@@ -11,12 +11,6 @@ module CC
         @url = url
       end
 
-      def wait_for_port
-        Timeout.timeout(10) do
-          sleep 0.05 while !port_open?
-        end
-      end
-
       def get(path)
         response = conn.get(path)
         validate_response(response)

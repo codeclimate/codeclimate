@@ -11,25 +11,22 @@ module CC
       end
 
       def run
-        engine_process.run do
-          client.wait_for_port
-          formatter.started(@engine_name, paths)
+        formatter.started(@engine_name, paths)
 
-          paths.each do |path|
-            analyze_file(path)
-          end
+        paths.each do |path|
+          analyze_file(path)
+        end
 
-          response = client.get("/finish")
-          issues = Array.wrap(response.body["issues"])
-          issues_by_path = issues.group_by do |doc|
-            doc["location"]["path"]
-          end
+        response = client.get("/finish")
+        issues = Array.wrap(response.body["issues"])
+        issues_by_path = issues.group_by do |doc|
+          doc["location"]["path"]
+        end
 
-          issues_by_path.each do |path, issues|
-            source_buffer = SourceBuffer.from_path(path)
-            result = AnalysisResult.new(source_buffer, { "issues" => issues })
-            formatter.file_analyzed(path, result)
-          end
+        issues_by_path.each do |path, issues|
+          source_buffer = SourceBuffer.from_path(path)
+          result = AnalysisResult.new(source_buffer, { "issues" => issues })
+          formatter.file_analyzed(path, result)
         end
       end
 
@@ -59,11 +56,7 @@ module CC
       end
 
       def client
-        @client ||= EngineClient.new(engine_process.wait_for_url)
-      end
-
-      def engine_process
-        @engine_process ||= EngineProcess.new(@engine_name)
+        @client ||= EngineClient.new(ENV["CODECLIMATE_ENGINE_#{@engine_name.upcase}_URL"])
       end
 
       def validate_name
