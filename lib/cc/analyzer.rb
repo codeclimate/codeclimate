@@ -7,7 +7,7 @@ module CC
     autoload :EngineAnalysis,     "cc/analyzer/engine_analysis"
     autoload :EngineClient,       "cc/analyzer/engine_client"
     autoload :EngineProcess,      "cc/analyzer/engine_process"
-    autoload :Formatter,          "cc/analyzer/formatter"
+    autoload :Formatters,         "cc/analyzer/formatters"
     autoload :Issue,              "cc/analyzer/issue"
     autoload :IssueAdapter,       "cc/analyzer/issue_adapter"
     autoload :IssueLocator,       "cc/analyzer/issue_locator"

@@ -7,7 +7,7 @@ module CC
 
       def run
         config = Config.from_file(".codeclimate.yml")
-        formatter = Formatter.new
+        formatter = Formatters::JSON.new
 
         config.engine_names.each do |engine_name|
           analysis = EngineAnalysis.new(config, engine_name, formatter)
