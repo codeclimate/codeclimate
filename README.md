@@ -1,1 +1,1 @@
-# cli
+# Code Climate CLI

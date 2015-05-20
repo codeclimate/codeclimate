@@ -1,0 +1,3 @@
+engines:
+  rubocop:
+    config_file: .ruby-style.yml
