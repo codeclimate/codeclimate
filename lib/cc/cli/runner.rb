@@ -28,13 +28,9 @@ module CC
       end
 
       def command_class
-        CLI.const_get(command_class_name)
+        CLI.const_get(command_name)
       rescue NameError
         nil
-      end
-
-      def command_class_name
-        command_name.capitalize
       end
 
       def command_name
