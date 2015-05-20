@@ -4,10 +4,6 @@ module CC
   module Analyzer
     class Config
 
-      def self.from_file(path)
-        new(File.read(path))
-      end
-
       def initialize(config_body)
         @config = YAML.safe_load(config_body)
 

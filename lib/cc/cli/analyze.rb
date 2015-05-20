@@ -6,14 +6,19 @@ module CC
       include CC::Analyzer
 
       def run
-        config = Config.from_file(".codeclimate.yml")
+        config_body = filesystem.read_path(".codeclimate.yml")
+        config = Config.new(config_body)
 
         config.engine_names.each do |engine_name|
-          analysis = EngineAnalysis.new(config, engine_name, formatter)
+          analysis = EngineAnalysis.new(config, engine_name, formatter, filesystem)
           analysis.run
         end
 
         formatter.finished
+      end
+
+      def filesystem
+        @filesystem ||= Filesystem.new(".")
       end
 
       def formatter

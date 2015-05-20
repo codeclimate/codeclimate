@@ -2,11 +2,6 @@
 module CC
   module Analyzer
     class SourceBuffer
-
-      def self.from_path(path)
-        new(path, File.read(path))
-      end
-
       attr_reader :name
       attr_reader :source
 

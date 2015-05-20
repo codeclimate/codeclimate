@@ -3,10 +3,11 @@ module CC
     class EngineAnalysis
       attr_reader :formatter
 
-      def initialize(config, engine_name, formatter)
+      def initialize(config, engine_name, formatter, filesystem)
         @config = config
         @engine_name = engine_name
         @formatter = formatter
+        @filesystem = filesystem
         validate_name
       end
 
@@ -24,7 +25,7 @@ module CC
         end
 
         issues_by_path.each do |path, issues|
-          source_buffer = SourceBuffer.from_path(path)
+          source_buffer = @filesystem.source_buffer_for(path)
           result = AnalysisResult.new(source_buffer, { "issues" => issues })
           formatter.file_analyzed(path, result)
         end
@@ -33,7 +34,7 @@ module CC
     private
 
       def analyze_file(path)
-        source_buffer = SourceBuffer.from_path(path)
+        source_buffer = @filesystem.source_buffer_for(path)
 
         response = client.post("/analyze",
           path:         source_buffer.name,
@@ -48,7 +49,7 @@ module CC
         @paths ||= begin
           response = client.post("/configure",
             config: @config.to_hash,
-            tree:   Dir["**/*.*"].sort.select { |path| File.file?(path) }
+            tree:   @filesystem.file_paths
           )
 
           response.body["paths"]
