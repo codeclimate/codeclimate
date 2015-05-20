@@ -1,13 +1,6 @@
 source 'https://rubygems.org'
 
-gem "activesupport"
-gem "faraday"
-gem "faraday_middleware"
-gem "rainbow"
-gem "docker-api", require: "docker"
-gem "highline"
-gem "pry"
-gem "safe_yaml"
+gemspec
 
 group :test do
   gem "minitest"

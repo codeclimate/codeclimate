@@ -1,3 +1,16 @@
+PATH
+  remote: .
+  specs:
+    codeclimate (0.0.1)
+      activesupport (~> 4.2, >= 4.2.1)
+      docker-api (~> 1.21, >= 1.21.4)
+      faraday (~> 0.9.1)
+      faraday_middleware (~> 0.9.1)
+      highline (~> 1.7, >= 1.7.2)
+      pry (~> 0.10.1)
+      rainbow (~> 2.0, >= 2.0.0)
+      safe_yaml (~> 1.0, >= 1.0.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -48,14 +61,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport
-  docker-api
-  faraday
-  faraday_middleware
-  highline
+  codeclimate!
   minitest
   minitest-reporters
-  pry
   rack-test
-  rainbow
-  safe_yaml
