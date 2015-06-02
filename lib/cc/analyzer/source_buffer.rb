@@ -16,6 +16,10 @@ module CC
         [ 1 + line_no, position - line_begin ]
       end
 
+      def line_count
+        @source.lines.count
+      end
+
     private
 
       def line_for(position)
