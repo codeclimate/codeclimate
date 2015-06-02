@@ -5,7 +5,7 @@ module CC
     class Init < Command
       include CC::Analyzer
 
-      CODECLIMATE_YAML = ".testcodeclimate.yml".freeze
+      CODECLIMATE_YAML = ".codeclimate.yml".freeze
       TEMPLATE_CODECLIMATE_YAML = "lib/cc/cli/template_codeclimate_config.yml"
       
       def run
