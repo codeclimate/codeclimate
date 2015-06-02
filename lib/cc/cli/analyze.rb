@@ -5,11 +5,13 @@ module CC
     class Analyze < Command
       include CC::Analyzer
 
+      CODECLIMATE_YAML = ".codeclimate.yml".freeze
+
       def run
-        begin
-          config_body = filesystem.read_path(".codeclimate.yml")
+        if filesystem.exist?(CODECLIMATE_YAML)
+          config_body = filesystem.read_path(CODECLIMATE_YAML)
           config = Config.new(config_body)
-        rescue Errno::ENOENT
+        else
           config = NullConfig.new
         end
 

@@ -19,12 +19,12 @@ module CC::CLI
         @files = files
       end
 
+      def exist?(path)
+        @files.key?(path)
+      end
+
       def read_path(path)
-        if @files.key?(path)
-          @files[path]
-        else
-          raise Errno::ENOENT, path
-        end
+        @files[path]
       end
 
       # implement as needed
