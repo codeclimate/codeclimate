@@ -6,6 +6,10 @@ module CC
         @root = root
       end
 
+      def exist?(path)
+        File.exist?(File.join(@root, path))
+      end
+
       def source_buffer_for(path)
         SourceBuffer.new(path, read_path(path))
       end

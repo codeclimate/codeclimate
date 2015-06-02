@@ -13,6 +13,7 @@ module CC
     autoload :IssueAdapter,       "cc/analyzer/issue_adapter"
     autoload :IssueLocator,       "cc/analyzer/issue_locator"
     autoload :LinePrinter,        "cc/analyzer/line_printer"
+    autoload :NullConfig,         "cc/analyzer/null_config"
     autoload :SourceBuffer,       "cc/analyzer/source_buffer"
     autoload :SourceLocation,     "cc/analyzer/source_location"
     autoload :SourceRange,        "cc/analyzer/source_range"
