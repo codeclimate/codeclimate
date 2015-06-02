@@ -9,7 +9,7 @@ module CC
       TEMPLATE_CODECLIMATE_YAML = "lib/cc/cli/template_codeclimate_config.yml"
       
       def run
-        say "Generating codeclimate.yml config file if it doesn't exist.\nEdit and then try running 'validate-config' to check configuration."
+        say "Generating .codeclimate.yml config file if it doesn't exist.\nEdit and then try running 'validate-config' to check configuration."
         create_codeclimate_yaml!
       end
 
