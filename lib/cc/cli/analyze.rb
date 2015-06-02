@@ -6,8 +6,12 @@ module CC
       include CC::Analyzer
 
       def run
-        config_body = filesystem.read_path(".codeclimate.yml")
-        config = Config.new(config_body)
+        begin
+          config_body = filesystem.read_path(".codeclimate.yml")
+          config = Config.new(config_body)
+        rescue Errno::ENOENT
+          config = NullConfig.new
+        end
 
         config.engine_names.each do |engine_name|
           analysis = EngineAnalysis.new(config, engine_name, formatter, filesystem)
