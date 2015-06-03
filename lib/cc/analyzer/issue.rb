@@ -11,6 +11,7 @@ module CC
       attr_reader :fingerprint
       attr_reader :attrs
       attr_reader :remediation_points
+      attr_reader :check
 
       def initialize(check, message, location, fingerprint, remediation_points = 1_000, attrs = {})
         @check = check
