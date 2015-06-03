@@ -31,13 +31,13 @@ module CC::CLI
 
           Dir.chdir(temp) do
             filesystem = CC::Analyzer::Filesystem.new(".")
-            
+
             expect(filesystem.exist?(".codeclimate.yml")).to eq(false)
 
 
-            existing_yml_text = "This is a test yaml!"
+            yaml_content_before = "This is a test yaml!"
             File.open(".codeclimate.yml", "w") do |f|
-              f.write(existing_yml_text)
+              f.write(yaml_content_before)
             end
 
             expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
@@ -47,9 +47,9 @@ module CC::CLI
 
             expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
 
-            post_run_yml_content = File.read(".codeclimate.yml")
+            content_after = File.read(".codeclimate.yml")
 
-            expect(post_run_yml_content).to eq(existing_yml_text)
+            expect(content_after).to eq(yaml_content_before)
           end
         end
       end
