@@ -28,11 +28,11 @@ module CC
 
       def as_json
         {
-          check:              @check,
-          message:            @message,
-          fingerprint:        @fingerprint,
-          remediation_points: @remediation_points,
-          location:           @location.as_json
+          check: check,
+          fingerprint: fingerprint,
+          location: location.as_json,
+          message: message,
+          remediation_points: remediation_points,
         }
       end
 
