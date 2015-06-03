@@ -31,7 +31,7 @@ exclude_paths:
         if filesystem.exist?(CODECLIMATE_YAML)
           say "Config file .codeclimate.yml already present.\nTry running 'validate_config' to check configuration." 
         else
-          create_codeclimate_yaml!
+          create_codeclimate_yaml
           say "Config file .codeclimate.yml successfully generated.\nEdit and then try running 'validate_config' to check configuration."
         end
       end
@@ -42,7 +42,7 @@ exclude_paths:
         @filesystem ||= Filesystem.new(".")
       end
 
-      def create_codeclimate_yaml!
+      def create_codeclimate_yaml
         File.open(CODECLIMATE_YAML, "w") do |f|
           f.write(TEMPLATE_CODECLIMATE_YAML)
         end
