@@ -19,13 +19,14 @@ module CC::CLI
             expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
 
             new_content = File.read(".codeclimate.yml")
+
             expect(new_content).to eq(Init::TEMPLATE_CODECLIMATE_YAML)
           end
         end 
       end
 
-      context "when a .codeclimate.yml file is already present in repository" do
-        it "does not create a new file" do
+      context "when a .codeclimate.yml file is already present in working directory" do
+        it "does not create a new file or overwrite the old" do
           temp = Dir.mktmpdir
 
           Dir.chdir(temp) do
