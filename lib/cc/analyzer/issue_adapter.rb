@@ -22,13 +22,15 @@ module CC
         location = SourceLocation.new(@source_buffer, source_range)
 
         check = @issue_hash["check"]
-        message = @issue_hash["message"]
+        description = @issue_hash["description"]
+        categories = @issue_hash["categories"]
 
         Issue.new(
           check,
-          message,
+          description,
           location,
           fingerprint.to_s,
+          categories,
           1_000,
           @issue_hash["attrs"] || {})
       end

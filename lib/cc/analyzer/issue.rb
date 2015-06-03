@@ -6,18 +6,20 @@ module CC
         IssueAdapter.new(source_buffer, doc).to_issue
       end
 
-      attr_reader :message
+      attr_reader :description
       attr_reader :location
       attr_reader :fingerprint
       attr_reader :attrs
       attr_reader :remediation_points
       attr_reader :check
+      attr_reader :categories
 
-      def initialize(check, message, location, fingerprint, remediation_points = 1_000, attrs = {})
+      def initialize(check, description, location, fingerprint, categories, remediation_points = 1_000, attrs = {})
         @check = check
-        @message = message
+        @description = description
         @location = location
         @fingerprint = fingerprint
+        @categories = categories
         @remediation_points = remediation_points
         @attrs = attrs
       end
@@ -28,10 +30,11 @@ module CC
 
       def as_json
         {
+          categories: categories,
           check: check,
           fingerprint: fingerprint,
           location: location.as_json,
-          message: message,
+          description: description,
           remediation_points: remediation_points,
         }
       end
