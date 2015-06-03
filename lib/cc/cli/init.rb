@@ -6,7 +6,7 @@ module CC
       include CC::Analyzer
 
       CODECLIMATE_YAML = ".codeclimate.yml".freeze
-      TEMPLATE_CODECLIMATE_YAML = <<-YAML
+      TEMPLATE_CODECLIMATE_YAML = %{
 #
 # ---Choose Your Languages---
 # To disable analysis for a certain language, set the language to `false`.
@@ -25,8 +25,7 @@ languages:
 # http://docs.codeclimate.com/article/166-excluding-files-folders
 #
 exclude_paths:
- - "test/*"
-      YAML
+ - "test/*"}.freeze
       
       def run
         if filesystem.exist?(CODECLIMATE_YAML)
