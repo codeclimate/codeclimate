@@ -4,12 +4,13 @@ require "cc/cli"
 module CC::CLI
   describe Init do
     describe "#run" do
-      context "when no .codeclimate.yml file is present in user's repository" do
-        it "creates a .codeclimate.yml file" do
+      context "when no .codeclimate.yml file is present in working directory" do
+        it "creates a correct .codeclimate.yml file" do
           temp = Dir.mktmpdir
           
           Dir.chdir(temp) do
             filesystem = CC::Analyzer::Filesystem.new(".")
+            
             expect(filesystem.exist?(".codeclimate.yml")).to eq(false)
 
             init = Init.new
