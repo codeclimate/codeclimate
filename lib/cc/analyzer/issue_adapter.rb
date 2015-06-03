@@ -23,12 +23,14 @@ module CC
 
         check = @issue_hash["check"]
         description = @issue_hash["description"]
+        categories = @issue_hash["categories"]
 
         Issue.new(
           check,
           description,
           location,
           fingerprint.to_s,
+          categories,
           1_000,
           @issue_hash["attrs"] || {})
       end

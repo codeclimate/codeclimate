@@ -12,12 +12,14 @@ module CC
       attr_reader :attrs
       attr_reader :remediation_points
       attr_reader :check
+      attr_reader :categories
 
-      def initialize(check, description, location, fingerprint, remediation_points = 1_000, attrs = {})
+      def initialize(check, description, location, fingerprint, categories, remediation_points = 1_000, attrs = {})
         @check = check
         @description = description
         @location = location
         @fingerprint = fingerprint
+        @categories = categories
         @remediation_points = remediation_points
         @attrs = attrs
       end
@@ -28,6 +30,7 @@ module CC
 
       def as_json
         {
+          categories: categories,
           check: check,
           fingerprint: fingerprint,
           location: location.as_json,
