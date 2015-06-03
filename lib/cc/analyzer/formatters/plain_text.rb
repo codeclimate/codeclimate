@@ -38,7 +38,7 @@ module CC
               issues.sort_by { |i| i.location.line }.each do |issue|
                 @output.printf("%s: %s\n",
                   colorize(issue.location.line, :cyan),
-                  issue.message)
+                  issue.description)
 
                 if issue.attrs["other_locations"]
                   issue.attrs["other_locations"].each do |location|
