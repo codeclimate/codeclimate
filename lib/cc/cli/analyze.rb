@@ -8,27 +8,46 @@ module CC
       CODECLIMATE_YAML = ".codeclimate.yml".freeze
 
       def run
-        if filesystem.exist?(CODECLIMATE_YAML)
+        engines.each do |engine|
+          engine.run(STDOUT)
+        end
+      end
+
+      private
+
+      def config
+        @config ||= if filesystem.exist?(CODECLIMATE_YAML)
           config_body = filesystem.read_path(CODECLIMATE_YAML)
           config = Config.new(config_body)
         else
           config = NullConfig.new
         end
+      end
 
-        config.engine_names.each do |engine_name|
-          analysis = EngineAnalysis.new(config, engine_name, formatter, filesystem)
-          analysis.run
+      def engine_registry
+        @engine_registry ||= EngineRegistry.new
+      end
+
+      def engines
+        @engines ||= config.engine_names.map do |engine_name|
+          Engine.new(
+            engine_name,
+            engine_registry[engine_name],
+            path
+          )
         end
-
-        formatter.finished
       end
 
       def filesystem
-        @filesystem ||= Filesystem.new(".")
+        @filesystem ||= Filesystem.new(path)
       end
 
       def formatter
         @formatter ||= Formatters::JSON.new
+      end
+
+      def path
+        @args.first || Dir.pwd
       end
 
     end

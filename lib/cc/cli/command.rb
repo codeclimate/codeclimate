@@ -4,6 +4,10 @@ module CC
   module CLI
     class Command
 
+      def initialize(args)
+        @args = args
+      end
+
       def self.command_name
         name[/[^:]*$/].split(/(?=[A-Z])/).map(&:downcase).join('-')
       end

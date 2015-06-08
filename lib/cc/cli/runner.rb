@@ -15,7 +15,7 @@ module CC
 
       def run
         if command_class
-          command = command_class.new
+          command = command_class.new(command_arguments)
           command.execute
         else
           command_not_found
@@ -39,6 +39,10 @@ module CC
         when '-v', '--version'         then 'Version'
         else @args.first.underscore.camelize
         end
+      end
+
+      def command_arguments
+        @args[1..-1]
       end
 
     end
