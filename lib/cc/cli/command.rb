@@ -4,7 +4,7 @@ module CC
   module CLI
     class Command
 
-      def initialize(args)
+      def initialize(args = [])
         @args = args
       end
 

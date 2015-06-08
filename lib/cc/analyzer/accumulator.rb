@@ -1,7 +1,6 @@
 module CC
   module Analyzer
     class Accumulator
-      include CC::Analyzer
       def initialize(delimiter)
         @delimiter = delimiter
         @buffer = ""
