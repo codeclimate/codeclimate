@@ -18,7 +18,6 @@ module CC
         accumulator = Accumulator.new("\0")
         accumulator.on_flush { |chunk| stdout_io.write(chunk) }
 
-        #Builder.logger.info("starting container #{container.id}")
         container.start
 
         container.attach do |stream, output|
@@ -31,11 +30,8 @@ module CC
       end
 
       def destroy
-        #Builder.logger.info("stopping container #{container.id}")
         container.stop
-        #Builder.logger.info("removing container #{container.id}")
         container.remove(force: true)
-        #Builder.logger.debug("stopped and removed container #{container.id}")
       end
 
       private
