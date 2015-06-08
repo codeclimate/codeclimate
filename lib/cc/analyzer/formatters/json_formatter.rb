@@ -3,7 +3,7 @@ module CC
     module Formatters
       class JSONFormatter < Formatter
         def write(data)
-          puts JSON.parse(data).to_json
+          puts JSON.parse(data).to_json if data.present?
         end
       end
     end

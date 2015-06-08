@@ -14,12 +14,15 @@ module CC::Analyzer
       accumulator << "entr"
       accumulator << "y 1\0entry 2\0en"
       accumulator << "try 3\0end\0"
+      accumulator << "epilogue"
+      accumulator.flush
 
       flushed.must_equal([
         "entry 1",
         "entry 2",
         "entry 3",
-        "end"
+        "end",
+        "epilogue"
       ])
     end
   end

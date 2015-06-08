@@ -27,6 +27,7 @@ module CC
         end
 
         container.wait(TIMEOUT)
+        accumulator.flush
       end
 
       def destroy

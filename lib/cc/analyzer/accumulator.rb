@@ -20,6 +20,10 @@ module CC
 
         @buffer << data if data
       end
+
+      def flush
+        @on_flush.call(@buffer)
+      end
     end
   end
 end
