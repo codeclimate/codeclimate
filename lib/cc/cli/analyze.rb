@@ -9,7 +9,7 @@ module CC
 
       def run
         engines.each do |engine|
-          engine.run(STDOUT)
+          engine.run(formatter)
         end
       end
 
@@ -43,7 +43,7 @@ module CC
       end
 
       def formatter
-        @formatter ||= Formatters::JSON.new
+        @formatter ||= Formatters::JSONFormatter.new
       end
 
       def path
