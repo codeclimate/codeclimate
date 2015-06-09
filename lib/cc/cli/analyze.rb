@@ -62,7 +62,7 @@ module CC
       end
 
       def formatter
-        @formatter ||= Formatters.resolve(:json)
+        @formatter ||= Formatters::PlainTextFormatter.new
       end
 
       def path
