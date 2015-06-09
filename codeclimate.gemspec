@@ -11,13 +11,13 @@ Gem::Specification.new do |s|
   s.homepage    = "https://codeclimate.com"
   s.description = "Code Climate command line tool"
 
-  s.files         = Dir["lib/**/*.rb"] + Dir['bin/*']
+  s.files         = Dir["lib/**/*.rb"] + Dir["bin/*"] + Dir["config/*"]
   s.require_paths = ["lib"]
   s.bindir        = "bin"
   s.executables   = "codeclimate"
 
-  s.add_dependency "activesupport", "~> 4.2", '>= 4.2.1'
-  s.add_dependency "codeclimate-yaml", ">= 0.0.2"
+  s.add_dependency "activesupport", "~> 4.2", ">= 4.2.1"
+  s.add_dependency "codeclimate-yaml", "~> 0.0", ">= 0.0.2"
   s.add_dependency "faraday", "~> 0.9.1"
   s.add_dependency "faraday_middleware", "~> 0.9.1"
   s.add_dependency "highline",  "~> 1.7", ">= 1.7.2"
