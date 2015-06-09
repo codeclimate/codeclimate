@@ -7,7 +7,8 @@ module CC
       BUFFER = "  ".freeze
 
       def initialize(config_body)
-        @config = YAML.safe_load(config_body)
+        @config = YAML.safe_load(config_body) || {"engines"=> {} }
+        @config["engines"] ||= {}
 
         expand_shorthand
         expand_references
