@@ -24,4 +24,5 @@ Gem::Specification.new do |s|
   s.add_dependency "highline",  '~> 1.7', '>= 1.7.2'
   s.add_dependency "pry", "~> 0.10.1"
   s.add_dependency "safe_yaml", '~> 1.0', '>= 1.0.4'
+  s.add_dependency "codeclimate-yaml", '>= 0.0.2'
 end
