@@ -1,5 +1,4 @@
 require "spec_helper"
-require "cc/analyzer"
 
 describe CC::Analyzer::Engine do
   describe "#run" do

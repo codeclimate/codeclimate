@@ -1,4 +1,3 @@
-require "cc/analyzer"
 require "cc/yaml"
 
 module CC

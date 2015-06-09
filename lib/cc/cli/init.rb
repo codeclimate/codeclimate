@@ -1,5 +1,3 @@
-require "cc/analyzer"
-
 module CC
   module CLI
     class Init < Command

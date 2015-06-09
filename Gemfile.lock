@@ -3,7 +3,7 @@ PATH
   specs:
     codeclimate (0.0.1)
       activesupport (~> 4.2, >= 4.2.1)
-      codeclimate-yaml (>= 0.0.2)
+      codeclimate-yaml (~> 0.0, >= 0.0.2)
       faraday (~> 0.9.1)
       faraday_middleware (~> 0.9.1)
       highline (~> 1.7, >= 1.7.2)

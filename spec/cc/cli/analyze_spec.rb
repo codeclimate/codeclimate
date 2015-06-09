@@ -1,5 +1,4 @@
 require "spec_helper"
-require "cc/cli"
 
 module CC::CLI
   describe Analyze do
