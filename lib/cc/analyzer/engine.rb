@@ -1,4 +1,4 @@
-require 'docker'
+require "posix/spawn"
 
 module CC
   module Analyzer
@@ -15,44 +15,43 @@ module CC
       end
 
       def run(stdout_io)
-        accumulator = Accumulator.new("\0")
-        accumulator.on_flush { |chunk| stdout_io.write(chunk) }
+        pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command)
 
-        container.start
-
-        container.attach do |stream, output|
-          if stream == :stdout
-            accumulator << output
+        t_out = Thread.new do
+          out.each_line("\0") do |chunk|
+            stdout_io.write(chunk.chomp("\0"))
           end
         end
 
-        container.wait(TIMEOUT)
-        accumulator.flush
-      end
+        t_err = Thread.new do
+          err.each_line do |line|
+            # N.B. The process will hang if the output's not read. We do nothing
+            # with this for now, but should eventually incorporate engine stderr
+            # as warnings.
+            #$stderr.puts(line.chomp)
+          end
+        end
 
-      def destroy
-        container.stop
-        container.remove(force: true)
+        Process.waitpid(pid)
+      ensure
+        t_out.join if t_out
+        t_err.join if t_err
       end
 
       private
 
-      def container
-        Excon.defaults[:ssl_verify_peer] = false # TODO: use certs
-        @container ||= Docker::Container.create(
-          "Image" => @metadata["image_name"],
-          "Cmd" => @metadata["command"],
-          "MemorySwap" => -1,
-          "Memory" => 512_000_000, # bytes
-          "Labels" => {
-            "com.codeclimate.label" => @label
-          },
-          "NetworkDisabled" => true,
-          "CapDrop" => ["ALL"],
-          "Binds" => [
-            "#{@code_path}:/code:ro",
-          ]
-        )
+      def docker_run_command
+        [
+          "docker", "run",
+          "--cap-drop", "all",
+          "--label", "com.codeclimate.label=#{@label}",
+          "--memory", 512_000_000.to_s, # bytes
+          "--memory-swap", "-1",
+          "--net", "none",
+          "--volume", "#{@code_path}:/code:ro",
+          @metadata["image_name"],
+          @metadata["command"], # String or Array
+        ].flatten.compact
       end
     end
   end
