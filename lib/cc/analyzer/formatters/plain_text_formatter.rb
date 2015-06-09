@@ -32,7 +32,7 @@ module CC
           issues_by_path.each do |path, file_issues|
             puts colorize("== #{path} (#{pluralize(file_issues.size, "issue")}) ==", :yellow)
 
-            file_issues.each do |issue|
+            file_issues.sort_by { |i| i["location"]["begin"]["line"] }.each do |issue|
               printf("%s: %s\n", colorize(issue["location"]["begin"]["line"], :cyan), issue["description"])
             end
             puts
@@ -56,7 +56,7 @@ module CC
         end
 
         def issues_by_path
-          issues.group_by { |i| i['location']['path'] }
+          issues.group_by { |i| i['location']['path'] }.sort
         end
 
         def warnings
