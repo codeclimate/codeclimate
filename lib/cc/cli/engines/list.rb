@@ -2,7 +2,7 @@ require "cc/analyzer"
 
 module CC
   module CLI
-     module Engines
+    module Engines
       class List < Command
         def run
           say "Available engines:"
