@@ -7,13 +7,32 @@ module CC
 
       CODECLIMATE_YAML = ".codeclimate.yml".freeze
 
+      def initialize(args = [])
+        super
+
+        process_args
+      end
+
       def run
+        formatter.started
         engines.each do |engine|
           engine.run(formatter)
         end
+        formatter.finished
       end
 
       private
+
+      def process_args
+        case @args.first
+        when '-f'
+          @args.shift # throw out the -f
+          @formatter = Formatters.resolve(@args.shift)
+        end
+      rescue Formatters::Formatter::InvalidFormatterError => e
+        $stderr.puts e.message
+        exit 1
+      end
 
       def config
         @config ||= if filesystem.exist?(CODECLIMATE_YAML)
@@ -43,11 +62,11 @@ module CC
       end
 
       def formatter
-        @formatter ||= Formatters::JSONFormatter.new
+        @formatter ||= Formatters::PlainTextFormatter.new
       end
 
       def path
-        @args.first || Dir.pwd
+        @args.last || Dir.pwd
       end
 
     end
