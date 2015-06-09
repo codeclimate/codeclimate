@@ -70,7 +70,6 @@ module CC
           end
         end
       end
-
     end
   end
 end
