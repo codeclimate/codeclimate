@@ -11,6 +11,10 @@ module CC
       def [](engine_name)
         @config[engine_name]
       end
+
+      def list
+        @config
+      end
     end
   end
 end
