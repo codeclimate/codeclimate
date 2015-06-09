@@ -5,8 +5,9 @@ module CC::CLI
   describe Analyze do
     it "handles missing .codeclimate.yml" do
       stub_filesystem do
-        analyze = Analyze.new
-        analyze.run
+        capture_io do
+          Analyze.new.run
+        end
       end
     end
 
