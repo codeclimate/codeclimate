@@ -41,10 +41,6 @@ module CC
 
         private
 
-        def colored_severity_code(issue)
-          colorize("W", :yellow)
-        end
-
         def colorize(string, *args)
           rainbow.wrap(string).color(*args)
         end

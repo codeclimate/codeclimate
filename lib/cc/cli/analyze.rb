@@ -27,7 +27,7 @@ module CC
         case @args.first
         when '-f'
           @args.shift # throw out the -f
-          @formatter = Formatters::Formatter.resolve(@args.shift)
+          @formatter = Formatters.resolve(@args.shift)
         end
       rescue Formatters::Formatter::InvalidFormatterError => e
         $stderr.puts e.message
@@ -62,7 +62,7 @@ module CC
       end
 
       def formatter
-        @formatter ||= Formatters::Formatter.resolve(:json)
+        @formatter ||= Formatters.resolve(:json)
       end
 
       def path
