@@ -2,17 +2,22 @@ module CC
   module CLI
     class Help < Command
 
+      COMMANDS = [
+        'analyze [-f format] [path]',
+        'console',
+        'engines:list',
+        'help',
+        'init',
+        'validate-config',
+        'version'
+      ].freeze
+
       def run
-        say "Usage: codeclimate COMMAND ...\n\nAvailable commands:\n\n"
-        commands.each do |command|
-          say "\t#{command.command_name}"
+        say "Usage: codeclimate COMMAND ...\n\nAvailable commands:\n"
+        COMMANDS.each do |command|
+          say "    #{command}"
         end
       end
-
-      def commands
-        CLI.commands.sort_by(&:command_name)
-      end
-
     end
   end
 end
