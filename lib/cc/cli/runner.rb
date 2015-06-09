@@ -37,7 +37,7 @@ module CC
         case @args.first
         when nil, '-h', '-?', '--help' then 'Help'
         when '-v', '--version'         then 'Version'
-        else @args.first.underscore.camelize
+        else @args.first.sub(":", "::").underscore.camelize
         end
       end
 
