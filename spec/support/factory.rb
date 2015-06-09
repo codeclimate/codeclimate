@@ -1,6 +1,30 @@
 module Factory
   extend self
 
+  def yaml_with_rubocop_enabled
+    %{
+    engines:
+      rubocop:
+        enabled: true
+    }
+  end
+
+  def yaml_without_rubocop_enabled
+    %{
+    engines:
+      rubocop:
+        enabled: false
+    }
+  end
+
+  def yaml_without_jshint
+  %{
+    engines:
+      rubocop:
+        enabled: false
+    }
+  end
+
   def create_correct_yaml
     %{
       engines:

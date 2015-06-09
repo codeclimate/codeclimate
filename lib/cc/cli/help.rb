@@ -1,22 +1,32 @@
+require "rainbow"
+
 module CC
   module CLI
     class Help < Command
-
-      COMMANDS = [
-        'analyze [-f format] [path]',
-        'console',
-        'engines:list',
-        'help',
-        'init',
-        'validate-config',
-        'version'
-      ].freeze
-
       def run
         say "Usage: codeclimate COMMAND ...\n\nAvailable commands:\n"
-        COMMANDS.each do |command|
+        commands.each do |command|
           say "    #{command}"
         end
+      end
+
+      private
+
+      def commands
+        [
+          "analyze [-f format] [path]",
+          "console",
+          "engines:enable #{underline('engine_name')}",
+          "engines:list",
+          "help",
+          "init",
+          "validate-config",
+          "version"
+        ].freeze
+      end
+
+      def underline(string)
+        return Rainbow.new.wrap(string).underline
       end
     end
   end
