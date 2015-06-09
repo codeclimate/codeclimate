@@ -35,8 +35,9 @@ module CC::CLI
 
             filesystem.exist?(".codeclimate.yml").must_equal(true)
 
-            init = Init.new
-            init.run
+            capture_io do
+              Init.new.run
+            end
 
             content_after = File.read(".codeclimate.yml")
 
