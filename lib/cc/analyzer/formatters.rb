@@ -3,7 +3,7 @@ module CC
     module Formatters
       autoload :Formatter,  "cc/analyzer/formatters/formatter"
       autoload :JSONFormatter, "cc/analyzer/formatters/json_formatter"
-      autoload :PlainText,  "cc/analyzer/formatters/plain_text"
+      autoload :PlainTextFormatter,  "cc/analyzer/formatters/plain_text_formatter"
     end
   end
 end
