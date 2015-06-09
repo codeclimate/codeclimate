@@ -7,7 +7,7 @@ module CC
         def run
           say "Available engines:"
           engines.each do |name, attributes|
-            say "- #{name}: #{attributes['description']}"
+            say "- #{name}: #{attributes["description"]}"
           end
         end
 
