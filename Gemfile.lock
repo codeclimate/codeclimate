@@ -34,6 +34,7 @@ GEM
     highline (1.7.2)
     i18n (0.7.0)
     json (1.8.2)
+    metaclass (0.0.4)
     method_source (0.8.2)
     minitest (5.6.0)
     minitest-reporters (1.0.11)
@@ -41,6 +42,8 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    mocha (1.1.0)
+      metaclass (~> 0.0.1)
     multipart-post (2.0.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -64,4 +67,8 @@ DEPENDENCIES
   codeclimate!
   minitest
   minitest-reporters
+  mocha
   rack-test
+
+BUNDLED WITH
+   1.10.2

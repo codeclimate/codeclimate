@@ -1,12 +1,13 @@
 module CC
   module Analyzer
-    autoload :AnalysisResult,     "cc/analyzer/analysis_result"
+    autoload :Accumulator,        "cc/analyzer/accumulator"
     autoload :Config,             "cc/analyzer/config"
     autoload :Definition,         "cc/analyzer/definition"
     autoload :DefinitionAdapter,  "cc/analyzer/definition_adapter"
-    autoload :EngineAnalysis,     "cc/analyzer/engine_analysis"
+    autoload :Engine,             "cc/analyzer/engine"
     autoload :EngineClient,       "cc/analyzer/engine_client"
     autoload :EngineProcess,      "cc/analyzer/engine_process"
+    autoload :EngineRegistry,     "cc/analyzer/engine_registry"
     autoload :Filesystem,         "cc/analyzer/filesystem"
     autoload :Formatters,         "cc/analyzer/formatters"
     autoload :Issue,              "cc/analyzer/issue"
