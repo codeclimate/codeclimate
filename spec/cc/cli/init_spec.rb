@@ -45,7 +45,7 @@ module CC::CLI
           end
         end
 
-        it "reports that there is a .codecliamte.yml file already present" do
+        it "reports that there is a .codeclimate.yml file already present" do
           within_temp_dir do
             filesystem.exist?(".codeclimate.yml").must_equal(false)
 
