@@ -23,7 +23,7 @@ module CC
       end
 
       def command_not_found
-        $stderr.puts "unknown command #{command_name}"
+        $stderr.puts "unknown command #{command}"
         exit 1
       end
 
@@ -34,15 +34,19 @@ module CC
       end
 
       def command_name
-        case @args.first
+        case command
         when nil, '-h', '-?', '--help' then 'Help'
         when '-v', '--version'         then 'Version'
-        else @args.first.underscore.camelize
+        else command.underscore.camelize
         end
       end
 
       def command_arguments
         @args[1..-1]
+      end
+
+      def command
+        @args.first
       end
 
     end
