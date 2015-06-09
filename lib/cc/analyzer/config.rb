@@ -23,11 +23,11 @@ module CC
       end
 
       def engine_present?(engine_name)
-        @config["engines"][engine_name]
+        @config["engines"][engine_name] ? true : false
       end
 
       def engine_enabled?(engine_name)
-        @config["engines"][engine_name] && @config["engines"][engine_name]["enabled"]
+        @config["engines"][engine_name] && @config["engines"][engine_name]["enabled"] ? true : false
       end
 
       def enable_engine(engine_name)
