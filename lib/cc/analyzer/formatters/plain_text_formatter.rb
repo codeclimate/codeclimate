@@ -24,19 +24,25 @@ module CC
         end
 
         def finished
-          puts colorize(
-            "Finished! Found #{pluralize(issues.size, "issue")} and #{pluralize(warnings.size, "warning")}",
-            :green)
+          puts
           puts
 
           issues_by_path.each do |path, file_issues|
             puts colorize("== #{path} (#{pluralize(file_issues.size, "issue")}) ==", :yellow)
 
             file_issues.sort_by { |i| i["location"]["begin"]["line"] }.each do |issue|
-              printf("%s: %s\n", colorize(issue["location"]["begin"]["line"], :cyan), issue["description"])
+              print("#{colorize(issue["location"]["begin"]["line"], :cyan)}: ")
+              print(issue["description"])
+              puts
             end
             puts
           end
+
+          print(colorize("Analysis complete! Found #{pluralize(issues.size, "issue")}", :green))
+          if warnings.size > 0
+            print(colorize(" and #{pluralize(warnings.size, "warning")}", :green))
+          end
+          puts(colorize(".", :green))
         end
 
         private
