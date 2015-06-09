@@ -2,7 +2,7 @@ require "cc/analyzer"
 
 module CC
   module CLI
-    class Engines
+    module Engines
       class Enable < Command
         include CC::Analyzer
         include CC::Yaml
