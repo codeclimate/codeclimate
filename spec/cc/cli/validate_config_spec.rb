@@ -31,8 +31,10 @@ module CC::CLI
 
             filesystem.exist?(".codeclimate.yml").must_equal(true)
 
-            validate_config = ValidateConfig.new
-            validate_config.run
+            capture_io do
+              validate_config = ValidateConfig.new
+              validate_config.run
+            end
 
             filesystem.exist?(".codeclimate.yml").must_equal(true)
 
