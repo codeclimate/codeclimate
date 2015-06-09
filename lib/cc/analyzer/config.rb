@@ -22,13 +22,20 @@ module CC
         @config["engines"].keys
       end
 
+      def engine_present?(engine_name)
+        @config["engines"][engine_name]
+      end
+
       def engine_enabled?(engine_name)
-        engine = @config["engines"][engine_name]
-        engine && engine["enabled"]
+        @config["engines"][engine_name] && @config["engines"][engine_name]["enabled"]
       end
 
       def enable_engine(engine_name)
-        @config["engines"][engine_name] = { "enabled" => true }
+        if engine_present?(engine_name)
+          @config["engines"][engine_name]["enabled"] = true
+        else
+          @config["engines"][engine_name] = { "enabled" => true }
+        end
       end
 
       def attribute_to_s(attribute, buffer="")
