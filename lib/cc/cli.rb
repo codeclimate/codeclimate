@@ -12,12 +12,5 @@ module CC
     autoload :Runner, "cc/cli/runner"
     autoload :ValidateConfig, "cc/cli/validate_config"
     autoload :Version, "cc/cli/version"
-
-    def self.commands
-      constants.map { |n| const_get(n) }.select do |constant|
-        constant < Command
-      end
-    end
-
   end
 end
