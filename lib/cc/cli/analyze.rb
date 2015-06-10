@@ -45,12 +45,23 @@ module CC
         @engine_registry ||= EngineRegistry.new
       end
 
+      def engine_config
+        return @engine_config if @engine_config
+
+        file = Tempfile.new('config.json')
+        file.write(config.engine_config.to_json)
+
+        @engine_config = file.path
+      end
+
       def engines
         @engines ||= config.engine_names.map do |engine_name|
           Engine.new(
             engine_name,
             engine_registry[engine_name],
-            path
+            path,
+            engine_config,
+            SecureRandom.uuid
           )
         end
       end

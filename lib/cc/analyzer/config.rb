@@ -16,6 +16,14 @@ module CC
         @config
       end
 
+      def engine_config
+        @config["engines"].each_with_object({}) do |engine, hash|
+          result = {}
+          result["config_file"] = engine[1]["config_file"]["content"]
+          hash[engine[0]] = result
+        end
+      end
+
       def engine_names
         @config["engines"].keys
       end
