@@ -61,12 +61,13 @@ module CC
           thread = Thread.new do
             loop do
               spinner.spin
-              sleep 0.08
+              sleep 0.075
             end
           end
 
           yield
         ensure
+          spinner.stop("Done!")
           print("\n")
           thread.kill
         end
