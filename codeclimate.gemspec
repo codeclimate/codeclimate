@@ -1,9 +1,8 @@
 $LOAD_PATH.unshift(File.join(__FILE__, "../lib"))
-require "cc/version"
 
 Gem::Specification.new do |s|
   s.name        = "codeclimate"
-  s.version     = CC::VERSION
+  s.version     = "0.0.1"
   s.summary     = "Code Climate CLI"
   s.license     = "MIT"
   s.authors     = "Code Climate"

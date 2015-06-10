@@ -29,7 +29,7 @@ module CC
         end
 
         def update_yaml
-          File.open(CODECLIMATE_YAML, "w") do |f|
+          File.open(filesystem.path_for(CODECLIMATE_YAML), "w") do |f|
             f.write(parsed_yaml.to_yaml)
           end
         end
@@ -39,7 +39,7 @@ module CC
         end
 
         def yaml_content
-          File.read(CODECLIMATE_YAML).freeze
+          filesystem.read_path(CODECLIMATE_YAML).freeze
         end
 
         def engine_already_enabled?
@@ -59,7 +59,7 @@ module CC
         end
 
         def filesystem
-          @filesystem ||= Filesystem.new(".")
+          @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
         end
       end
     end

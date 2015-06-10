@@ -19,7 +19,7 @@ module CC
       private
 
       def filesystem
-        @filesystem ||= Filesystem.new(".")
+        @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
       end
 
       def verify_yaml
@@ -35,7 +35,7 @@ module CC
       end
 
       def yaml_content
-        File.read(CODECLIMATE_YAML).freeze
+        filesystem.read_path(CODECLIMATE_YAML).freeze
       end
 
       def parsed_yaml

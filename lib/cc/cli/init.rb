@@ -37,11 +37,11 @@ exclude_paths:
       private
 
       def filesystem
-        @filesystem ||= Filesystem.new(".")
+        @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
       end
 
       def create_codeclimate_yaml
-        File.open(CODECLIMATE_YAML, "w") do |f|
+        File.open(filesystem.path_for(CODECLIMATE_YAML), "w") do |f|
           f.write(TEMPLATE_CODECLIMATE_YAML)
         end
       end
