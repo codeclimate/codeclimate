@@ -52,9 +52,22 @@ module CC
       end
 
       def engine_config(engine_name)
+        config.engine_config(engine_name).
+          merge!(exclude_paths: exclude_paths).to_json
+      end
+
+      def engine_config_file(engine_name)
         file = Tempfile.new('config.json')
-        file.write(config.engine_config(engine_name).to_json)
+        file.write(engine_config(engine_name))
         file.path
+      end
+
+      def exclude_paths
+        if config.exclude_paths
+          filesystem.files_matching(config.exclude_paths)
+        else
+          []
+        end
       end
 
       def engines
@@ -63,7 +76,7 @@ module CC
             engine_name,
             engine_registry[engine_name],
             path,
-            engine_config(engine_name),
+            engine_config_file(engine_name),
             SecureRandom.uuid
           )
         end

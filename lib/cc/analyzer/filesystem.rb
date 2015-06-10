@@ -24,6 +24,14 @@ module CC
         end
       end
 
+      def files_matching(globs)
+        Dir.chdir(@root) do
+          globs.map do |glob|
+            Dir.glob(glob)
+          end.flatten.sort.uniq
+        end
+      end
+
       def path_for(path)
         File.join(@root, path)
       end
