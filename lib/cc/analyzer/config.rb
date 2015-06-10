@@ -9,19 +9,14 @@ module CC
         @config["engines"] ||= {}
 
         expand_shorthand
-        expand_references
       end
 
       def to_hash
         @config
       end
 
-      def engine_config
-        @config["engines"].each_with_object({}) do |engine, hash|
-          result = {}
-          result["config_file"] = engine[1]["config_file"]["content"]
-          hash[engine[0]] = result
-        end
+      def engine_config(engine_name)
+        @config["engines"][engine_name] || {}
       end
 
       def engine_names
@@ -45,7 +40,6 @@ module CC
       end
 
       def to_yaml
-        contract_references
         @config.to_yaml
       end
 
@@ -55,24 +49,6 @@ module CC
         @config["engines"].each do |name, engine_config|
           if [true, false].include?(engine_config)
             @config["engines"][name] = { "enabled" => engine_config }
-          end
-        end
-      end
-
-      def expand_references
-        @config["engines"].each do |name, engine_config|
-          if (path = engine_config["config_file"])
-            if File.exist?(path)
-              engine_config["config_file"] = { "path" => "#{path}", "content" => File.read(path) }
-            end
-          end
-        end
-      end
-
-      def contract_references
-        @config["engines"].each do |name, engine_config|
-          if engine_config["config_file"]
-            @config["engines"][name]["config_file"] = engine_config["config_file"]["path"]
           end
         end
       end

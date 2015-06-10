@@ -45,13 +45,10 @@ module CC
         @engine_registry ||= EngineRegistry.new
       end
 
-      def engine_config
-        return @engine_config if @engine_config
-
+      def engine_config(engine_name)
         file = Tempfile.new('config.json')
-        file.write(config.engine_config.to_json)
-
-        @engine_config = file.path
+        file.write(config.engine_config(engine_name).to_json)
+        file.path
       end
 
       def engines
@@ -60,7 +57,7 @@ module CC
             engine_name,
             engine_registry[engine_name],
             path,
-            engine_config,
+            engine_config(engine_name),
             SecureRandom.uuid
           )
         end
