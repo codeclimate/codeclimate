@@ -24,7 +24,7 @@ module CC
         end
       end
 
-      def excluded_files(globs)
+      def files_matching(globs)
         Dir.chdir(@root) do
           globs.map do |glob|
             Dir.glob(glob)

@@ -54,7 +54,7 @@ module CC
       end
 
       def exclude_paths
-        filesystem.excluded_files(config.exclude_paths)
+        filesystem.files_matching(config.exclude_paths)
       end
 
       def engines
