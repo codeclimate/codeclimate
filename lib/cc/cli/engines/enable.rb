@@ -15,17 +15,23 @@ module CC
             say "Engine not found. Run 'codeclimate engines:list for a list of valid engines."
           elsif engine_already_enabled?
             say "Engine already enabled."
+            pull_uninstalled_docker_images
           else
             enable_engine
             update_yaml
-            say "Engine added."
+            say "Engine added to .codeclimate.yml."
+            pull_uninstalled_docker_images
           end
         end
 
         private
 
+        def pull_uninstalled_docker_images
+          Engines::Install.new.run
+        end
+
         def engine_name
-          @args.first
+          @engine_name ||= @args.first
         end
 
         def update_yaml
@@ -51,11 +57,11 @@ module CC
         end
 
         def engine_exists?
-          engines.include?(engine_name)
+          engines_registry_list.keys.include?(engine_name)
         end
 
-        def engines
-          @engines ||= CC::Analyzer::EngineRegistry.new.list
+        def engines_registry_list
+          @engines_registry_list ||= CC::Analyzer::EngineRegistry.new.list
         end
 
         def filesystem
