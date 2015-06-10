@@ -10,3 +10,6 @@ golint:
 coffeelint:
   image_name: codeclimate/codeclimate-coffeelint
   description: A style checker for CoffeeScript
+eslint:
+  image_name: codeclimate/codeclimate-eslint
+  description: A JavaScript/JSX linting utility
