@@ -1,3 +1,6 @@
 rubocop:
   image_name: codeclimate/codeclimate-rubocop
   description: A Ruby static code analyzer, based on the community Ruby style guide.
+coffeelint:
+  image_name: codeclimate/codeclimate-coffeelint
+  description: A style checker for CoffeeScript
