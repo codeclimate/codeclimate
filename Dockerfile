@@ -3,6 +3,7 @@ FROM codeclimate/alpine-ruby:0.0.1
 WORKDIR /usr/src/app
 COPY Gemfile /usr/src/app/
 COPY Gemfile.lock /usr/src/app/
+COPY codeclimate.gemspec /usr/src/app/
 
 RUN apk --update add git openssh-client build-base && \
     bundle install -j 4 && \
