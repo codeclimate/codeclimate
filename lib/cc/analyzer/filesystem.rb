@@ -28,7 +28,7 @@ module CC
         Dir.chdir(@root) do
           globs.map do |glob|
             Dir.glob(glob)
-          end.flatten
+          end.flatten.sort.uniq
         end
       end
 
