@@ -1,3 +1,9 @@
 rubocop:
   image_name: codeclimate/codeclimate-rubocop
   description: A Ruby static code analyzer, based on the community Ruby style guide.
+gofmt:
+  image_name: codeclimate/codeclimate-gofmt
+  description: gofmt
+golint:
+  image_name: codeclimate/codeclimate-golint
+  description: golint
