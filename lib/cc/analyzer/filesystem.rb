@@ -24,6 +24,14 @@ module CC
         end
       end
 
+      def excluded_files(globs)
+        Dir.chdir(@root) do
+          globs.map do |glob|
+            Dir.glob(glob)
+          end.flatten
+        end
+      end
+
       def path_for(path)
         File.join(@root, path)
       end

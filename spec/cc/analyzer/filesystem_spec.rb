@@ -14,6 +14,18 @@ module CC::Analyzer
       end
     end
 
+    describe "#excluded_files" do
+      it "returns files that match the globs" do
+        root = Dir.mktmpdir
+        File.write("#{root}/foo.js", "Foo")
+        File.write("#{root}/foo.rb", "Foo")
+
+        filesystem = Filesystem.new(root)
+
+        filesystem.excluded_files(["*.js"]).must_equal(["foo.js"])
+      end
+    end
+
     describe "#read_path" do
       it "returns the content for the given file" do
         root = Dir.mktmpdir

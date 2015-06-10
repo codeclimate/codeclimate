@@ -39,6 +39,10 @@ module CC
         end
       end
 
+      def exclude_paths
+        @config["exclude_paths"]
+      end
+
       def to_yaml
         @config.to_yaml
       end

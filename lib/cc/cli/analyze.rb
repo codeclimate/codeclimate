@@ -47,8 +47,14 @@ module CC
 
       def engine_config(engine_name)
         file = Tempfile.new('config.json')
-        file.write(config.engine_config(engine_name).to_json)
+        json = config.engine_config(engine_name).
+          merge!(exclude_paths: exclude_paths).to_json
+        file.write(json)
         file.path
+      end
+
+      def exclude_paths
+        filesystem.excluded_files(config.exclude_paths)
       end
 
       def engines
