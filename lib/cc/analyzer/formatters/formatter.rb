@@ -12,6 +12,10 @@ module CC
         def started
         end
 
+        def engine_running(engine)
+          yield
+        end
+
         def finished
         end
 

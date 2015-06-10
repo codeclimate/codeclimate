@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.executables   = "codeclimate"
 
   s.add_dependency "activesupport", "~> 4.2", ">= 4.2.1"
+  s.add_dependency "tty-spinner", "~> 0.1.0"
   s.add_dependency "codeclimate-yaml", "~> 0.0", ">= 0.0.2"
   s.add_dependency "faraday", "~> 0.9.1"
   s.add_dependency "faraday_middleware", "~> 0.9.1"

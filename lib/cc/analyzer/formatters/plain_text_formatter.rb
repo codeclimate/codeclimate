@@ -1,4 +1,5 @@
 require "rainbow"
+require "tty/spinner"
 
 module CC
   module Analyzer
@@ -47,7 +48,29 @@ module CC
           puts(colorize(".", :green))
         end
 
+        def engine_running(engine)
+          with_spinner("Running #{engine.name}: ") do
+            yield
+          end
+        end
+
         private
+
+        def with_spinner(text)
+          spinner = TTY::Spinner.new(text)
+          thread = Thread.new do
+            loop do
+              spinner.spin
+              sleep 0.075
+            end
+          end
+
+          yield
+        ensure
+          spinner.stop("Done!")
+          print("\n")
+          thread.kill
+        end
 
         def colorize(string, *args)
           rainbow.wrap(string).color(*args)
