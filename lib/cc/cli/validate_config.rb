@@ -19,7 +19,7 @@ module CC
       private
 
       def filesystem
-        @filesystem ||= Filesystem.new("/code")
+        @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
       end
 
       def verify_yaml

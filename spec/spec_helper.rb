@@ -6,3 +6,5 @@ require "support/factory"
 require "cc/cli"
 
 Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
+
+ENV['FILESYSTEM_DIR'] = '.'

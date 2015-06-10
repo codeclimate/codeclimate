@@ -37,7 +37,7 @@ exclude_paths:
       private
 
       def filesystem
-        @filesystem ||= Filesystem.new("/code")
+        @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
       end
 
       def create_codeclimate_yaml

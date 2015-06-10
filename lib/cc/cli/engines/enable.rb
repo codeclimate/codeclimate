@@ -59,7 +59,7 @@ module CC
         end
 
         def filesystem
-          @filesystem ||= Filesystem.new("/code")
+          @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
         end
       end
     end
