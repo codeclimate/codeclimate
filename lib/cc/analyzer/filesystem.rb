@@ -7,7 +7,7 @@ module CC
       end
 
       def exist?(path)
-        File.exist?(File.join(@root, path))
+        File.exist?(path_for(path))
       end
 
       def source_buffer_for(path)
@@ -15,7 +15,7 @@ module CC
       end
 
       def read_path(path)
-        File.read(File.join(@root, path))
+        File.read(path_for(path))
       end
 
       def file_paths
@@ -24,6 +24,9 @@ module CC
         end
       end
 
+      def path_for(path)
+        File.join(@root, path)
+      end
     end
   end
 end
