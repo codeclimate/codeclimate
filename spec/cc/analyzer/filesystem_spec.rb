@@ -1,5 +1,4 @@
 require "spec_helper"
-require "cc/analyzer"
 
 module CC::Analyzer
   describe Filesystem do

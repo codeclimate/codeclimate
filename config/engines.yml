@@ -7,3 +7,6 @@ gofmt:
 golint:
   image_name: codeclimate/codeclimate-golint
   description: golint
+coffeelint:
+  image_name: codeclimate/codeclimate-coffeelint
+  description: A style checker for CoffeeScript

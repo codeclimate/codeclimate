@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'cc/analyzer'
 
 describe CC::Analyzer::SourceBuffer do
   describe "#decompose_position" do
