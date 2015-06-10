@@ -1,3 +1,2 @@
 #!/bin/sh
 exec docker run -it -e CODE_PATH=$PWD -e FILESYSTEM_DIR=/code -v $PWD:/code -v /var/run/docker.sock:/var/run/docker.sock codeclimate/codeclimate "$@"
-
