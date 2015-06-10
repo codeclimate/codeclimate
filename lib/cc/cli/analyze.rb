@@ -1,3 +1,5 @@
+require "tty/spinner"
+
 module CC
   module CLI
     class Analyze < Command
@@ -13,9 +15,13 @@ module CC
 
       def run
         formatter.started
+
         engines.each do |engine|
-          engine.run(formatter)
+          formatter.engine_running(engine) do
+            engine.run(formatter)
+          end
         end
+
         formatter.finished
       end
 
