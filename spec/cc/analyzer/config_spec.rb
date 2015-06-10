@@ -21,6 +21,18 @@ describe CC::Analyzer::Config do
     end
   end
 
+  describe "#engine_config" do
+    it "returns the config" do
+      config = CC::Analyzer::Config.new(Factory.yaml_with_rubocop_enabled)
+      config.engine_config("rubocop").must_equal({"enabled" => true})
+    end
+
+    it "returns an empty hash" do
+      config = CC::Analyzer::Config.new(Factory.yaml_with_rubocop_enabled)
+      config.engine_config("bugfixer").must_equal({})
+    end
+  end
+
   describe "#engine_enabled?(engine_name)" do
     describe "when the engine is enabled" do
       it "returns true" do

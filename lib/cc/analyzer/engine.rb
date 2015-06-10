@@ -7,10 +7,11 @@ module CC
 
       TIMEOUT = 15 * 60 # 15m
 
-      def initialize(name, metadata, code_path, label = SecureRandom.uuid)
+      def initialize(name, metadata, code_path, config_path, label)
         @name = name
         @metadata = metadata
         @code_path = code_path
+        @config_path = config_path
         @label = label.to_s
       end
 
@@ -50,6 +51,7 @@ module CC
           "--memory-swap", "-1",
           "--net", "none",
           "--volume", "#{@code_path}:/code:ro",
+          "--volume", "#{@config_path}:/config.json:ro",
           @metadata["image_name"],
           @metadata["command"], # String or Array
         ].flatten.compact

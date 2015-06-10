@@ -60,7 +60,7 @@ describe CC::Analyzer::Engine do
         "command" => "run",
       }.merge(metadata)
 
-      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", "sup")
+      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", "/config.json", "sup")
       engine.run(io)
 
       io
