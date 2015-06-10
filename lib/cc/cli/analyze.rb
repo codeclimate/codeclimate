@@ -56,7 +56,7 @@ module CC
       end
 
       def filesystem
-        @filesystem ||= Filesystem.new(path)
+        @filesystem ||= Filesystem.new("/code")
       end
 
       def formatter
@@ -64,7 +64,7 @@ module CC
       end
 
       def path
-        @args.last || Dir.pwd
+        ENV['CODE_PATH']
       end
 
     end
