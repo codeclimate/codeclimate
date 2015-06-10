@@ -17,6 +17,7 @@ module CC
           "analyze [-f format]",
           "console",
           "engines:enable #{underline('engine_name')}",
+          "engines:install",
           "engines:list",
           "help",
           "init",
