@@ -43,6 +43,7 @@ module CC
       def docker_run_command
         [
           "docker", "run",
+          "--rm",
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=#{@label}",
           "--memory", 512_000_000.to_s, # bytes
