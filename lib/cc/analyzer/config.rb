@@ -43,6 +43,12 @@ module CC
         @config["exclude_paths"]
       end
 
+      def disable_engine(engine_name)
+        if engine_present?(engine_name)
+          @config["engines"].delete(engine_name)
+        end
+      end
+
       def to_yaml
         @config.to_yaml
       end
