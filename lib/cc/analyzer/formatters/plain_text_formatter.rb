@@ -31,7 +31,9 @@ module CC
             puts colorize("== #{path} (#{pluralize(file_issues.size, "issue")}) ==", :yellow)
 
             file_issues.sort_by { |i| i["location"]["begin"]["line"] }.each do |issue|
-              print("#{colorize(issue["location"]["begin"]["line"], :cyan)}: ")
+              if issue["location"]["begin"]
+                print("#{colorize(issue["location"]["begin"]["line"], :cyan)}: ")
+              end
               print(issue["description"])
               puts
             end
