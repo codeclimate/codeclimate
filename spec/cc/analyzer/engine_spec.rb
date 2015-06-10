@@ -45,6 +45,14 @@ describe CC::Analyzer::Engine do
       io.string.must_equal("issue oneissue twoissue three")
     end
 
+    it "ensures the container is cleaned up" do
+      expect_docker_run do |*args|
+        assert_within(["--rm"], args)
+      end
+
+      run_engine
+    end
+
     def run_engine(metadata = {})
       io = StringIO.new
       options = {
