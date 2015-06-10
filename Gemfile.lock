@@ -1,3 +1,17 @@
+PATH
+  remote: .
+  specs:
+    codeclimate (0.0.1)
+      activesupport (~> 4.2, >= 4.2.1)
+      codeclimate-yaml (~> 0.0, >= 0.0.2)
+      faraday (~> 0.9.1)
+      faraday_middleware (~> 0.9.1)
+      highline (~> 1.7, >= 1.7.2)
+      posix-spawn (~> 0.3, >= 0.3.11)
+      pry (~> 0.10.1)
+      rainbow (~> 2.0, >= 2.0.0)
+      safe_yaml (~> 1.0, >= 1.0.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -12,6 +26,10 @@ GEM
     codeclimate-yaml (0.0.2)
       secure_string
     coderay (1.1.0)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.9.1)
+      faraday (>= 0.7.4, < 0.10)
     highline (1.7.2)
     i18n (0.7.0)
     json (1.8.3)
@@ -25,6 +43,7 @@ GEM
       ruby-progressbar
     mocha (1.1.0)
       metaclass (~> 0.0.1)
+    multipart-post (2.0.0)
     posix-spawn (0.3.11)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -46,17 +65,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport (~> 4.2.1)
-  codeclimate-yaml
-  highline
+  codeclimate!
   minitest
   minitest-reporters
   mocha
-  posix-spawn (~> 0.3)
-  pry (~> 0.10.1)
   rack-test
-  rainbow (~> 2.0)
-  safe_yaml (~> 1.0)
-
-BUNDLED WITH
-   1.10.2
