@@ -54,22 +54,24 @@ module CC
           end
         end
 
+        def failed(output)
+          spinner.stop("Failed")
+          puts colorize("\nAnalysis failed with the following output:", :red)
+          puts output
+          exit 1
+        end
+
         private
 
-        def with_spinner(text)
-          spinner = TTY::Spinner.new(text)
-          thread = Thread.new do
-            loop do
-              spinner.spin
-              sleep 0.075
-            end
-          end
+        def spinner(text = nil)
+          @spinner ||= Spinner.new(text)
+        end
 
+        def with_spinner(text)
+          spinner(text).start
           yield
         ensure
-          spinner.stop("Done!")
-          print("\n")
-          thread.kill
+          spinner.stop
         end
 
         def colorize(string, *args)

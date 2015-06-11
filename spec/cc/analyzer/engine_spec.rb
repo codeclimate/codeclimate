@@ -1,4 +1,6 @@
 require "spec_helper"
+require "ostruct"
+require 'support/test_formatter'
 
 describe CC::Analyzer::Engine do
   describe "#run" do
@@ -45,6 +47,13 @@ describe CC::Analyzer::Engine do
       io.string.must_equal("issue oneissue twoissue three")
     end
 
+    it "passes stderr to a formatter" do
+      expect_docker_run(StringIO.new, StringIO.new, 1)
+      TestFormatter.any_instance.expects(:failed)
+
+      io = run_engine
+    end
+
     it "ensures the container is cleaned up" do
       expect_docker_run do |*args|
         assert_within(["--rm"], args)
@@ -54,7 +63,7 @@ describe CC::Analyzer::Engine do
     end
 
     def run_engine(metadata = {})
-      io = StringIO.new
+      io = TestFormatter.new
       options = {
         "image_name" => "codeclimate/image-name",
         "command" => "run",
@@ -66,11 +75,10 @@ describe CC::Analyzer::Engine do
       io
     end
 
-    def expect_docker_run(stdout = StringIO.new, stderr = StringIO.new, &block)
+    def expect_docker_run(stdout = StringIO.new, stderr = StringIO.new, exit_code = 0, &block)
       block ||= ->(*) { :unused }
 
-      Process.stubs(:waitpid)
-
+      Process.expects(:waitpid2).returns([1, OpenStruct.new(exitstatus: exit_code)])
       POSIX::Spawn.expects(:popen4).
         with(&block).returns([1, nil, stdout, stderr])
     end

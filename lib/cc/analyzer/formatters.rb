@@ -4,6 +4,7 @@ module CC
       autoload :Formatter,  "cc/analyzer/formatters/formatter"
       autoload :JSONFormatter, "cc/analyzer/formatters/json_formatter"
       autoload :PlainTextFormatter,  "cc/analyzer/formatters/plain_text_formatter"
+      autoload :Spinner, "cc/analyzer/formatters/spinner"
 
       FORMATTERS = {
         json: JSONFormatter,
