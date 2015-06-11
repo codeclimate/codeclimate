@@ -7,8 +7,8 @@ module CC
         end
 
         def failed(output)
-          puts "\nAnalysis failed with the following output:"
-          puts output
+          $stderr.puts "\nAnalysis failed with the following output:"
+          $stderr.puts output
           exit 1
         end
       end
