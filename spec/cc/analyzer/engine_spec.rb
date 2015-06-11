@@ -1,4 +1,5 @@
 require "spec_helper"
+require "ostruct"
 
 describe CC::Analyzer::Engine do
   describe "#run" do
@@ -69,8 +70,7 @@ describe CC::Analyzer::Engine do
     def expect_docker_run(stdout = StringIO.new, stderr = StringIO.new, &block)
       block ||= ->(*) { :unused }
 
-      Process.stubs(:waitpid)
-
+      Process.expects(:waitpid2).returns([1, OpenStruct.new(exitstatus: 0)])
       POSIX::Spawn.expects(:popen4).
         with(&block).returns([1, nil, stdout, stderr])
     end
