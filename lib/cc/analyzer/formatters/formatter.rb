@@ -19,6 +19,9 @@ module CC
         def finished
         end
 
+        def failed(output)
+        end
+
         InvalidFormatterError = Class.new(StandardError)
       end
     end

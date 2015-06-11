@@ -9,6 +9,7 @@ module CC
     autoload :Filesystem,         "cc/analyzer/filesystem"
     autoload :Formatters,         "cc/analyzer/formatters"
     autoload :NullConfig,         "cc/analyzer/null_config"
+    autoload :OutputAccumulator,  "cc/analyzer/output_accumulator"
     autoload :SourceBuffer,       "cc/analyzer/source_buffer"
     autoload :UnitName,           "cc/analyzer/unit_name"
   end

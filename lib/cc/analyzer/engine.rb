@@ -15,7 +15,7 @@ module CC
         @label = label.to_s
       end
 
-      def run(stdout_io)
+      def run(stdout_io, stderr_io = OutputAccumulator.new)
         pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command)
 
         t_out = Thread.new do
@@ -29,11 +29,17 @@ module CC
             # N.B. The process will hang if the output's not read. We do nothing
             # with this for now, but should eventually incorporate engine stderr
             # as warnings.
-            #$stderr.puts(line.chomp)
+            if stderr_io
+              stderr_io.write(line)
+            end
           end
         end
 
-        Process.waitpid(pid)
+        pid, status = Process.waitpid2(pid)
+
+        if status.exitstatus > 0
+          stdout_io.failed(stderr_io.output)
+        end
       ensure
         t_out.join if t_out
         t_err.join if t_err
