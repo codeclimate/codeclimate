@@ -13,3 +13,6 @@ coffeelint:
 eslint:
   image_name: codeclimate/codeclimate-eslint
   description: A JavaScript/JSX linting utility
+csslint:
+  image_name: codeclimate/codeclimate-csslint
+  description: Automated linting of Cascading Stylesheets
