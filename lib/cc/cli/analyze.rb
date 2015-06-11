@@ -59,14 +59,12 @@ module CC
       # Make a file in the code directory to mount into the
       # engine container
       def engine_config_file(engine_name)
-        filename = ".cc-#{SecureRandom.uuid}"
-        tmp_path = File.join(ENV['FILESYSTEM_DIR'], filename)
+        filename = "config-#{SecureRandom.uuid}.json"
+        tmp_path = File.join("/tmp/cc-config", filename)
 
-        File.open(tmp_path, "w") do |file|
-          file.write(engine_config(engine_name))
-        end
+        File.write(tmp_path, engine_config(engine_name))
 
-        File.join(ENV['CODE_PATH'], filename)
+        tmp_path
       end
 
       def exclude_paths
