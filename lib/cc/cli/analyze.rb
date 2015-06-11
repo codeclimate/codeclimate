@@ -1,4 +1,4 @@
-require "tty/spinner"
+require "securerandom"
 
 module CC
   module CLI
@@ -56,10 +56,15 @@ module CC
           merge!(exclude_paths: exclude_paths).to_json
       end
 
+      # Make a file in the code directory to mount into the
+      # engine container
       def engine_config_file(engine_name)
-        file = Tempfile.new('config.json')
-        file.write(engine_config(engine_name))
-        file.path
+        filename = "config-#{SecureRandom.uuid}.json"
+        tmp_path = File.join("/tmp/cc-config", filename)
+
+        File.write(tmp_path, engine_config(engine_name))
+
+        tmp_path
       end
 
       def exclude_paths

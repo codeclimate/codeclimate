@@ -13,9 +13,10 @@ on your system. On OS X, we recommend using [boot2docker](http://boot2docker.io/
 
 ```console
 docker run -it \
-  -e CODE_PATH=$PWD \
-  -v $PWD:/code \
+  -e CODE_PATH="$PWD" \
+  -v "$PWD":/code \
   -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /tmp/cc-config:/tmp/cc-config \
   codeclimate/codeclimate \
   COMMAND
 ```
