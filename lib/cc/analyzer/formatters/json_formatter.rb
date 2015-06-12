@@ -2,8 +2,19 @@ module CC
   module Analyzer
     module Formatters
       class JSONFormatter < Formatter
+
+        def engine_running(engine)
+          @active_engine = engine
+          yield
+          @active_engine = nil
+        end
+
         def write(data)
-          puts JSON.parse(data).to_json if data.present?
+          return unless data.present?
+
+          document = JSON.parse(data)
+          document["engine_name"] = @active_engine.name
+          puts document.to_json
         end
 
         def failed(output)
