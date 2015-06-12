@@ -1,4 +1,5 @@
 require "posix/spawn"
+require "securerandom"
 
 module CC
   module Analyzer
@@ -34,7 +35,8 @@ module CC
 
         Thread.new do
           sleep TIMEOUT
-          Process.kill('QUIT', pid)
+          id, _, _, _ = POSIX::Spawn.popen4("docker kill #{container_name}")
+          Process.waitpid(id)
 
           stdout_io.failed("Execution timed out")
         end
@@ -51,13 +53,17 @@ module CC
 
       private
 
+      def container_name
+        @container_name ||= "cc-engines-#{name}-#{SecureRandom.uuid}"
+      end
+
       def docker_run_command
         [
           "docker", "run",
           "--rm",
-          "--pid=host",
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=#{@label}",
+          "--name", container_name,
           "--memory", 512_000_000.to_s, # bytes
           "--memory-swap", "-1",
           "--net", "none",
