@@ -32,6 +32,13 @@ module CC
           end
         end
 
+        Thread.new do
+          sleep TIMEOUT
+          Process.kill('QUIT', pid)
+
+          stdout_io.failed("Execution timed out")
+        end
+
         pid, status = Process.waitpid2(pid)
 
         if status.exitstatus > 0
@@ -48,6 +55,7 @@ module CC
         [
           "docker", "run",
           "--rm",
+          "--pid=host",
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=#{@label}",
           "--memory", 512_000_000.to_s, # bytes
