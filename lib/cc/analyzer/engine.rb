@@ -18,6 +18,7 @@ module CC
 
       def run(stdout_io, stderr_io = StringIO.new)
         pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command)
+        engine_running = true
 
         t_out = Thread.new do
           out.each_line("\0") do |chunk|
@@ -35,13 +36,17 @@ module CC
 
         Thread.new do
           sleep TIMEOUT
-          id, _, _, _ = POSIX::Spawn.popen4("docker kill #{container_name}")
-          Process.waitpid(id)
 
-          stdout_io.failed("Execution timed out")
+          if engine_running
+            Thread.current.abort_on_exception = true
+            run_command("docker kill #{container_name}")
+
+            stdout_io.failed("Execution timed out")
+          end
         end
 
         pid, status = Process.waitpid2(pid)
+        engine_running = false
 
         if status.exitstatus > 0
           stdout_io.failed(stderr_io.string)
@@ -73,6 +78,16 @@ module CC
           @metadata["command"], # String or Array
         ].flatten.compact
       end
+
+      def run_command(command)
+        spawn = POSIX::Spawn::Child.new(command)
+
+        if spawn.status.exitstatus > 0
+          raise CommandFailure, "command '#{command}' failed with status #{spawn.status.exitstatus}"
+        end
+      end
+
+      CommandFailure = Class.new(StandardError)
     end
   end
 end
