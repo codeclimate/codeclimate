@@ -72,6 +72,7 @@ module CC
           yield
         ensure
           spinner.stop
+          @spinner = nil
         end
 
         def colorize(string, *args)
