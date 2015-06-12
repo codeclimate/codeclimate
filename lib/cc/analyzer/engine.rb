@@ -83,7 +83,7 @@ module CC
         spawn = POSIX::Spawn::Child.new(command)
 
         if spawn.status.exitstatus > 0
-          raise CommandFailure, "command '#{command}' failed with status #{spawn.status.exitstatus}"
+          raise CommandFailure, "command '#{command}' failed with status #{spawn.status.exitstatus} and output #{spawn.err}"
         end
       end
 
