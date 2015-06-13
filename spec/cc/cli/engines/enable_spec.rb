@@ -78,9 +78,7 @@ module CC::CLI::Engines
     end
 
     def create_yaml(yaml_content = Factory.create_correct_yaml)
-      File.open(".codeclimate.yml", "w") do |f|
-        f.write(yaml_content)
-      end
+      File.write(".codeclimate.yml", yaml_content)
     end
   end
 end
