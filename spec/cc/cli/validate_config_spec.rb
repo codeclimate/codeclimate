@@ -124,7 +124,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("Great copy!")
+              stdout.must_match("No errors or warnings found in .codeclimate.yml file.")
             end
           end
         end

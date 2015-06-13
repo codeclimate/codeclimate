@@ -31,21 +31,24 @@ module CC::CLI::Engines
           end
         end
       end
-      describe "when engine to be removed is present in .codeclimate.yml" do
-        it "reports that engine is removed" do
+      describe "when engine is present in .codeclimate.yml and already disabled" do
+        it "reports that engine is already disabled" do
           within_temp_dir do
-            create_yaml(Factory.yaml_with_rubocop_enabled)
+            create_yaml(Factory.yaml_without_rubocop_enabled)
 
             stdout, stderr = capture_io do
               Disable.new(args = ["rubocop"]).run
             end
 
-            stdout.must_match("Engine removed from .codeclimate.yml.")
+            stdout.must_match("Engine already disabled.")
           end
         end
-        it "removes engine from yaml file" do
+      end
+      describe "when engine is present in .codeclimate.yml and enabled" do
+        it "disables engine in yaml file" do
           within_temp_dir do
             create_yaml(Factory.yaml_with_rubocop_enabled)
+            content_before = File.read(".codeclimate.yml")
 
             stdout, stderr = capture_io do
               Disable.new(args = ["rubocop"]).run
@@ -53,8 +56,9 @@ module CC::CLI::Engines
 
             content_after = File.read(".codeclimate.yml")
 
-            stdout.must_match("Engine removed from .codeclimate.yml.")
-            CC::Analyzer::Config.new(content_after).engine_present?("rubocop").must_equal(false)
+            stdout.must_match("Engine disabled.")
+            CC::Analyzer::Config.new(content_before).engine_enabled?("rubocop").must_equal(true)
+            CC::Analyzer::Config.new(content_after).engine_enabled?("rubocop").must_equal(false)
           end
         end
       end
