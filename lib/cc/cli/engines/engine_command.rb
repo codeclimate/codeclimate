@@ -8,12 +8,6 @@ module CC
 
         CODECLIMATE_YAML = ".codeclimate.yml".freeze
 
-        def run
-          $stderr.puts "unknown command engine_command"
-        end
-
-        NotImplemented = Class.new(StandardError)
-
         private
 
         def engine_name

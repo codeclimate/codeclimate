@@ -1,4 +1,6 @@
 require "highline"
+require "active_support"
+require "active_support/core_ext"
 
 module CC
   module CLI
@@ -9,7 +11,7 @@ module CC
       end
 
       def run
-        $stderr.puts "unknown command command"
+        $stderr.puts "unknown command #{self.class.name.split('::').last.underscore}"
       end
 
       def self.command_name
