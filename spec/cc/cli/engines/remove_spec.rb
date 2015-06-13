@@ -17,6 +17,7 @@ module CC::CLI::Engines
           end
         end
       end
+
       describe "when the engine requested does not exist in Code Climate registry" do
         it "says engine does not exist" do
           within_temp_dir do
@@ -31,6 +32,7 @@ module CC::CLI::Engines
           end
         end
       end
+
       describe "when engine to be removed is present in .codeclimate.yml" do
         it "reports that engine is removed" do
           within_temp_dir do
@@ -43,6 +45,7 @@ module CC::CLI::Engines
             stdout.must_match("Engine removed from .codeclimate.yml.")
           end
         end
+
         it "removes engine from yaml file" do
           within_temp_dir do
             create_yaml(Factory.yaml_with_rubocop_enabled)

@@ -17,6 +17,7 @@ module CC::CLI::Engines
           end
         end
       end
+
       describe "when the engine requested does not exist in Code Climate registry" do
         it "says engine does not exist" do
           within_temp_dir do
@@ -31,6 +32,7 @@ module CC::CLI::Engines
           end
         end
       end
+
       describe "when engine is present in .codeclimate.yml and already disabled" do
         it "reports that engine is already disabled" do
           within_temp_dir do
@@ -44,6 +46,7 @@ module CC::CLI::Engines
           end
         end
       end
+
       describe "when engine is present in .codeclimate.yml and enabled" do
         it "disables engine in yaml file" do
           within_temp_dir do
