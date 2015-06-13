@@ -14,7 +14,7 @@ module CC
 
         NotImplemented = Class.new(StandardError)
 
-        protected
+        private
 
         def engine_name
           @engine_name ||= @args.first
