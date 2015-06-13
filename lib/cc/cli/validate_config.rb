@@ -26,7 +26,7 @@ module CC
         if any_issues?
           display_issues
         else
-          say "Great copy!"
+          say "No errors or warnings found in .codeclimate.yml file."
         end
       end
 

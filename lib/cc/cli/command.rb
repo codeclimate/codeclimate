@@ -1,4 +1,6 @@
 require "highline"
+require "active_support"
+require "active_support/core_ext"
 
 module CC
   module CLI
@@ -6,6 +8,10 @@ module CC
 
       def initialize(args = [])
         @args = args
+      end
+
+      def run
+        $stderr.puts "unknown command #{self.class.name.split('::').last.underscore}"
       end
 
       def self.command_name
@@ -25,7 +31,6 @@ module CC
       def terminal
         @terminal ||= HighLine.new($stdin, $stdout)
       end
-
     end
   end
 end

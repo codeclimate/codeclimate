@@ -27,10 +27,10 @@ exclude_paths:
 
       def run
         if filesystem.exist?(CODECLIMATE_YAML)
-          say "Config file .codeclimate.yml already present.\nTry running 'validate_config' to check configuration."
+          say "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
         else
           create_codeclimate_yaml
-          say "Config file .codeclimate.yml successfully generated.\nEdit and then try running 'validate_config' to check configuration."
+          say "Config file .codeclimate.yml successfully generated.\nEdit and then try running 'validate-config' to check configuration."
         end
       end
 

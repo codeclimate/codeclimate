@@ -28,9 +28,7 @@ module CC::CLI
             filesystem.exist?(".codeclimate.yml").must_equal(false)
 
             yaml_content_before = "This is a test yaml!"
-            File.open(".codeclimate.yml", "w") do |f|
-              f.write(yaml_content_before)
-            end
+            File.write(".codeclimate.yml", yaml_content_before)
 
             filesystem.exist?(".codeclimate.yml").must_equal(true)
 
@@ -64,7 +62,7 @@ module CC::CLI
     end
 
     def filesystem
-      @filesystem || CC::Analyzer::Filesystem.new(".")
+      @filesystem ||= CC::Analyzer::Filesystem.new(".")
     end
 
     def within_temp_dir(&block)

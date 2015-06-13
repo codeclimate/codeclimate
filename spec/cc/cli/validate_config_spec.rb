@@ -24,9 +24,7 @@ module CC::CLI
             filesystem.exist?(".codeclimate.yml").must_equal(false)
 
             yaml_content_before = "This is a test yaml!"
-            File.open(".codeclimate.yml", "w") do |f|
-              f.write(yaml_content_before)
-            end
+            File.write(".codeclimate.yml", yaml_content_before)
 
             filesystem.exist?(".codeclimate.yml").must_equal(true)
 
@@ -47,9 +45,7 @@ module CC::CLI
           it "reports that an error was found" do
             within_temp_dir do
               yaml_content = Factory.create_yaml_with_errors
-              File.open(".codeclimate.yml", "w") do |f|
-                f.write(yaml_content)
-              end
+              File.write(".codeclimate.yml", yaml_content)
 
               stdout, stderr = capture_io do
                 ValidateConfig.new.run
@@ -81,9 +77,7 @@ module CC::CLI
           it "reports that a warning was found in the parent item" do
             within_temp_dir do
               yaml_content = Factory.create_yaml_with_nested_warning
-              File.open(".codeclimate.yml", "w") do |f|
-                f.write(yaml_content)
-              end
+              File.write(".codeclimate.yml", yaml_content)
 
               stdout, stderr = capture_io do
                 ValidateConfig.new.run
@@ -98,9 +92,7 @@ module CC::CLI
           it "reports both kinds of warnings" do
             within_temp_dir do
               yaml_content = Factory.create_yaml_with_nested_and_unnested_warnings
-              File.open(".codeclimate.yml", "w") do |f|
-                f.write(yaml_content)
-              end
+              File.write(".codeclimate.yml", yaml_content)
 
               stdout, stderr = capture_io do
                 ValidateConfig.new.run
@@ -116,15 +108,13 @@ module CC::CLI
           it "reports copy looks great" do
             within_temp_dir do
               yaml_content = Factory.create_correct_yaml
-              File.open(".codeclimate.yml", "w") do |f|
-                f.write(yaml_content)
-              end
+              File.write(".codeclimate.yml", yaml_content)
 
               stdout, stderr = capture_io do
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("Great copy!")
+              stdout.must_match("No errors or warnings found in .codeclimate.yml file.")
             end
           end
         end
@@ -132,7 +122,7 @@ module CC::CLI
     end
 
     def filesystem
-      @filesystem || CC::Analyzer::Filesystem.new(".")
+      @filesystem ||= CC::Analyzer::Filesystem.new(".")
     end
 
     def within_temp_dir(&block)

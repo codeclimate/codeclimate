@@ -1,18 +1,12 @@
 module CC
   module CLI
     module Engines
-      class List < Command
+      class List < EngineCommand
         def run
           say "Available engines:"
-          engines.each do |name, attributes|
+          engines_registry_list.each do |name, attributes|
             say "- #{name}: #{attributes["description"]}"
           end
-        end
-
-        private
-
-        def engines
-          @engines ||= CC::Analyzer::EngineRegistry.new.list
         end
       end
     end

@@ -44,6 +44,12 @@ module CC
       end
 
       def disable_engine(engine_name)
+        if engine_present?(engine_name) && engine_enabled?(engine_name)
+          @config["engines"][engine_name]["enabled"] = false
+        end
+      end
+
+      def remove_engine(engine_name)
         if engine_present?(engine_name)
           @config["engines"].delete(engine_name)
         end
