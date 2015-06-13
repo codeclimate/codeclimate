@@ -66,7 +66,7 @@ module CC::CLI::Engines
     end
 
     def filesystem
-      @filesystem || CC::Analyzer::Filesystem.new(".")
+      @filesystem ||= CC::Analyzer::Filesystem.new(".")
     end
 
     def within_temp_dir(&block)
