@@ -20,6 +20,7 @@ module CC
           "engines:enable #{underline('engine_name')}",
           "engines:install",
           "engines:list",
+          "engines:remove #{underline('engine_name')}",
           "help",
           "init",
           "validate-config",
