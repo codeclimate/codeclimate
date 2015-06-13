@@ -9,7 +9,7 @@ module CC
         CODECLIMATE_YAML = ".codeclimate.yml".freeze
 
         def run
-          raise NotImplemented.new("Must be implemented by child command.")
+          raise NotImplementedError, "Must be implemented by child command."
         end
 
         NotImplemented = Class.new(StandardError)
