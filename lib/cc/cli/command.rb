@@ -25,7 +25,6 @@ module CC
       def terminal
         @terminal ||= HighLine.new($stdin, $stdout)
       end
-
     end
   end
 end
