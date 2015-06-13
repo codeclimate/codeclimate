@@ -8,6 +8,10 @@ module CC
         @args = args
       end
 
+      def run
+        $stderr.puts "unknown command command"
+      end
+
       def self.command_name
         name[/[^:]*$/].split(/(?=[A-Z])/).map(&:downcase).join('-')
       end
