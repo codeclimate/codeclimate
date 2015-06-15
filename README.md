@@ -30,11 +30,11 @@ $ codeclimate help
 
 Available commands:
     analyze [-f format] [path]
-    console
     engines:disable engine_name
     engines:enable engine_name
     engines:install
     engines:list
+    engines:remove
     help
     init
     validate-config

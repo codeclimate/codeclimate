@@ -1,4 +1,5 @@
 require "cc/yaml"
+require "rainbow"
 
 module CC
   module CLI
@@ -26,7 +27,7 @@ module CC
         if any_issues?
           display_issues
         else
-          say "No errors or warnings found in .codeclimate.yml file."
+          puts colorize("No errors or warnings found in .codeclimate.yml file.", :green)
         end
       end
 
@@ -62,22 +63,30 @@ module CC
 
       def display_errors
         errors.each do |error|
-          say "ERROR: " + error
+          puts colorize("ERROR: " + error, :red)
         end
       end
 
       def display_nested_warnings
         nested_warnings.each do |nested_warning|
           if nested_warning[0][0]
-            say "WARNING in " + nested_warning[0][0] + ": " + nested_warning[1]
+            puts colorize("WARNING in " + nested_warning[0][0] + ": " + nested_warning[1], :red)
           end
         end
       end
 
       def display_warnings
         warnings.each do |warning|
-          say "WARNING: " + warning
+          puts colorize("WARNING: " + warning, :red)
         end
+      end
+
+      def colorize(string, *args)
+        rainbow.wrap(string).color(*args)
+      end
+
+      def rainbow
+        @rainbow ||= Rainbow.new
       end
     end
   end
