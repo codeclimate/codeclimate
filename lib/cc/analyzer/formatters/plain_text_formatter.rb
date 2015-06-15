@@ -13,7 +13,7 @@ module CC
         def write(data)
           if data.present?
             json = JSON.parse(data)
-            case json["type"]
+            case json["type"].downcase
             when "issue"
               issues << json
             when "warning"
@@ -31,10 +31,11 @@ module CC
           issues_by_path.each do |path, file_issues|
             puts colorize("== #{path} (#{pluralize(file_issues.size, "issue")}) ==", :yellow)
 
-            file_issues.sort_by { |i| i["location"]["begin"]["line"] }.each do |issue|
-              if issue["location"]["begin"]
-                print("#{colorize(issue["location"]["begin"]["line"], :cyan)}: ")
+            IssueSorter.new(file_issues).by_location.each do |issue|
+              if location = issue["location"]
+                print(colorize("#{LocationDescription.new(location)}: ", :cyan))
               end
+
               print(issue["description"])
               puts
             end
