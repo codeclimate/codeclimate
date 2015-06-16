@@ -3,6 +3,12 @@ require "spec_helper"
 module CC::Analyzer
   describe LocationDescription do
     describe "#to_s" do
+      it "adds the suffix" do
+        location = {"lines" => {"begin" => 1, "end" => 3}}
+
+        LocationDescription.new(location, "!").to_s.must_equal("1-3!")
+      end
+
       it "with lines" do
         location = {"lines" => {"begin" => 1, "end" => 3}}
 
