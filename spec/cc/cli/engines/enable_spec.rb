@@ -3,6 +3,8 @@ require "spec_helper"
 module CC::CLI::Engines
   describe Enable do
     describe "#run" do
+      before { Install.any_instance.stubs(:run) }
+
       describe "when the engine requested does not exist" do
         it "says engine does not exist" do
           within_temp_dir do
