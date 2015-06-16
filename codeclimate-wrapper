@@ -1,8 +1,31 @@
 #!/bin/sh
-#
-# https://github.com/codeclimate/codeclimate
-#
-###
+invalid_setup() {
+  local reason=$1
+
+  cat >&2 <<EOF
+Your Docker setup does not support the codeclimate wrapper script:
+
+  > $reason
+
+We require a local Docker daemon that supports communication via the default
+socket path.
+
+Please use \`docker run' to run the \`codeclimate/codeclimate' image directly.
+
+See https://github.com/codeclimate/codeclimate for more details.
+
+EOF
+  exit 1
+}
+
+if [ ! -S /var/run/docker.sock ]; then
+  invalid_setup "/var/run/docker.sock does not exist or is not a socket"
+fi
+
+if [ -n "$DOCKER_HOST" ] && [ "$DOCKER_HOST" != "unix:///var/run/docker.sock" ]; then
+  invalid_setup "remote DOCKER_HOST=$DOCKER_HOST"
+fi
+
 exec docker run \
   --interactive --tty --rm \
   --env CODE_PATH="$PWD" \
