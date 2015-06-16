@@ -23,6 +23,14 @@ describe CC::Analyzer::Engine do
       run_engine("command" => %w[foo bar])
     end
 
+    it "passes json to docker" do
+      expect_docker_run do |*args|
+        assert_within(["--env", "ENGINE_CONFIG={\"exclude_paths\":[\"foo.rb\"]}"], args)
+      end
+
+      run_engine
+    end
+
     it "runs the container in a constrained environment" do
       expect_docker_run do |*args|
         assert_within(["--cap-drop", "all"], args)
@@ -69,7 +77,7 @@ describe CC::Analyzer::Engine do
         "command" => "run",
       }.merge(metadata)
 
-      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", "/config.json", "sup")
+      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", {exclude_paths: ["foo.rb"]}.to_json, "sup")
       engine.run(io)
 
       io

@@ -56,17 +56,6 @@ module CC
           merge!(exclude_paths: exclude_paths).to_json
       end
 
-      # Make a file in the code directory to mount into the
-      # engine container
-      def engine_config_file(engine_name)
-        filename = "config-#{SecureRandom.uuid}.json"
-        tmp_path = File.join("/tmp/cc-config", filename)
-
-        File.write(tmp_path, engine_config(engine_name))
-
-        tmp_path
-      end
-
       def exclude_paths
         if config.exclude_paths
           filesystem.files_matching(config.exclude_paths)
@@ -81,7 +70,7 @@ module CC
             engine_name,
             engine_registry[engine_name],
             path,
-            engine_config_file(engine_name),
+            engine_config(engine_name),
             SecureRandom.uuid
           )
         end
