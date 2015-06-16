@@ -36,7 +36,7 @@ module CC::CLI::Engines
         expect_system("docker pull madeup_img", false)
 
         capture_io do
-          lambda { Install.new.run }.must_raise(Install::ImageNotFound)
+          lambda { Install.new.run }.must_raise(Install::ImagePullFailure)
         end
       end
 

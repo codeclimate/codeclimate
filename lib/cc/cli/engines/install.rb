@@ -4,7 +4,7 @@ module CC
   module CLI
     module Engines
       class Install < EngineCommand
-        ImageNotFound = Class.new(StandardError)
+        ImagePullFailure = Class.new(StandardError)
 
         def run
           require_codeclimate_yml
@@ -50,7 +50,7 @@ module CC
 
         def pull_engine_image(engine_image)
           if !system("docker pull #{engine_image}")
-            raise ImageNotFound, "image #{engine_image} not found"
+            raise ImagePullFailure, "unable to pull image #{engine_image}"
           end
         end
       end
