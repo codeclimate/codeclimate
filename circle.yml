@@ -18,6 +18,7 @@ test:
   override:
     - bundle exec rake
     - docker build -t=$registry_root/$image_name:b$CIRCLE_BUILD_NUM .
+    - docker run -it -e CODE_PATH="$PWD" -v "$PWD":/code -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/cc-config:/tmp/cc-config $registry_root/$image_name:b$CIRCLE_BUILD_NUM help
 
 deployment:
   registry:
