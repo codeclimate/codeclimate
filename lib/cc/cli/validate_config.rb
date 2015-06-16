@@ -1,5 +1,4 @@
 require "cc/yaml"
-require "rainbow"
 
 module CC
   module CLI
@@ -7,21 +6,12 @@ module CC
       include CC::Analyzer
       include CC::Yaml
 
-      CODECLIMATE_YAML = ".codeclimate.yml".freeze
-
       def run
-        if filesystem.exist?(CODECLIMATE_YAML)
-          verify_yaml
-        else
-          say "No '.codeclimate.yml' file found. Consider running 'codeclimate init' to generate a valid config file."
-        end
+        require_codeclimate_yml
+        verify_yaml
       end
 
       private
-
-      def filesystem
-        @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
-      end
 
       def verify_yaml
         if any_issues?
@@ -79,14 +69,6 @@ module CC
         warnings.each do |warning|
           puts colorize("WARNING: " + warning, :red)
         end
-      end
-
-      def colorize(string, *args)
-        rainbow.wrap(string).color(*args)
-      end
-
-      def rainbow
-        @rainbow ||= Rainbow.new
       end
     end
   end

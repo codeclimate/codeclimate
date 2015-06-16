@@ -1,10 +1,12 @@
 require "highline"
 require "active_support"
 require "active_support/core_ext"
+require "rainbow"
 
 module CC
   module CLI
     class Command
+      CODECLIMATE_YAML = ".codeclimate.yml".freeze
 
       def initialize(args = [])
         @args = args
@@ -26,7 +28,26 @@ module CC
         terminal.say message
       end
 
-    private
+      def require_codeclimate_yml
+        if !filesystem.exist?(CODECLIMATE_YAML)
+          $stderr.puts colorize("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.", :red)
+          exit 1
+        end
+      end
+
+      private
+
+      def colorize(string, *args)
+        rainbow.wrap(string).color(*args)
+      end
+
+      def rainbow
+        @rainbow ||= Rainbow.new
+      end
+
+      def filesystem
+        @filesystem ||= CC::Analyzer::Filesystem.new(ENV['FILESYSTEM_DIR'])
+      end
 
       def terminal
         @terminal ||= HighLine.new($stdin, $stdout)

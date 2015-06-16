@@ -6,8 +6,6 @@ module CC
       class EngineCommand < Command
         include CC::Analyzer
 
-        CODECLIMATE_YAML = ".codeclimate.yml".freeze
-
         private
 
         def engine_name
@@ -42,10 +40,6 @@ module CC
 
         def engines_registry_list
           @engines_registry_list ||= CC::Analyzer::EngineRegistry.new.list
-        end
-
-        def filesystem
-          @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
         end
       end
     end
