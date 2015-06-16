@@ -25,7 +25,7 @@ module CC::CLI
 
             YAML.safe_load(new_content).must_equal({
               "rubocop"=> {"enabled"=>true},
-              "ratings"=>{"paths"=>["**/*.rb", "**/*.js", "**/*.jsx", "**/*.css"]},
+              "ratings"=>{"paths"=>["**.rb", "**.js", "**.jsx", "**.css"]},
               "eslint"=>{"enabled"=>true},
               "csslint"=>{"enabled"=>true}
             })

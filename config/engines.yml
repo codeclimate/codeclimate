@@ -4,30 +4,43 @@ rubocop:
   description: A Ruby static code analyzer, based on the community Ruby style guide.
   enable_patterns:
     - "**/*.rb"
+  default_ratings_paths:
+    - "**.rb"
 gofmt:
   image_name: codeclimate/codeclimate-gofmt
   image_id: c8ba52f4645ce0cc134e34cef40eb1335d9ac365d61f72728307687a981f1b64
   description: gofmt
   enable_patterns:
     - "**/*.go"
+  default_ratings_paths:
+    - "**.go"
 golint:
   image_name: codeclimate/codeclimate-golint
   description: golint
   enable_patterns:
     - "**/*.go"
+  default_ratings_paths:
+    - "**.go"
 coffeelint:
   image_name: codeclimate/codeclimate-coffeelint
   description: A style checker for CoffeeScript
   enable_patterns:
     - "**/*.coffee"
+  default_ratings_paths:
+    - "**.coffee"
 eslint:
   image_name: codeclimate/codeclimate-eslint
   description: A JavaScript/JSX linting utility
   enable_patterns:
     - "**/*.js"
     - "**/*.jsx"
+  default_ratings_paths:
+    - "**.js"
+    - "**.jsx"
 csslint:
   image_name: codeclimate/codeclimate-csslint
   description: Automated linting of Cascading Stylesheets
   enable_patterns:
     - "**/*.css"
+  default_ratings_paths:
+    - "**.css"

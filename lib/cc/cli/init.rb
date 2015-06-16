@@ -23,7 +23,7 @@ module CC
           config["ratings"] ||= {}
           config["ratings"]["paths"] ||= []
 
-          config["ratings"]["paths"] |= engine_config["enable_patterns"]
+          config["ratings"]["paths"] |= engine_config["default_ratings_paths"]
         end
 
         File.write(filesystem.path_for(CODECLIMATE_YAML), config.to_yaml)
