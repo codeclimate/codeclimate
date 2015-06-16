@@ -3,21 +3,6 @@ require "spec_helper"
 module CC::CLI
   describe ValidateConfig do
     describe "#run" do
-      describe "when no .codeclimate.yml file is present" do
-        it "analyzes nothing and prompts the user to generate a config using 'codeclimate init'" do
-          within_temp_dir do
-            filesystem.exist?(".codeclimate.yml").must_equal(false)
-
-            stdout, stderr = capture_io do
-              ValidateConfig.new.run
-            end
-
-            stdout.must_match("No '.codeclimate.yml' file found. Consider running 'codeclimate init' to generate a valid config file.")
-            filesystem.exist?(".codeclimate.yml").must_equal(false)
-          end
-        end
-      end
-
       describe "when a .codeclimate.yml file is present in working directory" do
         it "analyzes the .codeclimate.yml file without altering it" do
           within_temp_dir do

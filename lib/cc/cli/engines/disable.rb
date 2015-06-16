@@ -5,9 +5,9 @@ module CC
     module Engines
       class Disable < EngineCommand
         def run
-          if !filesystem.exist?(CODECLIMATE_YAML)
-            say "No .codeclimate.yml file found. Run 'codeclimate init' to generate a config file."
-          elsif !engine_exists?
+          require_codeclimate_yml
+
+          if !engine_exists?
             say "Engine not found. Run 'codeclimate engines:list for a list of valid engines."
           elsif !engine_present_in_yaml?
             say "Engine not found in .codeclimate.yml."

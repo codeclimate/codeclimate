@@ -5,8 +5,6 @@ module CC
     class Analyze < Command
       include CC::Analyzer
 
-      CODECLIMATE_YAML = ".codeclimate.yml".freeze
-
       def initialize(args = [])
         super
 
@@ -14,6 +12,8 @@ module CC
       end
 
       def run
+        require_codeclimate_yml
+
         formatter.started
 
         engines.each do |engine|
@@ -85,10 +85,6 @@ module CC
             SecureRandom.uuid
           )
         end
-      end
-
-      def filesystem
-        @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
       end
 
       def formatter

@@ -3,21 +3,6 @@ require "spec_helper"
 module CC::CLI::Engines
   describe Remove do
     describe "#run" do
-      describe "when no .codeclimate.yml file is present" do
-        it "prompts the user to generate a config using 'codeclimate init'" do
-          within_temp_dir do
-            filesystem.exist?(".codeclimate.yml").must_equal(false)
-
-            stdout, stderr = capture_io do
-              Remove.new(args = ["rubocop"]).run
-            end
-
-            stdout.must_match("No .codeclimate.yml file found. Run 'codeclimate init' to generate a config file.")
-            filesystem.exist?(".codeclimate.yml").must_equal(false)
-          end
-        end
-      end
-
       describe "when the engine requested does not exist in Code Climate registry" do
         it "says engine does not exist" do
           within_temp_dir do

@@ -5,6 +5,8 @@ module CC
     module Engines
       class Install < EngineCommand
         def run
+          require_codeclimate_yml
+
           say "Pulling uninstalled docker images."
           pull_uninstalled_docker_images
         end

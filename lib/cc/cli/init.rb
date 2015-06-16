@@ -3,7 +3,6 @@ module CC
     class Init < Command
       include CC::Analyzer
 
-      CODECLIMATE_YAML = ".codeclimate.yml".freeze
       TEMPLATE_CODECLIMATE_YAML = %{
 #
 # ---Choose Your Engines---
@@ -35,10 +34,6 @@ exclude_paths:
       end
 
       private
-
-      def filesystem
-        @filesystem ||= Filesystem.new(ENV['FILESYSTEM_DIR'])
-      end
 
       def create_codeclimate_yaml
         File.open(filesystem.path_for(CODECLIMATE_YAML), "w") do |f|
