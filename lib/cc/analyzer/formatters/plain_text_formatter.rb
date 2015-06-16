@@ -26,7 +26,6 @@ module CC
 
         def finished
           puts
-          puts
 
           issues_by_path.each do |path, file_issues|
             puts colorize("== #{path} (#{pluralize(file_issues.size, "issue")}) ==", :yellow)
