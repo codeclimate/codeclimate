@@ -24,11 +24,15 @@ module CC::CLI
             filesystem.exist?(".codeclimate.yml").must_equal(true)
 
             YAML.safe_load(new_content).must_equal({
-              "rubocop"=> {"enabled"=>true},
-              "ratings"=>{"paths"=>["**.rb", "**.js", "**.jsx", "**.css"]},
-              "eslint"=>{"enabled"=>true},
-              "csslint"=>{"enabled"=>true}
+              "engines" => {
+                "rubocop" => { "enabled"=>true },
+                "eslint" => { "enabled"=>true },
+                "csslint"=> { "enabled"=>true },
+              },
+              "ratings" => { "paths" => ["**.rb", "**.js", "**.jsx", "**.css"] },
             })
+
+            CC::Yaml.parse(new_content).errors.must_be_empty
           end
         end
       end
