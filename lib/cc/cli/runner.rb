@@ -7,6 +7,12 @@ module CC
 
       def self.run(argv)
         new(argv).run
+      rescue => ex
+        $stderr.puts("error: (#{ex.class}) #{ex.message}")
+
+        if ENV["CODECLIMATE_DEBUG"]
+          $stderr.puts("backtrace: #{ex.backtrace.join("\n\t")}")
+        end
       end
 
       def initialize(args)
