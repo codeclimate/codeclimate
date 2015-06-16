@@ -7,6 +7,11 @@ module CC::CLI
         it "creates a correct .codeclimate.yml file and reports successful creation" do
           within_temp_dir do
             filesystem.exist?(".codeclimate.yml").must_equal(false)
+            File.write("cool.rb", "class Cool; end")
+            FileUtils.mkdir_p("js")
+            File.write("js/foo.js", "function() {}");
+            FileUtils.mkdir_p("stylesheets")
+            File.write("stylesheets/main.css", ".main {}")
 
             stdout, stderr = capture_io do
               init = Init.new
@@ -17,7 +22,13 @@ module CC::CLI
 
             stdout.must_match "Config file .codeclimate.yml successfully generated."
             filesystem.exist?(".codeclimate.yml").must_equal(true)
-            new_content.must_equal(Init::TEMPLATE_CODECLIMATE_YAML)
+
+            YAML.safe_load(new_content).must_equal({
+              "rubocop"=> {"enabled"=>true},
+              "ratings"=>{"paths"=>["**/*.rb", "**/*.js", "**/*.jsx", "**/*.css"]},
+              "eslint"=>{"enabled"=>true},
+              "csslint"=>{"enabled"=>true}
+            })
           end
         end
       end

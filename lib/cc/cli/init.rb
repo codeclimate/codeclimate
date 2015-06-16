@@ -3,27 +3,6 @@ module CC
     class Init < Command
       include CC::Analyzer
 
-      TEMPLATE_CODECLIMATE_YAML = %{
-#
-# ---Choose Your Engines---
-# To enable analysis for a certain engine, add engine and set enabled to `true`.
-# For help setting your engines:
-# http://docs.codeclimate.com/article/169-configuring-analysis-languages #update to engines link
-#
-engines:
-  rubocop:
-    enabled: true
-  jshint:
-    enabled: true
-#
-# ---Exclude Files or Directories---
-# List the files or directories you would like excluded from our analysis.
-# For help setting your exclude paths:
-# http://docs.codeclimate.com/article/166-excluding-files-folders
-#
-exclude_paths:
- - "test/*"}.freeze
-
       def run
         if filesystem.exist?(CODECLIMATE_YAML)
           say "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
@@ -36,8 +15,25 @@ exclude_paths:
       private
 
       def create_codeclimate_yaml
-        File.open(filesystem.path_for(CODECLIMATE_YAML), "w") do |f|
-          f.write(TEMPLATE_CODECLIMATE_YAML)
+        config = {}
+        eligible_engines.each do |engine_name, engine_config|
+          config[engine_name] = {
+            "enabled" => true
+          }
+          config["ratings"] ||= {}
+          config["ratings"]["paths"] ||= []
+
+          config["ratings"]["paths"] |= engine_config["enable_patterns"]
+        end
+
+        File.write(filesystem.path_for(CODECLIMATE_YAML), config.to_yaml)
+      end
+
+      def eligible_engines
+        CC::Analyzer::EngineRegistry.new.list.each_with_object({}) do |(engine_name, config), result|
+          if filesystem.files_matching(config["enable_patterns"]).any?
+            result[engine_name] = config
+          end
         end
       end
     end
