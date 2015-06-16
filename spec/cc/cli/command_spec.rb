@@ -9,7 +9,6 @@ module CC::CLI
             lambda { Command.new.require_codeclimate_yml }.must_raise SystemExit
           end
 
-
           stderr.must_match("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.")
         end
       end

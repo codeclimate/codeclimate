@@ -6,7 +6,6 @@ require "rainbow"
 module CC
   module CLI
     class Command
-
       CODECLIMATE_YAML = ".codeclimate.yml".freeze
 
       def initialize(args = [])
@@ -36,7 +35,7 @@ module CC
         end
       end
 
-    private
+      private
 
       def colorize(string, *args)
         rainbow.wrap(string).color(*args)
