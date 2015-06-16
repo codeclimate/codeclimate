@@ -8,11 +8,11 @@ module CC
 
       TIMEOUT = 15 * 60 # 15m
 
-      def initialize(name, metadata, code_path, config_path, label)
+      def initialize(name, metadata, code_path, config_json, label)
         @name = name
         @metadata = metadata
         @code_path = code_path
-        @config_path = config_path
+        @config_json = config_json
         @label = label.to_s
       end
 
@@ -73,7 +73,7 @@ module CC
           "--memory-swap", "-1",
           "--net", "none",
           "--volume", "#{@code_path}:/code:ro",
-          "--volume", "#{@config_path}:/config.json:ro",
+          "--env", "ENGINE_CONFIG=#{@config_json}",
           @metadata["image_name"],
           @metadata["command"], # String or Array
         ].flatten.compact
