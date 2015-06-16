@@ -77,7 +77,7 @@ describe CC::Analyzer::Engine do
         "command" => "run",
       }.merge(metadata)
 
-      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", {exclude_paths: ["foo.rb"]}.to_json, "sup")
+      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", { exclude_paths: ["foo.rb"] }.to_json, "sup")
       engine.run(io)
 
       io
