@@ -33,7 +33,7 @@ module CC
 
             IssueSorter.new(file_issues).by_location.each do |issue|
               if location = issue["location"]
-                print(colorize("#{LocationDescription.new(location)}: ", :cyan))
+                print(colorize(LocationDescription.new(location, ": "), :cyan))
               end
 
               print(issue["description"])

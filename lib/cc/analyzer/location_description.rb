@@ -1,8 +1,9 @@
 module CC
   module Analyzer
     class LocationDescription
-      def initialize(location)
+      def initialize(location, suffix = "")
         @location = location
+        @suffix = suffix
       end
 
       def to_s
@@ -17,12 +18,15 @@ module CC
             str << render_position(positions["end"])
           end
         end
+
+        str << suffix unless str.blank?
+
         str
       end
 
       private
 
-      attr_reader :location
+      attr_reader :location, :suffix
 
       def render_lines
         str = location["lines"]["begin"].to_s
