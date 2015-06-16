@@ -10,17 +10,17 @@ dependencies:
     - echo $gcloud_json_key_base64 | sed 's/ //g' | base64 -d > /tmp/gcloud_key.json
     - curl https://sdk.cloud.google.com | bash
     - gcloud auth activate-service-account $gcloud_account_email --key-file /tmp/gcloud_key.json
+    - gcloud preview docker -a
+    - docker pull $registry_root/alpine-ruby:0.0.1
+    - docker tag $registry_root/alpine-ruby:0.0.1 codeclimate/alpine-ruby:0.0.1
 
 test:
   override:
     - bundle exec rake
+    - docker build -t=$registry_root/$image_name:b$CIRCLE_BUILD_NUM .
 
 deployment:
   registry:
     branch: master
     commands:
-      - gcloud preview docker -a
-      - docker pull $registry_root/alpine-ruby:0.0.1
-      - docker tag $registry_root/alpine-ruby:0.0.1 codeclimate/alpine-ruby:0.0.1
-      - docker build -t=$registry_root/$image_name:b$CIRCLE_BUILD_NUM .
       - docker push $registry_root/$image_name:b$CIRCLE_BUILD_NUM
