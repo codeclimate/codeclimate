@@ -15,7 +15,7 @@ module CC
       private
 
       def create_codeclimate_yaml
-        config = {"engines" => {}}
+        config = { "engines" => {} }
         eligible_engines.each do |engine_name, engine_config|
           config["engines"][engine_name] = {
             "enabled" => true
