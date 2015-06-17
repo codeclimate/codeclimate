@@ -11,8 +11,8 @@ dependencies:
     - curl https://sdk.cloud.google.com | bash
     - gcloud auth activate-service-account $gcloud_account_email --key-file /tmp/gcloud_key.json
     - gcloud preview docker -a
-    - docker pull $registry_root/alpine-ruby:0.0.1
-    - docker tag $registry_root/alpine-ruby:0.0.1 codeclimate/alpine-ruby:0.0.1
+    - docker pull $registry_root/alpine-ruby:b36
+    - docker tag $registry_root/alpine-ruby:b36 codeclimate/alpine-ruby:b36
 
 test:
   override:
