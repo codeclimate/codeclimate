@@ -6,7 +6,7 @@
 # determine which files should be rated.
 rubocop:
   image_name: codeclimate/codeclimate-rubocop
-  image_id: 83380a80e2395a172bf93e64762d3a0cdcd7b8ffc55be99d849119d8de1d3b90
+  image_id: 41273519bce24e59685106ff3f4519abc20233fdaf46093576cefecc093b795f
   description: A Ruby static code analyzer, based on the community Ruby style guide.
   enable_patterns:
     - "**/*.rb"
@@ -36,6 +36,7 @@ coffeelint:
     - "**.coffee"
 eslint:
   image_name: codeclimate/codeclimate-eslint
+  image_id: 28a9ec7c5fc88a67317b6193c3ddc72f1402ba2500e8ed3c6feab6d06ca91f65
   description: A JavaScript/JSX linting utility
   enable_patterns:
     - "**/*.js"
@@ -45,6 +46,7 @@ eslint:
     - "**.jsx"
 csslint:
   image_name: codeclimate/codeclimate-csslint
+  image_id: 3d5aea2e5f241ff1daff33bd86cc5a819a34c81471e31ca70992f6de5e8edf43
   description: Automated linting of Cascading Stylesheets
   enable_patterns:
     - "**/*.css"
