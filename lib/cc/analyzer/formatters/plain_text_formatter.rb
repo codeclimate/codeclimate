@@ -13,6 +13,10 @@ module CC
         def write(data)
           if data.present?
             json = JSON.parse(data)
+            if @active_engine
+              json["engine_name"] = @active_engine.name
+            end
+
             case json["type"].downcase
             when "issue"
               issues << json
@@ -36,6 +40,7 @@ module CC
               end
 
               print(issue["description"])
+              print(colorize(" [#{issue["engine_name"]}]", "#333333"))
               puts
             end
             puts
@@ -49,9 +54,11 @@ module CC
         end
 
         def engine_running(engine)
+          @active_engine = engine
           with_spinner("Running #{engine.name}: ") do
             yield
           end
+          @active_engine = nil
         end
 
         def failed(output)
