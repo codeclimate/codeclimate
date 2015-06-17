@@ -14,7 +14,7 @@ rubocop:
     - "**.rb"
 gofmt:
   image_name: codeclimate/codeclimate-gofmt
-  image_id: c8ba52f4645ce0cc134e34cef40eb1335d9ac365d61f72728307687a981f1b64
+  image_id: fe7b20a9eda6e0bd154fbbb289f0d18ff3ffc41d891cd3b2e5dbe7e015180396
   description: gofmt
   enable_patterns:
     - "**/*.go"
@@ -22,7 +22,16 @@ gofmt:
     - "**.go"
 golint:
   image_name: codeclimate/codeclimate-golint
+  image_id: cfde0099114d8b18bec8419d9ed359efac03069821cb967144b807d02ada1412
   description: golint
+  enable_patterns:
+    - "**/*.go"
+  default_ratings_paths:
+    - "**.go"
+govet:
+  image_name: codeclimate/codeclimate-govet
+  image_id: fe7690da7198c569a28b69189909eb4c1199d2987bf50ab5d3bbd20d83139489
+  description: govet
   enable_patterns:
     - "**/*.go"
   default_ratings_paths:
