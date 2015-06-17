@@ -13,7 +13,9 @@ module CC
         def write(data)
           if data.present?
             json = JSON.parse(data)
-            json["engine_name"] = @active_engine.name
+            if @active_engine
+              json["engine_name"] = @active_engine.name
+            end
 
             case json["type"].downcase
             when "issue"
