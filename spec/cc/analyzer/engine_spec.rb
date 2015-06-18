@@ -56,10 +56,9 @@ describe CC::Analyzer::Engine do
     end
 
     it "passes stderr to a formatter" do
-      expect_docker_run(StringIO.new, StringIO.new, 1)
-      TestFormatter.any_instance.expects(:failed)
+      expect_docker_run(StringIO.new, StringIO.new, failed_status)
 
-      io = run_engine
+      lambda { run_engine }.must_raise(CC::Analyzer::Engine::EngineFailure)
     end
 
     it "ensures the container is cleaned up" do
@@ -83,10 +82,10 @@ describe CC::Analyzer::Engine do
       io
     end
 
-    def expect_docker_run(stdout = StringIO.new, stderr = StringIO.new, exit_code = 0, &block)
+    def expect_docker_run(stdout = StringIO.new, stderr = StringIO.new, status = success_status, &block)
       block ||= ->(*) { :unused }
 
-      Process.expects(:waitpid2).returns([1, OpenStruct.new(exitstatus: exit_code)])
+      Process.expects(:waitpid2).returns([1, status])
       POSIX::Spawn.expects(:popen4).
         with(&block).returns([1, nil, stdout, stderr])
     end
@@ -100,6 +99,14 @@ describe CC::Analyzer::Engine do
       else
         assert(false, msg)
       end
+    end
+
+    def success_status
+      OpenStruct.new(exitstatus: 0, success?: true)
+    end
+
+    def failed_status
+      OpenStruct.new(exitstatus: 1, success?: false)
     end
   end
 end
