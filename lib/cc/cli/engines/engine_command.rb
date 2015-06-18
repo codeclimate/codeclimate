@@ -17,7 +17,7 @@ module CC
         end
 
         def yaml_content
-          File.read(CODECLIMATE_YAML).freeze
+          File.read(filesystem.path_for(CODECLIMATE_YAML)).freeze
         end
 
         def update_yaml
