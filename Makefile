@@ -7,12 +7,12 @@ release:
 
 install:
 	which docker
-	docker pull codeclimate/codeclimate:$(VERSION)
+	docker pull codeclimate/codeclimate:latest
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	install -m 0755 codeclimate-wrapper $(DESTDIR)$(PREFIX)/bin/codeclimate
 
 uninstall:
 	$(RM) $(DESTDIR)$(PREFIX)/bin/codeclimate
-	docker rmi codeclimate/codeclimate:$(VERSION)
+	docker rmi codeclimate/codeclimate:latest
 
 .PHONY: install uninstall
