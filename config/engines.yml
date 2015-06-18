@@ -82,3 +82,11 @@ rubymotion:
   enable_patterns:
   default_ratings_paths:
     - "**.rb"
+bundler-audit:
+  image_name: codeclimate/codeclimate-bundler-audit
+  description: Patch-level verification for Bundler
+  community: false
+  enable_patterns:
+    - Gemfile.lock
+  default_ratings_paths:
+    - Gemfile.lock
