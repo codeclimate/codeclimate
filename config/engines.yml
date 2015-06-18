@@ -61,3 +61,9 @@ csslint:
     - "**/*.css"
   default_ratings_paths:
     - "**.css"
+watson:
+  image_name: codeclimate/codeclimate-watson
+  description: A young Ember Doctor to help you fix your code.
+  enable_patterns:
+  default_ratings_paths:
+    - "app/**"
