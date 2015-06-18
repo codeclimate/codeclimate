@@ -24,6 +24,14 @@ module CC
         end
       end
 
+      def all
+        @files ||= Dir.chdir(@root) { Dir.glob("**/*") }
+      end
+
+      def any?(&block)
+        all.any?(&block)
+      end
+
       def files_matching(globs)
         Dir.chdir(@root) do
           globs.map do |glob|
