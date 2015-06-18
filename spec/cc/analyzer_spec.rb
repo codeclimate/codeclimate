@@ -5,6 +5,6 @@ describe CC::Analyzer do
     statsd = Object.new
     CC::Analyzer.statsd = statsd
     CC::Analyzer.statsd.must_equal statsd
-    CC::Analyzer.statsd = nil
+    CC::Analyzer.statsd = CC::Analyzer::DummyStatsd.new
   end
 end
