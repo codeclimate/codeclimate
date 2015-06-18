@@ -80,10 +80,9 @@ Available commands:
 The following is brief explanation of each available command.
 
 * `analyze`: Analyze all relevant files in the specified directory. All engines that are enabled in your `.codeclimate.yml` file will run, one after another. The `-f` (or `format`) argument allows you to set the output format of the analysis (using `%{TODO}` or `%{TODO}`). Use the `path` argument to set the location of the directory you want to analyze.
-* `console`: %{TODO}
 * `engines:disable engine_name`: Changes the engine's `enabled:` node to be `false` in your `.codeclimate.yml` file. This engine will not be run the next time your project is analyzed.
 * `engines:enable engine_name`: Pulls down the Docker image for the specified engine (`engine_name`) and builds it. Also changes the engine's `enabled:` node to be `true` in your `.codeclimate.yml` file. This engine will be run the next time your project is analyzed.
-* `engines:install`:
+* `engines:install`: Pulls down the Docker image for the specified engine (`engine_name`) and builds it. Does not add enable it in your `.codeclimate.yml` file.
 * `engines:list`: Lists all available engines in the [Code Climate Docker Hub](https://hub.docker.com/account/organizations/codeclimate/).
 * `help`: Displays a list of commands that can be passed to the CLI.
 * `init`: Generates a new `.codeclimate.yml` in the current working directory. Automatically enables any previously installed engines.
