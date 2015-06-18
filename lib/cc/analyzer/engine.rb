@@ -4,9 +4,13 @@ require "securerandom"
 module CC
   module Analyzer
     class Engine
-      attr_reader :name
-
       TIMEOUT = 15 * 60 # 15m
+
+      CommandFailure = Class.new(StandardError)
+      EngineFailure = Class.new(StandardError)
+      EngineTimeout = Class.new(StandardError)
+
+      attr_reader :name
 
       def initialize(name, metadata, code_path, config_json, label)
         @name = name
@@ -41,7 +45,7 @@ module CC
             Thread.current.abort_on_exception = true
             run_command("docker kill #{container_name}")
 
-            stdout_io.failed("Execution timed out")
+            raise EngineTimeout, "engine #{name} ran past #{TIMEOUT} seconds and was killed"
           end
         end
 
@@ -50,12 +54,13 @@ module CC
         Analyzer.statsd.increment("cli.engines.finished")
 
         if status.success?
-          Analyzer.statsd.increment("cli.engines.names.#{@name}.result.success")
+          Analyzer.statsd.increment("cli.engines.names.#{name}.result.success")
           Analyzer.statsd.increment("cli.engines.result.success")
         else
-          Analyzer.statsd.increment("cli.engines.names.#{@name}.result.error")
+          Analyzer.statsd.increment("cli.engines.names.#{name}.result.error")
           Analyzer.statsd.increment("cli.engines.result.error")
-          stdout_io.failed(stderr_io.string)
+
+          raise EngineFailure, "engine #{name} failed with status #{status.exitstatus} and stderr #{stderr_io.string.inspect}"
         end
       ensure
         t_out.join if t_out
@@ -92,8 +97,6 @@ module CC
           raise CommandFailure, "command '#{command}' failed with status #{spawn.status.exitstatus} and output #{spawn.err}"
         end
       end
-
-      CommandFailure = Class.new(StandardError)
     end
   end
 end
