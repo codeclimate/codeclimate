@@ -13,5 +13,7 @@ module CC
     autoload :NullConfig,         "cc/analyzer/null_config"
     autoload :SourceBuffer,       "cc/analyzer/source_buffer"
     autoload :UnitName,           "cc/analyzer/unit_name"
+
+    cattr_accessor :statsd
   end
 end
