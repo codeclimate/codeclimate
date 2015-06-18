@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.files         = Dir["lib/**/*.rb"] + Dir["bin/*"] + Dir["config/*"]
   s.require_paths = ["lib"]
   s.bindir        = "bin"
-  s.executables   = "codeclimate"
 
   s.add_dependency "activesupport", "~> 4.2", ">= 4.2.1"
   s.add_dependency "tty-spinner", "~> 0.1.0"
