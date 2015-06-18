@@ -1,4 +1,5 @@
 require "spec_helper"
+require "cc/yaml"
 
 module CC::CLI
   describe Init do

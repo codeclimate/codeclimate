@@ -30,7 +30,11 @@ module CC
       end
 
       def engine_eligible?(engine)
-        !engine["community"] && engine["enable_patterns"] && filesystem.files_matching(engine["enable_patterns"]).any?
+        !engine["community"] &&
+          engine["enable_regexps"].present? &&
+          filesystem.any? do |path|
+            engine["enable_regexps"].any? { |re| Regexp.new(re).match(path) }
+          end
       end
 
       def eligible_engines
