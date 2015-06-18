@@ -8,6 +8,7 @@ rubocop:
   image_name: codeclimate/codeclimate-rubocop
   image_id: 41273519bce24e59685106ff3f4519abc20233fdaf46093576cefecc093b795f
   description: A Ruby static code analyzer, based on the community Ruby style guide.
+  community: false
   enable_patterns:
     - "**/*.rb"
   default_ratings_paths:
@@ -16,6 +17,7 @@ gofmt:
   image_name: codeclimate/codeclimate-gofmt
   image_id: fe7b20a9eda6e0bd154fbbb289f0d18ff3ffc41d891cd3b2e5dbe7e015180396
   description: gofmt
+  community: true
   enable_patterns:
     - "**/*.go"
   default_ratings_paths:
@@ -24,6 +26,7 @@ golint:
   image_name: codeclimate/codeclimate-golint
   image_id: cfde0099114d8b18bec8419d9ed359efac03069821cb967144b807d02ada1412
   description: golint
+  community: true
   enable_patterns:
     - "**/*.go"
   default_ratings_paths:
@@ -32,6 +35,7 @@ govet:
   image_name: codeclimate/codeclimate-govet
   image_id: fe7690da7198c569a28b69189909eb4c1199d2987bf50ab5d3bbd20d83139489
   description: govet
+  community: true
   enable_patterns:
     - "**/*.go"
   default_ratings_paths:
@@ -39,6 +43,7 @@ govet:
 coffeelint:
   image_name: codeclimate/codeclimate-coffeelint
   description: A style checker for CoffeeScript
+  community: false
   enable_patterns:
     - "**/*.coffee"
   default_ratings_paths:
@@ -47,6 +52,7 @@ eslint:
   image_name: codeclimate/codeclimate-eslint
   image_id: 28a9ec7c5fc88a67317b6193c3ddc72f1402ba2500e8ed3c6feab6d06ca91f65
   description: A JavaScript/JSX linting utility
+  community: false
   enable_patterns:
     - "**/*.js"
     - "**/*.jsx"
@@ -57,6 +63,7 @@ csslint:
   image_name: codeclimate/codeclimate-csslint
   image_id: 3d5aea2e5f241ff1daff33bd86cc5a819a34c81471e31ca70992f6de5e8edf43
   description: Automated linting of Cascading Stylesheets
+  community: false
   enable_patterns:
     - "**/*.css"
   default_ratings_paths:
@@ -64,12 +71,14 @@ csslint:
 watson:
   image_name: codeclimate/codeclimate-watson
   description: A young Ember Doctor to help you fix your code.
+  community: true
   enable_patterns:
   default_ratings_paths:
     - "app/**"
 rubymotion:
   image_name: codeclimate/codeclimate-rubymotion
   description: Rubymotion-specific rubocop checks
+  community: true
   enable_patterns:
   default_ratings_paths:
     - "**.rb"
