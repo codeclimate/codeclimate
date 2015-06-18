@@ -13,5 +13,14 @@ module CC
     autoload :NullConfig,         "cc/analyzer/null_config"
     autoload :SourceBuffer,       "cc/analyzer/source_buffer"
     autoload :UnitName,           "cc/analyzer/unit_name"
+
+    class DummyStatsd
+      def method_missing(*args)
+        yield if block_given?
+      end
+    end
+
+    cattr_accessor :statsd
+    self.statsd = DummyStatsd.new
   end
 end

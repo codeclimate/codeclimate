@@ -47,8 +47,14 @@ module CC
 
         pid, status = Process.waitpid2(pid)
         engine_running = false
+        Analyzer.statsd.increment("cli.engines.finished")
 
-        if status.exitstatus > 0
+        if status.success?
+          Analyzer.statsd.increment("cli.engines.names.#{@name}.result.success")
+          Analyzer.statsd.increment("cli.engines.result.success")
+        else
+          Analyzer.statsd.increment("cli.engines.names.#{@name}.result.error")
+          Analyzer.statsd.increment("cli.engines.result.error")
           stdout_io.failed(stderr_io.string)
         end
       ensure
@@ -82,7 +88,7 @@ module CC
       def run_command(command)
         spawn = POSIX::Spawn::Child.new(command)
 
-        if spawn.status.exitstatus > 0
+        unless spawn.status.success?
           raise CommandFailure, "command '#{command}' failed with status #{spawn.status.exitstatus} and output #{spawn.err}"
         end
       end
