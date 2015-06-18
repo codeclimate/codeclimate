@@ -21,6 +21,20 @@ describe CC::Analyzer::Config do
     end
   end
 
+  describe "#engine_names" do
+    it "returns only enabled engines" do
+      yaml = %{
+        engines:
+          rubocop:
+            enabled: false
+          curses:
+            enabled: true
+        }
+      config = CC::Analyzer::Config.new(yaml)
+      config.engine_names.must_equal(["curses"])
+    end
+  end
+
   describe "#engine_config" do
     it "returns the config" do
       config = CC::Analyzer::Config.new(Factory.yaml_with_rubocop_enabled)

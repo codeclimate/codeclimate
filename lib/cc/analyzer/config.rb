@@ -20,7 +20,7 @@ module CC
       end
 
       def engine_names
-        @config["engines"].keys
+        @config["engines"].keys.select { |name| engine_enabled?(name) }
       end
 
       def engine_present?(engine_name)
