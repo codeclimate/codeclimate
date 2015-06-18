@@ -45,7 +45,7 @@ for the above invocation:
 ### OS X
 
 ```console
-brew tap codeclimate/homebrew-formulae
+brew tap codeclimate/formulae
 brew install codeclimate
 ```
 
