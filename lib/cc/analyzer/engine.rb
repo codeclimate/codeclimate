@@ -4,13 +4,9 @@ require "securerandom"
 module CC
   module Analyzer
     class Engine
-      TIMEOUT = 15 * 60 # 15m
-
-      CommandFailure = Class.new(StandardError)
-      EngineFailure = Class.new(StandardError)
-      EngineTimeout = Class.new(StandardError)
-
       attr_reader :name
+
+      TIMEOUT = 15 * 60 # 15m
 
       def initialize(name, metadata, code_path, config_json, label)
         @name = name
@@ -97,6 +93,10 @@ module CC
           raise CommandFailure, "command '#{command}' failed with status #{spawn.status.exitstatus} and output #{spawn.err}"
         end
       end
+
+      CommandFailure = Class.new(StandardError)
+      EngineFailure = Class.new(StandardError)
+      EngineTimeout = Class.new(StandardError)
     end
   end
 end
