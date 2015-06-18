@@ -1,8 +1,9 @@
 $LOAD_PATH.unshift(File.join(__FILE__, "../lib"))
+VERSION = File.read(File.expand_path("../VERSION", __FILE__))
 
 Gem::Specification.new do |s|
   s.name        = "codeclimate"
-  s.version     = "0.0.1"
+  s.version     = VERSION
   s.summary     = "Code Climate CLI"
   s.license     = "MIT"
   s.authors     = "Code Climate"
