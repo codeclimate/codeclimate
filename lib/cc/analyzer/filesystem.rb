@@ -20,7 +20,7 @@ module CC
 
       def file_paths
         Dir.chdir(@root) do
-          Dir["**/*.*"].sort.select { |path| File.file?(path) }
+          Dir["**/*.*"].select { |path| File.file?(path) }.sort
         end
       end
 
