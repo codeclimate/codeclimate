@@ -18,12 +18,27 @@ EOF
   exit 1
 }
 
-if [ ! -S /var/run/docker.sock ]; then
-  invalid_setup "/var/run/docker.sock does not exist or is not a socket"
-fi
+socket_missing() {
+  invalid_setup "/var/run/docker.sock must exist as a Unix domain socket"
+}
 
-if [ -n "$DOCKER_HOST" ] && [ "$DOCKER_HOST" != "unix:///var/run/docker.sock" ]; then
-  invalid_setup "remote DOCKER_HOST=$DOCKER_HOST"
+invalid_docker_host() {
+  local host=$1
+
+  invalid_setup "invalid DOCKER_HOST=$host, must be unset or unix:///var/run/docker.sock"
+}
+
+if command -v boot2docker > /dev/null 2>&1; then
+  boot2docker ssh -- \
+    test -S /var/run/docker.sock > /dev/null 2>&1 || socket_missing
+
+  boot2docker ssh -- \
+    'test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock"' > /dev/null 2>&1 \
+    && invalid_docker_host $(boot2docker ssh -- 'echo "$DOCKER_HOST"')
+else
+  test -S /var/run/docker.sock || socket_missing
+  test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock" \
+    && invalid_docker_host "$DOCKER_HOST"
 fi
 
 exec docker run \
