@@ -8,7 +8,7 @@ module CC
           require_codeclimate_yml
 
           if !engine_exists?
-            say "Engine not found. Run 'codeclimate engines:list for a list of valid engines."
+            say "Engine not found. Run 'codeclimate engines:list' for a list of valid engines."
           elsif engine_enabled?
             say "Engine already enabled."
             pull_uninstalled_docker_images

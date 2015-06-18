@@ -13,7 +13,7 @@ module CC::CLI::Engines
               Remove.new(args = ["the_litte_engine_that_could"]).run
             end
 
-            stdout.must_match("Engine not found. Run 'codeclimate engines:list for a list of valid engines.")
+            stdout.must_match("Engine not found. Run 'codeclimate engines:list' for a list of valid engines.")
           end
         end
       end
