@@ -52,8 +52,8 @@ brew install codeclimate
 ### Anywhere
 
 ```console
-curl https://github.com/codeclimate/codeclimate/archive/v0.0.1.tar.gz | tar xvzf -
-cd codeclimate-v0.0.1 && sudo make install
+curl -L https://github.com/codeclimate/codeclimate/archive/v0.0.1.tar.gz | tar xvz
+cd codeclimate-* && sudo make install
 ```
 
 ## Commands
