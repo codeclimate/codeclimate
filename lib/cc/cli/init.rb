@@ -31,7 +31,7 @@ module CC
 
       def eligible_engines
         CC::Analyzer::EngineRegistry.new.list.each_with_object({}) do |(engine_name, config), result|
-          if filesystem.files_matching(config["enable_patterns"]).any?
+          if config["enable_patterns"] && filesystem.files_matching(config["enable_patterns"]).any?
             result[engine_name] = config
           end
         end
