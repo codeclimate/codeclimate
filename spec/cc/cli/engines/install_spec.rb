@@ -9,7 +9,6 @@ module CC::CLI::Engines
           "madeup" => { "image_name" => "madeup_img" }
         })
 
-        expect_system("docker history madeup_img > /dev/null 2>&1", false)
         expect_system("docker pull madeup_img")
 
         capture_io { Install.new.run }
@@ -32,7 +31,6 @@ module CC::CLI::Engines
           "madeup" => { "image_name" => "madeup_img" }
         })
 
-        expect_system("docker history madeup_img > /dev/null 2>&1", false)
         expect_system("docker pull madeup_img", false)
 
         capture_io do
