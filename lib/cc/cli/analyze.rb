@@ -14,8 +14,7 @@ module CC
       def run
         require_codeclimate_yml
         if engines.empty?
-          $stderr.puts colorize("No engines enabled. Add some to your .codeclimate.yml file!", :red)
-          exit 1
+          fatal("No engines enabled. Add some to your .codeclimate.yml file!")
         end
 
         formatter.started
@@ -38,8 +37,7 @@ module CC
           @formatter = Formatters.resolve(@args.shift)
         end
       rescue Formatters::Formatter::InvalidFormatterError => e
-        $stderr.puts e.message
-        exit 1
+        fatal(e.message)
       end
 
       def config
