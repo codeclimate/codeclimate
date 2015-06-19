@@ -80,10 +80,16 @@ module CC
           "--memory-swap", "-1",
           "--net", "none",
           "--volume", "#{@code_path}:/code:ro",
-          "--env", "ENGINE_CONFIG=#{@config_json}",
+          "--env-file", env_file,
           @metadata["image_name"],
           @metadata["command"], # String or Array
         ].flatten.compact
+      end
+
+      def env_file
+        path = File.join("/tmp/cc", SecureRandom.uuid)
+        File.write(path, "ENGINE_CONFIG=#{@config_json}")
+        path
       end
 
       def run_command(command)
