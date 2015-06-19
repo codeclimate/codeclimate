@@ -32,10 +32,14 @@ module CC
         terminal.say(colorize("WARNING: #{message}", :yellow))
       end
 
+      def fatal(message)
+        $stderr.puts colorize(message, :red)
+        exit 1
+      end
+
       def require_codeclimate_yml
         if !filesystem.exist?(CODECLIMATE_YAML)
-          $stderr.puts colorize("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.", :red)
-          exit 1
+          fatal("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.")
         end
       end
 
