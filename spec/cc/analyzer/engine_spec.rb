@@ -3,6 +3,10 @@ require "ostruct"
 require 'support/test_formatter'
 
 describe CC::Analyzer::Engine do
+  before do
+    FileUtils.mkdir_p("/tmp/cc")
+  end
+
   describe "#run" do
     it "uses the image and command in the metadata" do
       expect_docker_run do |*args|
@@ -21,14 +25,6 @@ describe CC::Analyzer::Engine do
       end
 
       run_engine("command" => %w[foo bar])
-    end
-
-    it "passes json to docker" do
-      expect_docker_run do |*args|
-        assert_within(["--env", "ENGINE_CONFIG={\"exclude_paths\":[\"foo.rb\"]}"], args)
-      end
-
-      run_engine
     end
 
     it "runs the container in a constrained environment" do
