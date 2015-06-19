@@ -26,6 +26,10 @@ module CC
           config["ratings"]["paths"] |= engine_config["default_ratings_paths"]
         end
 
+        if filesystem.exist?("vendor")
+          config["exclude_paths"] = ["vendor/**/*"]
+        end
+
         File.write(filesystem.path_for(CODECLIMATE_YAML), config.to_yaml)
       end
 

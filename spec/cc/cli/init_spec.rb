@@ -13,6 +13,9 @@ module CC::CLI
             File.write("js/foo.js", "function() {}");
             FileUtils.mkdir_p("stylesheets")
             File.write("stylesheets/main.css", ".main {}")
+            FileUtils.mkdir_p("vendor/jquery")
+            File.write("vendor/foo.css", ".main {}")
+            File.write("vendor/jquery/jquery.css", ".main {}")
 
             stdout, stderr = capture_io do
               init = Init.new
@@ -31,6 +34,7 @@ module CC::CLI
                 "csslint"=> { "enabled"=>true },
               },
               "ratings" => { "paths" => ["**.rb", "**.js", "**.jsx", "**.css"] },
+              "exclude_paths" => ["vendor/**/*"],
             })
 
             CC::Yaml.parse(new_content).errors.must_be_empty
@@ -90,5 +94,3 @@ module CC::CLI
     end
   end
 end
-
-
