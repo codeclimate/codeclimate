@@ -13,6 +13,10 @@ module CC
 
       def run
         require_codeclimate_yml
+        if engines.empty?
+          $stderr.puts colorize("No engines enabled. Add some to your .codeclimate.yml file!", :red)
+          exit 1
+        end
 
         formatter.started
 
