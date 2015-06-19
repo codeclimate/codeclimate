@@ -27,7 +27,7 @@ module CC
         end
 
         if filesystem.exist?("vendor")
-          config["exclude_paths"] = ["vendor/**/*"]
+          config["exclude_paths"] = ["\"vendor/**/*\""]
         end
 
         File.write(filesystem.path_for(CODECLIMATE_YAML), config.to_yaml)

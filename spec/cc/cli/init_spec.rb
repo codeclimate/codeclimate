@@ -34,7 +34,7 @@ module CC::CLI
                 "csslint"=> { "enabled"=>true },
               },
               "ratings" => { "paths" => ["**.rb", "**.js", "**.jsx", "**.css"] },
-              "exclude_paths" => [ "vendor/**/*" ],
+              "exclude_paths" => [ "\"vendor/**/*\"" ],
             })
 
             CC::Yaml.parse(new_content).errors.must_be_empty
