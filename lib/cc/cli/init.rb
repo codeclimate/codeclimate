@@ -3,6 +3,8 @@ module CC
     class Init < Command
       include CC::Analyzer
 
+      AUTO_EXCLUDE_PATHS = %w[config db features node_modules script spec test vendor].freeze
+
       def run
         if filesystem.exist?(CODECLIMATE_YAML)
           say "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
@@ -26,11 +28,19 @@ module CC
           config["ratings"]["paths"] |= engine_config["default_ratings_paths"]
         end
 
-        if filesystem.exist?("vendor")
-          config["exclude_paths"] = ["vendor/**/*"]
-        end
+        config["exclude_paths"] = exclude_paths(AUTO_EXCLUDE_PATHS)
 
         File.write(filesystem.path_for(CODECLIMATE_YAML), config.to_yaml)
+      end
+
+      def exclude_paths(paths)
+        expanded_paths = []
+        paths.each do |dir|
+          if filesystem.exist?(dir)
+            expanded_paths << "#{dir}/**/*"
+          end
+        end
+        expanded_paths
       end
 
       def engine_eligible?(engine)
