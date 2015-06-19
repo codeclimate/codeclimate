@@ -1,0 +1,17 @@
+#!/bin/sh
+command -v docker > /dev/null 2>&1 || {
+  echo "Unable to find \`docker' on your \$PATH, is it installed?" >&2
+  exit 1
+}
+
+docker version | grep -Fq "Server version" || {
+  echo "Unable to run \`docker version', the docker daemon may not be running" >&2
+
+  if command -v boot2docker > /dev/null 2>&1; then
+    echo "Please ensure \`boot2docker up' succeeds and you've run \`boot2docker shellinit' in this shell" >&2
+  else
+    echo "Please ensure \`docker version' succeeds and try again"
+  fi
+
+  exit 1
+}
