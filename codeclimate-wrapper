@@ -45,5 +45,6 @@ exec docker run \
   --interactive --tty --rm \
   --env CODE_PATH="$PWD" \
   --volume "$PWD":/code \
+  --volume /tmp/cc:/tmp/cc \
   --volume /var/run/docker.sock:/var/run/docker.sock \
   codeclimate/codeclimate "$@"
