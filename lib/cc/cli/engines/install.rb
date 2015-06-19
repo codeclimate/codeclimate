@@ -39,10 +39,8 @@ module CC
         end
 
         def pull_engine_image(engine_image)
-          system("docker pull #{engine_image}")
-
-          if !$?.success?
-            exit 1
+          if !system("docker pull #{engine_image}")
+            raise ImagePullFailure, "unable to pull image #{engine_image}"
           end
         end
       end
