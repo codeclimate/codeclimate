@@ -9,13 +9,13 @@ module CC
         def run
           require_codeclimate_yml
 
-          say "Pulling uninstalled docker images."
-          pull_uninstalled_docker_images
+          say "Pulling docker images."
+          pull_docker_images
         end
 
         private
 
-        def pull_uninstalled_docker_images
+        def pull_docker_images
           engine_names.each do |name|
             if engine_exists?(name)
               image = engine_image(name)
