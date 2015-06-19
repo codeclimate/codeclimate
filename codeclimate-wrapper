@@ -1,0 +1,50 @@
+#!/bin/sh
+invalid_setup() {
+  local reason=$1
+
+  cat >&2 <<EOF
+Your Docker setup does not support the codeclimate wrapper script:
+
+  > $reason
+
+We require a local Docker daemon that supports communication via the default
+socket path.
+
+Please use \`docker run' to run the \`codeclimate/codeclimate' image directly.
+
+See https://github.com/codeclimate/codeclimate for more details.
+
+EOF
+  exit 1
+}
+
+socket_missing() {
+  invalid_setup "/var/run/docker.sock must exist as a Unix domain socket"
+}
+
+invalid_docker_host() {
+  local host=$1
+
+  invalid_setup "invalid DOCKER_HOST=$host, must be unset or unix:///var/run/docker.sock"
+}
+
+if command -v boot2docker > /dev/null 2>&1; then
+  boot2docker ssh -- \
+    test -S /var/run/docker.sock > /dev/null 2>&1 || socket_missing
+
+  boot2docker ssh -- \
+    'test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock"' > /dev/null 2>&1 \
+    && invalid_docker_host $(boot2docker ssh -- 'echo "$DOCKER_HOST"')
+else
+  test -S /var/run/docker.sock || socket_missing
+  test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock" \
+    && invalid_docker_host "$DOCKER_HOST"
+fi
+
+exec docker run \
+  --interactive --tty --rm \
+  --env CODE_PATH="$PWD" \
+  --volume "$PWD":/code \
+  --volume /tmp/cc:/tmp/cc \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
+  codeclimate/codeclimate "$@"
