@@ -1,5 +1,6 @@
 require "rainbow"
 require "tty/spinner"
+require "active_support/number_helper"
 
 module CC
   module Analyzer
@@ -105,7 +106,7 @@ module CC
         end
 
         def pluralize(number, noun)
-          "#{number} #{noun.pluralize(number)}"
+          "#{ActiveSupport::NumberHelper.number_to_delimited(number)} #{noun.pluralize(number)}"
         end
       end
     end
