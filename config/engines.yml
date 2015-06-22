@@ -93,3 +93,15 @@ bundler-audit:
     - Gemfile.lock
   default_ratings_paths:
     - Gemfile.lock
+phpcodesniffer:
+  image_name: codeclimate/codeclimate-phpcodesniffer
+  description: PHP Linting
+  community: false
+  enable_regexps:
+    - \.php$
+    - \.module$
+    - \.inc$
+  default_ratings_paths:
+    - "**.php"
+    - "**.module"
+    - "**.inc"
