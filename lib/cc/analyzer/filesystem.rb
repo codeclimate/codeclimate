@@ -18,6 +18,11 @@ module CC
         File.read(path_for(path))
       end
 
+      def write_path(path, content)
+        File.write(path_for(path), content)
+        File.chown(root_uid, root_gid, path_for(path))
+      end
+
       def file_paths
         Dir.chdir(@root) do
           Dir["**/*.*"].select { |path| File.file?(path) }.sort
@@ -40,8 +45,22 @@ module CC
         end
       end
 
+      private
+
       def path_for(path)
         File.join(@root, path)
+      end
+
+      def root_uid
+        root_stat.uid
+      end
+
+      def root_gid
+        root_stat.gid
+      end
+
+      def root_stat
+        @root_stat ||= File.stat(@root)
       end
     end
   end
