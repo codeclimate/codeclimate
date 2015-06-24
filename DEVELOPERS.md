@@ -5,7 +5,7 @@ Information for Code Climate CLI developers and contributors.
 Build a new image using the local sources:
 
 ```console
-docker build -t codeclimate/codeclimate .
+docker build --rm -t codeclimate/codeclimate .
 ```
 
 If you have the CLI installed, the `codeclimate` wrapper will automatically use
@@ -34,7 +34,7 @@ Otherwise, invoke the `docker run` command found in the README.
 1. Build and push the new image to docker hub
 
   ```console
-  docker build -t codeclimate/codeclimate .
+  docker build --rm -t codeclimate/codeclimate .
   docker push codeclimate/codeclimate
   ```
 
