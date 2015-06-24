@@ -5,7 +5,7 @@ module CC::CLI
     describe "#require_codeclimate_yml" do
       it "exits if the file doesn't exist" do
         Dir.chdir(Dir.mktmpdir) do
-          stdoit, stderr = capture_io do
+          _, stderr = capture_io do
             lambda { Command.new.require_codeclimate_yml }.must_raise SystemExit
           end
 

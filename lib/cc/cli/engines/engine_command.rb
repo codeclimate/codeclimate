@@ -17,13 +17,11 @@ module CC
         end
 
         def yaml_content
-          File.read(filesystem.path_for(CODECLIMATE_YAML)).freeze
+          filesystem.read_path(CODECLIMATE_YAML).freeze
         end
 
         def update_yaml
-          File.open(filesystem.path_for(CODECLIMATE_YAML), "w") do |f|
-            f.write(parsed_yaml.to_yaml)
-          end
+          filesystem.write_path(CODECLIMATE_YAML, parsed_yaml.to_yaml)
         end
 
         def engine_present_in_yaml?
