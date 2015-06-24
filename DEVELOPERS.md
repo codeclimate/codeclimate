@@ -19,7 +19,7 @@ Otherwise, invoke the `docker run` command found in the README.
 
 ## Releasing a new version
 
-1. Update `VERSION` and add tag it in git:
+1. Update `VERSION` and tag it in git:
 
   ```console
   echo 0.0.8 > VERSION          # for example
