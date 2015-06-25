@@ -2,31 +2,30 @@
 
 [![Code Climate](https://codeclimate.com/repos/5589eac269568019f50011ab/badges/58a4aad546ecbc23eb36/gpa.svg)](https://codeclimate.com/repos/5589eac269568019f50011ab/feed)
 
-## Overview
-
 `codeclimate` is a command line interface for the Code Climate analysis
 platform. It allows you to run Code Climate engines on your local machine inside
 of Docker containers.
 
-## Prerequisites
+## Recommended OS X Install
 
-The Code Climate CLI is distributed and run as a
-[Docker](https://www.docker.com) image. The engines that perform the actual
-analyses are also Docker images. To support this, you must have Docker installed
-and running locally. We also require that the Docker daemon supports connections
-on the default Unix socket `/var/run/docker.sock`.
+Use boot2docker and our Homebrew wrapper scripts:
 
-On OS X, we recommend using [boot2docker](http://boot2docker.io/).
+* [Install boot2docker](https://github.com/boot2docker/osx-installer/releases).
+* [Complete the boot2docker set up steps](https://docs.docker.com/installation/mac/). Ensure that you initalize the boot2docker virtual machine, start it, and then set the required Docker environment variables. Before continuing on, run `docker version` to verify that Docker is succesfully set up and running.
+* If it's not already, install [Homebrew](http://brew.sh/).
+* Run `brew tap codeclimate/formulae` and then `brew install codeclimate`.
+* To use the Code Climate CLI, run `codeclimate help`.
 
-## Installation
+## Alt. OS X Install
 
-```console
-docker pull codeclimate/codeclimate
+If you prefer not to use Homebrew:
+
+* [Install boot2docker](https://github.com/boot2docker/osx-installer/releases).
+* [Complete the boot2docker set up steps](https://docs.docker.com/installation/mac/). Ensure that you initalize the boot2docker virtual machine, start it, and then set the required Docker environment variables. Before continuing on, run `docker version` to verify that Docker is succesfully set up and running.
+* Run `docker pull codeclimate/codeclimate`.
+* To use the Code Climate CLI:
+
 ```
-
-## Usage
-
-```console
 docker run \
   --interactive --tty --rm \
   --env CODE_PATH="$PWD" \
@@ -36,33 +35,31 @@ docker run \
   codeclimate/codeclimate help
 ```
 
-## Packages
+## Anywhere
 
-The above is very transparent. It's clear what's happening, and any changes
-required to work with your specific Docker setup can be discovered easily. That
-said, it can be unwieldy to invoke such a command on a regular basis.
+If you are not using OS X:
 
-For this reason, we also provide packages that include a small wrapper script
-for the above invocation:
-
-### OS X
-
-```console
-brew tap codeclimate/formulae
-brew install codeclimate
+* Run the following command:
 ```
-
-### Anywhere
-
-```console
 curl -L https://github.com/codeclimate/codeclimate/archive/v0.0.7.tar.gz | tar xvz
 cd codeclimate-* && sudo make install
 ```
+* Run `docker pull codeclimate/codeclimate`. Before continuing on, run `docker version` to verify that Docker is succesfully set up and running.
+* To use the Code Climate CLI:
 
-## Commands
+```
+docker run \
+  --interactive --tty --rm \
+  --env CODE_PATH="$PWD" \
+  --volume "$PWD":/code \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
+  --volume /tmp/cc:/tmp/cc \
+  codeclimate/codeclimate help
+```
 
-A list of available commands is accessible by running `codeclimate` or
-`codeclimate help`.
+## CLI Commands
+
+A list of available commands is accessible by running `codeclimate` or `codeclimate help`.
 
 ```console
 $ codeclimate help
@@ -80,7 +77,7 @@ Available commands:
     version
 ```
 
-The following is a brief explanation of each available command.
+Description of each command:
 
 * `analyze`: Analyze all relevant files in the current working directory. All engines that are enabled in your `.codeclimate.yml` file will run, one after another. The `-f` (or `format`) argument allows you to set the output format of the analysis (using `json` or `text`).
 * `engines:disable engine_name`: Changes the engine's `enabled:` node to be `false` in your `.codeclimate.yml` file. This engine will not be run the next time your project is analyzed.
