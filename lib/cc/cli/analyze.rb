@@ -72,7 +72,7 @@ module CC
         @engines ||= config.engine_names.map do |engine_name|
           Engine.new(
             engine_name,
-            @dev_mode ? make_registry_entry(engine_name) : engine_registry[engine_name],
+            registry_entry(engine_name),
             path,
             engine_config(engine_name),
             SecureRandom.uuid
@@ -88,7 +88,15 @@ module CC
         ENV['CODE_PATH']
       end
 
-      def make_registry_entry(engine_name)
+      def registry_entry(engine_name)
+        if @dev_mode
+          make_dev_registry_entry(engine_name)
+        else
+          engine_registry[engine_name]
+        end
+      end
+
+      def make_dev_registry_entry(engine_name)
         {
           "image_name"=>"codeclimate/codeclimate-#{engine_name}:latest"
         }
