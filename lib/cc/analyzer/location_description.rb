@@ -8,9 +8,10 @@ module CC
 
       def to_s
         str = ""
+
         if location["lines"]
           str << render_lines
-        elsif positions = location["positions"]
+        elsif (positions = location["positions"])
           str << render_position(positions["begin"])
 
           if positions["end"]
@@ -30,7 +31,11 @@ module CC
 
       def render_lines
         str = location["lines"]["begin"].to_s
-        str << "-#{location["lines"]["end"]}" if location["lines"]["end"]
+
+        if location["lines"]["end"] && location["lines"]["end"] != location["lines"]["begin"]
+          str << "-#{location["lines"]["end"]}"
+        end
+
         str
       end
 
