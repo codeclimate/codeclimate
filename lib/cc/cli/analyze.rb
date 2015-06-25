@@ -79,7 +79,7 @@ module CC
       end
 
       def formatter
-        @formatter ||= Formatters::PlainTextFormatter.new
+        @formatter ||= Formatters::PlainTextFormatter.new(filesystem)
       end
 
       def path
