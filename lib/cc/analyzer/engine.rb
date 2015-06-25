@@ -19,6 +19,7 @@ module CC
       def run(stdout_io, stderr_io = StringIO.new)
         pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command)
         engine_running = true
+        Analyzer.statsd.increment("cli.engines.started")
 
         t_out = Thread.new do
           out.each_line("\0") do |chunk|
@@ -41,6 +42,10 @@ module CC
             Thread.current.abort_on_exception = true
             run_command("docker kill #{container_name}")
 
+            Analyzer.statsd.increment("cli.engines.result.error")
+            Analyzer.statsd.increment("cli.engines.result.error.timeout")
+            Analyzer.statsd.increment("cli.engines.names.#{name}.result.error")
+            Analyzer.statsd.increment("cli.engines.names.#{name}.result.error.timeout")
             raise EngineTimeout, "engine #{name} ran past #{TIMEOUT} seconds and was killed"
           end
         end
