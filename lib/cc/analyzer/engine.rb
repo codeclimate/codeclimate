@@ -41,6 +41,8 @@ module CC
             Thread.current.abort_on_exception = true
             run_command("docker kill #{container_name}")
 
+            Analyzer.statsd.increment("cli.engines.names.#{name}.result.timeout")
+            Analyzer.statsd.increment("cli.engines.result.timeout")
             raise EngineTimeout, "engine #{name} ran past #{TIMEOUT} seconds and was killed"
           end
         end
