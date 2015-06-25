@@ -73,6 +73,3 @@ DEPENDENCIES
   minitest-reporters
   mocha
   rack-test
-
-BUNDLED WITH
-   1.10.3

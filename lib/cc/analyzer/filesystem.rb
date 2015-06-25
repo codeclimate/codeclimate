@@ -23,18 +23,8 @@ module CC
         File.chown(root_uid, root_gid, path_for(path))
       end
 
-      def file_paths
-        Dir.chdir(@root) do
-          Dir["**/*.*"].select { |path| File.file?(path) }.sort
-        end
-      end
-
-      def all
-        @files ||= Dir.chdir(@root) { Dir.glob("**/*") }
-      end
-
       def any?(&block)
-        all.any?(&block)
+        file_paths.any?(&block)
       end
 
       def files_matching(globs)
@@ -46,6 +36,12 @@ module CC
       end
 
       private
+
+      def file_paths
+        @file_paths ||= Dir.chdir(@root) do
+          `find . -type f`.strip.split("\n")
+        end
+      end
 
       def path_for(path)
         File.join(@root, path)
