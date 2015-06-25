@@ -17,9 +17,8 @@ module CC
       end
 
       def run(stdout_io, stderr_io = StringIO.new)
+        timed_out = false
         pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command)
-        engine_running = true
-        Analyzer.statsd.increment("cli.engines.started")
 
         t_out = Thread.new do
           out.each_line("\0") do |chunk|
@@ -35,32 +34,30 @@ module CC
           end
         end
 
-        Thread.new do
-          sleep TIMEOUT
-
-          if engine_running
-            Thread.current.abort_on_exception = true
-            run_command("docker kill #{container_name}")
-
-            Analyzer.statsd.increment("cli.engines.result.error")
-            Analyzer.statsd.increment("cli.engines.result.error.timeout")
-            Analyzer.statsd.increment("cli.engines.names.#{name}.result.error")
-            Analyzer.statsd.increment("cli.engines.names.#{name}.result.error.timeout")
-            raise EngineTimeout, "engine #{name} ran past #{TIMEOUT} seconds and was killed"
+        begin
+          status = nil
+          Timeout::timeout(TIMEOUT) do
+            pid, status = Process.waitpid2(pid)
           end
+        rescue Timeout::Error
+          run_command("docker kill #{container_name} || true")
+          timed_out = true
         end
 
-        pid, status = Process.waitpid2(pid)
-        engine_running = false
         Analyzer.statsd.increment("cli.engines.finished")
 
-        if status.success?
+        if timed_out
+          Analyzer.statsd.increment("cli.engines.result.error")
+          Analyzer.statsd.increment("cli.engines.result.error.timeout")
+          Analyzer.statsd.increment("cli.engines.names.#{name}.result.error")
+          Analyzer.statsd.increment("cli.engines.names.#{name}.result.error.timeout")
+          raise EngineTimeout, "engine #{name} ran past #{TIMEOUT} seconds and was killed"
+        elsif status.success?
           Analyzer.statsd.increment("cli.engines.names.#{name}.result.success")
           Analyzer.statsd.increment("cli.engines.result.success")
         else
           Analyzer.statsd.increment("cli.engines.names.#{name}.result.error")
           Analyzer.statsd.increment("cli.engines.result.error")
-
           raise EngineFailure, "engine #{name} failed with status #{status.exitstatus} and stderr #{stderr_io.string.inspect}"
         end
       ensure
