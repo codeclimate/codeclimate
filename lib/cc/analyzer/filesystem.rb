@@ -39,7 +39,9 @@ module CC
 
       def file_paths
         @file_paths ||= Dir.chdir(@root) do
-          `find . -type f`.strip.split("\n")
+          `find . -type f -print0`.strip.split("\0").map do |path|
+            path.sub(/^\.//, "")
+          end
         end
       end
 
