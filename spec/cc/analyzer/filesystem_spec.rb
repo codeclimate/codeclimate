@@ -77,28 +77,5 @@ module CC::Analyzer
         filesystem.read_path("foo.js").must_equal("Hello world")
       end
     end
-
-    describe "#file_paths" do
-      it "returns all regular files in the root" do
-        root = Dir.mktmpdir
-        Dir.mkdir(File.join(root, "foo"))
-        Dir.mkdir(File.join(root, "bar"))
-        File.write(File.join(root, "foo.rb"), "")
-        File.write(File.join(root, "foo", "foo.rb"), "")
-        File.write(File.join(root, "foo", "bar.rb"), "")
-        File.write(File.join(root, "bar", "foo.rb"), "")
-        File.write(File.join(root, "bar", "bar.rb"), "")
-
-        filesystem = Filesystem.new(root)
-
-        filesystem.file_paths.sort.must_equal([
-          "foo.rb",
-          "foo/foo.rb",
-          "foo/bar.rb",
-          "bar/foo.rb",
-          "bar/bar.rb",
-        ].sort)
-      end
-    end
   end
 end
