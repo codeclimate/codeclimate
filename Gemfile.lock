@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.0.8)
+    codeclimate (0.0.9)
       activesupport (~> 4.2, >= 4.2.1)
       codeclimate-yaml (~> 0.0, >= 0.0.2)
       faraday (~> 0.9.1)
@@ -73,3 +73,6 @@ DEPENDENCIES
   minitest-reporters
   mocha
   rack-test
+
+BUNDLED WITH
+   1.10.3
