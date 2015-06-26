@@ -86,7 +86,7 @@ module CC
           "--net", "none",
           "--volume", "#{@code_path}:/code:ro",
           "--env-file", env_file,
-          "--user", "app",
+          "--user", "9000:9000",
           @metadata["image_name"],
           @metadata["command"], # String or Array
         ].flatten.compact
