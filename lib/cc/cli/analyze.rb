@@ -35,7 +35,7 @@ module CC
         when '-f'
           @args.shift # throw out the -f
           @formatter = Formatters.resolve(@args.shift)
-        when '-dev'
+        when '--dev'
           @dev_mode = true
         end
       rescue Formatters::Formatter::InvalidFormatterError => e
@@ -90,13 +90,13 @@ module CC
 
       def registry_entry(engine_name)
         if @dev_mode
-          make_dev_registry_entry(engine_name)
+          dev_registry_entry(engine_name)
         else
           engine_registry[engine_name]
         end
       end
 
-      def make_dev_registry_entry(engine_name)
+      def dev_registry_entry(engine_name)
         {
           "image_name"=>"codeclimate/codeclimate-#{engine_name}:latest"
         }
