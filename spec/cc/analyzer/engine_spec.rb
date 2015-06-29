@@ -14,7 +14,7 @@ describe CC::Analyzer::Engine do
       end
 
       run_engine(
-        "image_name" => "image",
+        "image" => "image",
         "command" => "command",
       )
     end
@@ -68,7 +68,7 @@ describe CC::Analyzer::Engine do
     def run_engine(metadata = {})
       io = TestFormatter.new
       options = {
-        "image_name" => "codeclimate/image-name",
+        "image" => "codeclimate/image-name",
         "command" => "run",
       }.merge(metadata)
 
