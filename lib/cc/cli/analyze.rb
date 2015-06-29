@@ -35,6 +35,8 @@ module CC
         when '-f'
           @args.shift # throw out the -f
           @formatter = Formatters.resolve(@args.shift)
+        when '--dev'
+          @dev_mode = true
         end
       rescue Formatters::Formatter::InvalidFormatterError => e
         fatal(e.message)
@@ -70,7 +72,7 @@ module CC
         @engines ||= config.engine_names.map do |engine_name|
           Engine.new(
             engine_name,
-            engine_registry[engine_name],
+            registry_entry(engine_name),
             path,
             engine_config(engine_name),
             SecureRandom.uuid
@@ -84,6 +86,20 @@ module CC
 
       def path
         ENV['CODE_PATH']
+      end
+
+      def registry_entry(engine_name)
+        if @dev_mode
+          dev_registry_entry(engine_name)
+        else
+          engine_registry[engine_name]
+        end
+      end
+
+      def dev_registry_entry(engine_name)
+        {
+          "image_name"=>"codeclimate/codeclimate-#{engine_name}:latest"
+        }
       end
 
     end
