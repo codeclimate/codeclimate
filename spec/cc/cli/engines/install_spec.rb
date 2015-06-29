@@ -6,7 +6,7 @@ module CC::CLI::Engines
       it "pulls uninstalled images using docker" do
         stub_config(engine_names: ["madeup"])
         stub_engine_registry(list: {
-          "madeup" => { "image_name" => "madeup_img" }
+          "madeup" => { "image" => "madeup_img" }
         })
 
         expect_system("docker pull madeup_img")
@@ -28,7 +28,7 @@ module CC::CLI::Engines
       it "errors if an image is unable to be pulled" do
         stub_config(engine_names: ["madeup"])
         stub_engine_registry(list: {
-          "madeup" => { "image_name" => "madeup_img" }
+          "madeup" => { "image" => "madeup_img" }
         })
 
         expect_system("docker pull madeup_img", false)

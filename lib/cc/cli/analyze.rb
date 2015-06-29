@@ -98,7 +98,7 @@ module CC
 
       def dev_registry_entry(engine_name)
         {
-          "image_name"=>"codeclimate/codeclimate-#{engine_name}:latest"
+          "image"=>"codeclimate/codeclimate-#{engine_name}:latest"
         }
       end
 

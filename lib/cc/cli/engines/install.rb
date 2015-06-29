@@ -35,7 +35,7 @@ module CC
         end
 
         def engine_image(engine_name)
-          engines_registry_list[engine_name]["image_name"]
+          engines_registry_list[engine_name]["image"]
         end
 
         def pull_engine_image(engine_image)
