@@ -92,12 +92,14 @@ module CC
       end
 
       def env_file
-        if @config_json.size > 64 * 1024
+        contents = "ENGINE_CONFIG=#{@config_json}"
+
+        if contents.size > 64 * 1024
           raise EngineFailure, "Config for engine #{name} exceeds 64k character limit"
         end
 
         path = File.join("/tmp/cc", SecureRandom.uuid)
-        File.write(path, "ENGINE_CONFIG=#{@config_json}")
+        File.write(path, contents)
         path
       end
 
