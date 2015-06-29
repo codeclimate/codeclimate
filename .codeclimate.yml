@@ -2,6 +2,8 @@
 engines:
   rubocop:
     enabled: true
+  bundler-audit:
+    enabled: true
 ratings:
   paths:
   - "**.rb"
