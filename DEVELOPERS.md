@@ -31,6 +31,12 @@ Otherwise, invoke the `docker run` command found in the README.
   git push --tags
   ```
 
+1. Release the new version to RubyGems:
+
+  ```console
+  rake release
+  ```
+
 1. Build and push the new image to docker hub
 
   ```console
