@@ -37,12 +37,18 @@ Otherwise, invoke the `docker run` command found in the README.
   rake release
   ```
 
+  **Note**: this is not required if you don't need to incorporate your changes
+  into server-side analysis.
+
 1. Build and push the new image to docker hub
 
   ```console
   docker build --rm -t codeclimate/codeclimate .
   docker push codeclimate/codeclimate
   ```
+
+  **Note**: this will cause any user who installs after this point to get the
+  updated image, regardless of which *package version* they may be installing.
 
 1. Update the Homebrew [formula][] with the correct `url` and `sha1sum`
 
@@ -51,6 +57,9 @@ Otherwise, invoke the `docker run` command found in the README.
   ```console
   curl -L https://github.com/codeclimate/codeclimate/archive/v0.0.8.tar.gz | sha1sum
   ```
+
+  **Note**: this is not required if you don't need to trigger Homebrew users to
+  update (maybe what you've changed only impacts server-side analysis).
 
 1. Update the *Anywhere* README instructions to reference the new archive
 
