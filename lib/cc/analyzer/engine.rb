@@ -84,14 +84,14 @@ module CC
           "--memory-swap", "-1",
           "--net", "none",
           "--volume", "#{@code_path}:/code:ro",
-          "--volume", "#{env_file}:/config.json:ro",
+          "--volume", "#{config_file}:/config.json:ro",
           "--user", "9000:9000",
           @metadata["image"],
           @metadata["command"], # String or Array
         ].flatten.compact
       end
 
-      def env_file
+      def config_file
         path = File.join("/tmp/cc", SecureRandom.uuid)
         File.write(path, @config_json)
         path
