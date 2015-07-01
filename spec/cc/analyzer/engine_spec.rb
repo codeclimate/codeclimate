@@ -65,14 +65,6 @@ describe CC::Analyzer::Engine do
       run_engine
     end
 
-    it "raises an error if the config is too big" do
-      json = "a" * (64 * 1024 + 1)
-      engine = CC::Analyzer::Engine.new("rubocop", {}, "/path", json, "label")
-
-      error = lambda { engine.run(StringIO.new) }.must_raise(CC::Analyzer::Engine::EngineFailure)
-      error.message.must_match "exceeds 64k character limit"
-    end
-
     def run_engine(metadata = {})
       io = TestFormatter.new
       options = {
