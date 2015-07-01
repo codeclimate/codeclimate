@@ -101,3 +101,9 @@ phpcodesniffer:
     - "**.php"
     - "**.module"
     - "**.inc"
+fixme:
+  image: codeclimate/codeclimate-fixme
+  description: Find FIXME, TODO, HACK, etc. comments
+  community: false
+  enable_regexps:
+  default_ratings_paths:
