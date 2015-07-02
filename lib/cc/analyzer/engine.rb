@@ -63,8 +63,13 @@ module CC
       ensure
         t_timeout.kill if t_timeout
 
-        t_out.join if t_out
-        t_err.join if t_err
+        if timed_out
+          t_out.kill if t_out
+          t_err.kill if t_err
+        else
+          t_out.join if t_out
+          t_err.join if t_err
+        end
       end
 
       private
