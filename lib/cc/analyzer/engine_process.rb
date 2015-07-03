@@ -76,7 +76,7 @@ module CC
         Process.kill("KILL", pid)
         Process.waitpid(pid)
         increment("aborted")
-      rescue Errno::ENOCHILD
+      rescue Errno::ECHILD
         # process was already cleaned up
       end
 
