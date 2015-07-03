@@ -40,7 +40,7 @@ module CC
         # ensure correct lexical scope
         pid = read_out = read_err = nil
 
-        status = Timeout.timeout(ENGINE_TIMEOUT) do
+        status = Timeout.timeout(ENGINE_TIMEOUT, engine_timeout_error) do
           pid, _, out, err = POSIX::Spawn.popen4(*@engine.command)
 
           increment("started")
