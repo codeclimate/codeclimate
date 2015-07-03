@@ -12,13 +12,13 @@ module CC
       # timeout for the overall operation as well as runnning the engine.
       TIMEOUT = ENGINE_TIMEOUT + 5 * 60
 
-      EngineFailure = Class.new(StandardError)
-      EngineTimeout = Class.new(StandardError)
 
       def initialize(engine, stdout_io, stderr_io = StringIO.new)
         @engine = engine
         @stdout_io = stdout_io
         @stderr_io = stderr_io
+
+        EngineTimeout.runtime_message = "engine #{@engine.name} ran past #{ENGINE_TIMEOUT} seconds and was killed"
       end
 
       def run
@@ -40,7 +40,7 @@ module CC
         # ensure correct lexical scope
         pid = read_out = read_err = nil
 
-        status = Timeout.timeout(ENGINE_TIMEOUT, engine_timeout_error) do
+        status = Timeout.timeout(ENGINE_TIMEOUT, EngineTimeout) do
           pid, stdin, stdout, stderr = POSIX::Spawn.popen4(*@engine.command)
           stdin.close
 
@@ -80,15 +80,21 @@ module CC
         # process was already cleaned up
       end
 
-      def engine_timeout_error
-        EngineTimeout.new(
-          "engine #{@engine.name} ran past #{ENGINE_TIMEOUT} seconds and was killed"
-        )
-      end
-
       def increment(metric)
         Analyzer.statsd.increment("cli.engines.names.#{@engine.name}.#{metric}")
         Analyzer.statsd.increment("cli.engines.#{metric}")
+      end
+
+      EngineFailure = Class.new(StandardError)
+
+      class EngineTimeout < StandardError
+        class << self
+          attr_accessor :runtime_message
+        end
+
+        def initialize(*)
+          super(self.class.runtime_message)
+        end
       end
     end
   end
