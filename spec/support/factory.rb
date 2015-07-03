@@ -68,6 +68,12 @@ module Factory
     }
   end
 
+  def create_yaml_with_no_engines
+    %{
+      engines:
+    }
+  end
+
   def sample_issue
     {
       "type" => "issue",
