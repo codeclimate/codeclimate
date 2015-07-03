@@ -41,18 +41,19 @@ module CC
         pid = read_out = read_err = nil
 
         status = Timeout.timeout(ENGINE_TIMEOUT, engine_timeout_error) do
-          pid, _, out, err = POSIX::Spawn.popen4(*@engine.command)
+          pid, stdin, stdout, stderr = POSIX::Spawn.popen4(*@engine.command)
+          stdin.close
 
           increment("started")
 
           read_out = Thread.new do
-            out.each_line("\0") do |chunk|
+            stdout.each_line("\0") do |chunk|
               @stdout_io.write(chunk.chomp("\0"))
             end
           end
 
           read_err = Thread.new do
-            err.each_line do |line|
+            stderr.each_line do |line|
               @stderr_io.write(line)
             end
           end

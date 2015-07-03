@@ -92,7 +92,7 @@ describe CC::Analyzer::Engine do
 
       Process.expects(:waitpid2).returns([1, status])
       POSIX::Spawn.expects(:popen4).
-        with(&block).returns([1, nil, stdout, stderr])
+        with(&block).returns([1, StringIO.new, stdout, stderr])
     end
 
     # Assert that +a+ is included in full, in order within +b+.
