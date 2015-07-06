@@ -61,8 +61,7 @@ Otherwise, invoke the `docker run` command found in the README.
   **Note**: this is not required if you don't need to trigger Homebrew users to
   update (maybe what you've changed only impacts server-side analysis).
 
-1. Update the *Anywhere* README instructions to reference the new archive
+1. Update the release notes for the tag you created in github using the `FIX`, `FEATURE` syntax
 
 [formula]: https://github.com/codeclimate/homebrew-formulae/blob/master/Formula/codeclimate.rb
 
-1. Update the release notes for the tag you created in github using the `FIX`, `FEATURE` syntax
