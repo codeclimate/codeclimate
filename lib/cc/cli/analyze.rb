@@ -70,14 +70,19 @@ module CC
 
       def engines
         @engines ||= config.engine_names.map do |engine_name|
-          Engine.new(
-            engine_name,
-            registry_entry(engine_name),
-            path,
-            engine_config(engine_name),
-            SecureRandom.uuid
-          )
-        end
+          entry = registry_entry(engine_name)
+          if entry.nil?
+            fatal("unknown engine name: #{engine_name}")
+          else
+            Engine.new(
+              engine_name,
+              entry,
+              path,
+              engine_config(engine_name),
+              SecureRandom.uuid
+            )
+          end
+        end.compact
       end
 
       def formatter
