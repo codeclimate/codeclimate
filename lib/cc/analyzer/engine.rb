@@ -89,22 +89,16 @@ module CC
           "--memory-swap", "-1",
           "--net", "none",
           "--volume", "#{@code_path}:/code:ro",
-          "--env-file", env_file,
+          "--volume", "#{config_file}:/config.json:ro",
           "--user", "9000:9000",
           @metadata["image"],
           @metadata["command"], # String or Array
         ].flatten.compact
       end
 
-      def env_file
-        contents = "ENGINE_CONFIG=#{@config_json}"
-
-        if contents.size > 64 * 1024
-          raise EngineFailure, "Config for engine #{name} exceeds 64k character limit"
-        end
-
+      def config_file
         path = File.join("/tmp/cc", SecureRandom.uuid)
-        File.write(path, contents)
+        File.write(path, @config_json)
         path
       end
 
