@@ -64,3 +64,5 @@ Otherwise, invoke the `docker run` command found in the README.
 1. Update the *Anywhere* README instructions to reference the new archive
 
 [formula]: https://github.com/codeclimate/homebrew-formulae/blob/master/Formula/codeclimate.rb
+
+1. Update the release notes for the tag you created in github using the `FIX`, `FEATURE` syntax
