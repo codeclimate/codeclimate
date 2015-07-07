@@ -9,12 +9,20 @@ module CC
           @active_engine = nil
         end
 
+        def started
+          puts "[ "
+        end
+
+        def finished
+          puts "\b\b ]"
+        end
+
         def write(data)
           return unless data.present?
 
           document = JSON.parse(data)
           document["engine_name"] = @active_engine.name
-          puts document.to_json
+          puts document.to_json + ","
         end
 
         def failed(output)
