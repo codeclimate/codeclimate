@@ -28,11 +28,11 @@ module CC
           document["engine_name"] = @active_engine.name
 
           if @has_begun
-            print ",\n" + document.to_json
-          else
-            print document.to_json
-            @has_begun = true
+            print ",\n"
           end
+
+          print document.to_json
+          @has_begun = true
         end
 
         def failed(output)
