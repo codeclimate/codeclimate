@@ -3,6 +3,10 @@ module CC
     module Formatters
       class JSONFormatter < Formatter
 
+        def initialize
+          @has_begun = false
+        end
+
         def engine_running(engine)
           @active_engine = engine
           yield
@@ -10,11 +14,11 @@ module CC
         end
 
         def started
-          puts "[ "
+          print "[ "
         end
 
         def finished
-          puts "\b\b ]"
+          print " ]\n"
         end
 
         def write(data)
@@ -22,7 +26,13 @@ module CC
 
           document = JSON.parse(data)
           document["engine_name"] = @active_engine.name
-          puts document.to_json + ","
+
+          if @has_begun
+            print ",\n" + document.to_json
+          else
+            print document.to_json
+            @has_begun = true
+          end
         end
 
         def failed(output)
