@@ -43,7 +43,7 @@ fi
 
 docker_run() {
   exec docker run \
-    --rm \
+    --interactive --rm \
     --env CODE_PATH="$PWD" \
     --volume "$PWD":/code \
     --volume /tmp/cc:/tmp/cc \
@@ -52,7 +52,7 @@ docker_run() {
 }
 
 if [ -t 1 ]; then
-  docker_run --interactive --tty codeclimate/codeclimate "$@"
+  docker_run --tty codeclimate/codeclimate "$@"
 else
   docker_run codeclimate/codeclimate "$@"
 fi
