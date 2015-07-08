@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.0.21)
+    codeclimate (0.0.22)
       activesupport (~> 4.2, >= 4.2.1)
       codeclimate-yaml (~> 0.0, >= 0.0.5)
       faraday (~> 0.9.1)
@@ -75,4 +75,4 @@ DEPENDENCIES
   rack-test
 
 BUNDLED WITH
-   1.10.3
+   1.10.5
