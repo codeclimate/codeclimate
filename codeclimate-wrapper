@@ -41,10 +41,18 @@ else
     && invalid_docker_host "$DOCKER_HOST"
 fi
 
-exec docker run \
-  --interactive --tty --rm \
-  --env CODE_PATH="$PWD" \
-  --volume "$PWD":/code \
-  --volume /tmp/cc:/tmp/cc \
-  --volume /var/run/docker.sock:/var/run/docker.sock \
-  codeclimate/codeclimate "$@"
+docker_run() {
+  exec docker run \
+    --rm \
+    --env CODE_PATH="$PWD" \
+    --volume "$PWD":/code \
+    --volume /tmp/cc:/tmp/cc \
+    --volume /var/run/docker.sock:/var/run/docker.sock \
+    "$@"
+}
+
+if [ -t 1 ]; then
+  docker_run --interactive --tty codeclimate/codeclimate "$@"
+else
+  docker_run codeclimate/codeclimate "$@"
+fi

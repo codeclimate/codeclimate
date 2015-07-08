@@ -7,6 +7,7 @@ module CC
         end
 
         def start
+          return unless $stdout.tty?
           @thread = Thread.new do
             loop do
               @spinning = true
