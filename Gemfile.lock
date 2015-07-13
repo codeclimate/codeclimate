@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.0.23)
+    codeclimate (0.0.24)
       activesupport (~> 4.2, >= 4.2.1)
       codeclimate-yaml (~> 0.0, >= 0.0.6)
       faraday (~> 0.9.1)
