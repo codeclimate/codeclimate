@@ -3,7 +3,7 @@ PATH
   specs:
     codeclimate (0.0.25)
       activesupport (~> 4.2, >= 4.2.1)
-      codeclimate-yaml (~> 0.0, >= 0.0.7)
+      codeclimate-yaml (~> 0.0, >= 0.0.9)
       faraday (~> 0.9.1)
       faraday_middleware (~> 0.9.1)
       highline (~> 1.7, >= 1.7.2)
@@ -24,7 +24,7 @@ GEM
       tzinfo (~> 1.1)
     ansi (1.5.0)
     builder (3.2.2)
-    codeclimate-yaml (0.0.7)
+    codeclimate-yaml (0.0.9)
       activesupport
       secure_string
     coderay (1.1.0)
