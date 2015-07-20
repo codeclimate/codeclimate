@@ -2,6 +2,20 @@ require "spec_helper"
 
 module CC::CLI
   describe Analyze do
+    describe "#initialize" do
+      it "sets dev mode for --dev" do
+        instance = Analyze.new(["--dev"])
+
+        instance.dev_mode?.must_equal true
+      end
+
+      it "sets dev mode with formatters defined" do
+        instance = Analyze.new(%w[-f json --dev])
+
+        instance.dev_mode?.must_equal true
+      end
+    end
+
     describe "#run" do
       before { CC::Analyzer::Engine.any_instance.stubs(:run) }
 
