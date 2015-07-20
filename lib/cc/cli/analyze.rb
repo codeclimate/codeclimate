@@ -28,15 +28,20 @@ module CC
         formatter.finished
       end
 
+      def dev_mode?
+        !!@dev_mode
+      end
+
       private
 
       def process_args
-        case @args.first
-        when '-f'
-          @args.shift # throw out the -f
-          @formatter = Formatters.resolve(@args.shift)
-        when '--dev'
-          @dev_mode = true
+        while arg = @args.shift
+          case arg
+          when '-f'
+            @formatter = Formatters.resolve(@args.shift)
+          when '--dev'
+            @dev_mode = true
+          end
         end
       rescue Formatters::Formatter::InvalidFormatterError => e
         fatal(e.message)
