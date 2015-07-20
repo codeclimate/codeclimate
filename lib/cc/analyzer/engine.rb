@@ -58,7 +58,7 @@ module CC
         else
           Analyzer.statsd.increment("cli.engines.names.#{name}.result.error")
           Analyzer.statsd.increment("cli.engines.result.error")
-          raise EngineFailure, "engine #{name} failed with status #{status.exitstatus} and stderr #{stderr_io.string.inspect}"
+          raise EngineFailure, "engine #{name} failed with status #{status.exitstatus} and stderr \n#{stderr_io.string}"
         end
       ensure
         t_timeout.kill if t_timeout
