@@ -62,7 +62,7 @@ module CC::Analyzer::Formatters
     end
 
     def engine_double(name)
-      stub(name: name, ignore_issue?: false)
+      stub(name: name)
     end
   end
 end
