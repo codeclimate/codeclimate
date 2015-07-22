@@ -1,0 +1,35 @@
+Style/StringLiterals:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Style/TrailingComma:
+  Enabled: false
+
+Style/FileName:
+  Exclude:
+    - 'bin/**/*'
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/ModuleLength:
+  Exclude:
+    - 'spec/**/*'
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/DotPosition:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Rails/TimeZone:
+  Enabled: false
