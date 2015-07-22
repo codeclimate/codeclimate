@@ -4,6 +4,7 @@ module CC
     autoload :Config,             "cc/analyzer/config"
     autoload :Engine,             "cc/analyzer/engine"
     autoload :EngineClient,       "cc/analyzer/engine_client"
+    autoload :EngineOutputFilter, "cc/analyzer/engine_output_filter"
     autoload :EngineProcess,      "cc/analyzer/engine_process"
     autoload :EngineRegistry,     "cc/analyzer/engine_registry"
     autoload :Filesystem,         "cc/analyzer/filesystem"
