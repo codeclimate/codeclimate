@@ -32,8 +32,8 @@ module CC
       end
 
       def check_config(check_name)
-        checks = @config.fetch("checks", {})
-        checks.fetch(check_name, {})
+        @checks ||= @config.fetch("checks", {})
+        @checks.fetch(check_name, {})
       end
     end
   end
