@@ -13,7 +13,10 @@ module CC
         end
 
         def engine_running(engine)
+          @current_engine = engine
           yield
+        ensure
+          @current_engine = nil
         end
 
         def finished
@@ -23,6 +26,10 @@ module CC
         end
 
         InvalidFormatterError = Class.new(StandardError)
+
+        private
+
+        attr_reader :current_engine
       end
     end
   end

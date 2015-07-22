@@ -2,31 +2,42 @@ require 'spec_helper'
 
 module CC::Analyzer::Formatters
   describe PlainTextFormatter do
+    include Factory
+
     describe "#write" do
       it "raises an error" do
+        engine = stub(name: "engine")
         formatter = PlainTextFormatter.new
-        data = {"type" => "thing"}.to_json
 
-        lambda { formatter.write(data) }.must_raise(RuntimeError, "Invalid type found: thing")
+        runner = lambda do
+          capture_io do
+            write_from_engine(formatter, engine, "type" => "thing")
+          end
+        end
+
+        runner.must_raise(RuntimeError, "Invalid type found: thing")
       end
     end
 
     describe "#finished" do
       it "outputs a breakdown" do
-        issue = Factory.sample_issue
+        engine = stub(name: "cool_engine")
         formatter = PlainTextFormatter.new
 
-        stdout, stderr = capture_io do
-          formatter.engine_running(OpenStruct.new(name: "cool_engine")) do
-            formatter.write(issue.to_json)
-          end
-
+        stdout, _ = capture_io do
+          write_from_engine(formatter, engine, sample_issue)
           formatter.finished
         end
 
         stdout.must_match("accumulator.rb (1 issue)")
         stdout.must_match("Missing top-level class documentation comment")
         stdout.must_match("[cool_engine]")
+      end
+    end
+
+    def write_from_engine(formatter, engine, issue)
+      formatter.engine_running(engine) do
+        formatter.write(issue.to_json)
       end
     end
   end

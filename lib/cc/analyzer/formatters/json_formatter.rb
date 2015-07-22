@@ -7,25 +7,19 @@ module CC
           @has_begun = false
         end
 
-        def engine_running(engine)
-          @active_engine = engine
-          yield
-          @active_engine = nil
-        end
-
         def started
-          print "[ "
+          print "["
         end
 
         def finished
-          print " ]\n"
+          print "]\n"
         end
 
         def write(data)
           return unless data.present?
 
           document = JSON.parse(data)
-          document["engine_name"] = @active_engine.name
+          document["engine_name"] = current_engine.name
 
           if @has_begun
             print ",\n"
