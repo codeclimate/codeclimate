@@ -51,6 +51,19 @@ describe CC::Analyzer::Engine do
       io.string.must_equal("issue oneissue twoissue three")
     end
 
+    it "supports issue filtering by check name" do
+      stdout = StringIO.new
+      stdout.write(%{{"type":"issue","check":"foo"}\0})
+      stdout.write(%{{"type":"issue","check":"bar"}\0})
+      stdout.write(%{{"type":"issue","check":"baz"}})
+      stdout.rewind
+
+      expect_docker_run(stdout)
+
+      io = run_engine({}, { checks: { bar: { enabled: false } } })
+      io.string.wont_match(%{"check":"bar"})
+    end
+
     it "passes stderr to a formatter" do
       expect_docker_run(StringIO.new, StringIO.new, failed_status)
 
@@ -65,14 +78,15 @@ describe CC::Analyzer::Engine do
       run_engine
     end
 
-    def run_engine(metadata = {})
+    def run_engine(metadata = {}, config = {})
       io = TestFormatter.new
       options = {
         "image" => "codeclimate/image-name",
         "command" => "run",
       }.merge(metadata)
+      config.reverse_merge!(exclude_paths: ["foo.rb"])
 
-      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", { exclude_paths: ["foo.rb"] }.to_json, "sup")
+      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", config.to_json, "sup")
       engine.run(io)
 
       io

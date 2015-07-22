@@ -23,7 +23,11 @@ module CC
 
         t_out = Thread.new do
           out.each_line("\0") do |chunk|
-            stdout_io.write(chunk.chomp("\0"))
+            output = chunk.chomp("\0")
+
+            unless output_filter.filter?(output)
+              stdout_io.write(output)
+            end
           end
         end
 
@@ -108,6 +112,16 @@ module CC
         unless spawn.status.success?
           raise CommandFailure, "command '#{command}' failed with status #{spawn.status.exitstatus} and output #{spawn.err}"
         end
+      end
+
+      def output_filter
+        @output_filter ||= EngineOutputFilter.new(config)
+      end
+
+      def config
+        # N.B. there is no expected scenario where this would fail so a
+        # parser-error rescue has been omitted intentionally
+        JSON.parse(@config_json)
       end
 
       CommandFailure = Class.new(StandardError)
