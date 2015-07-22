@@ -14,11 +14,11 @@ module CC
         end
 
         def started
-          print "[ "
+          print "["
         end
 
         def finished
-          print " ]\n"
+          print "]\n"
         end
 
         def write(data)
