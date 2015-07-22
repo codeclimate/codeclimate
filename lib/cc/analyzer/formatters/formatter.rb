@@ -2,6 +2,8 @@ module CC
   module Analyzer
     module Formatters
       class Formatter
+        attr_reader :current_engine
+
         def initialize(output = $stdout)
           @output = output
         end
@@ -13,7 +15,10 @@ module CC
         end
 
         def engine_running(engine)
+          @current_engine = engine
           yield
+        ensure
+          @current_engine = nil
         end
 
         def finished
