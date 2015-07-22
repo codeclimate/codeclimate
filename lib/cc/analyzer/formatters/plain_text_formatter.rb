@@ -37,7 +37,8 @@ module CC
 
             IssueSorter.new(file_issues).by_location.each do |issue|
               if location = issue["location"]
-                print(colorize(LocationDescription.new(location, ": "), :cyan))
+                source_buffer = @filesystem.source_buffer_for(location["path"])
+                print(colorize(LocationDescription.new(source_buffer, location, ": "), :cyan))
               end
 
               print(issue["description"])

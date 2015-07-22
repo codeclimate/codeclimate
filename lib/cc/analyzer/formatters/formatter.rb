@@ -2,7 +2,8 @@ module CC
   module Analyzer
     module Formatters
       class Formatter
-        def initialize(output = $stdout)
+        def initialize(filesystem, output = $stdout)
+          @filesystem = filesystem
           @output = output
         end
 
