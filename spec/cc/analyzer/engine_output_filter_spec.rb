@@ -12,7 +12,6 @@ module CC::Analyzer
       filter = EngineOutputFilter.new
 
       filter.filter?(%{{"arbitrary":"json"}}).must_equal false
-      filter.filter?(%{[{"arbitrary":"json"}]}).must_equal false
     end
 
     it "does not filter issues missing or enabled in the config" do

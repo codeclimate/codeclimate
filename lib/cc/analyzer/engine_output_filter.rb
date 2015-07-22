@@ -24,7 +24,7 @@ module CC
       end
 
       def issue?(json)
-        json.is_a?(Hash) && json["type"] == ISSUE_TYPE
+        json["type"] == ISSUE_TYPE
       end
 
       def ignore_issue?(json)
