@@ -2,7 +2,6 @@ module CC
   module Analyzer
     module Formatters
       class Formatter
-        attr_reader :current_engine
 
         def initialize(output = $stdout)
           @output = output
@@ -28,6 +27,10 @@ module CC
         end
 
         InvalidFormatterError = Class.new(StandardError)
+
+        private
+
+        attr_reader :current_engine
       end
     end
   end
