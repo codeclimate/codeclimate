@@ -11,7 +11,7 @@ module CC
 
       def [](engine_name)
         if dev_mode?
-          { "image"=>"codeclimate/codeclimate-#{engine_name}:latest" }
+          { "image" => "codeclimate/codeclimate-#{engine_name}:latest" }
         else
           @config[engine_name]
         end
