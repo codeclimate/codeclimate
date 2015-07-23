@@ -28,8 +28,7 @@ module CC
       end
     end
 
-    cattr_accessor :statsd
-    cattr_accessor :logger
+    cattr_accessor :statsd, :logger
     self.statsd = DummyStatsd.new
     self.logger = DummyLogger.new
   end
