@@ -8,11 +8,11 @@ module CC
 
       TIMEOUT = 15 * 60 # 15m
 
-      def initialize(name, metadata, code_path, config_json, label)
+      def initialize(name, metadata, code_path, config, label)
         @name = name
         @metadata = metadata
         @code_path = code_path
-        @config_json = config_json
+        @config = config
         @label = label.to_s
       end
 
@@ -102,7 +102,7 @@ module CC
 
       def config_file
         path = File.join("/tmp/cc", SecureRandom.uuid)
-        File.write(path, @config_json)
+        File.write(path, @config.to_json)
         path
       end
 
@@ -115,13 +115,7 @@ module CC
       end
 
       def output_filter
-        @output_filter ||= EngineOutputFilter.new(config)
-      end
-
-      def config
-        # N.B. there is no expected scenario where this would fail so a
-        # parser-error rescue has been omitted intentionally
-        JSON.parse(@config_json)
+        @output_filter ||= EngineOutputFilter.new(@config)
       end
 
       CommandFailure = Class.new(StandardError)

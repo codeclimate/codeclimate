@@ -22,6 +22,9 @@ module CC
         def finished
         end
 
+        def close
+        end
+
         def failed(output)
         end
 

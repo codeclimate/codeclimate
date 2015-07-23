@@ -60,7 +60,7 @@ describe CC::Analyzer::Engine do
 
       expect_docker_run(stdout)
 
-      io = run_engine({}, { checks: { bar: { enabled: false } } })
+      io = run_engine({}, { "checks" => { "bar" => { "enabled" => false } } })
       io.string.wont_match(%{"check":"bar"})
     end
 
@@ -86,7 +86,7 @@ describe CC::Analyzer::Engine do
       }.merge(metadata)
       config.reverse_merge!(exclude_paths: ["foo.rb"])
 
-      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", config.to_json, "sup")
+      engine = CC::Analyzer::Engine.new("rubocop", options, "/path", config, "sup")
       engine.run(io)
 
       io
