@@ -21,19 +21,7 @@ module CC
 
         @formatter.started
 
-        engines.each do |engine|
-          Analyzer.logger.info("starting engine #{engine.name}")
-
-          Analyzer.statsd.time("engines.time") do
-            Analyzer.statsd.time("engines.names.#{engine.name}.time") do
-              @formatter.engine_running(engine) do
-                engine.run(@formatter)
-              end
-            end
-          end
-
-          Analyzer.logger.info("finished engine #{engine.name}")
-        end
+        engines.each { |engine| run_engine(engine) }
 
         @formatter.finished
       ensure
@@ -41,6 +29,20 @@ module CC
       end
 
       private
+
+      def run_engine(engine)
+        Analyzer.logger.info("starting engine #{engine.name}")
+
+        Analyzer.statsd.time("engines.time") do
+          Analyzer.statsd.time("engines.names.#{engine.name}.time") do
+            @formatter.engine_running(engine) do
+              engine.run(@formatter)
+            end
+          end
+        end
+
+        Analyzer.logger.info("finished engine #{engine.name}")
+      end
 
       def engines
         @engines ||= enabled_engines.map do |name, config|
