@@ -19,9 +19,11 @@ module CC::Analyzer
       bar_issue = build_issue("bar")
 
       filter = EngineOutputFilter.new(
-        "checks" => {
-          "foo" => { "enabled" => true },
-        }
+        engine_config(
+          "checks" => {
+            "foo" => { "enabled" => true },
+          }
+        )
       )
 
       filter.filter?(foo_issue.to_json).must_equal false
@@ -32,9 +34,11 @@ module CC::Analyzer
       issue = build_issue("foo")
 
       filter = EngineOutputFilter.new(
-        "checks" => {
-          "foo" => { "enabled" => false },
-        }
+        engine_config(
+          "checks" => {
+            "foo" => { "enabled" => false },
+          }
+        )
       )
 
       filter.filter?(issue.to_json).must_equal true
@@ -45,6 +49,16 @@ module CC::Analyzer
         "type" => EngineOutputFilter::ISSUE_TYPE,
         "check" => check_name,
       }
+    end
+
+    def engine_config(hash)
+      codeclimate_yaml = {
+        "engines" => {
+          "rubocop" => hash.merge("enabled" => true)
+        }
+      }.to_yaml
+
+      CC::Yaml.parse(codeclimate_yaml).engines["rubocop"]
     end
   end
 end
