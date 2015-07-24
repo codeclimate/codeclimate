@@ -57,7 +57,7 @@ module CC
       def enabled_engines
         {}.tap do |ret|
           @config.engines.each do |name, config|
-            if config["enabled"]
+            if config.enabled?
               ret[name] = config
             end
           end

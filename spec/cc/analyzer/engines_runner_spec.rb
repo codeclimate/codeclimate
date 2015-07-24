@@ -31,7 +31,11 @@ module CC::Analyzer
     end
 
     def config_with_engine(name)
-      stub(engines: { name => { "enabled" => true } }, exclude_paths: nil)
+      CC::Yaml.parse(<<-EOYAML)
+        engines:
+          #{name}:
+            enabled: true
+      EOYAML
     end
 
     def expect_engine_run(name, source_dir, formatter)
