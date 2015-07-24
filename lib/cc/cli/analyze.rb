@@ -1,11 +1,9 @@
-require "securerandom"
-
 module CC
   module CLI
     class Analyze < Command
       include CC::Analyzer
 
-      def initialize(args = [])
+      def initialize(_args = [])
         super
 
         process_args
@@ -13,23 +11,14 @@ module CC
 
       def run
         require_codeclimate_yml
-        if engines.empty?
-          fatal("No engines enabled. Add some to your .codeclimate.yml file!")
-        end
 
-        formatter.started
+        runner = EnginesRunner.new(registry, formatter, source_dir, config)
+        runner.run
 
-        engines.each do |engine|
-          formatter.engine_running(engine) do
-            engine.run(formatter)
-          end
-        end
-
-        formatter.finished
-      end
-
-      def dev_mode?
-        !!@dev_mode
+      rescue EnginesRunner::InvalidEngineName => ex
+        fatal(ex.message)
+      rescue EnginesRunner::NoEnabledEngines
+        fatal("No enabled engines. Add some to your .codeclimate.yml file!")
       end
 
       private
@@ -47,71 +36,21 @@ module CC
         fatal(e.message)
       end
 
-      def config
-        @config ||= if filesystem.exist?(CODECLIMATE_YAML)
-          config_body = filesystem.read_path(CODECLIMATE_YAML)
-          config = Config.new(config_body)
-        else
-          config = NullConfig.new
-        end
-      end
-
-      def engine_registry
-        @engine_registry ||= EngineRegistry.new
-      end
-
-      def engine_config(engine_name)
-        config.engine_config(engine_name).
-          merge!(exclude_paths: exclude_paths).to_json
-      end
-
-      def exclude_paths
-        if config.exclude_paths
-          filesystem.files_matching(config.exclude_paths)
-        else
-          []
-        end
-      end
-
-      def engines
-        @engines ||= config.engine_names.map do |engine_name|
-          entry = registry_entry(engine_name)
-          if entry.nil?
-            fatal("unknown engine name: #{engine_name}")
-          else
-            Engine.new(
-              engine_name,
-              entry,
-              path,
-              engine_config(engine_name),
-              SecureRandom.uuid
-            )
-          end
-        end.compact
+      def registry
+        EngineRegistry.new(@dev_mode)
       end
 
       def formatter
         @formatter ||= Formatters::PlainTextFormatter.new
       end
 
-      def path
-        ENV['CODE_PATH']
+      def source_dir
+        ENV["CODE_PATH"]
       end
 
-      def registry_entry(engine_name)
-        if @dev_mode
-          dev_registry_entry(engine_name)
-        else
-          engine_registry[engine_name]
-        end
+      def config
+        CC::Yaml.parse(filesystem.read_path(CODECLIMATE_YAML))
       end
-
-      def dev_registry_entry(engine_name)
-        {
-          "image"=>"codeclimate/codeclimate-#{engine_name}:latest"
-        }
-      end
-
     end
   end
 end
