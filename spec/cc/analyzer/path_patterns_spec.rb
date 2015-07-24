@@ -29,6 +29,23 @@ module CC::Analyzer
         patterns.expanded.sort.must_equal(expected.sort)
       end
 
+      it "works with patterns returned by cc-yaml" do
+        root = Dir.mktmpdir
+        make_tree(root, "foo.rb foo.js foo.php")
+        config = CC::Yaml.parse(<<-EOYAML)
+        engines:
+          rubocop:
+            enabled: true
+        exclude_paths:
+        - "*.rb"
+        - "*.js"
+        EOYAML
+
+        patterns = PathPatterns.new(config.exclude_paths, root)
+
+        patterns.expanded.sort.must_equal(%w[ foo.js foo.rb ])
+      end
+
       def make_tree(root, spec)
         paths = spec.split(/\s+/).select(&:present?)
         paths.each do |path|
