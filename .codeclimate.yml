@@ -1,12 +1,3 @@
----
-engines:
-  rubocop:
-    enabled: true
-  bundler-audit:
-    enabled: true
-ratings:
-  paths:
-  - "**.rb"
-exclude_paths:
-- config/**/*
-- spec/**/*
+        engines:
+          madeup:
+            enabled: true

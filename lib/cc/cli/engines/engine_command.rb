@@ -4,7 +4,6 @@ module CC
   module CLI
     module Engines
       class EngineCommand < Command
-        include CC::Analyzer
 
         private
 
@@ -12,32 +11,29 @@ module CC
           @engine_name ||= @args.first
         end
 
-        def parsed_yaml
-          @parsed_yaml ||= CC::Analyzer::Config.new(yaml_content)
-        end
-
-        def yaml_content
-          filesystem.read_path(CODECLIMATE_YAML).freeze
-        end
-
-        def update_yaml
-          filesystem.write_path(CODECLIMATE_YAML, parsed_yaml.to_yaml)
-        end
-
-        def engine_present_in_yaml?
-          parsed_yaml.engine_present?(engine_name)
+        def engine_present?
+          config.engines.key?(engine_name)
         end
 
         def engine_enabled?
-          parsed_yaml.engine_enabled?(engine_name)
+          engine_present? &&
+            config.engines[engine_name].enabled?
         end
 
-        def engine_exists?
-          engines_registry_list.keys.include?(engine_name)
+        def config
+          @config ||= CC::Yaml.parse(filesystem.read_path(CODECLIMATE_YAML))
         end
 
-        def engines_registry_list
-          @engines_registry_list ||= CC::Analyzer::EngineRegistry.new.list
+        def write_config
+          filesystem.write_path(CODECLIMATE_YAML, config.as_json.to_yaml)
+        end
+
+        def valid_engine?(name = engine_name)
+          registry.list.keys.include?(name)
+        end
+
+        def registry
+          @registry ||= CC::Analyzer::EngineRegistry.new
         end
       end
     end

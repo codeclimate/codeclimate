@@ -7,13 +7,12 @@ module CC
         def run
           require_codeclimate_yml
 
-          if !engine_exists?
+          if !valid_engine?
             say "Engine not found. Run 'codeclimate engines:list' for a list of valid engines."
-          elsif !engine_present_in_yaml?
+          elsif !engine_present?
             say "Engine not found in .codeclimate.yml."
           else
             remove_engine
-            update_yaml
             say "Engine removed from .codeclimate.yml."
           end
         end
@@ -21,7 +20,8 @@ module CC
         private
 
         def remove_engine
-          parsed_yaml.remove_engine(engine_name)
+          config.engines.delete(engine_name)
+          write_config
         end
       end
     end

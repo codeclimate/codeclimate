@@ -2,9 +2,15 @@ require "spec_helper"
 
 module CC::CLI::Engines
   describe Install do
+    include CC::Yaml::TestHelpers
+
     describe "#run" do
       it "pulls uninstalled images using docker" do
-        stub_config(engine_names: ["madeup"])
+        create_codeclimate_yaml(<<-YAML)
+        engines:
+          madeup:
+            enabled: true
+        YAML
         stub_engine_registry(list: {
           "madeup" => { "image" => "madeup_img" }
         })
@@ -15,7 +21,11 @@ module CC::CLI::Engines
       end
 
       it "warns for invalid engine names" do
-        stub_config(engine_names: ["madeup"])
+        create_codeclimate_yaml(<<-YAML)
+        engines:
+          madeup:
+            enabled: true
+        YAML
         stub_engine_registry(list: {})
 
         stdout, _ = capture_io do
@@ -26,7 +36,11 @@ module CC::CLI::Engines
       end
 
       it "errors if an image is unable to be pulled" do
-        stub_config(engine_names: ["madeup"])
+        create_codeclimate_yaml(<<-YAML)
+        engines:
+          madeup:
+            enabled: true
+        YAML
         stub_engine_registry(list: {
           "madeup" => { "image" => "madeup_img" }
         })
@@ -42,11 +56,6 @@ module CC::CLI::Engines
 
     def expect_system(cmd, result = true)
       Install.any_instance.expects(:system).with(cmd).returns(result)
-    end
-
-    def stub_config(stubs)
-      config = stub(stubs)
-      CC::Analyzer::Config.stubs(:new).returns(config)
     end
 
     def stub_engine_registry(stubs)
