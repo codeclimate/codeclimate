@@ -14,12 +14,12 @@ module CC
 
       def expand
         results = Dir.chdir(@root) do
-          @patterns.map do |pattern|
+          @patterns.flat_map do |pattern|
             Dir.glob(pattern)
           end
         end
 
-        results.flatten.sort.uniq
+        results.sort.uniq
       end
     end
   end
