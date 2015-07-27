@@ -2,56 +2,62 @@ require "spec_helper"
 
 module CC::CLI::Engines
   describe Install do
+    include FileSystemHelpers
     include CC::Yaml::TestHelpers
 
     describe "#run" do
       it "pulls uninstalled images using docker" do
-        create_codeclimate_yaml(<<-YAML)
-        engines:
-          madeup:
-            enabled: true
-        YAML
-        stub_engine_registry(list: {
-          "madeup" => { "image" => "madeup_img" }
-        })
+        within_temp_dir do
+          create_codeclimate_yaml(<<-YAML)
+          engines:
+            madeup:
+              enabled: true
+          YAML
+          stub_engine_registry(list: {
+            "madeup" => { "image" => "madeup_img" }
+          })
 
-        expect_system("docker pull madeup_img")
+          expect_system("docker pull madeup_img")
 
-        capture_io { Install.new.run }
+          capture_io { Install.new.run }
+        end
       end
 
       it "warns for invalid engine names" do
-        create_codeclimate_yaml(<<-YAML)
-        engines:
-          madeup:
-            enabled: true
-        YAML
-        stub_engine_registry(list: {})
+        within_temp_dir do
+          create_codeclimate_yaml(<<-YAML)
+          engines:
+            madeup:
+              enabled: true
+          YAML
+          stub_engine_registry(list: {})
 
-        stdout, _ = capture_io do
-          Install.new.run
+          stdout, _ = capture_io do
+            Install.new.run
+          end
+
+          stdout.must_match(/unknown engine name: madeup/)
         end
-
-        stdout.must_match(/unknown engine name: madeup/)
       end
 
       it "errors if an image is unable to be pulled" do
-        create_codeclimate_yaml(<<-YAML)
-        engines:
-          madeup:
-            enabled: true
-        YAML
-        stub_engine_registry(list: {
-          "madeup" => { "image" => "madeup_img" }
-        })
+        within_temp_dir do
+          create_codeclimate_yaml(<<-YAML)
+          engines:
+            madeup:
+              enabled: true
+          YAML
+          stub_engine_registry(list: {
+            "madeup" => { "image" => "madeup_img" }
+          })
 
-        expect_system("docker pull madeup_img", false)
+          expect_system("docker pull madeup_img", false)
 
-        capture_io do
-          lambda { Install.new.run }.must_raise(Install::ImagePullFailure)
+          capture_io do
+            lambda { Install.new.run }.must_raise(Install::ImagePullFailure)
+          end
         end
       end
-
     end
 
     def expect_system(cmd, result = true)
