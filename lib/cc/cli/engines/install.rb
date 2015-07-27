@@ -27,8 +27,6 @@ module CC
         end
 
         def engine_names
-          p config.engines
-          p config.engines.keys
           config.engines.keys
         end
 
