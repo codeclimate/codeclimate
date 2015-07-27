@@ -28,7 +28,7 @@ module CC
         end
 
         def valid_engine?(name = engine_name)
-          registry.list.keys.include?(name)
+          registry.list[name].present?
         end
 
         def registry
