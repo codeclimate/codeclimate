@@ -4,7 +4,6 @@ module CC
   module CLI
     module Engines
       class EngineCommand < Command
-
         private
 
         def engine_name
