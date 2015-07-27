@@ -7,14 +7,13 @@ module CC
         def run
           require_codeclimate_yml
 
-          if !engine_exists?
+          if !valid_engine?
             say "Engine not found. Run 'codeclimate engines:list' for a list of valid engines."
           elsif engine_enabled?
             say "Engine already enabled."
             pull_docker_images
           else
             enable_engine
-            update_yaml
             say "Engine added to .codeclimate.yml."
             pull_docker_images
           end
@@ -27,7 +26,10 @@ module CC
         end
 
         def enable_engine
-          parsed_yaml.enable_engine(engine_name)
+          config.engines[engine_name] ||= {}
+          config.engines[engine_name].enabled = true
+
+          write_config
         end
       end
     end

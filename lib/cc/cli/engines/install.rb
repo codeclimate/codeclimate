@@ -17,7 +17,7 @@ module CC
 
         def pull_docker_images
           engine_names.each do |name|
-            if engine_exists?(name)
+            if valid_engine?(name)
               image = engine_image(name)
               pull_engine_image(image)
             else
@@ -27,15 +27,11 @@ module CC
         end
 
         def engine_names
-          @engine_names ||= parsed_yaml.engine_names
-        end
-
-        def engine_exists?(engine_name)
-          engines_registry_list.keys.include?(engine_name)
+          config.engines.keys
         end
 
         def engine_image(engine_name)
-          engines_registry_list[engine_name]["image"]
+          registry.list[engine_name]["image"]
         end
 
         def pull_engine_image(engine_image)

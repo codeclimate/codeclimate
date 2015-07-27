@@ -4,7 +4,7 @@ module CC::CLI::Engines
   describe List do
     describe "#run" do
       it "lists all engines in the config" do
-        stdout, stderr = capture_io do
+        stdout, _ = capture_io do
           List.new.run
         end
 
