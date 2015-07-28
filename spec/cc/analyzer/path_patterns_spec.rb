@@ -46,6 +46,23 @@ module CC::Analyzer
         patterns.expanded.sort.must_equal(%w[ foo.js foo.rb ])
       end
 
+      it "works with cc-yaml normalized paths and Dir.glob" do
+        root = Dir.mktmpdir
+        make_tree(root, "foo/bar.rb")
+        config = CC::Yaml.parse(<<-EOYAML)
+        engines:
+          rubocop:
+            enabled: true
+        ratings:
+          paths:
+          - "**.rb"
+        EOYAML
+
+        patterns = PathPatterns.new(config.ratings.paths, root)
+
+        patterns.expanded.sort.must_equal(%w[ foo/bar.rb ])
+      end
+
       def make_tree(root, spec)
         paths = spec.split(/\s+/).select(&:present?)
         paths.each do |path|
