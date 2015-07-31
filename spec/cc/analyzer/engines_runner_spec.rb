@@ -54,6 +54,28 @@ module CC::Analyzer
       EnginesRunner.new(registry, formatter, "/code", config).run
     end
 
+    it "respects .gitignore paths" do
+      system("git init > /dev/null")
+      make_file(".ignorethis")
+      make_file(".gitignore", ".ignorethis\n")
+      config = CC::Yaml.parse <<-EOYAML
+        engines:
+          rubocop:
+            enabled: true
+      EOYAML
+      registry = registry_with_engine("rubocop")
+      formatter = null_formatter
+
+      expected_config = {
+        "enabled" => true,
+        :exclude_paths => %w[ .ignorethis ]
+      }
+
+      expect_engine_run("rubocop", "/code", formatter, expected_config)
+
+      EnginesRunner.new(registry, formatter, "/code", config).run
+    end
+
     def registry_with_engine(name)
       { name => { "image" => "codeclimate/codeclimate-#{name}" } }
     end
