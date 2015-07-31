@@ -90,7 +90,7 @@ module CC
 
       def gitignore_paths
         if File.exist?(".gitignore")
-          `git ls-files --others -i --exclude-from .gitignore`.split("\n")
+          `git ls-files --others -i -z --exclude-from .gitignore`.split("\0")
         else
           []
         end
