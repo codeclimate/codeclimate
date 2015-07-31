@@ -2,6 +2,12 @@ require "spec_helper"
 
 module CC::Analyzer
   describe EnginesRunner do
+    include FileSystemHelpers
+
+    around do |test|
+      within_temp_dir { test.call }
+    end
+
     it "builds and runs enabled engines from the registry with the formatter" do
       config = config_with_engine("an_engine")
       registry = registry_with_engine("an_engine")
