@@ -1,5 +1,3 @@
-require "cc/analyzer"
-
 module CC
   module CLI
     module Engines
@@ -17,7 +15,7 @@ module CC
 
         def pull_docker_images
           engine_names.each do |name|
-            if engine_exists?(name)
+            if engine_registry.exists?(name)
               image = engine_image(name)
               pull_engine_image(image)
             else
@@ -30,12 +28,8 @@ module CC
           @engine_names ||= parsed_yaml.engine_names
         end
 
-        def engine_exists?(engine_name)
-          engines_registry_list.keys.include?(engine_name)
-        end
-
         def engine_image(engine_name)
-          engines_registry_list[engine_name]["image"]
+          engine_registry_list[engine_name]["image"]
         end
 
         def pull_engine_image(engine_image)

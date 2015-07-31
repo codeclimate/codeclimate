@@ -21,6 +21,11 @@ module CC
         @config
       end
 
+      def exists?(engine_name)
+        return true if dev_mode?
+        list.keys.include?(engine_name)
+      end
+
       private
 
       def dev_mode?

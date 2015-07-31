@@ -60,6 +60,10 @@ module CC
       def terminal
         @terminal ||= HighLine.new($stdin, $stdout)
       end
+
+      def engine_registry
+        @engine_registry ||= CC::Analyzer::EngineRegistry.new
+      end
     end
   end
 end

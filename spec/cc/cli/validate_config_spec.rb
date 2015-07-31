@@ -103,6 +103,32 @@ module CC::CLI
             end
           end
         end
+
+        describe "when there are invalid engines" do
+          it "reports that those engines are invalid" do
+            within_temp_dir do
+              yaml_content = <<-YAML
+                engines:
+                  rubocop:
+                    enabled: true
+                  madeup:
+                    enabled: true
+                ratings:
+                  paths:
+                  - "**/*.rb"
+                  - "**/*.js"
+              YAML
+
+              File.write(".codeclimate.yml", yaml_content)
+
+              stdout, stderr = capture_io do
+                ValidateConfig.new.run
+              end
+
+              stdout.must_include("WARNING: unknown engine <madeup>")
+            end
+          end
+        end
       end
     end
 
