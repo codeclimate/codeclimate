@@ -12,8 +12,10 @@ module CC
       def run
         require_codeclimate_yml
 
-        runner = EnginesRunner.new(registry, formatter, source_dir, config)
-        runner.run
+        Dir.chdir(ENV['FILESYSTEM_DIR']) do
+          runner = EnginesRunner.new(registry, formatter, source_dir, config)
+          runner.run
+        end
 
       rescue EnginesRunner::InvalidEngineName => ex
         fatal(ex.message)
