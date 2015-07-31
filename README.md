@@ -1,6 +1,6 @@
 # Code Climate CLI<br>
 
-[![Code Climate](https://codeclimate.com/repos/5589eac269568019f50011ab/badges/58a4aad546ecbc23eb36/gpa.svg)](https://codeclimate.com/repos/5589eac269568019f50011ab/feed)
+[![Code Climate](https://codeclimate.com/repos/55b805ec6956802047001e56/badges/3699fad515e370e5d622/gpa.svg)](https://codeclimate.com/repos/55b805ec6956802047001e56/feed)
 
 ## Overview
 
