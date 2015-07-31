@@ -111,7 +111,7 @@ module CC::CLI
                 engines:
                   rubocop:
                     enabled: true
-                  madeup
+                  madeup:
                     enabled: true
                 ratings:
                   paths:
@@ -125,7 +125,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("WARNING: unknown engine madeup")
+              stdout.must_include("WARNING: unknown engine <madeup>")
             end
           end
         end
