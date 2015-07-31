@@ -48,10 +48,22 @@ module CC
         @engines ||= enabled_engines.map do |name, config|
           metadata = registry_lookup(name)
           label = @container_label || SecureRandom.uuid
-          engine_config = config.merge!(exclude_paths: exclude_paths)
 
-          Engine.new(name, metadata, @source_dir, engine_config, label)
+          Engine.new(name, metadata, @source_dir, engine_config(config), label)
         end
+      end
+
+      def engine_config(config)
+        config = config.merge(exclude_paths: exclude_paths)
+
+        # The yaml gem turns a config file string into a hash, but engines expect the string
+        # So we (for now) need to turn it into a string in that one scenario.
+        # TODO: update the engines to expect the hash and then remove this.
+        if config.fetch("config", {}).keys.size == 1 && config["config"].key?("file")
+          config["config"] = config["config"]["file"]
+        end
+
+        config
       end
 
       def enabled_engines

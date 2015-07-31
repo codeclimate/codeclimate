@@ -26,6 +26,28 @@ module CC::Analyzer
       lambda { runner.run }.must_raise(EnginesRunner::NoEnabledEngines)
     end
 
+    it "massages data for the config" do
+      config = CC::Yaml.parse <<-EOYAML
+        engines:
+          rubocop:
+            enabled: true
+            config:
+              file: rubocop.yml
+      EOYAML
+      registry = registry_with_engine("rubocop")
+      formatter = null_formatter
+
+      expected_config = {
+        "enabled" => true,
+        "config" => "rubocop.yml",
+        :exclude_paths => []
+      }
+
+      expect_engine_run("rubocop", "/code", formatter, expected_config)
+
+      EnginesRunner.new(registry, formatter, "/code", config).run
+    end
+
     def registry_with_engine(name)
       { name => { "image" => "codeclimate/codeclimate-#{name}" } }
     end
@@ -38,12 +60,12 @@ module CC::Analyzer
       EOYAML
     end
 
-    def expect_engine_run(name, source_dir, formatter)
-      engine = stub(name: "an_engine")
+    def expect_engine_run(name, source_dir, formatter, engine_config = nil)
+      engine = stub(name: name)
       engine.expects(:run).with(formatter)
 
       image = "codeclimate/codeclimate-#{name}"
-      engine_config = { "enabled" => true, exclude_paths: [] }
+      engine_config ||= { "enabled" => true, exclude_paths: [] }
 
       Engine.expects(:new).
         with(name, { "image" => image }, source_dir, engine_config, anything).
