@@ -19,7 +19,7 @@ module CC::CLI
         end
 
         describe "when engine is not in registry" do
-          it "reports that no engines are enabled" do
+          it "ignores engine, without blowing up" do
             within_temp_dir do
               create_yaml(<<-EOYAML)
                 engines:
@@ -30,10 +30,10 @@ module CC::CLI
               EOYAML
 
               _, stderr = capture_io do
-                lambda { Analyze.new.run }.must_raise SystemExit
+                lambda { Analyze.new.run }
               end
 
-              stderr.must_match("unknown engine name: madeup")
+              stderr.must_match("")
             end
           end
         end

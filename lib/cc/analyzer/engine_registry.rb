@@ -21,12 +21,12 @@ module CC
         @config
       end
 
-      def has_key?(engine_name)
+      def key?(engine_name)
         return true if dev_mode?
-        list.has_key?(engine_name)
+        list.key?(engine_name)
       end
 
-      alias exists? has_key?
+      alias_method :exists?, :key?
 
       private
 

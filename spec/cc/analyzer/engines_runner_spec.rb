@@ -12,11 +12,11 @@ module CC::Analyzer
       EnginesRunner.new(registry, formatter, "/code", config).run
     end
 
-    it "raises for invalid engine names" do
+    it "does not raise for invalid engine names" do
       config = config_with_engine("an_engine")
       runner = EnginesRunner.new({}, null_formatter, "/code", config)
 
-      lambda { runner.run }.must_raise(EnginesRunner::InvalidEngineName)
+      lambda { runner.run }
     end
 
     it "raises for no enabled engines" do

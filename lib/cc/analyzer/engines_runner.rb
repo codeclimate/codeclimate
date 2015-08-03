@@ -46,10 +46,9 @@ module CC
 
       def engines
         @engines ||= enabled_engines.map do |name, config|
-          metadata = registry_lookup(name)
           label = @container_label || SecureRandom.uuid
 
-          Engine.new(name, metadata, @source_dir, engine_config(config), label)
+          Engine.new(name, metadata(name), @source_dir, engine_config(config), label)
         end
       end
 
@@ -69,19 +68,15 @@ module CC
       def enabled_engines
         {}.tap do |ret|
           @config.engines.each do |name, config|
-            if config.enabled?
+            if config.enabled? && @registry.key?(name)
               ret[name] = config
             end
           end
         end
       end
 
-      def registry_lookup(engine_name)
-        if (metadata = @registry[engine_name])
-          metadata
-        else
-          raise InvalidEngineName, "unknown engine name: #{engine_name}"
-        end
+      def metadata(engine_name)
+        @registry[engine_name]
       end
 
       def exclude_paths
