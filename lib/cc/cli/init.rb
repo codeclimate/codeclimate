@@ -52,7 +52,7 @@ module CC
       end
 
       def eligible_engines
-        CC::Analyzer::EngineRegistry.new.list.each_with_object({}) do |(engine_name, config), result|
+        engine_registry.list.each_with_object({}) do |(engine_name, config), result|
           if engine_eligible?(config)
             result[engine_name] = config
           end

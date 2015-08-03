@@ -33,11 +33,11 @@ module CC
         end
 
         def engine_exists?
-          engines_registry_list.keys.include?(engine_name)
+          engine_registry.exists?(engine_name)
         end
 
-        def engines_registry_list
-          @engines_registry_list ||= CC::Analyzer::EngineRegistry.new.list
+        def engine_registry_list
+          engine_registry.list
         end
       end
     end
