@@ -17,7 +17,9 @@ module CC
         if any_issues?
           display_issues
         else
-          puts colorize("No errors or warnings found in .codeclimate.yml file.", :green)
+          unless validate_engines
+            puts colorize("No errors or warnings found in .codeclimate.yml file.", :green)
+          end
         end
       end
 
@@ -69,6 +71,10 @@ module CC
         warnings.each do |warning|
           puts colorize("WARNING: " + warning, :red)
         end
+      end
+
+      def validate_engines
+        Engines::Validate.new.run
       end
     end
   end

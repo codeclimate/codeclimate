@@ -9,6 +9,7 @@ module CC
       autoload :Install, "cc/cli/engines/install"
       autoload :List, "cc/cli/engines/list"
       autoload :Remove, "cc/cli/engines/remove"
+      autoload :Validate, "cc/cli/engines/validate"
     end
   end
 end
