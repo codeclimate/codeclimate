@@ -80,7 +80,15 @@ module CC
       end
 
       def exclude_paths
-        PathPatterns.new(@config.exclude_paths || []).expanded
+        PathPatterns.new(@config.exclude_paths || []).expanded + gitignore_paths
+      end
+
+      def gitignore_paths
+        if File.exist?(".gitignore")
+          `git ls-files --others -i -z --exclude-from .gitignore`.split("\0")
+        else
+          []
+        end
       end
     end
   end

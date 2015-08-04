@@ -2,6 +2,12 @@ require "spec_helper"
 
 module CC::Analyzer
   describe EnginesRunner do
+    include FileSystemHelpers
+
+    around do |test|
+      within_temp_dir { test.call }
+    end
+
     it "builds and runs enabled engines from the registry with the formatter" do
       config = config_with_engine("an_engine")
       registry = registry_with_engine("an_engine")
@@ -41,6 +47,28 @@ module CC::Analyzer
         "enabled" => true,
         "config" => "rubocop.yml",
         :exclude_paths => []
+      }
+
+      expect_engine_run("rubocop", "/code", formatter, expected_config)
+
+      EnginesRunner.new(registry, formatter, "/code", config).run
+    end
+
+    it "respects .gitignore paths" do
+      system("git init > /dev/null")
+      make_file(".ignorethis")
+      make_file(".gitignore", ".ignorethis\n")
+      config = CC::Yaml.parse <<-EOYAML
+        engines:
+          rubocop:
+            enabled: true
+      EOYAML
+      registry = registry_with_engine("rubocop")
+      formatter = null_formatter
+
+      expected_config = {
+        "enabled" => true,
+        :exclude_paths => %w[ .ignorethis ]
       }
 
       expect_engine_run("rubocop", "/code", formatter, expected_config)
