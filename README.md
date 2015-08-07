@@ -84,7 +84,7 @@ Available commands:
 The following is a brief explanation of each available command.
 
 * `analyze`: Analyze all relevant files in the current working directory. All engines that are enabled in your `.codeclimate.yml` file will run, one after another. The `-f` (or `format`) argument allows you to set the output format of the analysis (using `json` or `text`).
-* `console`: start an interactive session providing access to the classes within thw CLI. Useful for engine developers and maintainers.
+* `console`: start an interactive session providing access to the classes within the CLI. Useful for engine developers and maintainers.
 * `engines:disable engine_name`: Changes the engine's `enabled:` node to be `false` in your `.codeclimate.yml` file. This engine will not be run the next time your project is analyzed.
 * `engines:enable engine_name`: Installs the specified engine (`engine_name`). Also changes the engine's `enabled:` node to be `true` in your `.codeclimate.yml` file. This engine will be run the next time your project is analyzed.
 * `engines:install`: Compares the list of engines in your `.codeclimate.yml` file to those that are currently installed, then installs any missing engines.
