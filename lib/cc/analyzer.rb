@@ -12,6 +12,7 @@ module CC
     autoload :IssueSorter,        "cc/analyzer/issue_sorter"
     autoload :LocationDescription,"cc/analyzer/location_description"
     autoload :NullConfig,         "cc/analyzer/null_config"
+    autoload :NullContainerLog,   "cc/analyzer/null_container_log"
     autoload :PathPatterns,       "cc/analyzer/path_patterns"
     autoload :SourceBuffer,       "cc/analyzer/source_buffer"
     autoload :UnitName,           "cc/analyzer/unit_name"

@@ -77,7 +77,28 @@ module CC::Analyzer
         run_engine
       end
 
-      def run_engine(metadata = {}, config = {})
+      it "notifies the container log of start with the image name" do
+        container_log = TestContainerLog.new
+        expect_docker_run
+
+        run_engine({ "image" => "test/image" }, {}, container_log)
+
+        container_log.started_image.must_equal "test/image"
+      end
+
+      # N.B. test case for timed_out omitted because it's basically impossible
+
+      it "notifies the container log of finish with the status and stderr" do
+        container_log = TestContainerLog.new
+        expect_docker_run
+
+        run_engine({}, {}, container_log)
+
+        container_log.finished_status.exitstatus.must_equal 0
+        container_log.finished_stderr.must_equal ""
+      end
+
+      def run_engine(metadata = {}, config = {}, container_log = NullContainerLog.new)
         io = TestFormatter.new
         options = {
           "image" => "codeclimate/image-name",
@@ -86,7 +107,7 @@ module CC::Analyzer
         config.reverse_merge!(exclude_paths: ["foo.rb"])
 
         engine = Engine.new("rubocop", options, "/path", config, "sup")
-        engine.run(io)
+        engine.run(io, StringIO.new, container_log)
 
         io
       end

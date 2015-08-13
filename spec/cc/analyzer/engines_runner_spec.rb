@@ -90,7 +90,7 @@ module CC::Analyzer
 
     def expect_engine_run(name, source_dir, formatter, engine_config = nil)
       engine = stub(name: name)
-      engine.expects(:run).with(formatter)
+      engine.expects(:run).with(formatter, kind_of(StringIO), kind_of(NullContainerLog))
 
       image = "codeclimate/codeclimate-#{name}"
       engine_config ||= { "enabled" => true, exclude_paths: [] }

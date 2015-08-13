@@ -16,7 +16,9 @@ module CC
         @label = label.to_s
       end
 
-      def run(stdout_io, stderr_io = StringIO.new)
+      def run(stdout_io, stderr_io = StringIO.new, container_log = NullContainerLog.new)
+        container_log.started(@metadata["image"])
+
         timed_out = false
         pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command)
         Analyzer.statsd.increment("cli.engines.started")
@@ -55,8 +57,13 @@ module CC
           Analyzer.statsd.increment("cli.engines.result.error.timeout")
           Analyzer.statsd.increment("cli.engines.names.#{name}.result.error")
           Analyzer.statsd.increment("cli.engines.names.#{name}.result.error.timeout")
+          container_log.timed_out
           raise EngineTimeout, "engine #{name} ran past #{TIMEOUT} seconds and was killed"
-        elsif status.success?
+        end
+
+        container_log.finished(status, stderr_io.string)
+
+        if status.success?
           Analyzer.statsd.increment("cli.engines.names.#{name}.result.success")
           Analyzer.statsd.increment("cli.engines.result.success")
         else
