@@ -41,14 +41,14 @@ module CC
 
         _, status = Process.waitpid2(pid)
 
-        @log.finished(status, @stderr_io.string)
+        @log.finished(@image, @name, status, @stderr_io.string)
 
         t_timeout.kill
       ensure
         t_timeout.kill if t_timeout
 
         if @timed_out
-          @log.timed_out(@timeout)
+          @log.timed_out(@image, @name, @timeout)
           t_out.kill if t_out
           t_err.kill if t_err
         else

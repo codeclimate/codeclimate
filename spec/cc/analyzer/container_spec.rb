@@ -77,7 +77,8 @@ module CC::Analyzer
 
         container.run
 
-        log.finished_status.must_equal :failed
+        log.finished_image.must_equal "codeclimate/foo"
+        log.finished_name.must_equal "name"
         log.finished_stderr.must_equal "error one\nerror two\n"
       end
 
@@ -93,6 +94,9 @@ module CC::Analyzer
         container.run
 
         log.timed_out?.must_equal true
+        log.timed_out_image.must_equal "codeclimate/foo"
+        log.timed_out_name.must_equal "name"
+        log.timed_out_seconds.must_equal 0
       end
     end
 

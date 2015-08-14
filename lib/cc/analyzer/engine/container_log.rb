@@ -16,8 +16,8 @@ module CC
           Analyzer.statsd.increment("cli.engines.started")
         end
 
-        def timed_out(timeout)
-          @inner_log.timed_out(timeout)
+        def timed_out(image, name, timeout)
+          @inner_log.timed_out(image, name, timeout)
 
           Analyzer.statsd.increment("cli.engines.result.error")
           Analyzer.statsd.increment("cli.engines.result.error.timeout")
@@ -27,8 +27,8 @@ module CC
           raise EngineTimeout, "engine #{@name} ran past #{timeout} seconds and was killed"
         end
 
-        def finished(status, stderr)
-          @inner_log.finished(status, stderr)
+        def finished(image, name, status, stderr)
+          @inner_log.finished(image, name, status, stderr)
 
           Analyzer.statsd.increment("cli.engines.finished")
 
