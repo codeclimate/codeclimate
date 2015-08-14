@@ -2,6 +2,7 @@ module CC
   module Analyzer
     autoload :Accumulator,        "cc/analyzer/accumulator"
     autoload :Config,             "cc/analyzer/config"
+    autoload :Container,          "cc/analyzer/container"
     autoload :Engine,             "cc/analyzer/engine"
     autoload :EngineClient,       "cc/analyzer/engine_client"
     autoload :EngineOutputFilter, "cc/analyzer/engine_output_filter"
