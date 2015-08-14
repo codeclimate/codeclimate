@@ -9,7 +9,7 @@ module CC
         @log = log || NullContainerLog.new
 
         @output_delimeter = "\n"
-        @on_output = ->(*)
+        @on_output = ->(*) { }
 
         @timed_out = false
         @stderr_io = StringIO.new
@@ -23,7 +23,7 @@ module CC
       def run(options)
         @log.started(@image)
 
-        pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command)
+        pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command(options))
 
         t_out = read_stdout(out)
         t_err = read_stderr(err)
@@ -31,11 +31,14 @@ module CC
 
         _, status = Process.waitpid2(pid)
 
+        @log.finished(status, @stderr_io.string)
+
         t_timeout.kill
       ensure
         t_timeout.kill if t_timeout
 
         if @timed_out
+          @log.timed_out
           t_out.kill if t_out
           t_err.kill if t_err
         else
@@ -45,6 +48,11 @@ module CC
       end
 
       private
+
+      def docker_run_command(options)
+        ["docker run --rm", *options, @image @command].compact
+      end
+
 
       def read_stdout(out)
         Thread.new do

@@ -21,7 +21,7 @@ module CC
         container = Container.new(
           @metadata["image"],
           @metadata["command"],
-          ContainerLogLog.new(name, container_log)
+          ContainerLog.new(name, container_log)
         )
 
         container.on_output("\0") do |chunk|
