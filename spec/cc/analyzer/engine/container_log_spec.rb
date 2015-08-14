@@ -19,9 +19,11 @@ class CC::Analyzer::Engine
         inner_log = TestContainerLog.new
         container_log = ContainerLog.new("", inner_log)
 
-        container_log.timed_out(900) rescue nil
+        container_log.timed_out("image", "name", 900) rescue nil
 
         inner_log.timed_out?.must_equal true
+        inner_log.timed_out_image.must_equal "image"
+        inner_log.timed_out_name.must_equal "name"
         inner_log.timed_out_seconds.must_equal 900
       end
 
@@ -29,7 +31,7 @@ class CC::Analyzer::Engine
         inner_log = TestContainerLog.new
         container_log = ContainerLog.new("", inner_log)
 
-        action = ->() { container_log.timed_out(900) }
+        action = ->() { container_log.timed_out("image", "name", 900) }
         action.must_raise(EngineTimeout)
       end
     end
@@ -40,9 +42,10 @@ class CC::Analyzer::Engine
         inner_log = TestContainerLog.new
         container_log = ContainerLog.new("", inner_log)
 
-        container_log.finished(status, "stderr")
+        container_log.finished("image", "name", status, "stderr")
 
-        inner_log.finished_status.must_equal status
+        inner_log.finished_image.must_equal "image"
+        inner_log.finished_name.must_equal "name"
         inner_log.finished_stderr.must_equal "stderr"
       end
 
@@ -51,7 +54,7 @@ class CC::Analyzer::Engine
         inner_log = TestContainerLog.new
         container_log = ContainerLog.new("", inner_log)
 
-        action = ->() { container_log.finished(status, "stderr") }
+        action = ->() { container_log.finished("image", "name", status, "stderr") }
         action.must_raise(EngineFailure)
       end
     end
