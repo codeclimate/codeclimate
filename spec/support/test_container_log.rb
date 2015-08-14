@@ -1,12 +1,18 @@
 class TestContainerLog
-  attr_reader :started_image, :timed_out, :finished_status, :finished_stderr
+  attr_reader :started_image, :started_name, :timed_out_seconds, :finished_status, :finished_stderr
 
-  def started(image)
+  def started(image, name)
     @started_image = image
+    @started_name = name
   end
 
-  def timed_out
+  def timed_out(seconds)
+    @timed_out_seconds = seconds
     @timed_out = true
+  end
+
+  def timed_out?
+    @timed_out
   end
 
   def finished(status, stderr)
