@@ -14,14 +14,14 @@ module CC
         @container_label = container_label
       end
 
-      def run
+      def run(container_log = NullContainerLog.new)
         raise NoEnabledEngines if engines.empty?
 
         Analyzer.logger.info("running #{engines.size} engines")
 
         @formatter.started
 
-        engines.each { |engine| run_engine(engine) }
+        engines.each { |engine| run_engine(engine, container_log) }
 
         @formatter.finished
       ensure
@@ -30,13 +30,16 @@ module CC
 
       private
 
-      def run_engine(engine)
+      def run_engine(engine, container_log)
         Analyzer.logger.info("starting engine #{engine.name}")
 
         Analyzer.statsd.time("engines.time") do
           Analyzer.statsd.time("engines.names.#{engine.name}.time") do
             @formatter.engine_running(engine) do
-              engine.run(@formatter)
+              engine.run(
+                stdout_io: @formatter,
+                container_log: container_log
+              )
             end
           end
         end
