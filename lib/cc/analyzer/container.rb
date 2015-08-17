@@ -3,6 +3,14 @@ require "posix/spawn"
 module CC
   module Analyzer
     class Container
+      ContainerData = Struct.new(
+        :image,         # image used to create the container
+        :name,          # name given to the container when created
+        :duration,      # duration, for a finished event
+        :status,        # status, for a finished event
+        :stderr,        # stderr, for a finished event
+      )
+
       DEFAULT_TIMEOUT = 15 * 60 # 15m
 
       def initialize(
@@ -97,7 +105,7 @@ module CC
       end
 
       def container_data(duration: nil, status: nil)
-        ContainerListener::ContainerData.new(
+        ContainerData.new(
           @image,
           @name,
           duration,
