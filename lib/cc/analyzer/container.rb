@@ -9,13 +9,13 @@ module CC
         image:,
         name:,
         command: nil,
-        log: NullContainerLog.new,
+        listener: ContainerListener.new,
         timeout: DEFAULT_TIMEOUT
       )
         @image = image
         @name = name
         @command = command
-        @log = log
+        @listener = listener
         @timeout = timeout
 
         @output_delimeter = "\n"
@@ -31,7 +31,8 @@ module CC
       end
 
       def run(options = [])
-        @log.started(@image, @name)
+        started = Time.now
+        @listener.started(container_data)
 
         pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command(options))
 
@@ -41,14 +42,15 @@ module CC
 
         _, status = Process.waitpid2(pid)
 
-        @log.finished(@image, @name, status, @stderr_io.string)
+        duration = ((Time.now - started) * 1000).round
+        @listener.finished(container_data(duration: duration, status: status))
 
         t_timeout.kill
       ensure
         t_timeout.kill if t_timeout
 
         if @timed_out
-          @log.timed_out(@image, @name, @timeout)
+          @listener.timed_out(container_data(duration: @timeout))
           t_out.kill if t_out
           t_err.kill if t_err
         else
@@ -92,6 +94,16 @@ module CC
           @timed_out = true
           Process.kill("KILL", pid)
         end
+      end
+
+      def container_data(duration: nil, status: nil)
+        ContainerListener::ContainerData.new(
+          @image,
+          @name,
+          duration,
+          status,
+          @stderr_io.string
+        )
       end
     end
   end

@@ -20,7 +20,7 @@ module CC::Analyzer
 
         metadata = { "image" => "codeclimate/foo", "command" => "bar" }
         engine = Engine.new("foo", metadata, "", {}, "")
-        engine.run(stdout_io: StringIO.new)
+        engine.run(StringIO.new, ContainerListener.new)
       end
 
       it "runs a Container in a constrained environment" do
@@ -39,21 +39,29 @@ module CC::Analyzer
 
         Container.expects(:new).returns(container)
         engine = Engine.new("", {}, "/code", {}, "a-label")
-        engine.run(stdout_io: StringIO.new)
+        engine.run(StringIO.new, ContainerListener.new)
       end
 
-      it "passes its container log wrapping the given one" do
+      it "passes a composite container listener wrapping the given one" do
         container = stub
         container.stubs(:on_output).yields("")
         container.stubs(:run)
 
-        given_log = stub
-        container_log = stub
-        Engine::ContainerLog.expects(:new).with("foo", given_log).returns(container_log)
-        Container.expects(:new).with(has_entry(log: container_log)).returns(container)
+        given_listener = stub
+        container_listener = stub
+        CompositeContainerListener.expects(:new).
+          with(
+            given_listener,
+            kind_of(LoggingContainerListener),
+            kind_of(StatsdContainerListener),
+            kind_of(RaisingContainerListener),
+          ).
+          returns(container_listener)
+        Container.expects(:new).
+          with(has_entry(listener: container_listener)).returns(container)
 
-        engine = Engine.new("foo", {}, "", {}, "")
-        engine.run(stdout_io: StringIO.new, container_log: given_log)
+        engine = Engine.new("", {}, "", {}, "")
+        engine.run(StringIO.new, given_listener)
       end
 
       it "parses stdout for null-delimited issues" do
@@ -66,7 +74,7 @@ module CC::Analyzer
 
         stdout = StringIO.new
         engine = Engine.new("", {}, "", {}, "")
-        engine.run(stdout_io: stdout)
+        engine.run(stdout, ContainerListener.new)
 
         stdout.string.must_equal "issue oneissue twoissue three"
       end
@@ -82,7 +90,7 @@ module CC::Analyzer
         stdout = StringIO.new
         config = { "checks" => { "bar" => { "enabled" => false } } }
         engine = Engine.new("", {}, "", config, "")
-        engine.run(stdout_io: stdout)
+        engine.run(stdout, ContainerListener.new)
 
         stdout.string.wont_match(%{"check":"bar"})
       end
