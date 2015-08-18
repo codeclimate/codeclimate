@@ -4,7 +4,7 @@ command -v docker > /dev/null 2>&1 || {
   exit 1
 }
 
-docker version | grep -Fq "Server version" || {
+docker version | grep -q "Server version\|Server:" || {
   echo "Unable to run \`docker version', the docker daemon may not be running" >&2
 
   if command -v boot2docker > /dev/null 2>&1; then
