@@ -3,7 +3,8 @@ require "securerandom"
 module CC
   module Analyzer
     class Engine
-      autoload :ContainerLog, "cc/analyzer/engine/container_log"
+      EngineFailure = Class.new(StandardError)
+      EngineTimeout = Class.new(StandardError)
 
       attr_reader :name
 
@@ -15,12 +16,19 @@ module CC
         @label = label.to_s
       end
 
-      def run(stdout_io:, container_log: NullContainerLog.new)
+      def run(stdout_io, container_listener)
+        composite_listener = CompositeContainerListener.new(
+          container_listener,
+          LoggingContainerListener.new(name, Analyzer.logger),
+          StatsdContainerListener.new(name, Analyzer.statsd),
+          RaisingContainerListener.new(name, EngineFailure, EngineTimeout),
+        )
+
         container = Container.new(
           image: @metadata["image"],
           command: @metadata["command"],
           name: container_name,
-          log: ContainerLog.new(name, container_log)
+          listener: composite_listener,
         )
 
         container.on_output("\0") do |output|

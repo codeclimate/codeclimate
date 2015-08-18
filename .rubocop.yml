@@ -22,6 +22,9 @@ Metrics/ModuleLength:
   Exclude:
     - 'spec/**/*'
 
+Style/GuardClause:
+  Enabled: false
+
 Style/IfUnlessModifier:
   Enabled: false
 

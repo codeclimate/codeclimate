@@ -54,20 +54,20 @@ module CC::Analyzer
         collected_output.must_equal %w[ foo bar ]
       end
 
-      it "logs a start event to the given container log" do
+      it "logs a start event to the given container listener" do
         stub_spawn
-        log = TestContainerLog.new
-        container = Container.new(image: "codeclimate/foo", name: "name", log: log)
+        listener = TestContainerListener.new
+        container = Container.new(image: "codeclimate/foo", name: "name", listener: listener)
 
         container.run
 
-        log.started_image.must_equal "codeclimate/foo"
-        log.started_name.must_equal "name"
+        listener.started_image.must_equal "codeclimate/foo"
+        listener.started_name.must_equal "name"
       end
 
       it "logs a finished event with status and stderr" do
-        log = TestContainerLog.new
-        container = Container.new(image: "codeclimate/foo", name: "name", log: log)
+        listener = TestContainerListener.new
+        container = Container.new(image: "codeclimate/foo", name: "name", listener: listener)
 
         err = StringIO.new
         err.puts("error one")
@@ -77,14 +77,14 @@ module CC::Analyzer
 
         container.run
 
-        log.finished_image.must_equal "codeclimate/foo"
-        log.finished_name.must_equal "name"
-        log.finished_stderr.must_equal "error one\nerror two\n"
+        listener.finished_image.must_equal "codeclimate/foo"
+        listener.finished_name.must_equal "name"
+        listener.finished_stderr.must_equal "error one\nerror two\n"
       end
 
       it "times out slow containers" do
-        log = TestContainerLog.new
-        container = Container.new(image: "codeclimate/foo", name: "name", log: log, timeout: 0)
+        listener = TestContainerListener.new
+        container = Container.new(image: "codeclimate/foo", name: "name", listener: listener, timeout: 0)
 
         # N.B. stubbing a private method is a Bad Idea, but it's the best I can
         # come up with here. Rather than invoke docker, we invoke a slow command
@@ -93,10 +93,10 @@ module CC::Analyzer
 
         container.run
 
-        log.timed_out?.must_equal true
-        log.timed_out_image.must_equal "codeclimate/foo"
-        log.timed_out_name.must_equal "name"
-        log.timed_out_seconds.must_equal 0
+        listener.timed_out?.must_equal true
+        listener.timed_out_image.must_equal "codeclimate/foo"
+        listener.timed_out_name.must_equal "name"
+        listener.timed_out_seconds.must_equal 0
       end
     end
 
