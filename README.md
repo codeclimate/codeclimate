@@ -88,7 +88,7 @@ The following is a brief explanation of each available command.
 * `engines:disable engine_name`: Changes the engine's `enabled:` node to be `false` in your `.codeclimate.yml` file. This engine will not be run the next time your project is analyzed.
 * `engines:enable engine_name`: Installs the specified engine (`engine_name`). Also changes the engine's `enabled:` node to be `true` in your `.codeclimate.yml` file. This engine will be run the next time your project is analyzed.
 * `engines:install`: Compares the list of engines in your `.codeclimate.yml` file to those that are currently installed, then installs any missing engines.
-* `engines:list`: Lists all available engines in the [Code Climate Docker Hub](https://registry.hub.docker.com/repos/codeclimate/).
+* `engines:list`: Lists all available engines in the [Code Climate Docker Hub](https://hub.docker.com/u/codeclimate/).
 * `engines:remove engine_name`: Removes an engine from your `.codeclimate.yml` file.
 * `help`: Displays a list of commands that can be passed to the Code Climate CLI.
 * `init`: Generates a new `.codeclimate.yml` file in the current working directory.
