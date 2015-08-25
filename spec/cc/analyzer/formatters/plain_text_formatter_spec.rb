@@ -29,7 +29,7 @@ module CC::Analyzer::Formatters
           formatter.finished
         end
 
-        stdout.must_match("accumulator.rb (1 issue)")
+        stdout.must_match("config.rb (1 issue)")
         stdout.must_match("Missing top-level class documentation comment")
         stdout.must_match("[cool_engine]")
       end

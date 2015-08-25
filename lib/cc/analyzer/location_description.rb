@@ -1,26 +1,23 @@
 module CC
   module Analyzer
     class LocationDescription
-      def initialize(location, suffix = "")
+      def initialize(source_buffer, location, suffix = "")
+        @source_buffer = source_buffer
         @location = location
         @suffix = suffix
       end
 
       def to_s
-        str = ""
         if location["lines"]
-          str << render_lines
-        elsif positions = location["positions"]
-          str << render_position(positions["begin"])
-
-          if positions["end"]
-            str << "-"
-            str << render_position(positions["end"])
-          end
+          begin_line = location["lines"]["begin"]
+          end_line = location["lines"]["end"]
+        elsif location["positions"]
+          begin_line = position_to_line(location["positions"]["begin"])
+          end_line = position_to_line(location["positions"]["end"])
         end
 
+        str = render_lines(begin_line, end_line)
         str << suffix unless str.blank?
-
         str
       end
 
@@ -28,23 +25,20 @@ module CC
 
       attr_reader :location, :suffix
 
-      def render_lines
-        str = location["lines"]["begin"].to_s
-        str << "-#{location["lines"]["end"]}" if location["lines"]["end"]
-        str
+      def render_lines(begin_line, end_line)
+        if end_line == begin_line
+          begin_line.to_s
+        else
+          "#{begin_line}-#{end_line}"
+        end
       end
 
-      def render_position(position)
-        str = ""
-
+      def position_to_line(position)
         if position["line"]
-          str << position["line"].to_s
-          str << ":#{position["column"]}" if position["column"]
-        elsif position["offset"]
-          str << position["offset"].to_s
+          position["line"]
+        else
+          @source_buffer.decompose_position(position["offset"]).first
         end
-
-        str
       end
     end
   end
