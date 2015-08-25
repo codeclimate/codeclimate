@@ -28,7 +28,14 @@ invalid_docker_host() {
   invalid_setup "invalid DOCKER_HOST=$host, must be unset or unix:///var/run/docker.sock"
 }
 
-if command -v boot2docker > /dev/null 2>&1; then
+if command -v docker-machine > /dev/null 2>&1; then
+  docker-machine ssh default -- \
+    test -S /var/run/docker.sock > /dev/null 2>&1 || socket_missing
+
+  docker-machine ssh default -- \
+    'test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock"' > /dev/null 2>&1 \
+    && invalid_docker_host $(boot2docker ssh -- 'echo "$DOCKER_HOST"')
+elif command -v boot2docker > /dev/null 2>&1; then
   boot2docker ssh -- \
     test -S /var/run/docker.sock > /dev/null 2>&1 || socket_missing
 
