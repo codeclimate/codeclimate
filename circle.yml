@@ -3,6 +3,7 @@ machine:
     - docker
   environment:
     CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+    registry_root: us.gcr.io/code_climate
 
 test:
   override:
