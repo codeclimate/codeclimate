@@ -11,6 +11,7 @@ module CC
         else
           create_codeclimate_yaml
           say "Config file .codeclimate.yml successfully generated.\nEdit and then try running 'validate-config' to check configuration."
+          create_default_configs
         end
       end
 
@@ -33,6 +34,19 @@ module CC
         filesystem.write_path(CODECLIMATE_YAML, config.to_yaml)
       end
 
+      def create_default_configs
+        eligible_engines.each do |engine_name, engine_config|
+          next if engine_config['default_config'].blank?
+          file_name = ".#{engine_name}.yml"
+          if filesystem.exist?(file_name)
+            say "Skipping generating #{file_name} file (already exists)."
+          else
+            filesystem.write_path(file_name, engine_config['default_config'])
+            say "Config file #{file_name} successfully generated."
+          end
+        end
+      end
+
       def exclude_paths(paths)
         expanded_paths = []
         paths.each do |dir|
@@ -52,7 +66,7 @@ module CC
       end
 
       def eligible_engines
-        engine_registry.list.each_with_object({}) do |(engine_name, config), result|
+        @eligible_engines ||= engine_registry.list.each_with_object({}) do |(engine_name, config), result|
           if engine_eligible?(config)
             result[engine_name] = config
           end
