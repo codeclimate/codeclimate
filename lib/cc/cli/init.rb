@@ -35,16 +35,24 @@ module CC
       end
 
       def create_default_configs
-        eligible_engines.each do |engine_name, engine_config|
-          next if engine_config['default_config'].blank?
-          file_name = ".#{engine_name}.yml"
+        available_configs.each do |config_path|
+          file_name = File.basename(config_path)
           if filesystem.exist?(file_name)
             say "Skipping generating #{file_name} file (already exists)."
           else
-            filesystem.write_path(file_name, engine_config['default_config'])
+            filesystem.write_path(file_name, File.read(config_path))
             say "Config file #{file_name} successfully generated."
           end
         end
+      end
+
+      def available_configs
+        all_paths = eligible_engines.flat_map do |engine_name, _|
+          engine_directory = File.expand_path("../../../../config/#{engine_name}", __FILE__)
+          Dir.glob("#{engine_directory}/*", File::FNM_DOTMATCH)
+        end
+
+        all_paths.reject { |path| ['.', '..'].include?(File.basename(path)) }
       end
 
       def exclude_paths(paths)
