@@ -45,6 +45,49 @@ module CC::CLI
             CC::Yaml.parse(new_content).errors.must_be_empty
           end
         end
+
+        describe 'when default config for engine is available' do
+          describe 'when no config file for this engine exists in working directory' do
+            it 'creates .engine.yml with default config' do
+              within_temp_dir do
+                File.write('foo.rb', 'class Foo; end')
+
+                stdout, stderr = capture_io do
+                  init = Init.new
+                  init.run
+                end
+
+                new_content = File.read('.rubocop.yml')
+
+                stdout.must_match 'Config file .rubocop.yml successfully generated.'
+                filesystem.exist?('.rubocop.yml').must_equal(true)
+                YAML.safe_load(new_content).keys.must_include('AllCops')
+              end
+            end
+          end
+
+          describe 'when config file for this engine already exists in working directory' do
+            it 'skips engine config file generation' do
+              within_temp_dir do
+                File.write('foo.rb', 'class Foo; end')
+
+                content_before = 'test content'
+                File.write('.rubocop.yml', content_before)
+
+                stdout, stderr = capture_io do
+                  init = Init.new
+                  init.run
+                end
+
+                content_after = File.read('.rubocop.yml')
+
+                stdout.must_match 'Skipping generating .rubocop.yml file (already exists).'
+                filesystem.exist?('.rubocop.yml').must_equal(true)
+                content_after.must_equal(content_before)
+              end
+            end
+          end
+        end
       end
 
       describe "when a .codeclimate.yml file is already present in working directory" do

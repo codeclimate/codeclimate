@@ -43,7 +43,7 @@ module CC
       end
 
       def formatter
-        @formatter ||= Formatters::PlainTextFormatter.new
+        @formatter ||= Formatters::PlainTextFormatter.new(filesystem)
       end
 
       def source_dir
