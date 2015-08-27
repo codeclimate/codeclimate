@@ -3,7 +3,8 @@ module CC
     module Formatters
       class JSONFormatter < Formatter
 
-        def initialize
+        def initialize(filesystem)
+          @filesystem = filesystem
           @has_begun = false
         end
 

@@ -4,9 +4,13 @@ module CC::Analyzer::Formatters
   describe JSONFormatter do
     include Factory
 
+    let(:formatter) do
+      filesystem ||= CC::Analyzer::Filesystem.new(ENV['FILESYSTEM_DIR'])
+      JSONFormatter.new(filesystem)
+    end
+
     describe "#write" do
       it "returns when no data is present" do
-        formatter = JSONFormatter.new
         stdout, stderr = capture_io do
           formatter.engine_running(engine_double("cool_engine")) do
             formatter.write("")
@@ -21,8 +25,6 @@ module CC::Analyzer::Formatters
       it "outputs a string that can be parsed as JSON" do
         issue1 = sample_issue
         issue2 = sample_issue
-
-        formatter = JSONFormatter.new
 
         stdout, stderr = capture_io do
           formatter.started
@@ -40,8 +42,6 @@ module CC::Analyzer::Formatters
       it "prints a correctly formatted array of comma separated JSON issues" do
         issue1 = sample_issue
         issue2 = sample_issue
-
-        formatter = JSONFormatter.new
 
         stdout, stderr = capture_io do
           formatter.started
