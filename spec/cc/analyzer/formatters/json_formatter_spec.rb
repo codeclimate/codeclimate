@@ -4,9 +4,13 @@ module CC::Analyzer::Formatters
   describe JSONFormatter do
     include Factory
 
+    let(:formatter) do
+      filesystem ||= CC::Analyzer::Filesystem.new(ENV['FILESYSTEM_DIR'])
+      JSONFormatter.new(filesystem)
+    end
+
     describe "#write" do
       it "returns when no data is present" do
-        formatter = JSONFormatter.new
         stdout, stderr = capture_io do
           formatter.engine_running(engine_double("cool_engine")) do
             formatter.write("")
@@ -22,8 +26,6 @@ module CC::Analyzer::Formatters
         issue1 = sample_issue
         issue2 = sample_issue
 
-        formatter = JSONFormatter.new
-
         stdout, stderr = capture_io do
           formatter.started
           formatter.engine_running(engine_double("cool_engine")) do
@@ -34,14 +36,12 @@ module CC::Analyzer::Formatters
         end
 
         parsed_json = JSON.parse(stdout)
-        parsed_json.must_equal([{"type"=>"issue", "check"=>"Rubocop/Style/Documentation", "description"=>"Missing top-level class documentation comment.", "categories"=>["Style"], "remediation_points"=>10, "location"=>{"path"=>"lib/cc/analyzer/accumulator.rb", "begin"=>{"pos"=>32, "line"=>3}, "end"=>{"pos"=>37, "line"=>3}}, "engine_name"=>"cool_engine"}, {"type"=>"issue", "check"=>"Rubocop/Style/Documentation", "description"=>"Missing top-level class documentation comment.", "categories"=>["Style"], "remediation_points"=>10, "location"=>{"path"=>"lib/cc/analyzer/accumulator.rb", "begin"=>{"pos"=>32, "line"=>3}, "end"=>{"pos"=>37, "line"=>3}}, "engine_name"=>"cool_engine"}])
+        parsed_json.must_equal([{"type"=>"issue", "check"=>"Rubocop/Style/Documentation", "description"=>"Missing top-level class documentation comment.", "categories"=>["Style"], "remediation_points"=>10, "location"=>{"path"=>"lib/cc/analyzer/config.rb", "lines"=>{"begin"=>32, "end"=>40}}, "engine_name"=>"cool_engine"}, {"type"=>"issue", "check"=>"Rubocop/Style/Documentation", "description"=>"Missing top-level class documentation comment.", "categories"=>["Style"], "remediation_points"=>10, "location"=>{"path"=>"lib/cc/analyzer/config.rb", "lines"=>{"begin"=>32, "end"=>40}}, "engine_name"=>"cool_engine"}])
       end
 
       it "prints a correctly formatted array of comma separated JSON issues" do
         issue1 = sample_issue
         issue2 = sample_issue
-
-        formatter = JSONFormatter.new
 
         stdout, stderr = capture_io do
           formatter.started
@@ -57,7 +57,7 @@ module CC::Analyzer::Formatters
         stdout.first.must_match("[")
         last_two_characters.must_match("]\n")
 
-        stdout.must_equal("[{\"type\":\"issue\",\"check\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"lib/cc/analyzer/accumulator.rb\",\"begin\":{\"pos\":32,\"line\":3},\"end\":{\"pos\":37,\"line\":3}},\"engine_name\":\"cool_engine\"},\n{\"type\":\"issue\",\"check\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"lib/cc/analyzer/accumulator.rb\",\"begin\":{\"pos\":32,\"line\":3},\"end\":{\"pos\":37,\"line\":3}},\"engine_name\":\"cool_engine\"}]\n")
+        stdout.must_equal("[{\"type\":\"issue\",\"check\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"lib/cc/analyzer/config.rb\",\"lines\":{\"begin\":32,\"end\":40}},\"engine_name\":\"cool_engine\"},\n{\"type\":\"issue\",\"check\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"lib/cc/analyzer/config.rb\",\"lines\":{\"begin\":32,\"end\":40}},\"engine_name\":\"cool_engine\"}]\n")
       end
     end
 
