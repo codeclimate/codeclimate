@@ -12,7 +12,7 @@ module CC
       }.freeze
 
       def self.resolve(name)
-        FORMATTERS[name.to_sym].new or raise InvalidFormatterError, "'#{name}' is not a valid formatter. Valid options are: #{FORMATTERS.keys.join(", ")}"
+        FORMATTERS[name.to_sym].new(ENV['FILESYSTEM_DIR']) or raise InvalidFormatterError, "'#{name}' is not a valid formatter. Valid options are: #{FORMATTERS.keys.join(", ")}"
       end
     end
   end
