@@ -6,7 +6,7 @@ COPY Gemfile.lock /usr/src/app/
 COPY VERSION /usr/src/app/
 COPY codeclimate.gemspec /usr/src/app/
 
-RUN apk --update add git openssh-client build-base && \
+RUN apk --update add git openssh-client wget build-base && \
     bundle install -j 4 && \
     apk del build-base && rm -fr /usr/share/ri
 
