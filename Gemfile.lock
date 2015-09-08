@@ -45,6 +45,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    minitest-spec-context (0.0.3)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multipart-post (2.0.0)
@@ -74,6 +75,7 @@ DEPENDENCIES
   minitest
   minitest-around
   minitest-reporters
+  minitest-spec-context
   mocha
   rack-test
 

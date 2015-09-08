@@ -43,7 +43,10 @@ module CC
       end
 
       def engine_config(config)
-        config = config.merge(exclude_paths: exclude_paths)
+        config = config.merge(
+          exclude_paths: exclude_paths, 
+          include_paths: include_paths
+        )
 
         # The yaml gem turns a config file string into a hash, but engines expect the string
         # So we (for now) need to turn it into a string in that one scenario.
@@ -71,6 +74,10 @@ module CC
 
       def exclude_paths
         PathPatterns.new(@config.exclude_paths || []).expanded + gitignore_paths
+      end
+
+      def include_paths
+        IncludePathsBuilder.new(@config.exclude_paths || []).build
       end
 
       def gitignore_paths

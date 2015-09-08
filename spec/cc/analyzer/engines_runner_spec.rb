@@ -8,6 +8,10 @@ module CC::Analyzer
       within_temp_dir { test.call }
     end
 
+    before do
+      system("git init > /dev/null")
+    end
+
     it "builds and runs enabled engines from the registry with the formatter" do
       config = config_with_engine("an_engine")
       registry = registry_with_engine("an_engine")
@@ -46,7 +50,8 @@ module CC::Analyzer
       expected_config = {
         "enabled" => true,
         "config" => "rubocop.yml",
-        :exclude_paths => []
+        :exclude_paths => [],
+        :include_paths => ["./"]
       }
 
       expect_engine_run("rubocop", "/code", formatter, expected_config)
@@ -55,7 +60,6 @@ module CC::Analyzer
     end
 
     it "respects .gitignore paths" do
-      system("git init > /dev/null")
       make_file(".ignorethis")
       make_file(".gitignore", ".ignorethis\n")
       config = CC::Yaml.parse <<-EOYAML
@@ -68,12 +72,35 @@ module CC::Analyzer
 
       expected_config = {
         "enabled" => true,
-        :exclude_paths => %w[ .ignorethis ]
+        :exclude_paths => %w[ .ignorethis ],
+        :include_paths => %w[.gitignore]
       }
 
       expect_engine_run("rubocop", "/code", formatter, expected_config)
 
       EnginesRunner.new(registry, formatter, "/code", config).run
+    end
+
+    context "when the source directory contains all readable files, and there are no ignored files" do
+      let(:engines_config) { config_with_engine("an_engine") }
+      let(:formatter) { null_formatter }
+      let(:registry) { registry_with_engine("an_engine") }
+
+      before do
+        make_file("root_file.rb")
+        make_file("subdir/subdir_file.rb")
+      end
+
+      it "gets include_paths from IncludePathBuilder" do
+        IncludePathsBuilder.expects(:new).with([]).returns(mock(build: ['.']))
+        expected_config = {
+          "enabled" => true,
+          :exclude_paths => [],
+          :include_paths => ['.']
+        }
+        expect_engine_run("an_engine", "/code", formatter, expected_config)
+        EnginesRunner.new(registry, formatter, "/code", engines_config).run
+      end
     end
 
     def registry_with_engine(name)
@@ -94,7 +121,11 @@ module CC::Analyzer
         with(formatter, kind_of(ContainerListener))
 
       image = "codeclimate/codeclimate-#{name}"
-      engine_config ||= { "enabled" => true, exclude_paths: [] }
+      engine_config ||= {
+        "enabled" => true,
+        exclude_paths: [],
+        include_paths: ["./"]
+      }
 
       Engine.expects(:new).
         with(name, { "image" => image }, source_dir, engine_config, anything).
