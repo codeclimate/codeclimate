@@ -18,6 +18,7 @@ module CC::Analyzer
       formatter = null_formatter
 
       expect_engine_run("an_engine", "/code", formatter)
+      FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
 
       EnginesRunner.new(registry, formatter, "/code", config).run
     end
@@ -47,6 +48,7 @@ module CC::Analyzer
       registry = registry_with_engine("rubocop")
       formatter = null_formatter
 
+      FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
       expected_config = {
         "enabled" => true,
         "config" => "rubocop.yml",
@@ -70,6 +72,7 @@ module CC::Analyzer
       registry = registry_with_engine("rubocop")
       formatter = null_formatter
 
+      FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
       expected_config = {
         "enabled" => true,
         :exclude_paths => %w[ .ignorethis ],

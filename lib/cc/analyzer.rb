@@ -34,5 +34,8 @@ module CC
     cattr_accessor :statsd, :logger
     self.statsd = DummyStatsd.new
     self.logger = DummyLogger.new
+
+    class UnreadableFileError < StandardError
+    end
   end
 end

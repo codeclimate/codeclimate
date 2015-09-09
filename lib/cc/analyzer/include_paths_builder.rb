@@ -6,8 +6,12 @@ module CC
       end
 
       def build
-        root = Directory.new('.', included_files)
-        root.included_paths
+        root = Directory.new('.', ignored_files)
+        paths = root.included_paths
+        paths.each do |path|
+          raise_on_unreadable_files(path)
+        end
+        paths
       end
 
       protected
@@ -33,20 +37,40 @@ module CC
         tracked_in_git + untracked_in_git
       end
 
+      def raise_on_unreadable_files(path)
+        if File.directory?(path)
+          raise_on_unreadable_files_in_directory(path)
+        elsif !FileUtils.readable_by_all?(path)
+          raise CC::Analyzer::UnreadableFileError.new("Can't read #{path}")
+        end
+      end
+
+      def raise_on_unreadable_files_in_directory(path)
+        raw_entries = Dir.entries(path).reject do |e|
+          %w(. .. .git).include?(e)
+        end
+        raw_entries.each do |entry|
+          sub_path = File.join(path, entry)
+          raise_on_unreadable_files(sub_path)
+        end
+      end
+
       class Directory
-        def initialize(path, included_files)
+        def initialize(path, excluded_files)
           @path = path
-          @included_files = ensure_hashified(included_files)
+          @excluded_files = ensure_hashified(excluded_files)
         end
 
         def all_included?
-          readable? && files_all_included? && subdirectories_all_included?
+          readable_by_all? &&
+            files_all_included? &&
+            subdirectories_all_included?
         end
 
         def included_paths
           if all_included?
             [@path + "/"]
-          elsif readable?
+          elsif readable_by_all?
             result = []
             result = result.concat(included_file_entries)
             result = result.concat(included_subdirectory_results)
@@ -71,7 +95,7 @@ module CC
         end
 
         def files_all_included?
-          file_entries.all? { |e| @included_files[e] }
+          !file_entries.any? { |e| @excluded_files[e] }
         end
 
         def file_entries
@@ -84,7 +108,7 @@ module CC
         end
 
         def included_file_entries
-          file_entries.select { |file_entry| @included_files[file_entry] }
+          file_entries.reject { |file_entry| @excluded_files[file_entry] }
         end
 
         def included_subdirectory_results
@@ -95,16 +119,8 @@ module CC
           result
         end
 
-        def readable?
-          if @_readable.nil?
-            begin
-              Dir.entries(@path)
-              @_readable = true
-            rescue Errno::EACCES, Errno::EPERM
-              @_readable = false
-            end
-          end
-          @_readable
+        def readable_by_all?
+          FileUtils.readable_by_all?(@path)
         end
 
         def relevant_full_entries
@@ -125,7 +141,7 @@ module CC
               File.directory?(e)
             end
             @_subdirectories = entries.map do |e|
-              Directory.new(e, @included_files)
+              Directory.new(e, @excluded_files)
             end
           end
           @_subdirectories
