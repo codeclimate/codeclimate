@@ -36,7 +36,8 @@ module CC::CLI
               "engines" => {
                 "rubocop" => { "enabled"=>true },
                 "eslint" => { "enabled"=>true },
-                "csslint"=> { "enabled"=>true },
+                "csslint" => { "enabled"=>true },
+                "duplication" => { "enabled"=>true }
               },
               "ratings" => { "paths" => ["**.rb", "**.js", "**.jsx", "**.css"] },
               "exclude_paths" => ["config/**/*", "spec/**/*", "vendor/**/*"],
