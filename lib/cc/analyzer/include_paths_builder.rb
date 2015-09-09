@@ -35,26 +35,18 @@ module CC
 
       class Directory
         def initialize(path, included_files)
-          @path, @included_files = path, ensure_hashified(included_files)
-          begin
-            all_entries = Dir.entries(@path)
-            @file_entries, @subdirectories = partition_and_build_from_entries(
-              all_entries
-            )
-            @readable = true
-          rescue Errno::EACCES, Errno::EPERM
-            @readable = false
-          end
+          @path = path
+          @included_files = ensure_hashified(included_files)
         end
 
         def all_included?
-          @readable && files_all_included? && subdirectories_all_included?
+          readable? && files_all_included? && subdirectories_all_included?
         end
 
         def included_paths
           if all_included?
             [@path + "/"]
-          elsif @readable
+          elsif readable?
             result = []
             result = result.concat(included_file_entries)
             result = result.concat(included_subdirectory_results)
@@ -65,15 +57,6 @@ module CC
         end
 
         protected
-
-        def build_relevant_entries(all_entries)
-          raw_entries = all_entries.reject do |e|
-            %w(. .. .git).include?(e)
-          end
-          raw_entries.map do |e|
-            @path == "." ? e : File.join(@path, e)
-          end
-        end
 
         def ensure_hashified(obj)
           if obj.is_a?(Array)
@@ -88,34 +71,68 @@ module CC
         end
 
         def files_all_included?
-          @file_entries.all? { |e| @included_files[e] }
+          file_entries.all? { |e| @included_files[e] }
+        end
+
+        def file_entries
+          unless @_file_entries
+            @_file_entries = relevant_full_entries.reject do |e|
+              File.directory?(e)
+            end
+          end
+          @_file_entries
         end
 
         def included_file_entries
-          @file_entries.select { |file_entry| @included_files[file_entry] }
+          file_entries.select { |file_entry| @included_files[file_entry] }
         end
 
         def included_subdirectory_results
           result = []
-          @subdirectories.each do |subdirectory|
+          subdirectories.each do |subdirectory|
             result = result.concat(subdirectory.included_paths)
           end
           result
         end
 
-        def partition_and_build_from_entries(all_entries)
-          relevant_entries = build_relevant_entries(all_entries)
-          subdirectory_entries, file_entries = relevant_entries.partition do |e|
-            File.directory?(e)
+        def readable?
+          if @_readable.nil?
+            begin
+              Dir.entries(@path)
+              @_readable = true
+            rescue Errno::EACCES, Errno::EPERM
+              @_readable = false
+            end
           end
-          subdirectories = subdirectory_entries.map do |e|
-            Directory.new(e, @included_files)
+          @_readable
+        end
+
+        def relevant_full_entries
+          unless @_relevant_full_entries
+            raw_entries = Dir.entries(@path).reject do |e|
+              %w(. .. .git).include?(e)
+            end
+            @_relevant_full_entries = raw_entries.map do |e|
+              @path == "." ? e : File.join(@path, e)
+            end
           end
-          [file_entries, subdirectories]
+          @_relevant_full_entries
+        end
+
+        def subdirectories
+          unless @_subdirectories
+            entries = relevant_full_entries.select do |e|
+              File.directory?(e)
+            end
+            @_subdirectories = entries.map do |e|
+              Directory.new(e, @included_files)
+            end
+          end
+          @_subdirectories
         end
 
         def subdirectories_all_included?
-          @subdirectories.all?(&:all_included?)
+          subdirectories.all?(&:all_included?)
         end
       end
     end
