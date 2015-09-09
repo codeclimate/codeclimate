@@ -17,7 +17,7 @@ module CC::Analyzer
       system("git init > /dev/null")
     end
 
-    context "when the source directory contains only files that are tracked or trackable in Git" do
+    describe "when the source directory contains only files that are tracked or trackable in Git" do
       before do
         make_file("root_file.rb")
         make_file("subdir/subdir_file.rb")
@@ -28,7 +28,7 @@ module CC::Analyzer
       end
     end
 
-    context "when the source directory contains a file that is not tracked or trackable in Git" do
+    describe "when the source directory contains a file that is not tracked or trackable in Git" do
       before do
         make_file("untrackable.rb")
         make_file(".gitignore", "untrackable.rb\n")
@@ -47,7 +47,7 @@ module CC::Analyzer
       end
     end
 
-    context "when the source directory contains a directory that is not tracked in Git" do
+    describe "when the source directory contains a directory that is not tracked in Git" do
       before do
         make_file("untrackable_subdir/secret.rb")
         make_file(".gitignore", "untrackable_subdir\n")
@@ -67,7 +67,7 @@ module CC::Analyzer
       end
     end
 
-    context "when the source directory contains a file that is excluded by exclude_paths" do
+    describe "when the source directory contains a file that is excluded by exclude_paths" do
       let(:cc_excludes) { ["untrackable.rb"] }
 
       before do
@@ -87,7 +87,7 @@ module CC::Analyzer
       end
     end
 
-    context "when the source directory contains an unreadable subdirectory" do
+    describe "when the source directory contains an unreadable subdirectory" do
       before do
         FileUtils.mkdir("unreadable_subdir", mode: 0000)
         make_file("trackable.rb")

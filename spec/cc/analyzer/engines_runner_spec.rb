@@ -81,7 +81,7 @@ module CC::Analyzer
       EnginesRunner.new(registry, formatter, "/code", config).run
     end
 
-    context "when the source directory contains all readable files, and there are no ignored files" do
+    describe "when the source directory contains all readable files, and there are no ignored files" do
       let(:engines_config) { config_with_engine("an_engine") }
       let(:formatter) { null_formatter }
       let(:registry) { registry_with_engine("an_engine") }

@@ -7,6 +7,5 @@ group :test do
   gem "minitest"
   gem "minitest-around"
   gem "minitest-reporters"
-  gem "minitest-spec-context"
   gem "rack-test"
 end
