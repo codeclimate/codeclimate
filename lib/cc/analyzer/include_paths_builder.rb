@@ -12,10 +12,8 @@ module CC
 
       protected
 
-      def included_files
-        tracked_in_git = `git ls-files -z`.split("\0")
-        untracked_in_git = `git ls-files -zo`.split("\0")
-        ignored = Tempfile.open(".cc_gitignore") do |tmp|
+      def ignored_files
+        Tempfile.open(".cc_gitignore") do |tmp|
           tmp.write(File.read(".gitignore")) if File.exist?(".gitignore")
           tmp << @cc_excludes.join("\n")
           tmp.close
@@ -23,13 +21,21 @@ module CC
           untracked_and_ignored = `git ls-files -zio -X #{tmp.path}`.split("\0")
           tracked_and_ignored + untracked_and_ignored
         end
-        tracked_in_git + untracked_in_git - ignored
+      end
+
+      def included_files
+        includable_files - ignored_files
+      end
+
+      def includable_files
+        tracked_in_git = `git ls-files -z`.split("\0")
+        untracked_in_git = `git ls-files -zo`.split("\0")
+        tracked_in_git + untracked_in_git
       end
 
       class Directory
         def initialize(path, included_files)
-          @path = path
-          @included_files = ensure_hashified(included_files)
+          @path, @included_files = path, ensure_hashified(included_files)
           begin
             all_entries = Dir.entries(@path)
             @file_entries, @subdirectories = partition_and_build_from_entries(
@@ -37,8 +43,6 @@ module CC
             )
             @readable = true
           rescue Errno::EACCES, Errno::EPERM
-            @file_entries = []
-            @subdirectories = []
             @readable = false
           end
         end
@@ -50,19 +54,26 @@ module CC
         def included_paths
           if all_included?
             [@path + "/"]
-          else
+          elsif @readable
             result = []
-            @file_entries.each do |file_entry|
-              result << file_entry if @included_files[file_entry]
-            end
-            @subdirectories.each do |subdirectory|
-              result = result.concat(subdirectory.included_paths)
-            end
+            result = result.concat(included_file_entries)
+            result = result.concat(included_subdirectory_results)
             result
+          else
+            []
           end
         end
 
         protected
+
+        def build_relevant_entries(all_entries)
+          raw_entries = all_entries.reject do |e|
+            %w(. .. .git).include?(e)
+          end
+          raw_entries.map do |e|
+            @path == "." ? e : File.join(@path, e)
+          end
+        end
 
         def ensure_hashified(obj)
           if obj.is_a?(Array)
@@ -80,13 +91,21 @@ module CC
           @file_entries.all? { |e| @included_files[e] }
         end
 
-        def partition_and_build_from_entries(all_entries)
-          relevant_child_entries = all_entries.reject do |e| 
-            %w[. .. .git].include?(e)
-          end.map do |e|
-            @path == "." ? e : File.join(@path, e)
+        def included_file_entries
+          @file_entries.select { |file_entry| @included_files[file_entry] }
+        end
+
+        def included_subdirectory_results
+          result = []
+          @subdirectories.each do |subdirectory|
+            result = result.concat(subdirectory.included_paths)
           end
-          subdirectory_entries, file_entries = relevant_child_entries.partition do |e|
+          result
+        end
+
+        def partition_and_build_from_entries(all_entries)
+          relevant_entries = build_relevant_entries(all_entries)
+          subdirectory_entries, file_entries = relevant_entries.partition do |e|
             File.directory?(e)
           end
           subdirectories = subdirectory_entries.map do |e|

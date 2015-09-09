@@ -44,7 +44,7 @@ module CC
 
       def engine_config(config)
         config = config.merge(
-          exclude_paths: exclude_paths, 
+          exclude_paths: exclude_paths,
           include_paths: include_paths
         )
 
