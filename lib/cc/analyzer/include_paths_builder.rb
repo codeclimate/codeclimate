@@ -89,12 +89,9 @@ module CC
         end
 
         def file_entries
-          unless @_file_entries
-            @_file_entries = relevant_full_entries.reject do |e|
-              File.directory?(e)
-            end
+          @file_entries ||= relevant_full_entries.reject do |e|
+            File.directory?(e)
           end
-          @_file_entries
         end
 
         def full_entry(entry)
@@ -120,25 +117,25 @@ module CC
         end
 
         def relevant_full_entries
-          unless @_relevant_full_entries
+          unless @relevant_full_entries
             raw_entries = IncludePathsBuilder.relevant_entries(@path)
-            @_relevant_full_entries = raw_entries.map do |e|
+            @relevant_full_entries = raw_entries.map do |e|
               full_entry(e)
             end
           end
-          @_relevant_full_entries
+          @relevant_full_entries
         end
 
         def subdirectories
-          unless @_subdirectories
+          unless @subdirectories
             entries = relevant_full_entries.select do |e|
               File.directory?(e)
             end
-            @_subdirectories = entries.map do |e|
+            @subdirectories = entries.map do |e|
               Directory.new(e, @excluded_files)
             end
           end
-          @_subdirectories
+          @subdirectories
         end
 
         def subdirectories_all_included?
