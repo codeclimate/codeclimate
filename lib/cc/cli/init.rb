@@ -21,7 +21,8 @@ module CC
         config = { "engines" => {} }
         eligible_engines.each do |engine_name, engine_config|
           config["engines"][engine_name] = {
-            "enabled" => true
+            "enabled" => true,
+            "config" => (additional_duplication_options if engine_name == 'duplication'),
           }
           config["ratings"] ||= {}
           config["ratings"]["paths"] ||= []
@@ -31,7 +32,7 @@ module CC
 
         config["exclude_paths"] = exclude_paths(AUTO_EXCLUDE_PATHS)
 
-        filesystem.write_path(CODECLIMATE_YAML, config.to_yaml)
+        filesystem.write_path(CODECLIMATE_YAML, strip_empty_values(config).to_yaml)
       end
 
       def create_default_configs
@@ -79,6 +80,19 @@ module CC
             result[engine_name] = config
           end
         end
+      end
+
+      def additional_duplication_options
+        { "languages" => ["ruby"] }
+      end
+
+      def strip_empty_values(config)
+        config['engines'].each do |engine_name, options|
+          options.delete_if do |key, value|
+            value.blank?
+          end
+        end
+        config
       end
     end
   end
