@@ -97,13 +97,21 @@ module CC
           @_file_entries
         end
 
+        def full_entry(entry)
+          if @path == "."
+            entry
+          else
+            File.join(@path, entry)
+          end
+        end
+
         def included_file_entries
           file_entries.reject { |file_entry| @excluded_files[file_entry] }
         end
 
         def included_subdirectory_results
           subdirectories.each_with_object([]) do |subdirectory, result|
-            result = result.concat(subdirectory.included_paths)
+            result.concat(subdirectory.included_paths)
           end
         end
 
@@ -115,11 +123,7 @@ module CC
           unless @_relevant_full_entries
             raw_entries = IncludePathsBuilder.relevant_entries(@path)
             @_relevant_full_entries = raw_entries.map do |e|
-              if @path == "."
-                e
-              else
-                File.join(@path, e)
-              end
+              full_entry(e)
             end
           end
           @_relevant_full_entries
