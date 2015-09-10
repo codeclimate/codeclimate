@@ -1,8 +1,8 @@
 module CC
   module Analyzer
     class IncludePathsBuilder
-      def initialize(cc_excludes)
-        @cc_excludes = cc_excludes
+      def initialize(cc_exclude_paths)
+        @cc_exclude_paths = cc_exclude_paths
       end
 
       def build
@@ -19,7 +19,7 @@ module CC
       def ignored_files
         Tempfile.open(".cc_gitignore") do |tmp|
           tmp.write(File.read(".gitignore")) if File.exist?(".gitignore")
-          tmp << @cc_excludes.join("\n")
+          tmp << @cc_exclude_paths.join("\n")
           tmp.close
           tracked_and_ignored = `git ls-files -zi -X #{tmp.path}`.split("\0")
           untracked_and_ignored = `git ls-files -zio -X #{tmp.path}`.split("\0")
@@ -41,7 +41,7 @@ module CC
         if File.directory?(path)
           raise_on_unreadable_files_in_directory(path)
         elsif !FileUtils.readable_by_all?(path)
-          raise CC::Analyzer::UnreadableFileError.new("Can't read #{path}")
+          raise(CC::Analyzer::UnreadableFileError, "Can't read #{path}")
         end
       end
 
