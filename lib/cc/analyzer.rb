@@ -35,7 +35,6 @@ module CC
     self.statsd = DummyStatsd.new
     self.logger = DummyLogger.new
 
-    class UnreadableFileError < StandardError
-    end
+    UnreadableFileError = Class.new(StandardError)
   end
 end

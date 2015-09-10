@@ -1,6 +1,12 @@
 module CC
   module Analyzer
     class IncludePathsBuilder
+      def self.relevant_entries(path)
+        Dir.entries(path).reject do |e|
+          %w(. .. .git).include?(e)
+        end
+      end
+
       def initialize(cc_exclude_paths)
         @cc_exclude_paths = cc_exclude_paths
       end
@@ -11,7 +17,6 @@ module CC
         paths.each do |path|
           raise_on_unreadable_files(path)
         end
-        paths
       end
 
       protected
@@ -27,29 +32,16 @@ module CC
         end
       end
 
-      def included_files
-        includable_files - ignored_files
-      end
-
-      def includable_files
-        tracked_in_git = `git ls-files -z`.split("\0")
-        untracked_in_git = `git ls-files -zo`.split("\0")
-        tracked_in_git + untracked_in_git
-      end
-
       def raise_on_unreadable_files(path)
         if File.directory?(path)
           raise_on_unreadable_files_in_directory(path)
         elsif !FileUtils.readable_by_all?(path)
-          raise(CC::Analyzer::UnreadableFileError, "Can't read #{path}")
+          raise CC::Analyzer::UnreadableFileError, "Can't read #{path}"
         end
       end
 
       def raise_on_unreadable_files_in_directory(path)
-        raw_entries = Dir.entries(path).reject do |e|
-          %w(. .. .git).include?(e)
-        end
-        raw_entries.each do |entry|
+        IncludePathsBuilder.relevant_entries(path).each do |entry|
           sub_path = File.join(path, entry)
           raise_on_unreadable_files(sub_path)
         end
@@ -72,8 +64,8 @@ module CC
             [@path + "/"]
           elsif readable_by_all?
             result = []
-            result = result.concat(included_file_entries)
-            result = result.concat(included_subdirectory_results)
+            result += included_file_entries
+            result += included_subdirectory_results
             result
           else
             []
@@ -84,18 +76,16 @@ module CC
 
         def ensure_hashified(obj)
           if obj.is_a?(Array)
-            result = {}
-            obj.each do |included|
+            obj.each_with_object({}) do |included, result|
               result[included] = true
             end
-            result
           else
             obj
           end
         end
 
         def files_all_included?
-          !file_entries.any? { |e| @excluded_files[e] }
+          file_entries.none? { |e| @excluded_files[e] }
         end
 
         def file_entries
@@ -112,11 +102,9 @@ module CC
         end
 
         def included_subdirectory_results
-          result = []
-          subdirectories.each do |subdirectory|
+          subdirectories.each_with_object([]) do |subdirectory, result|
             result = result.concat(subdirectory.included_paths)
           end
-          result
         end
 
         def readable_by_all?
@@ -125,11 +113,13 @@ module CC
 
         def relevant_full_entries
           unless @_relevant_full_entries
-            raw_entries = Dir.entries(@path).reject do |e|
-              %w(. .. .git).include?(e)
-            end
+            raw_entries = IncludePathsBuilder.relevant_entries(@path)
             @_relevant_full_entries = raw_entries.map do |e|
-              @path == "." ? e : File.join(@path, e)
+              if @path == "."
+                e
+              else
+                File.join(@path, e)
+              end
             end
           end
           @_relevant_full_entries

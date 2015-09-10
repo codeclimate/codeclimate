@@ -75,7 +75,7 @@ module CC::Analyzer
       FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
       expected_config = {
         "enabled" => true,
-        :exclude_paths => %w[ .ignorethis ],
+        :exclude_paths => %w[.ignorethis],
         :include_paths => %w[.gitignore]
       }
 
