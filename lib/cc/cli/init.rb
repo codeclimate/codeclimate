@@ -22,7 +22,7 @@ module CC
         eligible_engines.each do |engine_name, engine_config|
           config["engines"][engine_name] = {
             "enabled" => true,
-            "config" => (additional_duplication_options if engine_name == 'duplication'),
+            "config" => engine_config["default_config"],
           }
           config["ratings"] ||= {}
           config["ratings"]["paths"] ||= []
@@ -80,10 +80,6 @@ module CC
             result[engine_name] = config
           end
         end
-      end
-
-      def additional_duplication_options
-        { "languages" => ["ruby"] }
       end
 
       def strip_empty_values(config)
