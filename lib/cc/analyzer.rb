@@ -10,6 +10,7 @@ module CC
     autoload :EnginesRunner, "cc/analyzer/engines_runner"
     autoload :Filesystem, "cc/analyzer/filesystem"
     autoload :Formatters, "cc/analyzer/formatters"
+    autoload :IncludePathsBuilder, "cc/analyzer/include_paths_builder"
     autoload :IssueSorter, "cc/analyzer/issue_sorter"
     autoload :LocationDescription, "cc/analyzer/location_description"
     autoload :LoggingContainerListener, "cc/analyzer/logging_container_listener"
@@ -33,5 +34,7 @@ module CC
     cattr_accessor :statsd, :logger
     self.statsd = DummyStatsd.new
     self.logger = DummyLogger.new
+
+    UnreadableFileError = Class.new(StandardError)
   end
 end

@@ -2,6 +2,7 @@ require "active_support"
 require "active_support/core_ext"
 require "cc/analyzer"
 require "cc/yaml"
+require "file_utils_ext"
 
 module CC
   module CLI
