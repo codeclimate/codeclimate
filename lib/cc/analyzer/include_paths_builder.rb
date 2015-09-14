@@ -1,3 +1,5 @@
+require "file_utils_ext"
+
 module CC
   module Analyzer
     class IncludePathsBuilder
