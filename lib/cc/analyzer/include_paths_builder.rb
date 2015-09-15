@@ -9,19 +9,40 @@ module CC
         end
       end
 
-      def initialize(cc_exclude_paths)
+      attr_reader :cc_include_paths
+
+      def initialize(cc_exclude_paths, cc_include_paths = [])
         @cc_exclude_paths = cc_exclude_paths
+        @cc_include_paths = cc_include_paths
       end
 
       def build
-        root = Directory.new('.', ignored_files)
-        paths = root.included_paths
+        if cc_include_paths.any?
+          paths = filter_by_cc_includes
+        else
+          root = Directory.new(".", ignored_files)
+          paths = root.included_paths
+        end
+
         paths.each do |path|
           raise_on_unreadable_files(path)
         end
       end
 
       protected
+
+      def filter_by_cc_includes
+        paths = []
+        cc_include_paths.each do |path|
+          if File.directory?(path)
+            root = Directory.new(path, ignored_files)
+            paths += root.included_paths
+          elsif !ignored_files.include?(path)
+            paths << path
+          end
+        end
+        paths.uniq
+      end
 
       def ignored_files
         Tempfile.open(".cc_gitignore") do |tmp|

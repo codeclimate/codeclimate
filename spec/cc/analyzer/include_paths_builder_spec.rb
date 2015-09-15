@@ -8,7 +8,7 @@ module CC::Analyzer
       within_temp_dir { test.call }
     end
 
-    let(:builder) { CC::Analyzer::IncludePathsBuilder.new(cc_excludes) }
+    let(:builder) { CC::Analyzer::IncludePathsBuilder.new(cc_excludes, []) }
     let(:cc_excludes) { [] }
     let(:result) { builder.build }
 

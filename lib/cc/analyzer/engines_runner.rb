@@ -6,11 +6,12 @@ module CC
       InvalidEngineName = Class.new(StandardError)
       NoEnabledEngines = Class.new(StandardError)
 
-      def initialize(registry, formatter, source_dir, config, container_label = nil)
+      def initialize(registry, formatter, source_dir, config, requested_paths = [], container_label = nil)
         @registry = registry
         @formatter = formatter
         @source_dir = source_dir
         @config = config
+        @requested_paths = requested_paths
         @container_label = container_label
       end
 
@@ -27,6 +28,8 @@ module CC
       end
 
       private
+
+      attr_reader :requested_paths
 
       def run_engine(engine, container_listener)
         @formatter.engine_running(engine) do
@@ -72,12 +75,12 @@ module CC
         @registry[engine_name]
       end
 
-      def exclude_paths
-        PathPatterns.new(@config.exclude_paths || []).expanded + gitignore_paths
+      def include_paths
+        IncludePathsBuilder.new(@config.exclude_paths || [], requested_paths).build
       end
 
-      def include_paths
-        IncludePathsBuilder.new(@config.exclude_paths || []).build
+      def exclude_paths
+        @exclude_paths ||= PathPatterns.new(@config.exclude_paths || []).expanded + gitignore_paths
       end
 
       def gitignore_paths
@@ -87,6 +90,7 @@ module CC
           []
         end
       end
+
     end
   end
 end
