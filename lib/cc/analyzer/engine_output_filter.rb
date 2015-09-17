@@ -9,7 +9,7 @@ module CC
 
       def filter?(output)
         if (json = parse_as_json(output))
-          issue?(json) && ignore_issue?(json)
+          !!(issue?(json) && ignore_issue?(json))
         else
           false
         end
@@ -24,7 +24,7 @@ module CC
       end
 
       def issue?(json)
-        json["type"] == ISSUE_TYPE
+        json["type"] && json["type"].downcase == ISSUE_TYPE
       end
 
       def ignore_issue?(json)

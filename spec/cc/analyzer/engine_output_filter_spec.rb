@@ -44,6 +44,22 @@ module CC::Analyzer
       filter.filter?(issue.to_json).must_equal true
     end
 
+    it "filters issues ignored in the config even if the type has the wrong case" do
+      issue = {
+        "type" => "Issue", "check_name" => "foo",
+      }
+
+      filter = EngineOutputFilter.new(
+        engine_config(
+          "checks" => {
+            "foo" => { "enabled" => false },
+          }
+        )
+      )
+
+      filter.filter?(issue.to_json).must_equal true
+    end
+
     def build_issue(check_name)
       {
         "type" => EngineOutputFilter::ISSUE_TYPE,
