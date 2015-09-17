@@ -28,7 +28,7 @@ module CC
       end
 
       def ignore_issue?(json)
-        !check_config(json["check"]).fetch("enabled", true)
+        !check_config(json["check_name"]).fetch("enabled", true)
       end
 
       def check_config(check_name)

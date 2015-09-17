@@ -81,9 +81,9 @@ module CC::Analyzer
 
       it "supports issue filtering by check name" do
         container = TestContainer.new([
-          %{{"type":"issue","check":"foo"}},
-          %{{"type":"issue","check":"bar"}},
-          %{{"type":"issue","check":"baz"}},
+          %{{"type":"issue","check_name":"foo"}},
+          %{{"type":"issue","check_name":"bar"}},
+          %{{"type":"issue","check_name":"baz"}},
         ])
         Container.expects(:new).returns(container)
 
