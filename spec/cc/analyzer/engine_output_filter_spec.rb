@@ -11,7 +11,7 @@ module CC::Analyzer
     it "does not filter arbitrary json" do
       filter = EngineOutputFilter.new
 
-      filter.filter?(%{{"arbitrary":"json"}}).must_equal false
+      filter.filter?(%{{"arbitrary":"json"}}).must_equal nil
     end
 
     it "does not filter issues missing or enabled in the config" do
@@ -32,6 +32,22 @@ module CC::Analyzer
 
     it "filters issues ignored in the config" do
       issue = build_issue("foo")
+
+      filter = EngineOutputFilter.new(
+        engine_config(
+          "checks" => {
+            "foo" => { "enabled" => false },
+          }
+        )
+      )
+
+      filter.filter?(issue.to_json).must_equal true
+    end
+
+    it "filters issues ignored in the config even if the type has the wrong case" do
+      issue = {
+        "type" => "Issue", "check_name" => "foo",
+      }
 
       filter = EngineOutputFilter.new(
         engine_config(

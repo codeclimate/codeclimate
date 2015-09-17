@@ -24,7 +24,7 @@ module CC
       end
 
       def issue?(json)
-        json["type"] == ISSUE_TYPE
+        json["type"] && json["type"].downcase == ISSUE_TYPE
       end
 
       def ignore_issue?(json)
