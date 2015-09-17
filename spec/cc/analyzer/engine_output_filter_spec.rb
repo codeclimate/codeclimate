@@ -47,7 +47,7 @@ module CC::Analyzer
     def build_issue(check_name)
       {
         "type" => EngineOutputFilter::ISSUE_TYPE,
-        "check" => check_name,
+        "check_name" => check_name,
       }
     end
 
