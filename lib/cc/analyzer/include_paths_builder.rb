@@ -5,7 +5,7 @@ module CC
     class IncludePathsBuilder
       def self.relevant_entries(path)
         Dir.entries(path).reject do |e|
-          %w(. .. .git).include?(e)
+          %w(. .. .git).include?(e) || File.symlink?(File.join(path, e))
         end
       end
 

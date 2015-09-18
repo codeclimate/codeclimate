@@ -204,5 +204,22 @@ module CC::Analyzer
         lambda { builder.build }.must_raise(CC::Analyzer::UnreadableFileError)
       end
     end
+
+    describe "when a symlink points to an ancestor directory" do
+      before do
+        FileUtils.mkdir("subdir")
+        FileUtils.ln_s("../subdir", "subdir/subdir")
+      end
+
+      it "doesn't follow the symlink" do
+        Dir.expects(:entries).with(".").returns(%w[. .. .git subdir])
+        Dir.expects(:entries).with("./").returns(%w[. .. .git subdir])
+        Dir.expects(:entries).with("subdir").returns(%w[. .. subdir])
+        Dir.expects(:entries).with("./subdir").returns(%w[. .. subdir])
+        Dir.expects(:entries).with("subdir/subdir").never
+        result.include?("./").must_equal(true)
+        result.include?("subdir/subdir/").must_equal(false)
+      end
+    end
   end
 end
