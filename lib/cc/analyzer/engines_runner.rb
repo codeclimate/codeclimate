@@ -80,7 +80,7 @@ module CC
       end
 
       def exclude_paths
-        @exclude_paths ||= PathPatterns.new(@config.exclude_paths || []).expanded + gitignore_paths
+        PathPatterns.new(@config.exclude_paths || []).expanded + gitignore_paths
       end
 
       def gitignore_paths
@@ -90,7 +90,6 @@ module CC
           []
         end
       end
-
     end
   end
 end
