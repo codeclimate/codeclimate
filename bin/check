@@ -10,7 +10,11 @@ docker version | grep -q "Server version\|Server:" || {
   if command -v boot2docker > /dev/null 2>&1; then
     echo "Please ensure \`boot2docker up\` succeeds and you've run \`eval \$(boot2docker shellinit)\` in this shell" >&2
   else
-    echo "Please ensure \`docker version' succeeds and try again"
+    if [ $UID -eq 0 ]; then
+      echo "Please ensure \`sudo docker version' succeeds and try again" >&2
+    else
+      echo "Please ensure \`docker version' succeeds and try again" >&2
+    fi
   fi
 
   exit 1
