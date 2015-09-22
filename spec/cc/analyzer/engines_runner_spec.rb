@@ -95,7 +95,7 @@ module CC::Analyzer
       end
 
       it "gets include_paths from IncludePathBuilder" do
-        IncludePathsBuilder.expects(:new).with([]).returns(mock(build: ['.']))
+        IncludePathsBuilder.expects(:new).with([], []).returns(mock(build: ['.']))
         expected_config = {
           "enabled" => true,
           :exclude_paths => [],

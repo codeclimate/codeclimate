@@ -30,10 +30,74 @@ module CC::CLI
               EOYAML
 
               _, stderr = capture_io do
-                lambda { Analyze.new.run }
+                Analyze.new.run
               end
 
               stderr.must_match("")
+            end
+          end
+        end
+
+        describe "when user passes engine options to command" do
+          it "uses only the engines provided" do
+            within_temp_dir do
+              create_yaml(<<-EOYAML)
+                engines:
+                  rubocop:
+                    enabled: true
+              EOYAML
+
+              args = ["-e", "eslint"]
+
+              analyze = Analyze.new(args)
+              qualified_config = analyze.send(:config)
+
+              qualified_config.engines.must_equal("eslint" => { "enabled" => true })
+            end
+          end
+        end
+
+        describe "when user passes path args to command" do
+          it "captures the paths provided as path_options" do
+            within_temp_dir do
+              create_yaml(<<-EOYAML)
+                engines:
+                  rubocop:
+                    enabled: true
+                  eslint:
+                    enabled: true
+              EOYAML
+
+              args = ["-e", "eslint", "foo.rb"]
+              paths = ["foo.rb"]
+
+              analyze = Analyze.new(args)
+
+              analyze.send(:path_options).must_equal(paths)
+            end
+          end
+        end
+
+        describe "when user passes path args to command" do
+          it "passes the paths provided" do
+            within_temp_dir do
+              create_yaml(<<-EOYAML)
+                engines:
+                  rubocop:
+                    enabled: true
+                  eslint:
+                    enabled: true
+              EOYAML
+
+              args = ["-e", "eslint", "foo.rb"]
+              paths = ["foo.rb"]
+
+              analyze = Analyze.new(args)
+              engines_runner = stub(run: "peace")
+
+              CC::Analyzer::EnginesRunner.expects(:new).with(anything, anything, anything, anything, paths).returns(engines_runner)
+
+              analyze.run
             end
           end
         end

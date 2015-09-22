@@ -8,8 +8,9 @@ module CC::Analyzer
       within_temp_dir { test.call }
     end
 
-    let(:builder) { CC::Analyzer::IncludePathsBuilder.new(cc_excludes) }
+    let(:builder) { CC::Analyzer::IncludePathsBuilder.new(cc_excludes, cc_includes) }
     let(:cc_excludes) { [] }
+    let(:cc_includes) { [] }
     let(:result) { builder.build }
 
     before do
@@ -219,6 +220,27 @@ module CC::Analyzer
         Dir.expects(:entries).with("subdir/subdir").never
         result.include?("./").must_equal(true)
         result.include?("subdir/subdir/").must_equal(false)
+      end
+    end
+
+    describe "when cc_include_paths are passed in addition to excludes" do
+      let(:cc_excludes) { ["untrackable.rb"] }
+      let(:cc_includes) { ["untrackable.rb", "subdir"] }
+
+      before do
+        make_file("untrackable.rb")
+        make_file("trackable.rb")
+        make_file("subdir/subdir_trackable.rb")
+        make_file("subdir/foo.rb")
+        make_file("subdir/baz.rb")
+      end
+
+      it "includes requested paths" do
+        result.include?("subdir/").must_equal(true)
+      end
+
+      it "omits requested paths that are excluded by .codeclimate.yml" do
+        result.include?("untrackable.rb").must_equal(false)
       end
     end
   end
