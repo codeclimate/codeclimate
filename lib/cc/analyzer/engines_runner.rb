@@ -65,6 +65,7 @@ module CC
         {}.tap do |ret|
           @config.engines.each do |name, config|
             if config.enabled? && @registry.key?(name)
+              config.reload
               ret[name] = config
             end
           end
