@@ -119,3 +119,16 @@ fixme:
   community: false
   enable_regexps:
   default_ratings_paths:
+foodcritic:
+  image: codeclimate/codeclimate-foodcritic
+  description: Lint tool for Chef cookbooks
+  community: true
+  enable_regexps:
+  default_ratings_paths:
+scss-lint:
+  image: codeclimate/codeclimate-scss-lint
+  description: Configurable tool for writing clean and consistent SCSS
+  community: true
+  enable_regexps:
+  default_ratings_paths:
+    - "**.scss"
