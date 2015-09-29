@@ -16,7 +16,7 @@ analyses are also Docker images. To support this, you must have Docker installed
 and running locally. We also require that the Docker daemon supports connections
 on the default Unix socket `/var/run/docker.sock`.
 
-On OS X, we recommend using [boot2docker](http://boot2docker.io/).
+On OS X, we recommend using [Docker Machine](https://docs.docker.com/machine/).
 
 ## Installation
 
