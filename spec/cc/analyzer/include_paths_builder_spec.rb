@@ -243,5 +243,15 @@ module CC::Analyzer
         result.include?("untrackable.rb").must_equal(false)
       end
     end
+
+    describe "when .gitignore is a directory" do
+      before do
+        FileUtils.mkdir(".gitignore")
+      end
+
+      it "skips it entirely" do
+        result.include?("./").must_equal(true)
+      end
+    end
   end
 end
