@@ -46,7 +46,7 @@ module CC
 
       def ignored_files
         Tempfile.open(".cc_gitignore") do |tmp|
-          tmp.write(File.read(".gitignore")) if File.exist?(".gitignore")
+          tmp.write(File.read(".gitignore")) if File.file?(".gitignore")
           tmp << @cc_exclude_paths.join("\n")
           tmp.close
           tracked_and_ignored = `git ls-files -zi -X #{tmp.path}`.split("\0")
