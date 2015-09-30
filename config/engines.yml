@@ -17,6 +17,17 @@ rubocop:
     - \.rb$
   default_ratings_paths:
     - "**.rb"
+duplication:
+  image: codeclimate/codeclimate-duplication
+  description: Find similar structures in your code
+  community: false
+  default_config:
+    languages:
+      - ruby
+  enable_regexps:
+    - \.rb$
+  default_ratings_paths:
+    - "**.rb"
 gofmt:
   image: codeclimate/codeclimate-gofmt
   description: gofmt

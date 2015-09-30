@@ -1,3 +1,5 @@
+require 'cc/cli/config'
+
 module CC
   module CLI
     class Init < Command
@@ -18,19 +20,13 @@ module CC
       private
 
       def create_codeclimate_yaml
-        config = { "engines" => {} }
-        eligible_engines.each do |engine_name, engine_config|
-          config["engines"][engine_name] = {
-            "enabled" => true
-          }
-          config["ratings"] ||= {}
-          config["ratings"]["paths"] ||= []
+        config = CC::CLI::Config.new
 
-          config["ratings"]["paths"] |= engine_config["default_ratings_paths"]
+        eligible_engines.each do |(engine_name, engine_config)|
+          config.add_engine(engine_name, engine_config)
         end
 
-        config["exclude_paths"] = exclude_paths(AUTO_EXCLUDE_PATHS)
-
+        config.add_exclude_paths(auto_exclude_paths)
         filesystem.write_path(CODECLIMATE_YAML, config.to_yaml)
       end
 
@@ -55,28 +51,27 @@ module CC
         all_paths.reject { |path| ['.', '..'].include?(File.basename(path)) }
       end
 
-      def exclude_paths(paths)
-        expanded_paths = []
-        paths.each do |dir|
-          if filesystem.exist?(dir)
-            expanded_paths << "#{dir}/**/*"
-          end
-        end
-        expanded_paths
+      def engine_eligible?(engine)
+        !engine["community"] && engine["enable_regexps"].present? && has_files?(engine)
       end
 
-      def engine_eligible?(engine)
-        !engine["community"] &&
-          engine["enable_regexps"].present? &&
-          filesystem.any? do |path|
-            engine["enable_regexps"].any? { |re| Regexp.new(re).match(path) }
-          end
+      def has_files?(engine)
+        filesystem.any? do |path|
+          engine["enable_regexps"].any? { |re| Regexp.new(re).match(path) }
+        end
+      end
+
+      def auto_exclude_paths
+        AUTO_EXCLUDE_PATHS.select { |path| filesystem.exist?(path) }
       end
 
       def eligible_engines
-        @eligible_engines ||= engine_registry.list.each_with_object({}) do |(engine_name, config), result|
+        return @eligible_engines if @eligible_engines
+
+        engines = engine_registry.list
+        @eligible_engines = engines.each_with_object({}) do |(name, config), result|
           if engine_eligible?(config)
-            result[engine_name] = config
+            result[name] = config
           end
         end
       end

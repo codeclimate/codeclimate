@@ -2,11 +2,12 @@
 engines:
   rubocop:
     enabled: true
-  bundler-audit:
+  duplication:
     enabled: true
+    config:
+      languages:
+      - ruby
 ratings:
   paths:
   - "**.rb"
-exclude_paths:
-- config/**/*
-- spec/**/*
+exclude_paths: []
