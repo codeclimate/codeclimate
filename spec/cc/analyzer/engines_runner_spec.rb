@@ -1,4 +1,5 @@
 require "spec_helper"
+require "file_utils_ext"
 
 module CC::Analyzer
   describe EnginesRunner do
