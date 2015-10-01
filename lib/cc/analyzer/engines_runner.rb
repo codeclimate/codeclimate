@@ -24,7 +24,7 @@ module CC
 
         @formatter.finished
       ensure
-        @formatter.close
+        @formatter.close if @formatter.respond_to?(:close)
       end
 
       private

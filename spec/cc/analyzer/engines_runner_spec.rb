@@ -1,4 +1,5 @@
 require "spec_helper"
+require "file_utils_ext"
 
 module CC::Analyzer
   describe EnginesRunner do
@@ -103,6 +104,22 @@ module CC::Analyzer
         }
         expect_engine_run("an_engine", "/code", formatter, expected_config)
         EnginesRunner.new(registry, formatter, "/code", engines_config).run
+      end
+    end
+
+    describe "when the formatter does not respond to #close" do
+      let(:config) { config_with_engine("an_engine") }
+      let(:formatter) do
+        formatter = stub(started: nil, write: nil, run: nil, finished: nil)
+        formatter.stubs(:engine_running).yields
+        formatter
+      end
+      let(:registry) { registry_with_engine("an_engine") }
+
+      it "does not call #close" do
+        expect_engine_run("an_engine", "/code", formatter)
+        FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
+        EnginesRunner.new(registry, formatter, "/code", config).run
       end
     end
 
