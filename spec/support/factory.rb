@@ -99,4 +99,22 @@ module Factory
       }
     }
   end
+
+  def sample_issue_with_severity(severity)
+    {
+      "type" => "issue",
+      "check" => "Rubocop/Style/Documentation",
+      "description" => "Missing top-level class documentation comment.",
+      "categories" => ["Style"],
+      "remediation_points" => 10,
+      "severity" => severity,
+      "location"=> {
+        "path" => "lib/cc/analyzer/config.rb",
+        "lines" => {
+          "begin" => 32,
+          "end" => 40
+        }
+      }
+    }
+  end
 end
