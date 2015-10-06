@@ -29,6 +29,7 @@ module CC
           command: @metadata["command"],
           name: container_name,
           listener: composite_listener,
+          stdout_io: stdout_io,
         )
 
         container.on_output("\0") do |output|
