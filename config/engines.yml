@@ -13,6 +13,8 @@ rubocop:
   image: codeclimate/codeclimate-rubocop
   description: A Ruby static code analyzer, based on the community Ruby style guide.
   community: false
+  upgrade_languages:
+   - Ruby
   enable_regexps:
     - \.rb$
   default_ratings_paths:
@@ -24,6 +26,8 @@ duplication:
   default_config:
     languages:
       - ruby
+  upgrade_languages:
+    - Ruby
   enable_regexps:
     - \.rb$
   default_ratings_paths:
@@ -64,6 +68,8 @@ eslint:
   image: codeclimate/codeclimate-eslint
   description: A JavaScript/JSX linting utility
   community: false
+  upgrade_languages:
+    - JavaScript
   enable_regexps:
     - \.js$
     - \.jsx$
@@ -96,6 +102,8 @@ bundler-audit:
   image: codeclimate/codeclimate-bundler-audit
   description: Patch-level verification for Bundler
   community: false
+  upgrade_languages:
+    - Ruby
   enable_patterns:
     - Gemfile.lock
   default_ratings_paths:
@@ -104,6 +112,8 @@ phpcodesniffer:
   image: codeclimate/codeclimate-phpcodesniffer
   description: PHP Code Sniffer
   community: false
+  upgrade_languages:
+    - PHP
   enable_regexps:
     - \.php$
     - \.module$
@@ -116,6 +126,8 @@ phpmd:
   image: codeclimate/codeclimate-phpmd
   description: PHP Mess Detector
   community: false
+  upgrade_languages:
+    - PHP
   enable_regexps:
     - \.php$
     - \.module$

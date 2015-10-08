@@ -38,10 +38,18 @@ module CC::CLI
     describe "#add_exclude_paths" do
       it "adds exclude paths to config with glob" do
         config = CC::CLI::Config.new()
-        config.add_exclude_paths(["foo"])
+        config.add_exclude_paths(["foo/"])
 
         exclude_paths = YAML.load(config.to_yaml)["exclude_paths"]
         exclude_paths.must_equal(["foo/**/*"])
+      end
+
+      it "does not glob paths that aren't directories" do
+        config = CC::CLI::Config.new()
+        config.add_exclude_paths(["foo.rb"])
+
+        exclude_paths = YAML.load(config.to_yaml)["exclude_paths"]
+        exclude_paths.must_equal(["foo.rb"])
       end
     end
   end
