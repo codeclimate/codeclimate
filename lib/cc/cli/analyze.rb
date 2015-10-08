@@ -13,7 +13,9 @@ module CC
       end
 
       def run
-        require_codeclimate_yml
+        if @engine_options.empty?
+          require_codeclimate_yml
+        end
 
         Dir.chdir(ENV['FILESYSTEM_DIR']) do
           runner = EnginesRunner.new(registry, formatter, source_dir, config, path_options)
@@ -61,7 +63,13 @@ module CC
       end
 
       def config
-        @config ||= CC::Yaml.parse(filesystem.read_path(CODECLIMATE_YAML))
+        if !@engine_options.empty?
+          config = CC::Yaml.parse('config:\nengines:')
+        else
+          config = CC::Yaml.parse(filesystem.read_path(CODECLIMATE_YAML))
+        end
+
+        @config ||= config
       end
 
       def apply_config_options

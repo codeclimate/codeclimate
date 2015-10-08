@@ -81,7 +81,7 @@ module Factory
       "description" => "Missing top-level class documentation comment.",
       "categories" => ["Style"],
       "remediation_points" => 10,
-      "location"=> {
+      "location" => {
         "path" => "lib/cc/analyzer/config.rb",
         "lines" => {
           "begin" => 32,
