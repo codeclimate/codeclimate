@@ -74,6 +74,15 @@ module Factory
     }
   end
 
+  def create_classic_yaml
+    %{
+      languages:
+        Ruby: true
+      exclude_paths:
+        - excluded.rb
+    }
+  end
+
   def sample_issue
     {
       "type" => "issue",
