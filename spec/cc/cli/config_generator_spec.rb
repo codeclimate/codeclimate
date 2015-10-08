@@ -38,6 +38,15 @@ module CC::CLI
         end
         generator.eligible_engines.must_equal expected_engines
       end
+
+      it "returns brakeman when Gemfile.lock exists" do
+        File.write("Gemfile.lock", "gemfile-lock-content")
+
+        expected_engines = engine_registry.list.select do |name, _|
+          "bundler-audit" == name
+        end
+        generator.eligible_engines.must_equal expected_engines
+      end
     end
 
     describe "#exclude_paths" do

@@ -104,8 +104,8 @@ bundler-audit:
   community: false
   upgrade_languages:
     - Ruby
-  enable_patterns:
-    - Gemfile.lock
+  enable_regexps:
+    - Gemfile\.lock
   default_ratings_paths:
     - Gemfile.lock
 phpcodesniffer:
