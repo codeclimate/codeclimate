@@ -18,13 +18,15 @@ module CC
         name:,
         command: nil,
         listener: ContainerListener.new,
-        timeout: DEFAULT_TIMEOUT
+        timeout: DEFAULT_TIMEOUT,
+        stdout_io: StringIO.new
       )
         @image = image
         @name = name
         @command = command
         @listener = listener
         @timeout = timeout
+        @stdout_io = stdout_io
 
         @output_delimeter = "\n"
         @on_output = ->(*) { }
@@ -50,8 +52,10 @@ module CC
 
         _, status = Process.waitpid2(pid)
 
-        duration = ((Time.now - started) * 1000).round
-        @listener.finished(container_data(duration: duration, status: status))
+        unless @stdout_io.respond_to?(:failed) && @stdout_io.failed
+          duration = ((Time.now - started) * 1000).round
+          @listener.finished(container_data(duration: duration, status: status))
+        end
 
         t_timeout.kill
       ensure
