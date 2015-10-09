@@ -18,6 +18,10 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'spec/**/*'
 
+Metrics/MethodLength:
+  Exclude:
+    - 'spec/**/*'
+
 Metrics/ModuleLength:
   Exclude:
     - 'spec/**/*'
@@ -32,6 +36,9 @@ Style/DotPosition:
   Enabled: false
 
 Style/SignalException:
+  Enabled: false
+
+Style/TrailingUnderscoreVariable:
   Enabled: false
 
 Metrics/AbcSize:

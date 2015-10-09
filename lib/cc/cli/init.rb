@@ -1,32 +1,38 @@
 require 'cc/cli/config'
+require 'cc/cli/config_generator'
+require 'cc/cli/upgrade_config_generator'
 
 module CC
   module CLI
     class Init < Command
       include CC::Analyzer
 
-      AUTO_EXCLUDE_PATHS = %w[config db features node_modules script spec test vendor].freeze
-
       def run
-        if filesystem.exist?(CODECLIMATE_YAML)
+        if !upgrade? && filesystem.exist?(CODECLIMATE_YAML)
           say "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
+        elsif upgrade? && engines_enabled?
+          say "--upgrade should not be used on a .codeclimate.yml configured for the Platform.\nTry running 'validate-config' to check configuration."
         else
           create_codeclimate_yaml
-          say "Config file .codeclimate.yml successfully generated.\nEdit and then try running 'validate-config' to check configuration."
+          say "Config file .codeclimate.yml successfully #{config_generator.post_generation_verb}.\nEdit and then try running 'validate-config' to check configuration."
           create_default_configs
         end
       end
 
       private
 
+      def upgrade?
+        @args.include?("--upgrade")
+      end
+
       def create_codeclimate_yaml
         config = CC::CLI::Config.new
 
-        eligible_engines.each do |(engine_name, engine_config)|
+        config_generator.eligible_engines.each do |(engine_name, engine_config)|
           config.add_engine(engine_name, engine_config)
         end
 
-        config.add_exclude_paths(auto_exclude_paths)
+        config.add_exclude_paths(config_generator.exclude_paths)
         filesystem.write_path(CODECLIMATE_YAML, config.to_yaml)
       end
 
@@ -43,7 +49,7 @@ module CC
       end
 
       def available_configs
-        all_paths = eligible_engines.flat_map do |engine_name, _|
+        all_paths = config_generator.eligible_engines.flat_map do |engine_name, _|
           engine_directory = File.expand_path("../../../../config/#{engine_name}", __FILE__)
           Dir.glob("#{engine_directory}/*", File::FNM_DOTMATCH)
         end
@@ -51,29 +57,19 @@ module CC
         all_paths.reject { |path| ['.', '..'].include?(File.basename(path)) }
       end
 
-      def engine_eligible?(engine)
-        !engine["community"] && engine["enable_regexps"].present? && has_files?(engine)
-      end
+      def engines_enabled?
+        unless @engines_enabled.nil?
+          return @engines_enabled
+        end
 
-      def has_files?(engine)
-        filesystem.any? do |path|
-          engine["enable_regexps"].any? { |re| Regexp.new(re).match(path) }
+        if filesystem.exist?(CODECLIMATE_YAML)
+          config = CC::Analyzer::Config.new(File.read(CODECLIMATE_YAML))
+          @engines_enabled ||= config.engine_names.any?
         end
       end
 
-      def auto_exclude_paths
-        AUTO_EXCLUDE_PATHS.select { |path| filesystem.exist?(path) }
-      end
-
-      def eligible_engines
-        return @eligible_engines if @eligible_engines
-
-        engines = engine_registry.list
-        @eligible_engines = engines.each_with_object({}) do |(name, config), result|
-          if engine_eligible?(config)
-            result[name] = config
-          end
-        end
+      def config_generator
+        @config_generator ||= ConfigGenerator.for(filesystem, engine_registry, upgrade?)
       end
     end
   end
