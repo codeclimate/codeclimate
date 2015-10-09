@@ -155,3 +155,9 @@ scss-lint:
   enable_regexps:
   default_ratings_paths:
     - "**.scss"
+requiresafe:
+  image: codeclimate/codeclimate-requiresafe
+  description: Security tool for Node.js dependencies
+  community: true
+  enable_regexps:
+  default_ratings_paths:
