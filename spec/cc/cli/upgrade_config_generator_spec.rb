@@ -15,7 +15,7 @@ module CC::CLI
         File.write(".codeclimate.yml", create_classic_yaml)
         write_fixture_source_files
 
-        expected_engine_names = %w(rubocop csslint duplication)
+        expected_engine_names = %w(rubocop csslint)
         expected_engines = engine_registry.list.select do |name, _|
           expected_engine_names.include?(name)
         end
