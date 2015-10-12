@@ -10,6 +10,7 @@ module CC
         :status,        # status, for a finished event
         :stderr,        # stderr, for a finished event
       )
+      BlankImage = Class.new(StandardError)
 
       DEFAULT_TIMEOUT = 15 * 60 # 15m
 
@@ -20,6 +21,7 @@ module CC
         listener: ContainerListener.new,
         timeout: DEFAULT_TIMEOUT
       )
+        raise BlankImage if image.blank?
         @image = image
         @name = name
         @command = command

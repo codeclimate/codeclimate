@@ -100,6 +100,12 @@ module CC::Analyzer
       end
     end
 
+    describe "new with a blank image" do
+      it "raises an exception" do
+        lambda { CC::Analyzer::Container.new(image: "", name: "name") }.must_raise(CC::Analyzer::Container::BlankImage)
+      end
+    end
+
     def stub_spawn(status: nil, out: StringIO.new, err: StringIO.new)
       pid = 42
 
