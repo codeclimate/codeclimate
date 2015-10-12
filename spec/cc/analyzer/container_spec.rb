@@ -102,7 +102,7 @@ module CC::Analyzer
 
     describe "new with a blank image" do
       it "raises an exception" do
-        lambda { CC::Analyzer::Container.new(image: "", name: "name") }.must_raise(CC::Analyzer::Container::BlankImage)
+        -> { CC::Analyzer::Container.new(image: "", name: "name") }.must_raise(CC::Analyzer::Container::ImageRequired)
       end
     end
 
