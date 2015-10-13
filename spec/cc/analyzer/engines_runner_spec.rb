@@ -123,6 +123,49 @@ module CC::Analyzer
       end
     end
 
+    describe "when there are multiple engines" do
+      let(:config) do
+        CC::Yaml.parse(<<-EOYAML)
+          engines:
+            eslint:
+              enabled: true
+            rubocop:
+              enabled: true
+        EOYAML
+      end
+      let(:formatter) { null_formatter }
+      let(:registry) do
+        {
+          "eslint" => { "image" => "codeclimate/codeclimate-eslint" },
+          "rubocop" => { "image" => "codeclimate/codeclimate-rubocop" }
+        }
+      end
+      let(:runner) do
+        EnginesRunner.new(registry, formatter, "/code", config)
+      end
+
+      it "yields each engine in response to #each_engine" do
+        engines_yielded = []
+        runner.each_engine do |engine|
+          engines_yielded << engine
+        end
+        engines_yielded.size.must_equal(2)
+        engines_yielded.map(&:name).include?("eslint").must_equal(true)
+        engines_yielded.map(&:name).include?("rubocop").must_equal(true)
+      end
+
+      it "accepts different listeners per engine and uses them in the container for their respective engines" do
+        listeners = []
+        runner.each_engine do |engine|
+          listener = stub("ContainerListener #{engine.name}")
+          listeners << listener
+          runner.set_container_listener(engine, listener)
+          engine.expects(:run).with(formatter, listener)
+        end
+        runner.run
+      end
+    end
+
     def registry_with_engine(name)
       { name => { "image" => "codeclimate/codeclimate-#{name}" } }
     end

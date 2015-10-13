@@ -13,27 +13,36 @@ module CC
         @config = config
         @requested_paths = requested_paths
         @container_label = container_label
+        @container_listeners = {}
       end
 
-      def run(container_listener = ContainerListener.new)
+      def each_engine
+        engines.each do |engine|
+          yield(engine)
+        end
+      end
+
+      def run
         raise NoEnabledEngines if engines.empty?
-
         @formatter.started
-
-        engines.each { |engine| run_engine(engine, container_listener) }
-
+        each_engine { |engine| run_engine(engine) }
         @formatter.finished
       ensure
         @formatter.close if @formatter.respond_to?(:close)
+      end
+
+      def set_container_listener(engine, listener)
+        @container_listeners[engine] = listener
       end
 
       private
 
       attr_reader :requested_paths
 
-      def run_engine(engine, container_listener)
+      def run_engine(engine)
+        listener = @container_listeners[engine] || ContainerListener.new
         @formatter.engine_running(engine) do
-          engine.run(@formatter, container_listener)
+          engine.run(@formatter, listener)
         end
       end
 
