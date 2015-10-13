@@ -44,13 +44,13 @@ module CC
         started = Time.now
         @listener.started(container_data)
 
-        pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command(options))
+        @pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command(options))
 
         t_out = read_stdout(out)
         t_err = read_stderr(err)
-        t_timeout = timeout_thread(pid)
+        t_timeout = timeout_thread(@pid)
 
-        _, status = Process.waitpid2(pid)
+        _, status = Process.waitpid2(@pid)
 
         duration = ((Time.now - started) * 1000).round
         @listener.finished(container_data(duration: duration, status: status))
@@ -67,6 +67,15 @@ module CC
           t_out.join if t_out
           t_err.join if t_err
         end
+      end
+
+      def stop
+        # Prevents the processing of more output after first error
+        @on_output = ->(*) { }
+
+        Process.kill("TERM", @pid) if @pid
+      rescue Errno::ESRCH
+        Analyzer.statsd.increment("container.kill_process_rescue")
       end
 
       private

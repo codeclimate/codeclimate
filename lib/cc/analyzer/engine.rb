@@ -33,7 +33,7 @@ module CC
 
         container.on_output("\0") do |output|
           unless output_filter.filter?(output)
-            stdout_io.write(output)
+            stdout_io.write(output) || container.stop
           end
         end
 
