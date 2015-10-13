@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "activesupport", "~> 4.2", ">= 4.2.1"
   s.add_dependency "tty-spinner", "~> 0.1.0"
-  s.add_dependency "codeclimate-yaml", "~> 0.2.3"
+  s.add_dependency "codeclimate-yaml", "~> 0.3.0"
   s.add_dependency "faraday", "~> 0.9.1"
   s.add_dependency "faraday_middleware", "~> 0.9.1"
   s.add_dependency "highline",  "~> 1.7", ">= 1.7.2"
