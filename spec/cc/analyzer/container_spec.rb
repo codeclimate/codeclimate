@@ -69,16 +69,21 @@ module CC::Analyzer
         listener = TestContainerListener.new
         container = Container.new(image: "codeclimate/foo", name: "name", listener: listener)
 
+        out = StringIO.new
+        out.puts("output one")
+        out.puts("output two")
+        out.rewind
         err = StringIO.new
         err.puts("error one")
         err.puts("error two")
         err.rewind
-        stub_spawn(status: :failed, err: err)
+        stub_spawn(status: :failed, out: out, err: err)
 
         container.run
 
         listener.finished_image.must_equal "codeclimate/foo"
         listener.finished_name.must_equal "name"
+        listener.finished_stdout.must_equal "output one\noutput two\n"
         listener.finished_stderr.must_equal "error one\nerror two\n"
       end
 

@@ -8,6 +8,7 @@ class TestContainerListener < CC::Analyzer::ContainerListener
     :finished_image,
     :finished_name,
     :finished_status,
+    :finished_stdout,
     :finished_stderr
 
   def started(data)
@@ -30,6 +31,7 @@ class TestContainerListener < CC::Analyzer::ContainerListener
     @finished_image = data.image
     @finished_name = data.name
     @finished_status = data.status
+    @finished_stdout = data.stdout
     @finished_stderr = data.stderr
   end
 end
