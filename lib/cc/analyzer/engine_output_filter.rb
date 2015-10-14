@@ -8,6 +8,8 @@ module CC
       end
 
       def filter?(output)
+        return true unless output.present?
+
         if (json = parse_as_json(output))
           issue?(json) && ignore_issue?(json)
         else
