@@ -12,18 +12,16 @@ module CC
         end
 
         def write(data)
-          if data.present?
-            json = JSON.parse(data)
-            json["engine_name"] = current_engine.name
+          json = JSON.parse(data)
+          json["engine_name"] = current_engine.name
 
-            case json["type"].downcase
-            when "issue"
-              issues << json
-            when "warning"
-              warnings << json
-            else
-              raise "Invalid type found: #{json["type"]}"
-            end
+          case json["type"].downcase
+          when "issue"
+            issues << json
+          when "warning"
+            warnings << json
+          else
+            raise "Invalid type found: #{json["type"]}"
           end
         end
 
