@@ -9,18 +9,6 @@ module CC::Analyzer::Formatters
       JSONFormatter.new(filesystem)
     end
 
-    describe "#write" do
-      it "returns when no data is present" do
-        stdout, stderr = capture_io do
-          formatter.engine_running(engine_double("cool_engine")) do
-            formatter.write("")
-          end
-        end
-
-        stdout.must_equal("")
-      end
-    end
-
     describe "#start, write, finished" do
       it "outputs a string that can be parsed as JSON" do
         issue1 = sample_issue

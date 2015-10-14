@@ -2,6 +2,14 @@ require "spec_helper"
 
 module CC::Analyzer
   describe EngineOutputFilter do
+    it "filters empty output" do
+      filter = EngineOutputFilter.new
+
+      filter.filter?("").must_equal true
+      filter.filter?(" ").must_equal true
+      filter.filter?("\n").must_equal true
+    end
+
     it "does not filter arbitrary output" do
       filter = EngineOutputFilter.new
 

@@ -17,8 +17,6 @@ module CC
         end
 
         def write(data)
-          return unless data.present?
-
           document = JSON.parse(data)
           document["engine_name"] = current_engine.name
 
