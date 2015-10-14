@@ -8,6 +8,7 @@ module CC
         :name,          # name given to the container when created
         :duration,      # duration, for a finished event
         :status,        # status, for a finished event
+        :stdout,        # stdout, for a finished event
         :stderr,        # stderr, for a finished event
       )
       ImageRequired = Class.new(StandardError)
@@ -32,6 +33,7 @@ module CC
         @on_output = ->(*) { }
 
         @timed_out = false
+        @stdout_io = StringIO.new
         @stderr_io = StringIO.new
       end
 
@@ -94,6 +96,7 @@ module CC
       def read_stdout(out)
         Thread.new do
           out.each_line(@output_delimeter) do |chunk|
+            @stdout_io.write(chunk)
             output = chunk.chomp(@output_delimeter)
 
             @on_output.call(output)
@@ -121,6 +124,7 @@ module CC
           @name,
           duration,
           status,
+          @stdout_io.string,
           @stderr_io.string
         )
       end
