@@ -45,7 +45,7 @@ module CC::Analyzer
       let(:registry) { {} }
 
       it "does not raise" do
-        lambda { engines }
+        engines
       end
     end
 
@@ -105,8 +105,8 @@ module CC::Analyzer
       it "respects those paths" do
         expected_config = {
           "enabled" => true,
-          :exclude_paths => %w[.ignorethis],
-          :include_paths => %w[.gitignore]
+          :exclude_paths => %w(.ignorethis),
+          :include_paths => %w(.gitignore)
         }
         Engine.expects(:new).with(
           "rubocop",
