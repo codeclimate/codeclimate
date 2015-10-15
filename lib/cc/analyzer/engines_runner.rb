@@ -13,21 +13,14 @@ module CC
         @config = config
         @requested_paths = requested_paths
         @container_label = container_label
-        @engines = Engines.new(
-          registry: registry,
-          config: config,
-          container_label: container_label,
-          source_dir: source_dir,
-          requested_paths: requested_paths
-        )
       end
 
       def run(container_listener = ContainerListener.new)
-        raise NoEnabledEngines if @engines.empty?
+        raise NoEnabledEngines if engines.empty?
 
         @formatter.started
 
-        @engines.each { |engine| run_engine(engine, container_listener) }
+        engines.each { |engine| run_engine(engine, container_listener) }
 
         @formatter.finished
       ensure
@@ -37,6 +30,16 @@ module CC
       private
 
       attr_reader :requested_paths
+
+      def engines
+        @engines ||= Engines.new(
+          registry: @registry,
+          config: @config,
+          container_label: @container_label,
+          source_dir: @source_dir,
+          requested_paths: @requested_paths
+        )
+      end
 
       def run_engine(engine, container_listener)
         @formatter.engine_running(engine) do

@@ -7,17 +7,23 @@ module CC
         super()
         @registry = registry
         @config = config
+        @container_label = container_label
         @requested_paths = requested_paths
+        @source_dir = source_dir
         names_and_raw_engine_configs.each do |name, raw_engine_config|
-          label = container_label || SecureRandom.uuid
-          engine_config = engine_config(raw_engine_config)
-          self << Engine.new(
-            name, registry[name], source_dir, engine_config, label
-          )
+          self << build_engine(name, raw_engine_config)
         end
       end
 
       private
+
+      def build_engine(name, raw_engine_config)
+        label = @container_label || SecureRandom.uuid
+        engine_config = engine_config(raw_engine_config)
+        Engine.new(
+          name, @registry[name], @source_dir, engine_config, label
+        )
+      end
 
       def engine_config(raw_engine_config)
         config = raw_engine_config.merge(
@@ -51,7 +57,7 @@ module CC
       end
 
       def exclude_paths
-        PathPatterns.new(@config.exclude_paths || []).expanded + 
+        PathPatterns.new(@config.exclude_paths || []).expanded +
           gitignore_paths
       end
 
