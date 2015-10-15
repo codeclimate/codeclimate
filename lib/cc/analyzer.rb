@@ -5,6 +5,7 @@ module CC
     autoload :Container, "cc/analyzer/container"
     autoload :ContainerListener, "cc/analyzer/container_listener"
     autoload :Engine, "cc/analyzer/engine"
+    autoload :Engines, "cc/analyzer/engines"
     autoload :EngineOutputFilter, "cc/analyzer/engine_output_filter"
     autoload :EngineRegistry, "cc/analyzer/engine_registry"
     autoload :EnginesRunner, "cc/analyzer/engines_runner"
