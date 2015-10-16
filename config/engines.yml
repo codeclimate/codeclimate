@@ -92,7 +92,7 @@ bundler-audit:
   upgrade_languages:
     - Ruby
   enable_regexps:
-    - Gemfile\.lock
+    - ^Gemfile\.lock$
   default_ratings_paths:
     - Gemfile.lock
 phpcodesniffer:
