@@ -5,6 +5,11 @@ machine:
     CLOUDSDK_CORE_DISABLE_PROMPTS: 1
     registry_root: us.gcr.io/code_climate
 
+dependencies:
+  pre:
+    # Run in container_spec
+    - docker pull alpine
+
 test:
   override:
     - bundle exec rake
