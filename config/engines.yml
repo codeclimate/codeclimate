@@ -19,6 +19,12 @@ rubocop:
     - \.rb$
   default_ratings_paths:
     - "**.rb"
+duplication:
+  image: codeclimate/codeclimate-duplication
+  description: Structural duplication detection for Ruby, Python, JavaScript, and PHP
+  community: false
+  enable_regexps:
+  default_ratings_paths:
 gofmt:
   image: codeclimate/codeclimate-gofmt
   description: gofmt
