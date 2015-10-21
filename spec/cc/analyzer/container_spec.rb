@@ -82,22 +82,72 @@ module CC::Analyzer
         listener.finished_stderr.must_equal "error one\nerror two\n"
       end
 
-      it "times out slow containers" do
-        listener = TestContainerListener.new
-        listener.expects(:finished).never
-        container = Container.new(image: "codeclimate/foo", name: "name", listener: listener, timeout: 0)
+      # N.B. these specs actually docker-runs things. This logic is critical and
+      # so the real-world interaction is valuable.
+      describe "stopping containers" do
+        before do
+          @name = "codeclimate-container-test"
+          system("docker kill #{@name} &>/dev/null")
+          system("docker rm #{@name} &>/dev/null")
+        end
 
-        # N.B. stubbing a private method is a Bad Idea, but it's the best I can
-        # come up with here. Rather than invoke docker, we invoke a slow command
-        # in order to trigger the timeout logic.
-        container.stubs(:docker_run_command).returns(%w[ sleep 5 ])
+        it "can be stopped" do
+          listener = TestContainerListener.new
+          listener.expects(:timed_out).never
+          container = Container.new(
+            image: "alpine",
+            command: %w[sleep 10],
+            name: @name,
+            listener: listener,
+            timeout: 5,
+          )
 
-        container.run
+          run_container(container) do |c|
+            # it needs a second to boot before stop will work
+            sleep 1
+            c.stop
+          end
 
-        listener.timed_out?.must_equal true
-        listener.timed_out_image.must_equal "codeclimate/foo"
-        listener.timed_out_name.must_equal "name"
-        listener.timed_out_seconds.must_equal 0
+          assert_container_stopped
+          listener.finished_image.must_equal "alpine"
+          listener.finished_name.must_equal @name
+        end
+
+        it "times out slow containers" do
+          listener = TestContainerListener.new
+          listener.expects(:finished).never
+          container = Container.new(
+            image: "alpine",
+            command: %w[sleep 10],
+            name: @name,
+            listener: listener,
+            timeout: 1,
+          )
+
+          run_container(container)
+
+          assert_container_stopped
+          listener.timed_out?.must_equal true
+          listener.timed_out_image.must_equal "alpine"
+          listener.timed_out_name.must_equal @name
+          listener.timed_out_seconds.must_equal 1
+        end
+
+        def run_container(container)
+          thread = Thread.new { container.run }
+
+          if block_given?
+            yield container
+          else
+            container
+          end
+        ensure
+          thread.join if thread
+        end
+
+        def assert_container_stopped
+          `docker ps --quiet --filter name=#{@name}`.strip.must_equal ""
+        end
       end
     end
 

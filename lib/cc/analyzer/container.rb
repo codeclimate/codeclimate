@@ -42,13 +42,13 @@ module CC
         started = Time.now
         @listener.started(container_data)
 
-        @pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command(options))
+        pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command(options))
 
         t_out = read_stdout(out)
         t_err = read_stderr(err)
-        t_timeout = timeout_thread(@pid)
+        t_timeout = timeout_thread
 
-        _, status = Process.waitpid2(@pid)
+        _, status = Process.waitpid2(pid)
         if @timed_out
           @listener.timed_out(container_data(duration: @timeout))
         else
@@ -70,9 +70,7 @@ module CC
         # Prevents the processing of more output after first error
         @on_output = ->(*) { }
 
-        Process.kill("TERM", @pid) if @pid
-      rescue Errno::ESRCH
-        Analyzer.statsd.increment("container.kill_process_rescue")
+        reap_running_container
       end
 
       private
@@ -104,16 +102,21 @@ module CC
         end
       end
 
-      def timeout_thread(pid)
+      def timeout_thread
         Thread.new do
           sleep @timeout
           @timed_out = true
-          Process.kill("KILL", pid)
+          reap_running_container
         end
       end
 
       def container_data(duration: nil, status: nil)
         ContainerData.new(@image, @name, duration, status, @stderr_io.string)
+      end
+
+      def reap_running_container
+        Analyzer.logger.warn("killing container name=#{@name}")
+        POSIX::Spawn::Child.new("docker", "kill", @name)
       end
     end
   end
