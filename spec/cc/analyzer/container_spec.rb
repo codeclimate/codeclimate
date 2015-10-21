@@ -84,6 +84,7 @@ module CC::Analyzer
 
       it "times out slow containers" do
         listener = TestContainerListener.new
+        listener.expects(:finished).never
         container = Container.new(image: "codeclimate/foo", name: "name", listener: listener, timeout: 0)
 
         # N.B. stubbing a private method is a Bad Idea, but it's the best I can
