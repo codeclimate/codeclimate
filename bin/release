@@ -1,6 +1,8 @@
 #!/bin/sh
 #
-# Release a new version of this repository
+# Release a new version of this repository.
+#
+# Assumes bin/prep-release was run and the PR merged.
 #
 # Usage: bin/release VERSION
 #
@@ -13,22 +15,11 @@ if [ -z "$1" ]; then
 fi
 
 version=$1
-old_version=$(< VERSION)
 
-if ! bundle exec rake; then
-  echo "test failure, not releasing" >&2
-  exit 1
-fi
-
-printf "RELEASE %s => %s\n" "$old_version" "$version"
 git checkout master
 git pull
 
-printf "%s\n" "$version" > VERSION
-bundle
-git add VERSION Gemfile.lock
-git commit -m "Release v$version"
-
+printf "RELEASE %s\n" "$version"
 rake release
 
 docker build --rm -t codeclimate/codeclimate .
@@ -39,6 +30,4 @@ docker push codeclimate/codeclimate
 echo "Be sure to update release notes:"
 echo ""
 echo "  https://github.com/codeclimate/codeclimate/releases/new?tag=v$version"
-echo ""
-echo "  https://github.com/codeclimate/codeclimate/compare/v$old_version...v$version"
 echo ""
