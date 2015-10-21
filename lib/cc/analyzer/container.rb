@@ -27,14 +27,14 @@ module CC
         @command = command
         @listener = listener
         @timeout = timeout
-        @output_delimeter = "\n"
+        @output_delimiter = "\n"
         @on_output = ->(*) { }
         @timed_out = false
         @stderr_io = StringIO.new
       end
 
-      def on_output(delimeter = "\n", &block)
-        @output_delimeter = delimeter
+      def on_output(delimiter = "\n", &block)
+        @output_delimiter = delimiter
         @on_output = block
       end
 
@@ -90,8 +90,8 @@ module CC
 
       def read_stdout(out)
         Thread.new do
-          out.each_line(@output_delimeter) do |chunk|
-            output = chunk.chomp(@output_delimeter)
+          out.each_line(@output_delimiter) do |chunk|
+            output = chunk.chomp(@output_delimiter)
 
             @on_output.call(output)
           end
@@ -113,13 +113,7 @@ module CC
       end
 
       def container_data(duration: nil, status: nil)
-        ContainerData.new(
-          @image,
-          @name,
-          duration,
-          status,
-          @stderr_io.string
-        )
+        ContainerData.new(@image, @name, duration, status, @stderr_io.string)
       end
     end
   end
