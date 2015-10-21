@@ -27,10 +27,8 @@ module CC
         @command = command
         @listener = listener
         @timeout = timeout
-
         @output_delimeter = "\n"
         @on_output = ->(*) { }
-
         @timed_out = false
         @stderr_io = StringIO.new
       end
