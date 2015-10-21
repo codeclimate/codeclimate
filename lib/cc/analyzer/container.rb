@@ -27,14 +27,14 @@ module CC
         @command = command
         @listener = listener
         @timeout = timeout
-        @output_delimiter = "\n"
+        @output_delimeter = "\n"
         @on_output = ->(*) { }
         @timed_out = false
         @stderr_io = StringIO.new
       end
 
-      def on_output(delimiter = "\n", &block)
-        @output_delimiter = delimiter
+      def on_output(delimeter = "\n", &block)
+        @output_delimeter = delimeter
         @on_output = block
       end
 
@@ -90,8 +90,8 @@ module CC
 
       def read_stdout(out)
         Thread.new do
-          out.each_line(@output_delimiter) do |chunk|
-            output = chunk.chomp(@output_delimiter)
+          out.each_line(@output_delimeter) do |chunk|
+            output = chunk.chomp(@output_delimeter)
 
             @on_output.call(output)
           end
