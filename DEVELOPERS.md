@@ -19,6 +19,14 @@ Otherwise, invoke the `docker run` command found in the README.
 
 ## Releasing a new version
 
+Prep and open a PR bumping the version:
+
+```console
+bin/prep-release VERSION
+```
+
+Once merged, release it:
+
 ```console
 bin/release VERSION
 ```

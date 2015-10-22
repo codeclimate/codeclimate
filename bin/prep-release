@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Open a PR for releasing a new version of this repository.
+#
+# Usage: bin/prep-release VERSION
+#
+###
+set -e
+
+if [ -z "$1" ]; then
+  echo "usage: bin/prep-release VERSION" >&2
+  exit 64
+fi
+
+version=$1
+old_version=$(< VERSION)
+
+if ! bundle exec rake; then
+  echo "test failure, not releasing" >&2
+  exit 1
+fi
+
+printf "RELEASE %s => %s\n" "$old_version" "$version"
+git checkout master
+git pull
+
+git checkout -b "release-$version"
+
+printf "%s\n" "$version" > VERSION
+bundle
+git add VERSION Gemfile.lock
+git commit -m "Release v$version"
+git push
+
+if command -v gh > /dev/null 2>&1; then
+  gh pull-request -m "Release v$version"
+else
+  echo "gh not installed? Please open the PR manually" >&2
+fi
+
+echo "After merging the version-bump PR, run bin/release"
