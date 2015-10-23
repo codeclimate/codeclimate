@@ -26,10 +26,29 @@ module CC::CLI
     describe "#exclude_paths" do
       it "uses existing exclude_paths from yaml" do
         File.write(".codeclimate.yml", create_classic_yaml)
-        write_fixture_source_files
 
         expected_paths = %w(excluded.rb)
         generator.exclude_paths.must_equal expected_paths
+      end
+
+      it "forces existing include paths to be an array" do
+        File.write(".codeclimate.yml", %(
+          languages:
+            Ruby: true
+          exclude_paths: excluded.rb
+        ))
+
+        expected_paths = %w(excluded.rb)
+        generator.exclude_paths.must_equal expected_paths
+      end
+
+      it "handles yaml without exclude paths" do
+        File.write(".codeclimate.yml", %(
+          languages:
+            Ruby: true
+        ))
+
+        generator.exclude_paths.must_equal []
       end
     end
 
