@@ -4,7 +4,7 @@ module CC
   module CLI
     class UpgradeConfigGenerator < ConfigGenerator
       def exclude_paths
-        existing_yaml["exclude_paths"] || []
+        [existing_yaml["exclude_paths"]].flatten.select(&:present?)
       end
 
       def post_generation_verb
