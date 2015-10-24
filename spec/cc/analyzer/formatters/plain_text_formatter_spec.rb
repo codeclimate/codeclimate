@@ -36,6 +36,39 @@ module CC::Analyzer::Formatters
         stdout.must_match("Missing top-level class documentation comment")
         stdout.must_match("[cool_engine]")
       end
+
+      it "reports issue severity when info" do
+        engine = stub(name: "cool_engine")
+
+        stdout, _ = capture_io do
+          write_from_engine(formatter, engine, sample_issue_with_severity("info"))
+          formatter.finished
+        end
+
+        stdout.must_match("[info]")
+      end
+
+      it "reports issue severity when critical" do
+        engine = stub(name: "cool_engine")
+
+        stdout, _ = capture_io do
+          write_from_engine(formatter, engine, sample_issue_with_severity("critical"))
+          formatter.finished
+        end
+
+        stdout.must_match("[critical]")
+      end
+
+      it "does not report severity when normal" do
+        engine = stub(name: "cool_engine")
+
+        stdout, _ = capture_io do
+          write_from_engine(formatter, engine, sample_issue_with_severity("normal"))
+          formatter.finished
+        end
+
+        stdout.wont_match("[normal]")
+      end
     end
 
     def write_from_engine(formatter, engine, issue)
