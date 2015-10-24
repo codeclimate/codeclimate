@@ -52,6 +52,13 @@ brew tap codeclimate/formulae
 brew install codeclimate
 ```
 
+To update the brew package, use `brew update` first:
+
+```console
+brew update
+brew upgrade codeclimate
+```
+
 ### Anywhere
 
 ```console
