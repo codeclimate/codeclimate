@@ -54,7 +54,6 @@ module CC::Analyzer
             given_listener,
             kind_of(LoggingContainerListener),
             kind_of(StatsdContainerListener),
-            kind_of(RaisingContainerListener),
           ).
           returns(container_listener)
         Container.expects(:new).

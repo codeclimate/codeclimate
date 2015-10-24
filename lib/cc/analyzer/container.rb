@@ -11,6 +11,7 @@ module CC
         :stderr,        # stderr, for a finished event
       )
       ImageRequired = Class.new(StandardError)
+      Result = Struct.new(:exit_status, :timed_out?, :duration, :stderr)
 
       DEFAULT_TIMEOUT = 15 * 60 # 15m
 
@@ -51,9 +52,11 @@ module CC
         _, status = Process.waitpid2(pid)
         if @timed_out
           @listener.timed_out(container_data(duration: @timeout))
+          Result.new(status.exitstatus, true, @timeout, @stderr_io.string)
         else
           duration = ((Time.now - started) * 1000).round
           @listener.finished(container_data(duration: duration, status: status))
+          Result.new(status.exitstatus, false, duration, @stderr_io.string)
         end
       ensure
         t_timeout.kill if t_timeout

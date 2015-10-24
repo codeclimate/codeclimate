@@ -73,13 +73,25 @@ module CC::Analyzer
         err.puts("error one")
         err.puts("error two")
         err.rewind
-        stub_spawn(status: :failed, err: err)
+        status = stub("Process::Status", exitstatus: 123)
+        stub_spawn(status: status, err: err)
 
         container.run
 
         listener.finished_image.must_equal "codeclimate/foo"
         listener.finished_name.must_equal "name"
         listener.finished_stderr.must_equal "error one\nerror two\n"
+      end
+
+      it "returns a result object" do
+        container = Container.new(image: "codeclimate/foo", name: "name")
+        stub_spawn
+        result = container.run
+        result.exit_status.must_equal 0
+        result.timed_out?.must_equal false
+        (result.duration >= 0).must_equal true
+        (result.duration < 1).must_equal true
+        result.stderr.must_equal ""
       end
 
       # N.B. these specs actually docker-runs things. This logic is critical and
@@ -111,6 +123,11 @@ module CC::Analyzer
           assert_container_stopped
           listener.finished_image.must_equal "alpine"
           listener.finished_name.must_equal @name
+          @container_result.exit_status.must_equal 137
+          @container_result.timed_out?.must_equal false
+          (@container_result.duration >= 0).must_equal true
+          (@container_result.duration < 2_000).must_equal true
+          @container_result.stderr.must_equal ""
         end
 
         it "times out slow containers" do
@@ -131,10 +148,15 @@ module CC::Analyzer
           listener.timed_out_image.must_equal "alpine"
           listener.timed_out_name.must_equal @name
           listener.timed_out_seconds.must_equal 1
+          @container_result.exit_status.must_equal 137
+          @container_result.timed_out?.must_equal true
+          (@container_result.duration >= 0).must_equal true
+          (@container_result.duration < 2_000).must_equal true
+          @container_result.stderr.must_equal ""
         end
 
         def run_container(container)
-          thread = Thread.new { container.run }
+          thread = Thread.new { @container_result = container.run }
 
           if block_given?
             yield container
@@ -151,6 +173,27 @@ module CC::Analyzer
       end
     end
 
+    describe "#run when the process exits with a non-zero status" do
+      before do
+        @container = Container.new(image: "codeclimate/foo", name: "name")
+        err = StringIO.new
+        err.puts("error one")
+        err.puts("error two")
+        err.rewind
+        status = stub("Process::Status", exitstatus: 123)
+        stub_spawn(status: status, err: err)
+      end
+
+      it "returns a result object" do
+        result = @container.run
+        result.exit_status.must_equal 123
+        result.timed_out?.must_equal false
+        (result.duration >= 0).must_equal true
+        (result.duration < 1).must_equal true
+        result.stderr.must_equal "error one\nerror two\n"
+      end
+    end
+
     describe "new with a blank image" do
       it "raises an exception" do
         -> { CC::Analyzer::Container.new(image: "", name: "name") }.must_raise(CC::Analyzer::Container::ImageRequired)
@@ -159,6 +202,7 @@ module CC::Analyzer
 
     def stub_spawn(status: nil, out: StringIO.new, err: StringIO.new)
       pid = 42
+      status ||= stub("Process::Status", exitstatus: 0)
 
       POSIX::Spawn.stubs(:popen4).returns([pid, nil, out, err])
       Process.stubs(:waitpid2).with(pid).returns([nil, status])
@@ -168,6 +212,7 @@ module CC::Analyzer
 
     def expect_spawn(args, status: nil, out: StringIO.new, err: StringIO.new)
       pid = 42
+      status ||= stub("Process::Status", exitstatus: 0)
 
       POSIX::Spawn.expects(:popen4).with(*args).returns([pid, nil, out, err])
       Process.expects(:waitpid2).with(pid).returns([nil, status])
