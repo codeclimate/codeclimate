@@ -44,7 +44,7 @@ module CC
             @path_options << arg
           end
         end
-      rescue Formatters::Formatter::InvalidFormatterError => e
+      rescue InvalidFormatterError => e
         fatal(e.message)
       end
 

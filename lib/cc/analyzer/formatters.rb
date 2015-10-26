@@ -1,5 +1,7 @@
 module CC
   module Analyzer
+    autoload :InvalidFormatterError, "cc/analyzer/invalid_formatter_error"
+
     module Formatters
       autoload :Formatter,  "cc/analyzer/formatters/formatter"
       autoload :JSONFormatter, "cc/analyzer/formatters/json_formatter"
@@ -12,7 +14,7 @@ module CC
       }.freeze
 
       def self.resolve(name)
-        FORMATTERS[name.to_sym] or raise InvalidFormatterError, "'#{name}' is not a valid formatter. Valid options are: #{FORMATTERS.keys.join(", ")}"
+        FORMATTERS[name.to_sym] or raise InvalidFormatterError, "'#{name}' is not a valid formatter. Valid options are: #{Formatters::FORMATTERS.keys.join(", ")}"
       end
     end
   end

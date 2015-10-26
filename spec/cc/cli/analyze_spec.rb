@@ -110,6 +110,14 @@ module CC::CLI
 
           Analyze.new(%w[-f json])
         end
+
+        it "errors with a helpful message when a formatter is unknown" do
+          stdout, _ = capture_io do
+            Analyze.new(%w[-f nope])
+          end
+
+          stdout.must_match("'nope' is not a valid formatter")
+        end
       end
     end
 
