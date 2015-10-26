@@ -2,7 +2,7 @@ require "securerandom"
 
 module CC
   module Analyzer
-    class Engines < Array
+    class EnginesBuilder
       def initialize(registry:, config:, container_label:, source_dir:, requested_paths:)
         super()
         @registry = registry
@@ -10,8 +10,11 @@ module CC
         @container_label = container_label
         @requested_paths = requested_paths
         @source_dir = source_dir
-        names_and_raw_engine_configs.each do |name, raw_engine_config|
-          self << build_engine(name, raw_engine_config)
+      end
+
+      def run
+        names_and_raw_engine_configs.map do |name, raw_engine_config|
+          build_engine(name, raw_engine_config)
         end
       end
 

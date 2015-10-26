@@ -2,11 +2,11 @@ require "spec_helper"
 require "file_utils_ext"
 
 module CC::Analyzer
-  describe EnginesRunner do
+  describe EnginesBuilder do
     include FileSystemHelpers
 
-    let(:engines) do
-      Engines.new(
+    let(:engines_builder) do
+      EnginesBuilder.new(
         registry: registry,
         config: config,
         container_label: container_label,
@@ -35,6 +35,7 @@ module CC::Analyzer
       end
 
       it "contains that engine" do
+        engines = engines_builder.run
         engines.size.must_equal(1)
         engines.first.name.must_equal("an_engine")
       end
@@ -45,7 +46,7 @@ module CC::Analyzer
       let(:registry) { {} }
 
       it "does not raise" do
-        engines
+        engines_builder.run
       end
     end
 
@@ -79,7 +80,7 @@ module CC::Analyzer
           expected_config,
           anything
         )
-        engines
+        engines_builder.run
       end
     end
 
@@ -115,7 +116,7 @@ module CC::Analyzer
           expected_config,
           anything
         )
-        engines
+        engines_builder.run
       end
     end
 
@@ -142,7 +143,7 @@ module CC::Analyzer
           expected_config,
           anything
         )
-        engines
+        engines_builder.run
       end
     end
 

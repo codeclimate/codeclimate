@@ -32,13 +32,13 @@ module CC
       attr_reader :requested_paths
 
       def engines
-        @engines ||= Engines.new(
+        @engines ||= EnginesBuilder.new(
           registry: @registry,
           config: @config,
           container_label: @container_label,
           source_dir: @source_dir,
           requested_paths: @requested_paths
-        )
+        ).run
       end
 
       def run_engine(engine, container_listener)
