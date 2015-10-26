@@ -55,6 +55,7 @@ module CC::Analyzer
       let(:registry) { registry_with_engine("bad_engine") }
 
       before do
+        FileUtils.mkdir_p("/tmp/cc")
         container_result = stub(
           "Container::Result",
           timed_out?: false,

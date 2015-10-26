@@ -126,8 +126,7 @@ module CC::Analyzer
           (@container_result.exit_status != 0).must_equal true
           @container_result.timed_out?.must_equal false
           (@container_result.duration >= 0).must_equal true
-          (@container_result.duration < 2_000).must_equal true
-          @container_result.stderr.must_equal ""
+          (@container_result.duration < 5_000).must_equal true
         end
 
         it "times out slow containers" do
@@ -152,7 +151,6 @@ module CC::Analyzer
           @container_result.timed_out?.must_equal true
           (@container_result.duration >= 0).must_equal true
           (@container_result.duration < 2_000).must_equal true
-          @container_result.stderr.must_equal ""
         end
 
         def run_container(container)
