@@ -12,18 +12,18 @@ module CC
         @source_dir = source_dir
       end
 
-      def run
+      def run(engine_class = Analyzer::Engine)
         names_and_raw_engine_configs.map do |name, raw_engine_config|
-          build_engine(name, raw_engine_config)
+          build_engine(engine_class, name, raw_engine_config)
         end
       end
 
       private
 
-      def build_engine(name, raw_engine_config)
+      def build_engine(engine_class, name, raw_engine_config)
         label = @container_label || SecureRandom.uuid
         engine_config = engine_config(raw_engine_config)
-        Engine.new(
+        engine_class.new(
           name, @registry[name], @source_dir, engine_config, label
         )
       end

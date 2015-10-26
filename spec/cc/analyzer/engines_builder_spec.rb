@@ -147,16 +147,56 @@ module CC::Analyzer
       end
     end
 
-    def registry_with_engine(name)
-      { name => { "image" => "codeclimate/codeclimate-#{name}" } }
+    describe "with a custom engine class" do
+      let(:config) { config_with_engine("engine1", "engine2") }
+      let(:registry) { registry_with_engine("engine1", "engine2") }
+      let(:engine_class) { stub("MySpecialEngine") }
+
+      before do
+        FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
+      end
+
+      it "instantiates that class with the arguments" do
+        expected_config = {
+          "enabled" => true,
+          :exclude_paths => [],
+          :include_paths => ["./"]
+        }
+        engine_instance1 = stub("MySpecialEngine instance 1")
+        engine_instance2 = stub("MySpecialEngine instance 2")
+        engine_class.expects(:new).with(
+          "engine1",
+          registry["engine1"],
+          source_dir,
+          expected_config,
+          anything
+        ).returns(engine_instance1)
+        engine_class.expects(:new).with(
+          "engine2",
+          registry["engine2"],
+          source_dir,
+          expected_config,
+          anything
+        ).returns(engine_instance2)
+        result = engines_builder.run(engine_class)
+        result.must_equal([engine_instance1, engine_instance2])
+      end
     end
 
-    def config_with_engine(name)
-      CC::Yaml.parse(<<-EOYAML)
-        engines:
-          #{name}:
-            enabled: true
-      EOYAML
+    def registry_with_engine(*names)
+      {}.tap do |result|
+        names.each do |name|
+          result[name] = { "image" => "codeclimate/codeclimate-#{name}" }
+        end
+      end
+    end
+
+    def config_with_engine(*names)
+      raw = "engines:\n"
+      names.each do |name|
+        raw << "  #{name}:\n    enabled: true\n"
+      end
+      CC::Yaml.parse(raw)
     end
 
     def null_formatter
