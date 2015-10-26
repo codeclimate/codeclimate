@@ -21,7 +21,6 @@ module CC
           container_listener,
           LoggingContainerListener.new(name, Analyzer.logger),
           StatsdContainerListener.new(name, Analyzer.statsd),
-          RaisingContainerListener.new(name, EngineFailure, EngineTimeout),
         )
 
         container = Container.new(

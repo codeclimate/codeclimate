@@ -3,7 +3,12 @@ require "spec_helper"
 module CC::CLI
   describe Analyze do
     describe "#run" do
-      before { CC::Analyzer::Engine.any_instance.stubs(:run) }
+      before do
+        container_result = stub(
+          "Container::Result", timed_out?: false, exit_status: 0, stderr: ""
+        )
+        CC::Analyzer::Engine.any_instance.stubs(:run).returns(container_result)
+      end
 
       describe "when no engines are specified" do
         it "exits and reports no engines are enabled" do

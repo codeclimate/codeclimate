@@ -16,7 +16,6 @@ module CC
     autoload :LocationDescription, "cc/analyzer/location_description"
     autoload :LoggingContainerListener, "cc/analyzer/logging_container_listener"
     autoload :PathPatterns, "cc/analyzer/path_patterns"
-    autoload :RaisingContainerListener, "cc/analyzer/raising_container_listener"
     autoload :SourceBuffer, "cc/analyzer/source_buffer"
     autoload :StatsdContainerListener, "cc/analyzer/statsd_container_listener"
 

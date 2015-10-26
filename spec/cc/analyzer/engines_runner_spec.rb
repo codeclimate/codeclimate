@@ -47,6 +47,32 @@ module CC::Analyzer
       end
     end
 
+    describe "when an engine container exits with non-zero status" do
+      let(:config) { config_with_engine("bad_engine") }
+      let(:container_name) { "cc-engines-123-asdf" }
+      let(:formatter) { null_formatter }
+      let(:image_name) { "codeclimate/bad-engine:b52" }
+      let(:registry) { registry_with_engine("bad_engine") }
+
+      before do
+        FileUtils.mkdir_p("/tmp/cc")
+        container_result = stub(
+          "Container::Result",
+          timed_out?: false,
+          exit_status: 123,
+          stderr: "Oopsie"
+        )
+        container = stub("Container", run: container_result)
+        container.stubs(:on_output).yields
+        Container.stubs(:new).returns(container)
+      end
+
+      it "raises EngineFailure for the CLI" do
+        runner = EnginesRunner.new(registry, formatter, "/code", config)
+        -> { runner.run }.must_raise(Engine::EngineFailure)
+      end
+    end
+
     def registry_with_engine(name)
       { name => { "image" => "codeclimate/codeclimate-#{name}" } }
     end
@@ -60,9 +86,13 @@ module CC::Analyzer
     end
 
     def expect_engine_run(name, source_dir, formatter, engine_config = nil)
+      container_result = stub(
+        "Container::Result", timed_out?: false, exit_status: 0, stderr: ""
+      )
       engine = stub(name: name)
       engine.expects(:run).
-        with(formatter, kind_of(ContainerListener))
+        with(formatter, kind_of(ContainerListener)).
+        returns(container_result)
 
       image = "codeclimate/codeclimate-#{name}"
       engine_config ||= {
