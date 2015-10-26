@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://codeclimate.com"
   s.description = "Code Climate command line tool"
 
-  s.files         = Dir["lib/**/*.rb"] + Dir["bin/*"] + Dir["config/*"]
+  s.files         = Dir["lib/**/*.rb"] + Dir["bin/*"] + Dir.glob("config/**/*", File::FNM_DOTMATCH)
   s.require_paths = ["lib"]
   s.bindir        = "bin"
   s.executables   = %w(check codeclimate-init)
