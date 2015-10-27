@@ -5,7 +5,6 @@ require "safe_yaml"
 module CC
   module CLI
     class Runner
-
       def self.run(argv)
         new(argv).run
       rescue => ex
@@ -44,8 +43,8 @@ module CC
 
       def command_name
         case command
-        when nil, '-h', '-?', '--help' then 'Help'
-        when '-v', '--version'         then 'Version'
+        when nil, "-h", "-?", "--help" then "Help"
+        when "-v", "--version"         then "Version"
         else command.sub(":", "::").underscore.camelize
         end
       end
@@ -57,7 +56,6 @@ module CC
       def command
         @args.first
       end
-
     end
   end
 end

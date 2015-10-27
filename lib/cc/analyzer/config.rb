@@ -5,7 +5,7 @@ module CC
     # TODO: replace each use of this with CC::Yaml and remove it
     class Config
       def initialize(config_body)
-        @config = YAML.safe_load(config_body) || {"engines"=> {} }
+        @config = YAML.safe_load(config_body) || { "engines" => {} }
         @config["engines"] ||= {}
 
         expand_shorthand
@@ -59,7 +59,7 @@ module CC
         @config.to_yaml
       end
 
-    private
+      private
 
       def expand_shorthand
         @config["engines"].each do |name, engine_config|

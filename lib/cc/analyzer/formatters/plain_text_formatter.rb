@@ -6,7 +6,6 @@ module CC
   module Analyzer
     module Formatters
       class PlainTextFormatter < Formatter
-
         def started
           puts colorize("Starting analysis", :green)
         end
@@ -21,7 +20,7 @@ module CC
           when "warning"
             warnings << json
           else
-            raise "Invalid type found: #{json["type"]}"
+            raise "Invalid type found: #{json['type']}"
           end
         end
 
@@ -29,24 +28,24 @@ module CC
           puts
 
           issues_by_path.each do |path, file_issues|
-            puts colorize("== #{path} (#{pluralize(file_issues.size, "issue")}) ==", :yellow)
+            puts colorize("== #{path} (#{pluralize(file_issues.size, 'issue')}) ==", :yellow)
 
             IssueSorter.new(file_issues).by_location.each do |issue|
-              if location = issue["location"]
+              if (location = issue["location"])
                 source_buffer = @filesystem.source_buffer_for(location["path"])
                 print(colorize(LocationDescription.new(source_buffer, location, ": "), :cyan))
               end
 
               print(issue["description"])
-              print(colorize(" [#{issue["engine_name"]}]", "#333333"))
+              print(colorize(" [#{issue['engine_name']}]", "#333333"))
               puts
             end
             puts
           end
 
-          print(colorize("Analysis complete! Found #{pluralize(issues.size, "issue")}", :green))
+          print(colorize("Analysis complete! Found #{pluralize(issues.size, 'issue')}", :green))
           if warnings.size > 0
-            print(colorize(" and #{pluralize(warnings.size, "warning")}", :green))
+            print(colorize(" and #{pluralize(warnings.size, 'warning')}", :green))
           end
           puts(colorize(".", :green))
         end
@@ -93,7 +92,7 @@ module CC
         end
 
         def issues_by_path
-          issues.group_by { |i| i['location']['path'] }.sort
+          issues.group_by { |i| i["location"]["path"] }.sort
         end
 
         def warnings

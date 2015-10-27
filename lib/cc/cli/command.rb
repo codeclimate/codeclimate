@@ -17,7 +17,7 @@ module CC
       end
 
       def self.command_name
-        name[/[^:]*$/].split(/(?=[A-Z])/).map(&:downcase).join('-')
+        name[/[^:]*$/].split(/(?=[A-Z])/).map(&:downcase).join("-")
       end
 
       def execute
@@ -38,7 +38,7 @@ module CC
       end
 
       def require_codeclimate_yml
-        if !filesystem.exist?(CODECLIMATE_YAML)
+        unless filesystem.exist?(CODECLIMATE_YAML)
           fatal("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.")
         end
       end
@@ -54,7 +54,7 @@ module CC
       end
 
       def filesystem
-        @filesystem ||= CC::Analyzer::Filesystem.new(ENV['FILESYSTEM_DIR'])
+        @filesystem ||= CC::Analyzer::Filesystem.new(ENV["FILESYSTEM_DIR"])
       end
 
       def terminal

@@ -1,6 +1,6 @@
-require 'cc/cli/config'
-require 'cc/cli/config_generator'
-require 'cc/cli/upgrade_config_generator'
+require "cc/cli/config"
+require "cc/cli/config_generator"
+require "cc/cli/upgrade_config_generator"
 
 module CC
   module CLI
@@ -54,7 +54,7 @@ module CC
           Dir.glob("#{engine_directory}/*", File::FNM_DOTMATCH)
         end
 
-        all_paths.reject { |path| ['.', '..'].include?(File.basename(path)) }
+        all_paths.reject { |path| [".", ".."].include?(File.basename(path)) }
       end
 
       def engines_enabled?

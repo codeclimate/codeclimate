@@ -15,7 +15,7 @@ module CC
       def run
         require_codeclimate_yml
 
-        Dir.chdir(ENV['FILESYSTEM_DIR']) do
+        Dir.chdir(ENV["FILESYSTEM_DIR"]) do
           runner = EnginesRunner.new(registry, formatter, source_dir, config, path_options)
           runner.run
         end
@@ -32,13 +32,13 @@ module CC
       attr_reader :engine_options, :path_options
 
       def process_args
-        while arg = @args.shift
+        while (arg = @args.shift)
           case arg
-          when '-f'
+          when "-f"
             @formatter = Formatters.resolve(@args.shift).new(filesystem)
-          when '-e', '--engine'
+          when "-e", "--engine"
             @engine_options << @args.shift
-          when '--dev'
+          when "--dev"
             @dev_mode = true
           else
             @path_options << arg
@@ -86,7 +86,7 @@ module CC
           if config.engines.include?(engine)
             config.engines[engine].enabled = true
           else
-            config.engines[engine] = CC::Yaml::Nodes::Engine.new(config.engines).with_value({ "enabled" => true })
+            config.engines[engine] = CC::Yaml::Nodes::Engine.new(config.engines).with_value("enabled" => true)
           end
         end
       end
