@@ -134,7 +134,8 @@ fixme:
   description: Find FIXME, TODO, HACK, etc. comments
   community: false
   enable_regexps:
-  default_ratings_paths:
+    - .+
+  default_ratings_paths: []
 foodcritic:
   image: codeclimate/codeclimate-foodcritic
   description: Lint tool for Chef cookbooks
