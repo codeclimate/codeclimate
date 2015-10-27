@@ -7,7 +7,7 @@ module CC
           @output = output
         end
 
-        def write(data)
+        def write(_)
         end
 
         def started
@@ -26,7 +26,7 @@ module CC
         def close
         end
 
-        def failed(output)
+        def failed(_)
         end
 
         InvalidFormatterError = Class.new(StandardError)

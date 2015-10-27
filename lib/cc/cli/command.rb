@@ -5,6 +5,7 @@ require "rainbow"
 
 module CC
   module CLI
+
     class Command
       CODECLIMATE_YAML = ".codeclimate.yml".freeze
 
