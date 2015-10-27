@@ -29,8 +29,6 @@ module CC
         def failed(output)
         end
 
-        InvalidFormatterError = Class.new(StandardError)
-
         private
 
         attr_reader :current_engine
