@@ -28,7 +28,7 @@ module CC
         @listener = listener
         @timeout = timeout
         @output_delimeter = "\n"
-        @on_output = ->(*) { }
+        @on_output = ->(*) {}
         @timed_out = false
         @stderr_io = StringIO.new
       end
@@ -68,7 +68,7 @@ module CC
 
       def stop
         # Prevents the processing of more output after first error
-        @on_output = ->(*) { }
+        @on_output = ->(*) {}
 
         reap_running_container
       end
@@ -82,7 +82,7 @@ module CC
           "--name", @name,
           options,
           @image,
-          @command,
+          @command
         ].flatten.compact
       end
 

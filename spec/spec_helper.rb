@@ -13,4 +13,4 @@ SafeYAML::OPTIONS[:default_mode] = :safe
 
 Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
 
-ENV['FILESYSTEM_DIR'] = '.'
+ENV["FILESYSTEM_DIR"] = "."

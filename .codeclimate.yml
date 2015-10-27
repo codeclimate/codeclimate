@@ -7,3 +7,4 @@ ratings:
   - "**.rb"
 exclude_paths:
   - .bundle/**/*
+  - spec/**/*
