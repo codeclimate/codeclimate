@@ -32,7 +32,7 @@ module CC::CLI
       it "calculates eligible_engines based on existing files" do
         write_fixture_source_files
 
-        expected_engine_names = %w(rubocop eslint csslint)
+        expected_engine_names = %w(rubocop eslint csslint fixme)
         expected_engines = engine_registry.list.select do |name, _|
           expected_engine_names.include?(name)
         end
@@ -42,8 +42,9 @@ module CC::CLI
       it "returns brakeman when Gemfile.lock exists" do
         File.write("Gemfile.lock", "gemfile-lock-content")
 
+        expected_engine_names = %w(bundler-audit fixme)
         expected_engines = engine_registry.list.select do |name, _|
-          "bundler-audit" == name
+          expected_engine_names.include?(name)
         end
         generator.eligible_engines.must_equal expected_engines
       end

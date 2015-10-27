@@ -31,6 +31,7 @@ module CC::CLI
               "rubocop" => { "enabled"=>true },
               "eslint" => { "enabled"=>true },
               "csslint" => { "enabled"=>true },
+              "fixme" => { "enabled"=>true },
             },
             "ratings" => { "paths" => ["**.rb", "**.js", "**.jsx", "**.css"] },
             "exclude_paths" => ["config/**/*", "spec/**/*", "vendor/**/*"],
@@ -150,6 +151,7 @@ module CC::CLI
               "rubocop" => { "enabled"=>true },
               "eslint" => { "enabled"=>true },
               "csslint" => { "enabled"=>true },
+              "fixme" => { "enabled"=>true },
             },
             "ratings" => { "paths" => ["**.rb", "**.js", "**.jsx", "**.css"] },
             "exclude_paths" => ["config/**/*", "spec/**/*", "vendor/**/*"],
@@ -178,6 +180,7 @@ module CC::CLI
             "engines" => {
               "rubocop" => { "enabled"=>true },
               "csslint" => { "enabled"=>true },
+              "fixme" => { "enabled"=>true },
             },
             "ratings" => { "paths" => ["**.rb", "**.css"] },
             "exclude_paths" => ["excluded.rb"],
