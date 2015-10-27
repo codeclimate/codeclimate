@@ -1,48 +1,111 @@
-Style/StringLiterals:
-  Enabled: false
-
-Style/Documentation:
-  Enabled: false
+################################################################################
+# Metrics
+################################################################################
 
 Metrics/LineLength:
-  Enabled: false
-
-Style/TrailingComma:
-  Enabled: false
-
-Style/FileName:
-  Exclude:
-    - 'bin/**/*'
-
-Style/ClassAndModuleChildren:
-  Exclude:
-    - 'spec/**/*'
-
-Metrics/MethodLength:
-  Exclude:
-    - 'spec/**/*'
-
-Metrics/ModuleLength:
-  Exclude:
-    - 'spec/**/*'
-
-Style/GuardClause:
-  Enabled: false
-
-Style/IfUnlessModifier:
-  Enabled: false
-
-Style/DotPosition:
-  Enabled: false
-
-Style/SignalException:
-  Enabled: false
-
-Style/TrailingUnderscoreVariable:
   Enabled: false
 
 Metrics/AbcSize:
   Enabled: false
 
+################################################################################
+# Lint
+################################################################################
+
+Lint/Debugger:
+  Exclude:
+  - lib/cc/cli/console.rb
+
+################################################################################
+# Style
+################################################################################
+
+# Executables are conventionally named bin/foo-bar
+Style/FileName:
+  Exclude:
+  - bin/**/*
+
+# We don't (currently) document our code
+Style/Documentation:
+  Enabled: false
+
+# Always use double-quotes to keep things simple
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Use a trailing comma to keep diffs clean when elements are inserted or removed
+Style/TrailingComma:
+  EnforcedStyleForMultiline: comma
+
+# We avoid GuardClause because it can result in "suprise return"
+Style/GuardClause:
+  Enabled: false
+
+# We avoid IfUnlessModifier because it can result in "suprise if"
+Style/IfUnlessModifier:
+  Enabled: false
+
+# We don't care about the fail/raise distinction
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+# Common globals we allow
+Style/GlobalVars:
+  AllowedVariables:
+  - "$statsd"
+  - "$mongo"
+  - "$rollout"
+
+# Allow $! in config/initializers
+Style/SpecialGlobalVars:
+  Exclude:
+  - config/initializers/**/*
+
+# We have common cases where has_ and have_ make sense
+Style/PredicateName:
+  Enabled: true
+  NamePrefixBlacklist:
+  - is_
+
+# We use %w[ ], not %w( ) because the former looks like an array
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    "%w": []
+    "%W": []
+
+################################################################################
+# Rails - disable things because we're primarily non-rails
+################################################################################
+
+Rails/Delegate:
+  Enabled: false
+
 Rails/TimeZone:
   Enabled: false
+
+################################################################################
+# Specs - be more lenient on length checks and block styles
+################################################################################
+
+Metrics/ModuleLength:
+  Exclude:
+  - spec/**/*
+
+Metrics/MethodLength:
+  Exclude:
+  - spec/**/*
+
+Style/ClassAndModuleChildren:
+  Exclude:
+  - spec/**/*
+
+Style/BlockDelimiters:
+  Exclude:
+  - spec/**/*
+
+Style/Blocks:
+  Exclude:
+  - spec/**/*
