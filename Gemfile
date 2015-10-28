@@ -8,4 +8,5 @@ group :test do
   gem "minitest-around"
   gem "minitest-reporters"
   gem "rack-test"
+  gem "rake"
 end
