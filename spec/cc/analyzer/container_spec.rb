@@ -108,7 +108,7 @@ module CC::Analyzer
           listener.expects(:timed_out).never
           container = Container.new(
             image: "alpine",
-            command: %w[sleep 10],
+            command: %w[sleep 100],
             name: @name,
             listener: listener,
             timeout: 5,
@@ -134,7 +134,7 @@ module CC::Analyzer
           listener.expects(:finished).never
           container = Container.new(
             image: "alpine",
-            command: %w[sleep 10],
+            command: %w[sleep 100],
             name: @name,
             listener: listener,
             timeout: 1,
