@@ -15,19 +15,12 @@ module CC
 
       DEFAULT_TIMEOUT = 15 * 60 # 15m
 
-      def initialize(
-        image:,
-        name:,
-        command: nil,
-        listener: ContainerListener.new,
-        timeout: DEFAULT_TIMEOUT
-      )
+      def initialize(image:, name:, command: nil, listener: ContainerListener.new)
         raise ImageRequired if image.blank?
         @image = image
         @name = name
         @command = command
         @listener = listener
-        @timeout = timeout
         @output_delimeter = "\n"
         @on_output = ->(*) {}
         @timed_out = false
@@ -51,8 +44,8 @@ module CC
 
         _, status = Process.waitpid2(pid)
         if @timed_out
-          @listener.timed_out(container_data(duration: @timeout))
-          Result.new(status.exitstatus, true, @timeout, @stderr_io.string)
+          @listener.timed_out(container_data(duration: timeout))
+          Result.new(status.exitstatus, true, timeout, @stderr_io.string)
         else
           duration = ((Time.now - started) * 1000).round
           @listener.finished(container_data(duration: duration, status: status))
@@ -107,7 +100,7 @@ module CC
 
       def timeout_thread
         Thread.new do
-          sleep @timeout
+          sleep timeout
           @timed_out = true
           reap_running_container
         end
@@ -120,6 +113,10 @@ module CC
       def reap_running_container
         Analyzer.logger.warn("killing container name=#{@name}")
         POSIX::Spawn::Child.new("docker", "kill", @name)
+      end
+
+      def timeout
+        ENV["CONTAINER_TIMEOUT_SECONDS"] || DEFAULT_TIMEOUT
       end
     end
   end
