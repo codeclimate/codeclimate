@@ -123,8 +123,8 @@ module CC::Analyzer
           assert_container_stopped
           listener.finished_image.must_equal "alpine"
           listener.finished_name.must_equal @name
-          (@container_result.exit_status != 0).must_equal true
           @container_result.timed_out?.must_equal false
+          (@container_result.exit_status != 0).must_equal true
           (@container_result.duration >= 0).must_equal true
           (@container_result.duration < 5_000).must_equal true
         end
@@ -147,8 +147,8 @@ module CC::Analyzer
           listener.timed_out_image.must_equal "alpine"
           listener.timed_out_name.must_equal @name
           listener.timed_out_seconds.must_equal 1
-          (@container_result.exit_status != 0).must_equal true
           @container_result.timed_out?.must_equal true
+          (@container_result.exit_status != 0).must_equal true
           (@container_result.duration >= 0).must_equal true
           (@container_result.duration < 2_000).must_equal true
         end
