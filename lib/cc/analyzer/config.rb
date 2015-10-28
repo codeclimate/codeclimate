@@ -35,7 +35,10 @@ module CC
         if engine_present?(engine_name)
           @config["engines"][engine_name]["enabled"] = true
         else
-          @config["engines"][engine_name] = { "enabled" => true }
+          @config["engines"][engine_name] = {
+            "enabled" => true,
+            "config" => default_config(engine_name),
+          }
         end
       end
 
@@ -67,6 +70,16 @@ module CC
             @config["engines"][name] = { "enabled" => engine_config }
           end
         end
+      end
+
+      def default_config(engine_name)
+        if (engine_config = engine_registry[engine_name])
+          engine_config["default_config"]
+        end
+      end
+
+      def engine_registry
+        @engine_registry ||= CC::Analyzer::EngineRegistry.new
       end
     end
   end
