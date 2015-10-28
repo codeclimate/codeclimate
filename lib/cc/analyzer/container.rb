@@ -116,7 +116,7 @@ module CC
       end
 
       def timeout
-        ENV["CONTAINER_TIMEOUT_SECONDS"] || DEFAULT_TIMEOUT
+        (ENV["CONTAINER_TIMEOUT_SECONDS"] || DEFAULT_TIMEOUT).to_i
       end
     end
   end

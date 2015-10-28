@@ -111,7 +111,6 @@ module CC::Analyzer
             command: %w[sleep 10],
             name: @name,
             listener: listener,
-            timeout: 5,
           )
 
           run_container(container) do |c|
@@ -130,27 +129,34 @@ module CC::Analyzer
         end
 
         it "times out slow containers" do
-          listener = TestContainerListener.new
-          listener.expects(:finished).never
-          container = Container.new(
-            image: "alpine",
-            command: %w[sleep 10],
-            name: @name,
-            listener: listener,
-            timeout: 1,
-          )
+          old_timeout = ENV["CONTAINER_TIMEOUT_SECONDS"]
+          ENV["CONTAINER_TIMEOUT_SECONDS"] = "1"
 
-          run_container(container)
+          begin
+            listener = TestContainerListener.new
+            listener.expects(:finished).never
+            container = Container.new(
+              image: "alpine",
+              command: %w[sleep 10],
+              name: @name,
+              listener: listener,
+            )
 
-          assert_container_stopped
-          listener.timed_out?.must_equal true
-          listener.timed_out_image.must_equal "alpine"
-          listener.timed_out_name.must_equal @name
-          listener.timed_out_seconds.must_equal 1
-          @container_result.timed_out?.must_equal true
-          @container_result.exit_status.wont_equal nil
-          (@container_result.duration >= 0).must_equal true
-          (@container_result.duration < 2_000).must_equal true
+            run_container(container)
+
+            assert_container_stopped
+            listener.timed_out?.must_equal true
+            listener.timed_out_image.must_equal "alpine"
+            listener.timed_out_name.must_equal @name
+            listener.timed_out_seconds.must_equal 1
+            @container_result.timed_out?.must_equal true
+            @container_result.exit_status.wont_equal nil
+            (@container_result.duration >= 0).must_equal true
+            (@container_result.duration < 2_000).must_equal true
+
+          ensure
+            ENV["CONTAINER_TIMEOUT_SECONDS"] = old_timeout
+          end
         end
 
         def run_container(container)
