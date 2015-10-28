@@ -25,6 +25,12 @@ duplication:
   community: false
   enable_regexps:
   default_ratings_paths:
+  default_config:
+    languages:
+      - ruby
+      - javascript
+      - python
+      - php
 gofmt:
   image: codeclimate/codeclimate-gofmt
   description: gofmt
