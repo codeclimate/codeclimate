@@ -108,7 +108,7 @@ module CC::Analyzer
           listener.expects(:timed_out).never
           container = Container.new(
             image: "alpine",
-            command: %w[sleep 100],
+            command: %w[sleep 10],
             name: @name,
             listener: listener,
             timeout: 5,
@@ -116,7 +116,7 @@ module CC::Analyzer
 
           run_container(container) do |c|
             # it needs a second to boot before stop will work
-            sleep 1
+            sleep 2
             c.stop
           end
 
@@ -124,7 +124,7 @@ module CC::Analyzer
           listener.finished_image.must_equal "alpine"
           listener.finished_name.must_equal @name
           @container_result.timed_out?.must_equal false
-          (@container_result.exit_status != 0).must_equal true
+          @container_result.exit_status.wont_equal nil
           (@container_result.duration >= 0).must_equal true
           (@container_result.duration < 5_000).must_equal true
         end
@@ -134,7 +134,7 @@ module CC::Analyzer
           listener.expects(:finished).never
           container = Container.new(
             image: "alpine",
-            command: %w[sleep 100],
+            command: %w[sleep 10],
             name: @name,
             listener: listener,
             timeout: 1,
@@ -148,7 +148,7 @@ module CC::Analyzer
           listener.timed_out_name.must_equal @name
           listener.timed_out_seconds.must_equal 1
           @container_result.timed_out?.must_equal true
-          (@container_result.exit_status != 0).must_equal true
+          @container_result.exit_status.wont_equal nil
           (@container_result.duration >= 0).must_equal true
           (@container_result.duration < 2_000).must_equal true
         end
