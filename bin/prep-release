@@ -14,6 +14,7 @@ fi
 
 version=$1
 old_version=$(< VERSION)
+branch="release-$version"
 
 if ! bundle exec rake; then
   echo "test failure, not releasing" >&2
@@ -24,13 +25,13 @@ printf "RELEASE %s => %s\n" "$old_version" "$version"
 git checkout master
 git pull
 
-git checkout -b "release-$version"
+git checkout -b $branch
 
 printf "%s\n" "$version" > VERSION
 bundle
 git add VERSION Gemfile.lock
 git commit -m "Release v$version"
-git push
+git push origin $branch
 
 if command -v gh > /dev/null 2>&1; then
   gh pull-request -m "Release v$version"
