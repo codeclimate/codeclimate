@@ -4,7 +4,6 @@ module CC
   module Analyzer
     class EnginesBuilder
       def initialize(registry:, config:, container_label:, source_dir:, requested_paths:)
-        super()
         @registry = registry
         @config = config
         @container_label = container_label
