@@ -13,29 +13,28 @@ module CC
       def decompose_position(position)
         line_no, line_begin = line_for(position)
 
-        [ 1 + line_no, position - line_begin ]
+        [1 + line_no, position - line_begin]
       end
 
       def line_count
         @source.lines.count
       end
 
-    private
+      private
 
       def line_for(position)
-        line_begins.bsearch do |line, line_begin|
+        line_begins.bsearch do |_, line_begin|
           line_begin <= position
         end
       end
 
       def line_begins
         unless @line_begins
-          @line_begins, index = [ [ 0, 0 ] ], 1
+          @line_begins = [[0, 0]]
+          index = 1
 
           @source.each_char do |char|
-            if char == "\n"
-              @line_begins.unshift [ @line_begins.length, index ]
-            end
+            @line_begins.unshift [@line_begins.length, index] if char == "\n"
 
             index += 1
           end
@@ -43,7 +42,6 @@ module CC
 
         @line_begins
       end
-
     end
   end
 end

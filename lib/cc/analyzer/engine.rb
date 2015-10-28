@@ -8,6 +8,8 @@ module CC
 
       attr_reader :name
 
+      DEFAULT_MEMORY_LIMIT = 512_000_000.freeze
+
       def initialize(name, metadata, code_path, config, label)
         @name = name
         @metadata = metadata
@@ -46,12 +48,12 @@ module CC
         [
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=#{@label}",
-          "--memory", 512_000_000.to_s, # bytes
+          "--memory", memory_limit,
           "--memory-swap", "-1",
           "--net", "none",
           "--volume", "#{@code_path}:/code:ro",
           "--volume", "#{config_file}:/config.json:ro",
-          "--user", "9000:9000",
+          "--user", "9000:9000"
         ]
       end
 
@@ -67,6 +69,11 @@ module CC
 
       def output_filter
         @output_filter ||= EngineOutputFilter.new(@config)
+      end
+
+      # Memory limit for a running engine in bytes
+      def memory_limit
+        (ENV["ENGINE_MEMORY_LIMIT_BYTES"] || DEFAULT_MEMORY_LIMIT).to_s
       end
     end
   end

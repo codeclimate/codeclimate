@@ -31,7 +31,7 @@ module CC
       def engine_config(raw_engine_config)
         config = raw_engine_config.merge(
           exclude_paths: exclude_paths,
-          include_paths: include_paths
+          include_paths: include_paths,
         )
         # The yaml gem turns a config file string into a hash, but engines
         # expect the string. So we (for now) need to turn it into a string in

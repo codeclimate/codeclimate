@@ -1,7 +1,6 @@
 module CC
   module Analyzer
     class Filesystem
-
       def initialize(root)
         @root = root
       end
@@ -40,7 +39,7 @@ module CC
       def file_paths
         @file_paths ||= Dir.chdir(@root) do
           `find . -type f -print0`.strip.split("\0").map do |path|
-            path.sub(/^\.\//, "")
+            path.sub(%r{^\.\/}, "")
           end
         end
       end

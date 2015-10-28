@@ -5,7 +5,7 @@ module CC
       def initialize
         @config = {
           "engines" => {},
-          "ratings" => { "paths" => [] }
+          "ratings" => { "paths" => [] },
         }
       end
 

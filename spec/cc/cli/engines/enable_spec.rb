@@ -51,6 +51,24 @@ module CC::CLI::Engines
           end
         end
       end
+
+      describe "when engine has a default configuration" do
+        it "it includes the config when enabling an engine" do
+          within_temp_dir do
+            create_yaml(Factory.create_yaml_with_no_engines)
+
+            stdout, stderr = capture_io do
+              Enable.new(args = ["duplication"]).run
+            end
+
+            content_after = File.read(".codeclimate.yml")
+
+            stdout.must_match("Engine added")
+            config = CC::Analyzer::Config.new(content_after).engine_config("duplication")
+            config["config"].must_equal("languages" => %w[ruby javascript python php])
+          end
+        end
+      end
     end
 
     def filesystem

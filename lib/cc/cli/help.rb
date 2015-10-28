@@ -24,12 +24,12 @@ module CC
           "help",
           "init",
           "validate-config",
-          "version"
+          "version",
         ].freeze
       end
 
       def underline(string)
-        return Rainbow.new.wrap(string).underline
+        Rainbow.new.wrap(string).underline
       end
     end
   end

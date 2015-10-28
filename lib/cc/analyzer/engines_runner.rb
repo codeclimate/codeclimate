@@ -37,7 +37,7 @@ module CC
           config: @config,
           container_label: @container_label,
           source_dir: @source_dir,
-          requested_paths: @requested_paths
+          requested_paths: @requested_paths,
         ).run
       end
 
