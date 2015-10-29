@@ -2,11 +2,11 @@ require "spec_helper"
 require "file_utils_ext"
 
 module CC::Analyzer
-  describe EnginesBuilder do
+  describe EnginesConfigBuilder do
     include FileSystemHelpers
 
-    let(:engines_builder) do
-      EnginesBuilder.new(
+    let(:engines_config_builder) do
+      EnginesConfigBuilder.new(
         registry: registry,
         config: config,
         container_label: container_label,
@@ -35,9 +35,9 @@ module CC::Analyzer
       end
 
       it "contains that engine" do
-        engines = engines_builder.run
-        engines.size.must_equal(1)
-        engines.first.name.must_equal("an_engine")
+        result = engines_config_builder.run
+        result.size.must_equal(1)
+        result.first.name.must_equal("an_engine")
       end
     end
 
@@ -46,7 +46,7 @@ module CC::Analyzer
       let(:registry) { {} }
 
       it "does not raise" do
-        engines_builder.run
+        engines_config_builder.run
       end
     end
 
@@ -73,14 +73,13 @@ module CC::Analyzer
           :exclude_paths => [],
           :include_paths => ["./"]
         }
-        Engine.expects(:new).with(
-          "rubocop",
-          registry["rubocop"],
-          source_dir,
-          expected_config,
-          anything
-        )
-        engines_builder.run
+        result = engines_config_builder.run
+        result.size.must_equal(1)
+        result.first.name.must_equal("rubocop")
+        result.first.registry_entry.must_equal(registry["rubocop"])
+        result.first.code_path.must_equal(source_dir)
+        (result.first.config == expected_config).must_equal(true)
+        result.first.container_label.wont_equal nil
       end
     end
 
@@ -109,14 +108,13 @@ module CC::Analyzer
           :exclude_paths => %w(.ignorethis),
           :include_paths => %w(.gitignore)
         }
-        Engine.expects(:new).with(
-          "rubocop",
-          registry["rubocop"],
-          source_dir,
-          expected_config,
-          anything
-        )
-        engines_builder.run
+        result = engines_config_builder.run
+        result.size.must_equal(1)
+        result.first.name.must_equal("rubocop")
+        result.first.registry_entry.must_equal(registry["rubocop"])
+        result.first.code_path.must_equal(source_dir)
+        (result.first.config == expected_config).must_equal(true)
+        result.first.container_label.wont_equal nil
       end
     end
 
@@ -136,50 +134,13 @@ module CC::Analyzer
           :exclude_paths => [],
           :include_paths => ['.']
         }
-        Engine.expects(:new).with(
-          "an_engine",
-          registry["an_engine"],
-          source_dir,
-          expected_config,
-          anything
-        )
-        engines_builder.run
-      end
-    end
-
-    describe "with a custom engine class" do
-      let(:config) { config_with_engine("engine1", "engine2") }
-      let(:registry) { registry_with_engine("engine1", "engine2") }
-      let(:engine_class) { stub("MySpecialEngine") }
-
-      before do
-        FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
-      end
-
-      it "instantiates that class with the arguments" do
-        expected_config = {
-          "enabled" => true,
-          :exclude_paths => [],
-          :include_paths => ["./"]
-        }
-        engine_instance1 = stub("MySpecialEngine instance 1")
-        engine_instance2 = stub("MySpecialEngine instance 2")
-        engine_class.expects(:new).with(
-          "engine1",
-          registry["engine1"],
-          source_dir,
-          expected_config,
-          anything
-        ).returns(engine_instance1)
-        engine_class.expects(:new).with(
-          "engine2",
-          registry["engine2"],
-          source_dir,
-          expected_config,
-          anything
-        ).returns(engine_instance2)
-        result = engines_builder.run(engine_class)
-        result.must_equal([engine_instance1, engine_instance2])
+        result = engines_config_builder.run
+        result.size.must_equal(1)
+        result.first.name.must_equal("an_engine")
+        result.first.registry_entry.must_equal(registry["an_engine"])
+        result.first.code_path.must_equal(source_dir)
+        (result.first.config == expected_config).must_equal(true)
+        result.first.container_label.wont_equal nil
       end
     end
 

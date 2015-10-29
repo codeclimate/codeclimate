@@ -32,13 +32,25 @@ module CC
       attr_reader :requested_paths
 
       def engines
-        @engines ||= EnginesBuilder.new(
-          registry: @registry,
-          config: @config,
-          container_label: @container_label,
-          source_dir: @source_dir,
-          requested_paths: @requested_paths,
-        ).run
+        unless @engines
+          configs = EnginesConfigBuilder.new(
+            registry: @registry,
+            config: @config,
+            container_label: @container_label,
+            source_dir: @source_dir,
+            requested_paths: @requested_paths,
+          ).run
+          @engines = configs.map do |result|
+            Engine.new(
+              result.name,
+              result.registry_entry,
+              result.code_path,
+              result.config,
+              result.container_label,
+            )
+          end
+        end
+        @engines
       end
 
       def run_engine(engine, container_listener)
