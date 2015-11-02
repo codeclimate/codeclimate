@@ -28,12 +28,12 @@ module CC::CLI
 
           YAML.safe_load(new_content).must_equal({
             "engines" => {
-              "rubocop" => { "enabled"=>true },
-              "eslint" => { "enabled"=>true },
               "csslint" => { "enabled"=>true },
+              "eslint" => { "enabled"=>true },
               "fixme" => { "enabled"=>true },
+              "rubocop" => { "enabled"=>true },
             },
-            "ratings" => { "paths" => ["**.rb", "**.js", "**.jsx", "**.css"] },
+            "ratings" => { "paths" => ["**.css", "**.js", "**.jsx", "**.rb"] },
             "exclude_paths" => ["config/**/*", "spec/**/*", "vendor/**/*"],
           })
 
@@ -148,12 +148,12 @@ module CC::CLI
           new_content = File.read(".codeclimate.yml")
           YAML.safe_load(new_content).must_equal({
             "engines" => {
-              "rubocop" => { "enabled"=>true },
-              "eslint" => { "enabled"=>true },
               "csslint" => { "enabled"=>true },
+              "eslint" => { "enabled"=>true },
               "fixme" => { "enabled"=>true },
+              "rubocop" => { "enabled"=>true },
             },
-            "ratings" => { "paths" => ["**.rb", "**.js", "**.jsx", "**.css"] },
+            "ratings" => { "paths" => ["**.css", "**.js", "**.jsx", "**.rb"] },
             "exclude_paths" => ["config/**/*", "spec/**/*", "vendor/**/*"],
           })
 
@@ -178,11 +178,11 @@ module CC::CLI
           new_content = File.read(".codeclimate.yml")
           YAML.safe_load(new_content).must_equal({
             "engines" => {
-              "rubocop" => { "enabled"=>true },
               "csslint" => { "enabled"=>true },
               "fixme" => { "enabled"=>true },
+              "rubocop" => { "enabled"=>true },
             },
-            "ratings" => { "paths" => ["**.rb", "**.css"] },
+            "ratings" => { "paths" => ["**.css", "**.rb"] },
             "exclude_paths" => ["excluded.rb"],
           })
 
