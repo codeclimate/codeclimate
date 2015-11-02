@@ -9,16 +9,32 @@
 # the `default_ratings_paths` globs, which are used during analysis to determine
 # which files should be rated.
 #
-rubocop:
-  image: codeclimate/codeclimate-rubocop
-  description: A Ruby static code analyzer, based on the community Ruby style guide.
+bundler-audit:
+  image: codeclimate/codeclimate-bundler-audit
+  description: Patch-level verification for Bundler
   community: false
   upgrade_languages:
-   - Ruby
+    - Ruby
   enable_regexps:
-    - \.rb$
+    - ^Gemfile\.lock$
   default_ratings_paths:
-    - "**.rb"
+    - Gemfile.lock
+csslint:
+  image: codeclimate/codeclimate-csslint
+  description: Automated linting of Cascading Stylesheets
+  community: false
+  enable_regexps:
+    - \.css$
+  default_ratings_paths:
+    - "**.css"
+coffeelint:
+  image: codeclimate/codeclimate-coffeelint
+  description: A style checker for CoffeeScript
+  community: false
+  enable_regexps:
+    - \.coffee$
+  default_ratings_paths:
+    - "**.coffee"
 duplication:
   image: codeclimate/codeclimate-duplication
   description: Structural duplication detection for Ruby, Python, JavaScript, and PHP
@@ -31,6 +47,18 @@ duplication:
       - javascript
       - python
       - php
+eslint:
+  image: codeclimate/codeclimate-eslint
+  description: A JavaScript/JSX linting utility
+  community: false
+  upgrade_languages:
+    - JavaScript
+  enable_regexps:
+    - \.js$
+    - \.jsx$
+  default_ratings_paths:
+    - "**.js"
+    - "**.jsx"
 gofmt:
   image: codeclimate/codeclimate-gofmt
   description: gofmt
@@ -55,58 +83,19 @@ govet:
     - \.go$
   default_ratings_paths:
     - "**.go"
-coffeelint:
-  image: codeclimate/codeclimate-coffeelint
-  description: A style checker for CoffeeScript
+fixme:
+  image: codeclimate/codeclimate-fixme
+  description: Find FIXME, TODO, HACK, etc. comments
   community: false
   enable_regexps:
-    - \.coffee$
-  default_ratings_paths:
-    - "**.coffee"
-eslint:
-  image: codeclimate/codeclimate-eslint
-  description: A JavaScript/JSX linting utility
-  community: false
-  upgrade_languages:
-    - JavaScript
-  enable_regexps:
-    - \.js$
-    - \.jsx$
-  default_ratings_paths:
-    - "**.js"
-    - "**.jsx"
-csslint:
-  image: codeclimate/codeclimate-csslint
-  description: Automated linting of Cascading Stylesheets
-  community: false
-  enable_regexps:
-    - \.css$
-  default_ratings_paths:
-    - "**.css"
-watson:
-  image: codeclimate/codeclimate-watson
-  description: A young Ember Doctor to help you fix your code.
+    - .+
+  default_ratings_paths: []
+foodcritic:
+  image: codeclimate/codeclimate-foodcritic
+  description: Lint tool for Chef cookbooks
   community: true
   enable_regexps:
   default_ratings_paths:
-    - "app/**"
-rubymotion:
-  image: codeclimate/codeclimate-rubymotion
-  description: Rubymotion-specific rubocop checks
-  community: true
-  enable_regexps:
-  default_ratings_paths:
-    - "**.rb"
-bundler-audit:
-  image: codeclimate/codeclimate-bundler-audit
-  description: Patch-level verification for Bundler
-  community: false
-  upgrade_languages:
-    - Ruby
-  enable_regexps:
-    - ^Gemfile\.lock$
-  default_ratings_paths:
-    - Gemfile.lock
 phpcodesniffer:
   image: codeclimate/codeclimate-phpcodesniffer
   description: PHP Code Sniffer
@@ -135,19 +124,29 @@ phpmd:
     - "**.php"
     - "**.module"
     - "**.inc"
-fixme:
-  image: codeclimate/codeclimate-fixme
-  description: Find FIXME, TODO, HACK, etc. comments
-  community: false
-  enable_regexps:
-    - .+
-  default_ratings_paths: []
-foodcritic:
-  image: codeclimate/codeclimate-foodcritic
-  description: Lint tool for Chef cookbooks
+requiresafe:
+  image: codeclimate/codeclimate-requiresafe
+  description: Security tool for Node.js dependencies
   community: true
   enable_regexps:
   default_ratings_paths:
+rubocop:
+  image: codeclimate/codeclimate-rubocop
+  description: A Ruby static code analyzer, based on the community Ruby style guide.
+  community: false
+  upgrade_languages:
+   - Ruby
+  enable_regexps:
+    - \.rb$
+  default_ratings_paths:
+    - "**.rb"
+rubymotion:
+  image: codeclimate/codeclimate-rubymotion
+  description: Rubymotion-specific rubocop checks
+  community: true
+  enable_regexps:
+  default_ratings_paths:
+    - "**.rb"
 scss-lint:
   image: codeclimate/codeclimate-scss-lint
   description: Configurable tool for writing clean and consistent SCSS
@@ -155,9 +154,10 @@ scss-lint:
   enable_regexps:
   default_ratings_paths:
     - "**.scss"
-requiresafe:
-  image: codeclimate/codeclimate-requiresafe
-  description: Security tool for Node.js dependencies
+watson:
+  image: codeclimate/codeclimate-watson
+  description: A young Ember Doctor to help you fix your code.
   community: true
   enable_regexps:
   default_ratings_paths:
+    - "app/**"
