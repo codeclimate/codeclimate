@@ -89,8 +89,8 @@ module CC::Analyzer
         result = container.run
         result.exit_status.must_equal 0
         result.timed_out?.must_equal false
-        (result.duration >= 0).must_equal true
-        (result.duration < 1).must_equal true
+        result.duration.must_be :>=, 0
+        result.duration.must_be :<, 1
         result.stderr.must_equal ""
       end
 
@@ -124,8 +124,8 @@ module CC::Analyzer
           listener.finished_name.must_equal @name
           @container_result.timed_out?.must_equal false
           @container_result.exit_status.wont_equal nil
-          (@container_result.duration >= 0).must_equal true
-          (@container_result.duration < 5_000).must_equal true
+          @container_result.duration.must_be :>=, 0
+          @container_result.duration.must_be :<, 5_000
         end
 
         it "times out slow containers" do
@@ -151,8 +151,8 @@ module CC::Analyzer
             listener.timed_out_seconds.must_equal 1
             @container_result.timed_out?.must_equal true
             @container_result.exit_status.wont_equal nil
-            (@container_result.duration >= 0).must_equal true
-            (@container_result.duration < 2_000).must_equal true
+            @container_result.duration.must_be :>=, 0
+            @container_result.duration.must_be :<, 2_000
 
           ensure
             ENV["CONTAINER_TIMEOUT_SECONDS"] = old_timeout
