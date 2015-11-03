@@ -125,7 +125,7 @@ module CC::Analyzer
           @container_result.timed_out?.must_equal false
           @container_result.exit_status.wont_equal nil
           @container_result.duration.must_be :>=, 0
-          @container_result.duration.must_be :<, 5_000
+          @container_result.duration.must_be :<, 10_000
         end
 
         it "times out slow containers" do
