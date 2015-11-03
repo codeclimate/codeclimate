@@ -9,13 +9,11 @@ module CC
 
       def run
         if !upgrade? && filesystem.exist?(CODECLIMATE_YAML)
-          say "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
+          fatal "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
         elsif upgrade? && engines_enabled?
-          say "--upgrade should not be used on a .codeclimate.yml configured for the Platform.\nTry running 'validate-config' to check configuration."
+          fatal "--upgrade should not be used on a .codeclimate.yml configured for the Platform.\nTry running 'validate-config' to check configuration."
         else
-          create_codeclimate_yaml
-          say "Config file .codeclimate.yml successfully #{config_generator.post_generation_verb}.\nEdit and then try running 'validate-config' to check configuration."
-          create_default_configs
+          generate_config
         end
       end
 
@@ -23,6 +21,19 @@ module CC
 
       def upgrade?
         @args.include?("--upgrade")
+      end
+
+      def generate_config
+        unless config_generator.can_generate?
+          config_generator.errors.each do |error|
+            $stderr.puts colorize("ERROR: #{error}", :red)
+          end
+          fatal "Cannot generate .codeclimate.yml: please address above errors."
+        end
+
+        create_codeclimate_yaml
+        say "Config file .codeclimate.yml successfully #{config_generator.post_generation_verb}.\nEdit and then try running 'validate-config' to check configuration."
+        create_default_configs
       end
 
       def create_codeclimate_yaml

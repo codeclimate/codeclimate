@@ -17,6 +17,10 @@ module CC
         @engine_registry = engine_registry
       end
 
+      def can_generate?
+        true
+      end
+
       def eligible_engines
         return @eligible_engines if @eligible_engines
 
@@ -26,6 +30,10 @@ module CC
             result[name] = config
           end
         end
+      end
+
+      def errors
+        []
       end
 
       def exclude_paths
