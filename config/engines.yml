@@ -105,6 +105,14 @@ foodcritic:
   community: true
   enable_regexps:
   default_ratings_paths:
+pep8:
+  image: codeclimate/codeclimate-pep8
+  description: Static analysis tool to check Python code against the style conventions outlined in PEP-8.
+  community: true
+  enable_regexps:
+    - \.py$
+  default_ratings_paths:
+    - "**.py"
 phpcodesniffer:
   image: codeclimate/codeclimate-phpcodesniffer
   description: PHP Code Sniffer
