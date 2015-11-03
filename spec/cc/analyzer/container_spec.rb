@@ -192,8 +192,7 @@ module CC::Analyzer
         result = @container.run
         result.exit_status.must_equal 123
         result.timed_out?.must_equal false
-        (result.duration >= 0).must_equal true
-        (result.duration < 1).must_equal true
+        result.duration.must_be :present?
         result.stderr.must_equal "error one\nerror two\n"
       end
     end
