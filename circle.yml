@@ -3,17 +3,20 @@ machine:
     - docker
   environment:
     CLOUDSDK_CORE_DISABLE_PROMPTS: 1
-    registry_root: us.gcr.io/code_climate
+    PRIVATE_REGISTRY: us.gcr.io/code_climate
 
 dependencies:
-  pre:
-    # Run in container_spec
+  override:
+    # Used by container_spec
     - docker pull alpine
+    - docker build -t=$PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
 
 test:
   override:
-    - bundle exec rake
-    - docker build -t=$registry_root/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
+    - docker run
+      --volume /var/run/docker.sock:/var/run/docker.sock
+      --entrypoint bundle
+      $PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM exec rake
 
 deployment:
   registry:
@@ -23,4 +26,4 @@ deployment:
       - curl https://sdk.cloud.google.com | bash
       - gcloud auth activate-service-account --key-file /tmp/gcloud_key.json
       - gcloud docker -a
-      - docker push $registry_root/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM
+      - docker push $PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM
