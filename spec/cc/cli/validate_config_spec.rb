@@ -68,7 +68,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("WARNING in")
+              stdout.must_match("ERROR: invalid \"engines\" section")
             end
           end
         end
@@ -83,8 +83,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("WARNING in")
-              stdout.must_match("WARNING:")
+              stdout.must_match("ERROR: invalid \"engines\" section")
             end
           end
         end
