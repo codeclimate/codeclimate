@@ -141,6 +141,14 @@ phpmd:
     - "**.php"
     - "**.module"
     - "**.inc"
+radon:
+  image: codeclimate/codeclimate-radon
+  description: Python tool used to compute Cyclomatic Complexity.
+  community: true
+  enable_regexps:
+    - \.py$
+  default_ratings_paths:
+    - "**.py"
 requiresafe:
   image: codeclimate/codeclimate-requiresafe
   description: Security tool for Node.js dependencies
