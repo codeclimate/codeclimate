@@ -44,7 +44,7 @@ module CC
 
       def names_and_raw_engine_configs
         {}.tap do |ret|
-          @config.engines.each do |name, raw_engine_config|
+          (@config.engines || {}).each do |name, raw_engine_config|
             if raw_engine_config.enabled? && @registry.key?(name)
               ret[name] = raw_engine_config
             end

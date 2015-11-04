@@ -1,5 +1,6 @@
 require "spec_helper"
 require "cc/cli/config_generator"
+require "cc/cli/upgrade_config_generator"
 
 module CC::CLI
   describe ConfigGenerator do
@@ -28,6 +29,12 @@ module CC::CLI
       end
     end
 
+    describe "#can_generate?" do
+      it "is true" do
+        generator.can_generate?.must_equal true
+      end
+    end
+
     describe "#eligible_engines" do
       it "calculates eligible_engines based on existing files" do
         write_fixture_source_files
@@ -47,6 +54,12 @@ module CC::CLI
           expected_engine_names.include?(name)
         end
         generator.eligible_engines.must_equal expected_engines
+      end
+    end
+
+    describe "#errors" do
+      it "is empty array" do
+        generator.errors.must_equal []
       end
     end
 

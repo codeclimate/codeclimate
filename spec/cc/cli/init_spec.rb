@@ -5,6 +5,7 @@ module CC::CLI
   describe Init do
     include Factory
     include FileSystemHelpers
+    include ProcHelpers
 
     around do |test|
       within_temp_dir { test.call }
@@ -16,7 +17,7 @@ module CC::CLI
           filesystem.exist?(".codeclimate.yml").must_equal(false)
           write_fixture_source_files
 
-          stdout, stderr = capture_io do
+          stdout, _, exit_code = capture_io_and_exit_code do
             init = Init.new
             init.run
           end
@@ -24,6 +25,7 @@ module CC::CLI
           new_content = File.read(".codeclimate.yml")
 
           stdout.must_match "Config file .codeclimate.yml successfully generated."
+          exit_code.must_equal 0
           filesystem.exist?(".codeclimate.yml").must_equal(true)
 
           YAML.safe_load(new_content).must_equal({
@@ -45,7 +47,7 @@ module CC::CLI
             it 'creates .engine.yml with default config' do
               File.write('foo.rb', 'class Foo; end')
 
-              stdout, stderr = capture_io do
+              stdout, _, exit_code = capture_io_and_exit_code do
                 init = Init.new
                 init.run
               end
@@ -53,6 +55,7 @@ module CC::CLI
               new_content = File.read('.rubocop.yml')
 
               stdout.must_match 'Config file .rubocop.yml successfully generated.'
+              exit_code.must_equal 0
               filesystem.exist?('.rubocop.yml').must_equal(true)
               YAML.safe_load(new_content).keys.must_include('AllCops')
             end
@@ -65,7 +68,7 @@ module CC::CLI
               content_before = 'test content'
               File.write('.rubocop.yml', content_before)
 
-              stdout, stderr = capture_io do
+              stdout, _, _ = capture_io_and_exit_code do
                 init = Init.new
                 init.run
               end
@@ -89,7 +92,7 @@ module CC::CLI
 
           filesystem.exist?(".codeclimate.yml").must_equal(true)
 
-          capture_io do
+          capture_io_and_exit_code do
             Init.new.run
           end
 
@@ -106,11 +109,12 @@ module CC::CLI
 
           filesystem.exist?(".codeclimate.yml").must_equal(true)
 
-          stdout, stderr = capture_io do
+          _, stderr, exit_code = capture_io_and_exit_code do
             Init.new.run
           end
 
-          stdout.must_match("Config file .codeclimate.yml already present.")
+          stderr.must_match("Config file .codeclimate.yml already present.")
+          exit_code.must_equal 1
         end
       end
 
@@ -123,7 +127,7 @@ module CC::CLI
 
           filesystem.exist?(".codeclimate.yml").must_equal(true)
 
-          stdout, _ = capture_io do
+          _, stderr, exit_code = capture_io_and_exit_code do
             Init.new(["--upgrade"]).run
           end
 
@@ -132,14 +136,15 @@ module CC::CLI
           filesystem.exist?(".codeclimate.yml").must_equal(true)
           content_after.must_equal(yaml_content_before)
 
-          stdout.must_match "--upgrade should not be used on a .codeclimate.yml configured for the Platform"
+          stderr.must_match "--upgrade should not be used on a .codeclimate.yml configured for the Platform"
+          exit_code.must_equal 1
         end
 
         it "behaves normally if no .codeclimate.yml present" do
           filesystem.exist?(".codeclimate.yml").must_equal(false)
           write_fixture_source_files
 
-          stdout, _ = capture_io do
+          stdout, _, _ = capture_io_and_exit_code do
             Init.new(["--upgrade"]).run
           end
 
@@ -169,7 +174,7 @@ module CC::CLI
 
           write_fixture_source_files
 
-          stdout, _ = capture_io do
+          stdout, _, _ = capture_io_and_exit_code do
             Init.new(["--upgrade"]).run
           end
 
@@ -187,6 +192,27 @@ module CC::CLI
           })
 
           CC::Yaml.parse(new_content).errors.must_be_empty
+        end
+
+        it "fails & emits errors if existing yaml has errors" do
+          filesystem.exist?(".codeclimate.yml").must_equal(false)
+
+          File.write(".codeclimate.yml", %{
+            languages:
+              Ruby:
+                bar: foo
+
+            exclude_paths:
+              - excluded.rb
+          })
+
+          _, stderr, exit_code = capture_io_and_exit_code do
+            Init.new(["--upgrade"]).run
+          end
+
+          stderr.must_match "ERROR: invalid \"languages\" section"
+          stderr.must_match "Cannot generate .codeclimate.yml"
+          exit_code.must_equal 1
         end
       end
     end

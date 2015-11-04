@@ -3,8 +3,16 @@ require "cc/cli/config_generator"
 module CC
   module CLI
     class UpgradeConfigGenerator < ConfigGenerator
+      def can_generate?
+        errors.blank?
+      end
+
+      def errors
+        existing_yaml.errors
+      end
+
       def exclude_paths
-        existing_yaml["exclude_paths"] || []
+        (existing_yaml.exclude_paths || []).map(&:to_s)
       end
 
       def post_generation_verb
@@ -23,11 +31,11 @@ module CC
       end
 
       def classic_languages
-        @classic_languages ||= existing_yaml["languages"].reject { |_, v| !v }.map(&:first)
+        @classic_languages ||= existing_yaml.languages.reject { |_, v| !v }.map(&:first)
       end
 
       def existing_yaml
-        @existing_yml ||= YAML.safe_load(File.read(CODECLIMATE_YAML))
+        @existing_yaml ||= CC::Yaml.parse(File.read(CODECLIMATE_YAML))
       end
     end
   end
