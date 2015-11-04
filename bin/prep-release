@@ -33,10 +33,12 @@ git add VERSION Gemfile.lock
 git commit -m "Release v$version"
 git push origin $branch
 
-if command -v gh > /dev/null 2>&1; then
+if command -v hub > /dev/null 2>&1; then
+  hub pull-request -m "Release v$version"
+elif command -v gh > /dev/null 2>&1; then
   gh pull-request -m "Release v$version"
 else
-  echo "gh not installed? Please open the PR manually" >&2
+  echo "hub not installed? Please open the PR manually" >&2
 fi
 
 echo "After merging the version-bump PR, run bin/release"
