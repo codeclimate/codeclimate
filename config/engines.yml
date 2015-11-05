@@ -105,6 +105,12 @@ foodcritic:
   community: true
   enable_regexps:
   default_ratings_paths:
+nodesecurity:
+  image: codeclimate/codeclimate-nodesecurity
+  description: Security tool for Node.js dependencies.
+  community: true
+  enable_regexps:
+  default_ratings_paths:
 pep8:
   image: codeclimate/codeclimate-pep8
   description: Static analysis tool to check Python code against the style conventions outlined in PEP-8.
@@ -150,7 +156,7 @@ radon:
   default_ratings_paths:
     - "**.py"
 requiresafe:
-  image: codeclimate/codeclimate-requiresafe
+  image: codeclimate/codeclimate-nodesecurity
   description: Security tool for Node.js dependencies.
   community: true
   enable_regexps:
