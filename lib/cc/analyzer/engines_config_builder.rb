@@ -2,7 +2,15 @@ require "securerandom"
 
 module CC
   module Analyzer
-    class EnginesBuilder
+    class EnginesConfigBuilder
+      Result = Struct.new(
+        :name,
+        :registry_entry,
+        :code_path,
+        :config,
+        :container_label,
+      )
+
       def initialize(registry:, config:, container_label:, source_dir:, requested_paths:)
         @registry = registry
         @config = config
@@ -11,21 +19,15 @@ module CC
         @source_dir = source_dir
       end
 
-      def run(engine_class = Analyzer::Engine)
+      def run
         names_and_raw_engine_configs.map do |name, raw_engine_config|
-          build_engine(engine_class, name, raw_engine_config)
+          label = @container_label || SecureRandom.uuid
+          engine_config = engine_config(raw_engine_config)
+          Result.new(name, @registry[name], @source_dir, engine_config, label)
         end
       end
 
       private
-
-      def build_engine(engine_class, name, raw_engine_config)
-        label = @container_label || SecureRandom.uuid
-        engine_config = engine_config(raw_engine_config)
-        engine_class.new(
-          name, @registry[name], @source_dir, engine_config, label
-        )
-      end
 
       def engine_config(raw_engine_config)
         config = raw_engine_config.merge(

@@ -7,7 +7,7 @@ module CC
     autoload :Engine, "cc/analyzer/engine"
     autoload :EngineOutputFilter, "cc/analyzer/engine_output_filter"
     autoload :EngineRegistry, "cc/analyzer/engine_registry"
-    autoload :EnginesBuilder, "cc/analyzer/engines_builder"
+    autoload :EnginesConfigBuilder, "cc/analyzer/engines_config_builder"
     autoload :EnginesRunner, "cc/analyzer/engines_runner"
     autoload :Filesystem, "cc/analyzer/filesystem"
     autoload :Formatters, "cc/analyzer/formatters"
