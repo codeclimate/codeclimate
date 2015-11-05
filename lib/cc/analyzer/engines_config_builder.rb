@@ -29,14 +29,6 @@ module CC
 
       private
 
-      def build_engine(engine_class, name, raw_engine_config)
-        label = @container_label || SecureRandom.uuid
-        engine_config = engine_config(raw_engine_config)
-        engine_class.new(
-          name, @registry[name], @source_dir, engine_config, label
-        )
-      end
-
       def engine_config(raw_engine_config)
         config = raw_engine_config.merge(
           exclude_paths: exclude_paths,
