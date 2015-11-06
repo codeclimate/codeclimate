@@ -86,7 +86,7 @@ module CC
       end
 
       def issues_in(test_file)
-        issue_docs = capture(:stdout) do
+        issue_docs = capture_stdout do
           codeclimate_analyze(test_file)
         end
 
@@ -210,6 +210,22 @@ module CC
 
       def engine_image
         engine_registry[@engine_name]["image"]
+      end
+
+      # Stolen from ActiveSupport (where it was deprecated)
+      def capture_stdout
+        captured_stream = Tempfile.new("stdout")
+        origin_stream = $stdout.dup
+        $stdout.reopen(captured_stream)
+
+        yield
+
+        $stdout.rewind
+        return captured_stream.read
+      ensure
+        captured_stream.close
+        captured_stream.unlink
+        $stdout.reopen(origin_stream)
       end
 
     end
