@@ -24,7 +24,7 @@ module CC
         run
       end
 
-      def say(message)
+      def say(message = "")
         terminal.say message
       end
 

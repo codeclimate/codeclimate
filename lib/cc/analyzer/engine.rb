@@ -63,6 +63,7 @@ module CC
 
       def config_file
         path = File.join("/tmp/cc", SecureRandom.uuid)
+        FileUtils.mkdir_p("/tmp/cc")
         File.write(path, @config.to_json)
         path
       end
