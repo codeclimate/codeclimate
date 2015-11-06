@@ -1,36 +1,118 @@
+require "shellwords"
 require "cc/yaml"
 
 module CC
   module CLI
-    class Test < Command
-      Marker = Struct.new(:line, :line_text, :issue)
+    class Marker
+      def self.from_text(engine_name, test_file, line_number, text)
+        marker = Marker.new(line_number, text)
+        attrs = attrs_from_marker(text.sub(/^.*\[issue\] ?/, ""))
 
+        marker.issue = attrs.merge(
+          "engine_name" => engine_name,
+          "location" => {
+            "path" => test_file,
+            "lines" => {
+              "begin" => line_number + 1,
+              "end" => line_number + 1,
+            },
+          },
+        )
+
+        if marker.issue["category"]
+          marker.issue["categories"] = Array.wrap(marker.issue["category"])
+          marker.issue.delete("category")
+        end
+
+        marker
+      end
+
+      def self.attrs_from_marker(text)
+        if text.blank?
+          {}
+        else
+          matches = text.scan(/([a-z\._-]+)=(?:(")((?:\\.|[^"])*)"|([^\s]*))/).map(&:compact)
+
+          key_values = matches.map do |match|
+            munge_match(match)
+          end
+
+          Hash[key_values]
+        end
+      end
+
+      def self.munge_match(match)
+        if match.size == 3 # Quoted
+          key, _, value = match
+          value = '"' + value + '"'
+        else
+          key, value = match
+        end
+
+        [key, munge_value(value)]
+      end
+
+      def self.munge_value(value)
+        JSON.load(value)
+      rescue JSON::ParserError
+        value
+      end
+
+      attr_reader :line, :line_text
+      attr_accessor :issue
+
+      def initialize(line, line_text)
+        @line = line
+        @line_text = line_text
+        @issue = issue
+      end
+    end
+
+    class Test < Command
       def run
         @engine_name = @args.first
 
         if @engine_name.blank?
-          fatal "Usage: codeclimate test #{rainbow.wrap("engine_name").underline}"
+          fatal "Usage: codeclimate test #{rainbow.wrap('engine_name').underline}"
         end
 
-        tmpdir = create_tmpdir
+        test_engine
+      end
 
-        Dir.chdir(tmpdir) do
+      def test_engine
+        within_tempdir do
           prepare_working_dir
-
-          test_paths.each do |test_path|
-            unpack(test_path)
-          end
-
-          Dir["**/*"].each do |test_file|
-            next unless File.file?(test_file)
-            process_file(test_file, tmpdir)
-          end
+          unpack_tests
+          run_tests
         end
       ensure
         remove_null_container
       end
 
-      def process_file(test_file, tmpdir)
+      def within_tempdir
+        tmpdir = create_tmpdir
+
+        Dir.chdir(tmpdir) do
+          yield
+        end
+      ensure
+        FileUtils.rm_rf(tmpdir)
+      end
+
+      def unpack_tests
+        test_paths.each do |test_path|
+          unpack(test_path)
+        end
+      end
+
+      def run_tests
+        Dir["**/*"].each do |test_file|
+          next unless File.file?(test_file)
+          process_file(test_file)
+        end
+      end
+
+      def process_file(test_file)
         markers = markers_in(test_file)
 
         actual_issues = issues_in(test_file)
@@ -46,34 +128,43 @@ module CC
       end
 
       def validate_issue(marker, actual_issues)
-        found_index = nil
+        if (index = locate_match(actual_issues, marker))
+          announce_pass(marker)
+          actual_issues.delete_at(index)
+        else
+          announce_fail(marker, actual_issues)
+          fatal "Expected issue not found."
+        end
+      end
 
+      def locate_match(actual_issues, marker)
         actual_issues.each_with_index do |actual, index|
           if fuzzy_match(marker.issue, actual)
-            found_index = index
-            break
+            return index
           end
         end
 
-        if found_index
-          say "PASS %3d: %s" % [marker.line, marker.line_text]
-          actual_issues.delete_at(found_index)
-        else
-          say colorize("MISS %3d: %s" % [marker.line, marker.line_text], :red)
-          say colorize("Searched:", :yellow)
-          say colorize(JSON.pretty_generate(marker.issue), :yellow)
-          say "\n"
-          say colorize("Actual:", :yellow)
-          say colorize(JSON.pretty_generate(actual_issues), :yellow)
-          fatal "Expected issue not found."
-        end
+        nil
+      end
+
+      def announce_pass(marker)
+        say format("PASS %3d: %s", marker.line, marker.line_text)
+      end
+
+      def announce_fail(marker, actual_issues)
+        say colorize(format("FAIL %3d: %s", marker.line, marker.line_text), :red)
+        say colorize("Expected:", :yellow)
+        say colorize(JSON.pretty_generate(marker.issue), :yellow)
+        say "\n"
+        say colorize("Actual:", :yellow)
+        say colorize(JSON.pretty_generate(actual_issues), :yellow)
       end
 
       def validate_unexpected_issues(actual_issues)
         if actual_issues.any?
           say colorize("Actuals not empty after matching.", :red)
           say
-          say colorize("#{actual_issues.size } remaining:", :yellow)
+          say colorize("#{actual_issues.size} remaining:", :yellow)
           say colorize(JSON.pretty_generate(actual_issues), :yellow)
           fatal "Unexpected issue found."
         end
@@ -99,11 +190,11 @@ module CC
         system([
           "unset CODE_PATH &&",
           "unset FILESYSTEM_DIR &&",
-          codeclimate_path,
+          Shellwords.escape(codeclimate_path),
           "analyze",
-          "--engine", @engine_name,
+          "--engine", Shellwords.escape(@engine_name),
           "-f", "json",
-          relative_path
+          Shellwords.escape(relative_path)
         ].join(" "))
       end
 
@@ -118,66 +209,13 @@ module CC
       def markers_in(test_file)
         lines = File.readlines(test_file)
 
-        Array.new.tap do |markers|
+        [].tap do |markers|
           lines.each_with_index do |line, index|
             if line =~ /\[issue\].*/
-              markers << build_marker(test_file, index + 1, line)
+              markers << Marker.from_text(@engine_name, test_file, index + 1, line)
             end
           end
         end
-      end
-
-      def build_marker(test_file, line_number, text)
-        marker = Marker.new(line_number, text)
-
-        text = text.sub(/^.*\[issue\] ?/, "")
-
-        if text.blank?
-          attrs = {}
-        else
-          matches = text.scan(/([a-z\._-]+)=(?:(")((?:\\.|[^"])*)"|([^\s]*))/).map(&:compact)
-
-          key_values = matches.map do |match|
-            # puts match.inspect
-
-            if match.size == 3 # Quoted
-              key, _, value = match
-              value = '"' + value + '"'
-            else
-              key, value = match
-            end
-
-            [key, munge(value)]
-          end
-
-          attrs = Hash[key_values]
-        end
-
-        issue_line = line_number + 1
-
-        marker.issue = attrs.merge(
-          "engine_name" => @engine_name,
-          "location" => {
-            "path" => test_file,
-            "lines" => {
-              "begin" => issue_line,
-              "end" => issue_line
-            }
-          }
-        )
-
-        if marker.issue["category"]
-          marker.issue["categories"] = Array.wrap(marker.issue["category"])
-          marker.issue.delete("category")
-        end
-
-        marker
-      end
-
-      def munge(value)
-        JSON.load(value)
-      rescue JSON::ParserError
-        value
       end
 
       def create_tmpdir
@@ -192,7 +230,7 @@ module CC
 
       def null_container_id
         # docker cp only works with containers, not images so
-        # hack it by creating a throwaway container
+        # workaround it by creating a throwaway container
         @null_container_id = `docker run -d #{engine_image} false`.chomp
       end
 
@@ -227,7 +265,6 @@ module CC
         captured_stream.unlink
         $stdout.reopen(origin_stream)
       end
-
     end
   end
 end
