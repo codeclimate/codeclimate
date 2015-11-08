@@ -1,4 +1,5 @@
 require "posix/spawn"
+require "thread"
 
 module CC
   module Analyzer
@@ -11,9 +12,17 @@ module CC
         :stderr,        # stderr, for a finished event
       )
       ImageRequired = Class.new(StandardError)
-      Result = Struct.new(:exit_status, :timed_out?, :duration, :stderr)
+      Result = Struct.new(
+        :exit_status,
+        :timed_out?,
+        :duration,
+        :maximum_output_exceeded?,
+        :output_byte_count,
+        :stderr,
+      )
 
       DEFAULT_TIMEOUT = 15 * 60 # 15m
+      DEFAULT_MAXIMUM_OUTPUT_BYTES = 500_000_000
 
       def initialize(image:, name:, command: nil, listener: ContainerListener.new)
         raise ImageRequired if image.blank?
@@ -24,7 +33,10 @@ module CC
         @output_delimeter = "\n"
         @on_output = ->(*) {}
         @timed_out = false
+        @maximum_output_exceeded = false
         @stderr_io = StringIO.new
+        @output_byte_count = 0
+        @counter_mutex = Mutex.new
       end
 
       def on_output(delimeter = "\n", &block)
@@ -43,14 +55,23 @@ module CC
         t_timeout = timeout_thread
 
         _, status = Process.waitpid2(pid)
+
         if @timed_out
-          @listener.timed_out(container_data(duration: timeout))
-          Result.new(status.exitstatus, true, timeout, @stderr_io.string)
+          duration = timeout
+          @listener.timed_out(container_data(duration: duration))
         else
           duration = ((Time.now - started) * 1000).round
           @listener.finished(container_data(duration: duration, status: status))
-          Result.new(status.exitstatus, false, duration, @stderr_io.string)
         end
+
+        Result.new(
+          status.exitstatus,
+          @timed_out,
+          duration,
+          @maximum_output_exceeded,
+          output_byte_count,
+          @stderr_io.string,
+        )
       ensure
         t_timeout.kill if t_timeout
         if @timed_out
@@ -71,6 +92,8 @@ module CC
 
       private
 
+      attr_reader :output_byte_count, :counter_mutex
+
       def docker_run_command(options)
         [
           "docker", "run",
@@ -88,13 +111,17 @@ module CC
             output = chunk.chomp(@output_delimeter)
 
             @on_output.call(output)
+            check_output_bytes(output.bytesize)
           end
         end
       end
 
       def read_stderr(err)
         Thread.new do
-          err.each_line { |line| @stderr_io.write(line) }
+          err.each_line do |line|
+            @stderr_io.write(line)
+            check_output_bytes(line.bytesize)
+          end
         end
       end
 
@@ -103,6 +130,17 @@ module CC
           sleep timeout
           @timed_out = true
           reap_running_container
+        end
+      end
+
+      def check_output_bytes(last_read_byte_count)
+        counter_mutex.synchronize do
+          @output_byte_count += last_read_byte_count
+        end
+
+        if output_byte_count > maximum_output_bytes
+          @maximum_output_exceeded = true
+          stop
         end
       end
 
@@ -116,7 +154,11 @@ module CC
       end
 
       def timeout
-        (ENV["CONTAINER_TIMEOUT_SECONDS"] || DEFAULT_TIMEOUT).to_i
+        ENV.fetch("CONTAINER_TIMEOUT_SECONDS", DEFAULT_TIMEOUT).to_i
+      end
+
+      def maximum_output_bytes
+        ENV.fetch("CONTAINER_MAXIMUM_OUTPUT_BYTES", DEFAULT_MAXIMUM_OUTPUT_BYTES).to_i
       end
     end
   end
