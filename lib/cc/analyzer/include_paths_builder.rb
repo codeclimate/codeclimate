@@ -49,8 +49,8 @@ module CC
           tmp.write(File.read(".gitignore")) if File.file?(".gitignore")
           tmp << @cc_exclude_paths.join("\n")
           tmp.close
-          tracked_and_ignored = `git ls-files -zi -X #{tmp.path}`.split("\0")
-          untracked_and_ignored = `git ls-files -zio -X #{tmp.path}`.split("\0")
+          tracked_and_ignored = `git ls-files -zi -X #{tmp.path} 2>/dev/null`.split("\0")
+          untracked_and_ignored = `git ls-files -zio -X #{tmp.path} 2>/dev/null`.split("\0")
           tracked_and_ignored + untracked_and_ignored
         end
       end

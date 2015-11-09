@@ -159,6 +159,29 @@ module CC::Analyzer
           end
         end
 
+        it "stops containers that emit more than the configured maximum output bytes" do
+          begin
+            ENV["CONTAINER_MAXIMUM_OUTPUT_BYTES"] = "4"
+            listener = TestContainerListener.new
+            container = Container.new(
+              image: "alpine",
+              command: ["echo", "hello"],
+              name: @name,
+              listener: listener,
+            )
+
+            run_container(container)
+
+            assert_container_stopped
+            @container_result.maximum_output_exceeded?.must_equal true
+            @container_result.timed_out?.must_equal false
+            @container_result.exit_status.wont_equal nil
+            @container_result.output_byte_count.must_be :>, 4
+          ensure
+            ENV.delete("CONTAINER_MAXIMUM_OUTPUT_BYTES")
+          end
+        end
+
         def run_container(container)
           thread = Thread.new { @container_result = container.run }
 
