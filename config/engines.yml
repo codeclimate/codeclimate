@@ -12,9 +12,9 @@
 brakeman:
   image: codeclimate/codeclimate-brakeman
   description: Static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
-  community: true
+  community: false
   enable_regexps:
-    - \.rb$
+    - ^script\/rails$
   default_ratings_paths:
     - "app/**"
     - "**.rb"
@@ -114,7 +114,9 @@ nodesecurity:
 pep8:
   image: codeclimate/codeclimate-pep8
   description: Static analysis tool to check Python code against the style conventions outlined in PEP-8.
-  community: true
+  community: false
+  upgrade_languages:
+    - Python
   enable_regexps:
     - \.py$
   default_ratings_paths:
@@ -150,7 +152,9 @@ phpmd:
 radon:
   image: codeclimate/codeclimate-radon
   description: Python tool used to compute Cyclomatic Complexity.
-  community: true
+  community: false
+  upgrade_languages:
+    - Python
   enable_regexps:
     - \.py$
   default_ratings_paths:
