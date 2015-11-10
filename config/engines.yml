@@ -13,6 +13,8 @@ brakeman:
   image: codeclimate/codeclimate-brakeman
   description: Static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
   community: false
+  upgrade_languages:
+    - Ruby
   enable_regexps:
     - ^script\/rails$
   default_ratings_paths:
