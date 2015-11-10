@@ -25,7 +25,7 @@ module CC::Analyzer
     end
 
     it "raises for no enabled engines" do
-      config = stub(engines: {})
+      config = stub(engines: {}, exclude_paths: [])
       runner = EnginesRunner.new({}, null_formatter, "/code", config)
 
       lambda { runner.run }.must_raise(EnginesRunner::NoEnabledEngines)

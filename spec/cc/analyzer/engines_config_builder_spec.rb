@@ -5,13 +5,17 @@ module CC::Analyzer
   describe EnginesConfigBuilder do
     include FileSystemHelpers
 
+    let(:include_paths) do
+      IncludePathsBuilder.new(config.exclude_paths || [], requested_paths).build
+    end
+
     let(:engines_config_builder) do
       EnginesConfigBuilder.new(
         registry: registry,
         config: config,
         container_label: container_label,
         source_dir: source_dir,
-        requested_paths: requested_paths
+        include_paths: include_paths
       )
     end
     let(:container_label) { nil }

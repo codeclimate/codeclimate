@@ -11,11 +11,11 @@ module CC
         :container_label,
       )
 
-      def initialize(registry:, config:, container_label:, source_dir:, requested_paths:)
+      def initialize(registry:, config:, container_label:, source_dir:, include_paths:)
         @registry = registry
         @config = config
         @container_label = container_label
-        @requested_paths = requested_paths
+        @include_paths = include_paths
         @source_dir = source_dir
       end
 
@@ -28,6 +28,8 @@ module CC
       end
 
       private
+
+      attr_reader :include_paths
 
       def engine_config(raw_engine_config)
         config = raw_engine_config.merge(
@@ -52,12 +54,6 @@ module CC
             end
           end
         end
-      end
-
-      def include_paths
-        IncludePathsBuilder.new(
-          @config.exclude_paths || [], @requested_paths
-        ).build
       end
 
       def exclude_paths
