@@ -163,7 +163,7 @@ module CC
       def validate_unexpected_issues(actual_issues)
         if actual_issues.any?
           say colorize("Actuals not empty after matching.", :red)
-          say
+          say "\n"
           say colorize("#{actual_issues.size} remaining:", :yellow)
           say colorize(JSON.pretty_generate(actual_issues), :yellow)
           fatal "Unexpected issue found."
