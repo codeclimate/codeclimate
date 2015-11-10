@@ -16,13 +16,13 @@ module CC
 
         case
         when location["lines"]
-          location["lines"]["begin"].to_i
+          [location["lines"]["begin"].to_i]
         when location["positions"] && location["positions"]["begin"]["line"]
-          location["positions"]["begin"]["line"].to_i + location["positions"]["begin"]["column"].to_i
+          [location["positions"]["begin"]["line"].to_i, location["positions"]["begin"]["column"].to_i]
         when location["positions"] && location["positions"]["begin"]["offset"]
-          location["positions"]["begin"]["offset"].to_i + 1_000_000_000 # push offsets to end of list
+          [1_000_000_000] # push offsets to end of list
         else
-          0 # whole-file issues are first
+          [0] # whole-file issues are first
         end
       end
     end
