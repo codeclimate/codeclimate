@@ -39,7 +39,7 @@ module CC
 
       def ignore_fingerprint?(json)
         if (fingerprint = json["fingerprint"])
-          @config.fetch("ignored_issues", []).include?(fingerprint)
+          @config.fetch("exclude_fingerprints", []).include?(fingerprint)
         else
           false
         end

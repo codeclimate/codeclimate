@@ -68,7 +68,7 @@ module CC::Analyzer
       filter.filter?(issue.to_json).must_equal true
     end
 
-    it "filters issues with a fingerprint that matches ignored_issues" do
+    it "filters issues with a fingerprint that matches exclude_fingerprints" do
       issue = {
         "type" => "Issue",
         "check_name" => "foo",
@@ -77,7 +77,7 @@ module CC::Analyzer
 
       filter = EngineOutputFilter.new(
         engine_config(
-          "ignored_issues" => [
+          "exclude_fingerprints" => [
             "05a33ac5659c1e90cad1ce32ff8a91c0"
           ]
         )
