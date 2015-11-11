@@ -245,3 +245,9 @@ rules:
   yoda:
   - 0
   - never
+env:
+  browser: true
+  node: true
+  jquery: true
+  amd: true
+  commonjs: true
