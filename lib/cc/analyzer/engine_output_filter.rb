@@ -30,7 +30,19 @@ module CC
       end
 
       def ignore_issue?(json)
+        check_disabled?(json) || ignore_fingerprint?(json)
+      end
+
+      def check_disabled?(json)
         !check_config(json["check_name"]).fetch("enabled", true)
+      end
+
+      def ignore_fingerprint?(json)
+        if (fingerprint = json["fingerprint"])
+          @config.fetch("ignored_issues", []).include?(fingerprint)
+        else
+          false
+        end
       end
 
       def check_config(check_name)
