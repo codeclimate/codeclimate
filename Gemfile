@@ -9,4 +9,5 @@ group :test do
   gem "minitest-reporters"
   gem "rack-test"
   gem "rake"
+  gem "codeclimate-test-reporter", require: nil
 end

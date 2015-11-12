@@ -10,13 +10,11 @@ dependencies:
     # Used by container_spec
     - docker pull alpine
     - docker build -t=$PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
+    - bundle install
 
 test:
   override:
-    - docker run
-      --volume /var/run/docker.sock:/var/run/docker.sock
-      --entrypoint bundle
-      $PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM exec rake
+    - bundle exec rake
 
 deployment:
   registry:
