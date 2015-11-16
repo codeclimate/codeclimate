@@ -14,7 +14,7 @@ module CC
 
       def commands
         [
-          "analyze [-f format]",
+          "analyze [-f format] [-e engine] <path>",
           "console",
           "engines:disable #{underline('engine_name')}",
           "engines:enable #{underline('engine_name')}",
