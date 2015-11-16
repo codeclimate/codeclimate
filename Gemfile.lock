@@ -3,7 +3,7 @@ PATH
   specs:
     codeclimate (0.14.2)
       activesupport (~> 4.2, >= 4.2.1)
-      codeclimate-yaml (~> 0.6.1)
+      codeclimate-yaml (~> 0.7.0)
       faraday (~> 0.9.1)
       faraday_middleware (~> 0.9.1)
       highline (~> 1.7, >= 1.7.2)
@@ -16,7 +16,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.4)
+    activesupport (4.2.5)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -26,7 +26,7 @@ GEM
     builder (3.2.2)
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
-    codeclimate-yaml (0.6.1)
+    codeclimate-yaml (0.7.0)
       activesupport
       secure_string
     coderay (1.1.0)

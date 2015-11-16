@@ -32,7 +32,7 @@ module CC
         # are translated to **/*-style globs within cc-yaml's custom
         # Glob#value method. It was thought that that would work correctly
         # with Dir.glob but it turns out we have to actually invoke #value
-        # directrly for this to work. We need to guard this on class (not
+        # directly for this to work. We need to guard this on class (not
         # respond_to?) because our mocking framework adds a #value method to
         # all objects, apparently.
         if pattern.is_a?(CC::Yaml::Nodes::Glob)

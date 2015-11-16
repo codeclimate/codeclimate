@@ -15,7 +15,7 @@ module CC::Analyzer
 
     before do
       system("git init > /dev/null")
-      FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
+      FileUtils.stubs(:readable_by_all?).returns(true)
     end
 
     describe "when the source directory contains only files that are tracked or trackable in Git" do
@@ -248,6 +248,17 @@ module CC::Analyzer
       it "skips it entirely" do
         FileUtils.readable_by_all?(".")
         result.include?("./").must_equal(true)
+      end
+    end
+
+    describe "when analyzing a single file" do
+      let(:cc_includes) { ["subdir/subdir_file.rb"] }
+
+      it "returns the file" do
+        make_file("root_file.rb")
+        make_file("subdir/subdir_file.rb")
+
+        builder.build.must_equal(["subdir/subdir_file.rb"])
       end
     end
 

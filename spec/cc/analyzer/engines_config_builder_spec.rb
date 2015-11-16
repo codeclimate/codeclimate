@@ -139,6 +139,45 @@ module CC::Analyzer
       end
     end
 
+    describe "when the engine specifies its own excludes" do
+      let(:config) do
+        CC::Yaml.parse <<-EOYAML
+          engines:
+            rubocop:
+              enabled: true
+              exclude_paths:
+              - subdir/*
+          exclude_paths:
+          - "ignored.rb"
+        EOYAML
+      end
+      let(:registry) { registry_with_engine("rubocop") }
+
+      before do
+        make_file("ignored.rb")
+        make_file("root_file.rb")
+        make_file("subdir/subdir_file.rb")
+      end
+
+      it "excludes engine specific paths and passes combined exclude paths to engine" do
+        IncludePathsBuilder.
+          stubs(:new).with(["ignored.rb", "subdir/*"], []).
+          returns(mock(build: ["."]))
+        expected_config = {
+          "enabled" => true,
+          exclude_paths: ["ignored.rb", "subdir/*"],
+          include_paths: ['.']
+        }
+        result = engines_config_builder.run
+        result.size.must_equal(1)
+        result.first.name.must_equal("rubocop")
+        result.first.registry_entry.must_equal(registry["rubocop"])
+        result.first.code_path.must_equal(source_dir)
+        (result.first.config == expected_config).must_equal(true)
+        result.first.container_label.wont_equal nil
+      end
+    end
+
     def registry_with_engine(*names)
       {}.tap do |result|
         names.each do |name|
