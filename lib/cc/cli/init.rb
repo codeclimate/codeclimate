@@ -33,7 +33,7 @@ module CC
         end
 
         create_codeclimate_yaml
-        say "Config file .codeclimate.yml successfully #{config_generator.post_generation_verb}.\nEdit and then try running 'validate-config' to check configuration."
+        say colorize("Config file .codeclimate.yml successfully #{config_generator.post_generation_verb}.\nEdit and then try running 'validate-config' to check configuration.", :green)
         create_default_configs
       end
 
@@ -55,7 +55,7 @@ module CC
             say "Skipping generating #{file_name} file (already exists)."
           else
             filesystem.write_path(file_name, File.read(config_path))
-            say "Config file #{file_name} successfully generated."
+            say colorize("Config file #{file_name} successfully generated.", :green)
           end
         end
       end
