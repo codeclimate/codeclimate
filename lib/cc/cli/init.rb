@@ -33,7 +33,7 @@ module CC
         end
 
         create_codeclimate_yaml
-        congrats "Config file .codeclimate.yml successfully #{config_generator.post_generation_verb}.\nEdit and then try running 'validate-config' to check configuration."
+        success "Config file .codeclimate.yml successfully #{config_generator.post_generation_verb}.\nEdit and then try running 'validate-config' to check configuration."
         create_default_configs
       end
 
@@ -55,7 +55,7 @@ module CC
             say "Skipping generating #{file_name} file (already exists)."
           else
             filesystem.write_path(file_name, File.read(config_path))
-            congrats "Config file #{file_name} successfully generated."
+            success "Config file #{file_name} successfully generated."
           end
         end
       end
