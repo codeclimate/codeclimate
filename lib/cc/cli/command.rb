@@ -24,6 +24,10 @@ module CC
         run
       end
 
+      def congrats(message)
+        terminal.say colorize(message, :green)
+      end
+
       def say(message)
         terminal.say message
       end
