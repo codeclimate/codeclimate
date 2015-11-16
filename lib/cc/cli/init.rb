@@ -9,8 +9,8 @@ module CC
 
       def run
         if !upgrade? && filesystem.exist?(CODECLIMATE_YAML)
+          warn "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
           create_default_configs
-          fatal "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
         elsif upgrade? && engines_enabled?
           fatal "--upgrade should not be used on a .codeclimate.yml configured for the Platform.\nTry running 'validate-config' to check configuration."
         else

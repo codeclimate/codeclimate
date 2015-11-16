@@ -102,19 +102,19 @@ module CC::CLI
           content_after.must_equal(yaml_content_before)
         end
 
-        it "reports that there is a .codeclimate.yml file already present" do
+        it "warns that there is a .codeclimate.yml file already present" do
           filesystem.exist?(".codeclimate.yml").must_equal(false)
 
           File.new(".codeclimate.yml", "w")
 
           filesystem.exist?(".codeclimate.yml").must_equal(true)
 
-          _, stderr, exit_code = capture_io_and_exit_code do
+          stdout, _, exit_code = capture_io_and_exit_code do
             Init.new.run
           end
 
-          stderr.must_match("Config file .codeclimate.yml already present.")
-          exit_code.must_equal 1
+          stdout.must_match("WARNING: Config file .codeclimate.yml already present.")
+          exit_code.must_equal 0
         end
 
         it "still generates default config files" do
