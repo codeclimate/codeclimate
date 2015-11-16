@@ -1,5 +1,8 @@
 require "spec_helper"
 require "file_utils_ext"
+require "cc/analyzer"
+require "cc/analyzer/include_paths_builder"
+require "cc/analyzer/path_patterns"
 
 module CC::Analyzer
   describe EnginesConfigBuilder do
@@ -34,10 +37,6 @@ module CC::Analyzer
       let(:config) { config_with_engine("an_engine") }
       let(:registry) { registry_with_engine("an_engine") }
 
-      before do
-        FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
-      end
-
       it "contains that engine" do
         result = engines_config_builder.run
         result.size.must_equal(1)
@@ -65,10 +64,6 @@ module CC::Analyzer
         EOYAML
       end
       let(:registry) { registry_with_engine("rubocop") }
-
-      before do
-        FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
-      end
 
       it "keeps that config and adds some entries" do
         expected_config = {

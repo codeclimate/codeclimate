@@ -196,7 +196,7 @@ module CC::Analyzer
     describe "when there is a file that isn't readable by all and is not excluded by either .codeclimate.yml or .gitignore" do
       before do
         make_file("subdir/unreadable.rb")
-        FileUtils.expects(:readable_by_all?).with("./subdir/unreadable.rb").at_least_once.returns(false)
+        FileUtils.expects(:readable_by_all?).with("subdir/unreadable.rb").at_least_once.returns(false)
         make_file("trackable.rb")
         make_file("subdir/subdir_trackable.rb")
       end
@@ -213,11 +213,6 @@ module CC::Analyzer
       end
 
       it "doesn't follow the symlink" do
-        Dir.expects(:entries).with(".").returns(%w[. .. .git subdir])
-        Dir.expects(:entries).with("./").returns(%w[. .. .git subdir])
-        Dir.expects(:entries).with("subdir").returns(%w[. .. subdir])
-        Dir.expects(:entries).with("./subdir").returns(%w[. .. subdir])
-        Dir.expects(:entries).with("subdir/subdir").never
         result.include?("./").must_equal(true)
         result.include?("subdir/subdir/").must_equal(false)
       end
@@ -250,7 +245,20 @@ module CC::Analyzer
       end
 
       it "skips it entirely" do
+        FileUtils.readable_by_all?(".")
         result.include?("./").must_equal(true)
+      end
+    end
+
+    describe "when given extra excludes" do
+      before do
+        make_file("root_file.rb")
+        make_file("subdir/subdir_file.rb")
+      end
+
+      it "returns a the only non-excluded file" do
+        builder.build.must_equal(["./"])
+        builder.build(["**/subdir*"]).must_equal(["root_file.rb"])
       end
     end
   end
