@@ -8,7 +8,7 @@ module CC
       include CC::Analyzer
 
       def run
-        if !upgrade? && filesystem.exist?(CODECLIMATE_YAML)
+        if !upgrade? && filesystem.exist?(CODECLIMATE_YAML) && !force
           warn "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
           create_default_configs
         elsif upgrade? && engines_enabled?

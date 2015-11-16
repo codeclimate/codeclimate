@@ -7,9 +7,11 @@ module CC
   module CLI
     class Command
       CODECLIMATE_YAML = ".codeclimate.yml".freeze
+      InvalidOption = Class.new(StandardError)
 
       def initialize(args = [])
         @args = args
+        @force = false
       end
 
       def run
@@ -20,7 +22,19 @@ module CC
         name[/[^:]*$/].split(/(?=[A-Z])/).map(&:downcase).join("-")
       end
 
+      def process_args
+        while (arg = @args.shift)
+          case arg
+          when "-f", "--f", "--force"
+            @force = true
+          else
+            raise InvalidOption, "option #{arg} not found. Try running codeclimate --help for a list of valid commands."
+          end
+        end
+      end
+
       def execute
+        process_args
         run
       end
 
@@ -48,6 +62,8 @@ module CC
       end
 
       private
+
+      attr_reader :force
 
       def colorize(string, *args)
         rainbow.wrap(string).color(*args)
