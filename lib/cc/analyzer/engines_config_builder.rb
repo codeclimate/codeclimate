@@ -11,11 +11,11 @@ module CC
         :container_label,
       )
 
-      def initialize(registry:, config:, container_label:, source_dir:, include_paths:)
+      def initialize(registry:, config:, container_label:, source_dir:, requested_paths:)
         @registry = registry
         @config = config
         @container_label = container_label
-        @include_paths = include_paths
+        @requested_paths = requested_paths
         @source_dir = source_dir
       end
 
@@ -54,6 +54,10 @@ module CC
             end
           end
         end
+      end
+
+      def include_paths
+        IncludePathsBuilder.new(exclude_paths, Array(@requested_paths)).build
       end
 
       def exclude_paths

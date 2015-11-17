@@ -113,7 +113,7 @@ module CC::Analyzer
     describe "when there is a subdirectory that isn't readable by all but is excluded in .gitignore" do
       before do
         make_file("unreadable_subdir/secret.rb")
-        FileUtils.expects(:readable_by_all?).with("unreadable_subdir").at_least_once.returns(false)
+        FileUtils.stubs(:readable_by_all?).with("unreadable_subdir").at_least_once.returns(false)
         make_file(".gitignore", "unreadable_subdir\n")
         make_file("trackable.rb")
         make_file("subdir/subdir_trackable.rb")
@@ -196,7 +196,8 @@ module CC::Analyzer
     describe "when there is a file that isn't readable by all and is not excluded by either .codeclimate.yml or .gitignore" do
       before do
         make_file("subdir/unreadable.rb")
-        FileUtils.expects(:readable_by_all?).with("subdir/unreadable.rb").at_least_once.returns(false)
+        FileUtils.readable_by_all?(".")
+        FileUtils.stubs(:readable_by_all?).with("subdir/unreadable.rb").at_least_once.returns(false)
         make_file("trackable.rb")
         make_file("subdir/subdir_trackable.rb")
       end
@@ -250,15 +251,14 @@ module CC::Analyzer
       end
     end
 
-    describe "when given extra excludes" do
-      before do
+    describe "when analyzing a single file" do
+      let(:cc_includes) { ["subdir/subdir_file.rb"] }
+
+      it "returns the file" do
         make_file("root_file.rb")
         make_file("subdir/subdir_file.rb")
-      end
 
-      it "returns a the only non-excluded file" do
-        builder.build.must_equal(["./"])
-        builder.build(["**/subdir*"]).must_equal(["root_file.rb"])
+        builder.build.must_equal(["subdir/subdir_file.rb"])
       end
     end
   end

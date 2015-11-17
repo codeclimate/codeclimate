@@ -47,14 +47,8 @@ module CC
           config: @config,
           container_label: @container_label,
           source_dir: @source_dir,
-          include_paths: include_paths,
+          requested_paths: requested_paths,
         ).run
-      end
-
-      def include_paths
-        @_include_paths ||= IncludePathsBuilder.new(
-          @config.exclude_paths || [], @requested_paths
-        ).build
       end
 
       def engines
