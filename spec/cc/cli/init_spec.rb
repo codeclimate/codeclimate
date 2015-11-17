@@ -84,52 +84,76 @@ module CC::CLI
       end
 
       describe "when a platform .codeclimate.yml file is already present in working directory" do
-        it "does not create a new file or overwrite the old" do
-          filesystem.exist?(".codeclimate.yml").must_equal(false)
+        describe "if no --f option present" do
+          it "does not create a new file or overwrite the old" do
+            filesystem.exist?(".codeclimate.yml").must_equal(false)
 
-          yaml_content_before = "---\nlanguages:\n  Ruby: true\n"
-          File.write(".codeclimate.yml", yaml_content_before)
+            yaml_content_before = "---\nlanguages:\n  Ruby: true\n"
+            File.write(".codeclimate.yml", yaml_content_before)
 
-          filesystem.exist?(".codeclimate.yml").must_equal(true)
+            filesystem.exist?(".codeclimate.yml").must_equal(true)
 
-          capture_io_and_exit_code do
-            Init.new.run
+            capture_io_and_exit_code do
+              Init.new.run
+            end
+
+            content_after = File.read(".codeclimate.yml")
+
+            filesystem.exist?(".codeclimate.yml").must_equal(true)
+            content_after.must_equal(yaml_content_before)
           end
-
-          content_after = File.read(".codeclimate.yml")
-
-          filesystem.exist?(".codeclimate.yml").must_equal(true)
-          content_after.must_equal(yaml_content_before)
         end
 
-        it "warns that there is a .codeclimate.yml file already present" do
-          filesystem.exist?(".codeclimate.yml").must_equal(false)
+        describe "when --f or --force is passed as an option" do
+          it "overwrites the existing .codeclimate.yml" do
+            filesystem.exist?(".codeclimate.yml").must_equal(false)
 
-          File.new(".codeclimate.yml", "w")
+            yaml_content_before = "---\nlanguages:\n  Ruby: true\n"
+            File.write(".codeclimate.yml", yaml_content_before)
 
-          filesystem.exist?(".codeclimate.yml").must_equal(true)
+            filesystem.exist?(".codeclimate.yml").must_equal(true)
 
-          stdout, _, exit_code = capture_io_and_exit_code do
-            Init.new.run
+            capture_io_and_exit_code do
+              Init.new(["--f"]).execute
+            end
+
+            content_after = File.read(".codeclimate.yml")
+
+            filesystem.exist?(".codeclimate.yml").must_equal(true)
+            content_after.wont_equal(yaml_content_before)
           end
-
-          stdout.must_match("WARNING: Config file .codeclimate.yml already present.")
-          exit_code.must_equal 0
         end
 
-        it "still generates default config files" do
-          filesystem.exist?(".codeclimate.yml").must_equal(false)
+        describe "always" do
+          it "warns that there is a .codeclimate.yml file already present" do
+            filesystem.exist?(".codeclimate.yml").must_equal(false)
 
-          File.new(".codeclimate.yml", "w")
+            File.new(".codeclimate.yml", "w")
 
-          filesystem.exist?(".codeclimate.yml").must_equal(true)
+            filesystem.exist?(".codeclimate.yml").must_equal(true)
 
-          init = Init.new
+            stdout, _, exit_code = capture_io_and_exit_code do
+              Init.new.run
+            end
 
-          init.expects(:create_default_configs)
+            stdout.must_match("WARNING: Config file .codeclimate.yml already present.")
+            exit_code.must_equal 0
+          end
 
-          _, stderr, exit_code = capture_io_and_exit_code do
-            init.run
+          it "still generates default config files" do
+            filesystem.exist?(".codeclimate.yml").must_equal(false)
+
+            File.new(".codeclimate.yml", "w")
+
+            filesystem.exist?(".codeclimate.yml").must_equal(true)
+
+            init = Init.new
+
+            init.expects(:create_default_configs)
+
+            _, stderr, exit_code = capture_io_and_exit_code do
+              init.run
+            end
           end
         end
       end
