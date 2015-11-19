@@ -18,8 +18,12 @@ brakeman:
   enable_regexps:
     - ^script\/rails$
   default_ratings_paths:
-    - "app/**"
+    - "Gemfile.lock"
+    - "**.erb"
+    - "**.haml"
     - "**.rb"
+    - "**.rhtml"
+    - "**.slim"
 bundler-audit:
   image: codeclimate/codeclimate-bundler-audit
   description: Patch-level verification for Bundler.
