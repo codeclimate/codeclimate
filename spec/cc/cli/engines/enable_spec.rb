@@ -69,6 +69,24 @@ module CC::CLI::Engines
           end
         end
       end
+
+      describe "when engine has no default configuration" do
+        it "it omits the config key entirely" do
+          within_temp_dir do
+            create_yaml(Factory.create_yaml_with_no_engines)
+
+            stdout, stderr = capture_io do
+              Enable.new(args = ["coffeelint"]).run
+            end
+
+            content_after = File.read(".codeclimate.yml")
+
+            config = CC::Analyzer::Config.new(content_after).engine_config("coffeelint")
+
+            config.must_equal({"enabled" => true})
+          end
+        end
+      end
     end
 
     def filesystem
