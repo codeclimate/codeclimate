@@ -60,7 +60,7 @@ module CC
           duration = timeout
           @listener.timed_out(container_data(duration: duration))
         else
-          sleep 0.01 until !t_out.alive? && !t_err.alive?
+          t_out.join || t_err.join
           duration = ((Time.now - started) * 1000).round
           @listener.finished(container_data(duration: duration, status: status))
         end
@@ -78,9 +78,6 @@ module CC
         if @timed_out
           t_out.kill if t_out
           t_err.kill if t_err
-        else
-          t_out.join if t_out
-          t_err.join if t_err
         end
       end
 
