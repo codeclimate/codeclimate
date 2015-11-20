@@ -33,10 +33,11 @@ git add VERSION Gemfile.lock
 git commit -m "Release v$version"
 git push origin $branch
 
+compare_link="https://github.com/codeclimate/codeclimate/compare/${old_version}...$(git rev-parse --short $branch)"
 if command -v hub > /dev/null 2>&1; then
-  hub pull-request -m "Release v$version"
+  hub pull-request -m "Release v$version\n\n$compare_link"
 elif command -v gh > /dev/null 2>&1; then
-  gh pull-request -m "Release v$version"
+  gh pull-request -m "Release v$version\n\n$compare_link"
 else
   echo "hub not installed? Please open the PR manually" >&2
 fi
