@@ -153,7 +153,6 @@ module CC::Analyzer
             @container_result.exit_status.wont_equal nil
             @container_result.duration.must_be :>=, 0
             @container_result.duration.must_be :<, 2_000
-
           ensure
             ENV["CONTAINER_TIMEOUT_SECONDS"] = old_timeout
           end

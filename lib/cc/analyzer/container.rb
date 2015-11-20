@@ -60,7 +60,7 @@ module CC
           duration = timeout
           @listener.timed_out(container_data(duration: duration))
         else
-          t_out.join || t_err.join
+          t_out.join && t_err.join
           duration = ((Time.now - started) * 1000).round
           @listener.finished(container_data(duration: duration, status: status))
         end
@@ -75,10 +75,8 @@ module CC
         )
       ensure
         t_timeout.kill if t_timeout
-        if @timed_out
-          t_out.kill if t_out
-          t_err.kill if t_err
-        end
+        t_out.kill if t_out
+        t_err.kill if t_err
       end
 
       def stop
@@ -128,7 +126,7 @@ module CC
           sleep timeout
           @timed_out = true
           reap_running_container
-        end
+        end.run
       end
 
       def check_output_bytes(last_read_byte_count)
