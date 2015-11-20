@@ -4,20 +4,15 @@
 #
 # Assumes bin/prep-release was run and the PR merged.
 #
-# Usage: bin/release VERSION
+# Usage: bin/release
 #
 ###
 set -e
 
-if [ -z "$1" ]; then
-  echo "usage: bin/release VERSION" >&2
-  exit 64
-fi
-
-version=$1
-
 git checkout master
 git pull
+
+version=$(< VERSION)
 
 printf "RELEASE %s\n" "$version"
 rake release
