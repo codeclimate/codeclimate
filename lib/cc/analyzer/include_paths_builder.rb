@@ -24,7 +24,6 @@ module CC
         @_paths =
           PathFilter.new(include_paths).
           reject_paths(ignored_files).
-          raise_if_any_unreadable_files.
           reject_unreadable_paths.
           select_readable_files.
           reject_symlinks
