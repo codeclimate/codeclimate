@@ -106,16 +106,16 @@ module CC
       end
 
       def run_tests
-        Dir["**/*"].each do |test_file|
-          next unless File.file?(test_file)
-          process_file(test_file)
+        Dir["*"].each do |file|
+          next unless File.directory?(file)
+          process_directory(file)
         end
       end
 
-      def process_file(test_file)
-        markers = markers_in(test_file)
+      def process_directory(test_directory)
+        markers = markers_in(test_directory)
 
-        actual_issues = issues_in(test_file)
+        actual_issues = issues_in(test_directory)
         compare_issues(actual_issues, markers)
       end
 
@@ -176,9 +176,9 @@ module CC
         end
       end
 
-      def issues_in(test_file)
+      def issues_in(test_directory)
         issue_docs = capture_stdout do
-          codeclimate_analyze(test_file)
+          codeclimate_analyze(test_directory)
         end
 
         JSON.parse(issue_docs)
@@ -206,13 +206,16 @@ module CC
         end
       end
 
-      def markers_in(test_file)
-        lines = File.readlines(test_file)
-
+      def markers_in(test_directory)
         [].tap do |markers|
-          lines.each_with_index do |line, index|
-            if line =~ /\[issue\].*/
-              markers << Marker.from_text(@engine_name, test_file, index + 1, line)
+          Dir[File.join(test_directory, "**/*")].each do |file|
+            next unless File.file?(file)
+            lines = File.readlines(file)
+
+            lines.each_with_index do |line, index|
+              if line =~ /\[issue\].*/
+                markers << Marker.from_text(@engine_name, file, index + 1, line)
+              end
             end
           end
         end
