@@ -202,8 +202,8 @@ module CC::Analyzer
         make_file("subdir/subdir_trackable.rb")
       end
 
-      it "raises an informative error" do
-        lambda { builder.build }.must_raise(CC::Analyzer::UnreadableFileError)
+      it "generates correct paths" do
+        builder.build.must_equal ["subdir/subdir_trackable.rb", "trackable.rb"]
       end
     end
 

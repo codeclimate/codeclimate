@@ -7,16 +7,6 @@ module CC
         @paths = paths
       end
 
-      def raise_if_any_unreadable_files
-        paths.each do |path|
-          if !File.directory?(path) && !FileUtils.readable_by_all?(path)
-            raise CC::Analyzer::UnreadableFileError, "Can't read #{path}"
-          end
-        end
-
-        self
-      end
-
       def reject_unreadable_paths
         @paths = paths - unreadable_path_entries
         self
@@ -28,7 +18,7 @@ module CC
       end
 
       def select_readable_files
-        @paths = paths.select { |path| FileUtils.readable_by_all?(path) }
+        @paths = paths.select { |path| File.exist?(path) && FileUtils.readable_by_all?(path) }
         self
       end
 
