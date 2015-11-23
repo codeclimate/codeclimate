@@ -90,7 +90,7 @@ module CC::Analyzer
         result.exit_status.must_equal 0
         result.timed_out?.must_equal false
         result.duration.must_be :>=, 0
-        result.duration.must_be :<, 1
+        result.duration.must_be :<, 2_000
         result.stderr.must_equal ""
       end
 

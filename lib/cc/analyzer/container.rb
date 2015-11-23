@@ -60,7 +60,7 @@ module CC
           duration = timeout
           @listener.timed_out(container_data(duration: duration))
         else
-          t_out.join && t_err.join
+          sleep 1 until !t_out.alive? && !t_err.alive?
           duration = ((Time.now - started) * 1000).round
           @listener.finished(container_data(duration: duration, status: status))
         end
@@ -123,7 +123,15 @@ module CC
 
       def timeout_thread
         Thread.new do
-          sleep timeout
+          # Doing one long `sleep timeout` seems to fail sometimes, so
+          # we do a series of short timeouts before exiting
+          start_time = Time.now
+          loop do
+            sleep 10
+            duration = Time.now - start_time
+            break if duration >= timeout
+          end
+
           @timed_out = true
           reap_running_container
         end.run
