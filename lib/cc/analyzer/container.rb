@@ -57,7 +57,7 @@ module CC
         _, status = Process.waitpid2(pid)
 
         if @timed_out
-          duration = timeout
+          duration = timeout * 1000
           @listener.timed_out(container_data(duration: duration))
         else
           sleep 1 until !t_out.alive? && !t_err.alive?
