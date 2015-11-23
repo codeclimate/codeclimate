@@ -74,9 +74,7 @@ module CC
           @stderr_io.string,
         )
       ensure
-        t_timeout.kill if t_timeout
-        t_out.kill if t_out
-        t_err.kill if t_err
+        [t_timeout, t_out, t_err].each { |t| t.kill if t }
       end
 
       def stop
