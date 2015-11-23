@@ -57,10 +57,10 @@ module CC
         _, status = Process.waitpid2(pid)
 
         if @timed_out
-          duration = timeout
+          duration = timeout * 1000
           @listener.timed_out(container_data(duration: duration))
         else
-          sleep 0.01 until !t_out.alive? && !t_err.alive?
+          sleep 1 until !t_out.alive? && !t_err.alive?
           duration = ((Time.now - started) * 1000).round
           @listener.finished(container_data(duration: duration, status: status))
         end
@@ -74,14 +74,7 @@ module CC
           @stderr_io.string,
         )
       ensure
-        t_timeout.kill if t_timeout
-        if @timed_out
-          t_out.kill if t_out
-          t_err.kill if t_err
-        else
-          t_out.join if t_out
-          t_err.join if t_err
-        end
+        [t_timeout, t_out, t_err].each { |t| t.kill if t }
       end
 
       def stop
@@ -128,10 +121,18 @@ module CC
 
       def timeout_thread
         Thread.new do
-          sleep timeout
+          # Doing one long `sleep timeout` seems to fail sometimes, so
+          # we do a series of short timeouts before exiting
+          start_time = Time.now
+          loop do
+            sleep 10
+            duration = Time.now - start_time
+            break if duration >= timeout
+          end
+
           @timed_out = true
           reap_running_container
-        end
+        end.run
       end
 
       def check_output_bytes(last_read_byte_count)

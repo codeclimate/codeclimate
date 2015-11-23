@@ -18,7 +18,7 @@ class TestContainerListener < CC::Analyzer::ContainerListener
   def timed_out(data)
     @timed_out_image = data.image
     @timed_out_name = data.name
-    @timed_out_seconds = data.duration
+    @timed_out_seconds = data.duration / 1_000
     @timed_out = true
   end
 

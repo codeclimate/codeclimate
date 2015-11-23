@@ -90,7 +90,7 @@ module CC::Analyzer
         result.exit_status.must_equal 0
         result.timed_out?.must_equal false
         result.duration.must_be :>=, 0
-        result.duration.must_be :<, 20
+        result.duration.must_be :<, 2_000
         result.stderr.must_equal ""
       end
 
@@ -153,9 +153,41 @@ module CC::Analyzer
             @container_result.exit_status.wont_equal nil
             @container_result.duration.must_be :>=, 0
             @container_result.duration.must_be :<, 2_000
-
           ensure
             ENV["CONTAINER_TIMEOUT_SECONDS"] = old_timeout
+          end
+        end
+
+        it "waits for IO parsing to finish" do
+          stdout_lines = []
+          listener = TestContainerListener.new
+          listener.expects(:finished).once.with do
+            stdout_lines == %w[line1 line2 line3]
+          end
+          container = Container.new(
+            image: "alpine",
+            command: ["echo", "line1\nline2\nline3"],
+            name: @name,
+            listener: listener,
+          )
+          container.on_output do |str|
+            stdout_lines << str
+          end
+
+          slow_read_stdout = Proc.new do |out|
+            Thread.new do
+              out.each_line(container.instance_variable_get(:@output_delimeter)) do |chunk|
+                sleep 0.5
+                output = chunk.chomp(container.instance_variable_get(:@output_delimeter))
+                container.instance_variable_get(:@on_output).call(output)
+              end
+            end
+          end
+          container.stub :read_stdout, slow_read_stdout do
+            run_container(container)
+
+            assert_container_stopped
+            @container_result.timed_out?.must_equal false
           end
         end
 
