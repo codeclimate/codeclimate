@@ -60,7 +60,7 @@ module CC
           duration = timeout * 1000
           @listener.timed_out(container_data(duration: duration))
         else
-          sleep 1 until !t_out.alive? && !t_err.alive?
+          [t_out, t_err].each(&:join)
           duration = ((Time.now - started) * 1000).round
           @listener.finished(container_data(duration: duration, status: status))
         end
@@ -101,20 +101,28 @@ module CC
 
       def read_stdout(out)
         Thread.new do
-          out.each_line(@output_delimeter) do |chunk|
-            output = chunk.chomp(@output_delimeter)
+          begin
+            out.each_line(@output_delimeter) do |chunk|
+              output = chunk.chomp(@output_delimeter)
 
-            @on_output.call(output)
-            check_output_bytes(output.bytesize)
+              @on_output.call(output)
+              check_output_bytes(output.bytesize)
+            end
+          ensure
+            out.close
           end
         end
       end
 
       def read_stderr(err)
         Thread.new do
-          err.each_line do |line|
-            @stderr_io.write(line)
-            check_output_bytes(line.bytesize)
+          begin
+            err.each_line do |line|
+              @stderr_io.write(line)
+              check_output_bytes(line.bytesize)
+            end
+          ensure
+            err.close
           end
         end
       end
