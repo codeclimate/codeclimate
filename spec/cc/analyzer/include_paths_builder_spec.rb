@@ -203,7 +203,7 @@ module CC::Analyzer
       end
 
       it "generates correct paths" do
-        builder.build.must_equal ["subdir/subdir_trackable.rb", "trackable.rb"]
+        builder.build.sort.must_equal ["subdir/subdir_trackable.rb", "trackable.rb"].sort
       end
     end
 
