@@ -50,17 +50,24 @@ module CC
 
         pid, _, out, err = POSIX::Spawn.popen4(*docker_run_command(options))
 
-        t_out = read_stdout(out)
-        t_err = read_stderr(err)
+        @t_out = read_stdout(out)
+        @t_err = read_stderr(err)
         t_timeout = timeout_thread
 
+        # blocks until the engine stops. there may still be stdout in flight if
+        # it was being produced more quickly than consumed.
         _, status = Process.waitpid2(pid)
+
+        # blocks until all readers are done. they're still governed by the
+        # timeout thread at this point. if we hit the timeout while processing
+        # output, the threads will be Thread#killed as part of #stop and this
+        # will unblock with the correct value in @timed_out
+        [@t_out, @t_err].each(&:join)
 
         if @timed_out
           duration = timeout * 1000
           @listener.timed_out(container_data(duration: duration))
         else
-          [t_out, t_err].each(&:join)
           duration = ((Time.now - started) * 1000).round
           @listener.finished(container_data(duration: duration, status: status))
         end
@@ -74,14 +81,13 @@ module CC
           @stderr_io.string,
         )
       ensure
-        [t_timeout, t_out, t_err].each { |t| t.kill if t }
+        kill_reader_threads
+        t_timeout.kill if t_timeout
       end
 
-      def stop
-        # Prevents the processing of more output after first error
-        @on_output = ->(*) {}
-
-        reap_running_container
+      def stop(message = nil)
+        reap_running_container(message)
+        kill_reader_threads
       end
 
       private
@@ -139,7 +145,7 @@ module CC
           end
 
           @timed_out = true
-          reap_running_container
+          stop("timed out")
         end.run
       end
 
@@ -150,7 +156,7 @@ module CC
 
         if output_byte_count > maximum_output_bytes
           @maximum_output_exceeded = true
-          stop
+          stop("maximum output exceeded")
         end
       end
 
@@ -158,8 +164,13 @@ module CC
         ContainerData.new(@image, @name, duration, status, @stderr_io.string)
       end
 
-      def reap_running_container
-        Analyzer.logger.warn("killing container name=#{@name}")
+      def kill_reader_threads
+        @t_out.kill if @t_out
+        @t_err.kill if @t_err
+      end
+
+      def reap_running_container(message)
+        Analyzer.logger.warn("killing container name=#{@name} message=#{message.inspect}")
         POSIX::Spawn::Child.new("docker", "kill", @name)
       end
 

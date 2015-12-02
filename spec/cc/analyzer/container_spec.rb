@@ -176,6 +176,28 @@ module CC::Analyzer
           @container_result.timed_out?.must_equal false
         end
 
+        it "does not wait for IO when timed out" do
+          with_timeout(1) do
+            listener = TestContainerListener.new
+            listener.expects(:finished).never
+            container = Container.new(
+              image: "alpine",
+              #command: %w[sleep 10],
+              command: ["echo", "line1\nline2\nline3"],
+              name: @name,
+              listener: listener,
+            )
+            container.on_output do |str|
+              sleep 10 and raise "Reader thread was not killed"
+            end
+
+            run_container(container)
+
+            assert_container_stopped
+            listener.timed_out?.must_equal true
+          end
+        end
+
         it "stops containers that emit more than the configured maximum output bytes" do
           begin
             ENV["CONTAINER_MAXIMUM_OUTPUT_BYTES"] = "4"
