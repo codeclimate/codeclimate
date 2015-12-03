@@ -25,13 +25,13 @@ printf "RELEASE %s => %s\n" "$old_version" "$version"
 git checkout master
 git pull
 
-git checkout -b $branch
+git checkout -b "$branch"
 
 printf "%s\n" "$version" > VERSION
 bundle
 git add VERSION Gemfile.lock
 git commit -m "Release v$version"
-git push origin $branch
+git push origin "$branch"
 
 compare_link="https://github.com/codeclimate/codeclimate/compare/${old_version}...$(git rev-parse --short $branch)"
 pr_description_file=$(mktemp -t cc_commit_message) || exit 1
