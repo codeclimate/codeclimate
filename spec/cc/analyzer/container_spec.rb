@@ -129,10 +129,7 @@ module CC::Analyzer
         end
 
         it "times out slow containers" do
-          old_timeout = ENV["CONTAINER_TIMEOUT_SECONDS"]
-          ENV["CONTAINER_TIMEOUT_SECONDS"] = "1"
-
-          begin
+          with_timeout(1) do
             listener = TestContainerListener.new
             listener.expects(:finished).never
             container = Container.new(
@@ -153,8 +150,6 @@ module CC::Analyzer
             @container_result.exit_status.wont_equal nil
             @container_result.duration.must_be :>=, 0
             @container_result.duration.must_be :<, 2_000
-          ensure
-            ENV["CONTAINER_TIMEOUT_SECONDS"] = old_timeout
           end
         end
 
@@ -171,23 +166,35 @@ module CC::Analyzer
             listener: listener,
           )
           container.on_output do |str|
+            sleep 0.5
             stdout_lines << str
           end
 
-          slow_read_stdout = Proc.new do |out|
-            Thread.new do
-              out.each_line(container.instance_variable_get(:@output_delimeter)) do |chunk|
-                sleep 0.5
-                output = chunk.chomp(container.instance_variable_get(:@output_delimeter))
-                container.instance_variable_get(:@on_output).call(output)
-              end
+          run_container(container)
+
+          assert_container_stopped
+          @container_result.timed_out?.must_equal false
+        end
+
+        it "does not wait for IO when timed out" do
+          with_timeout(1) do
+            listener = TestContainerListener.new
+            listener.expects(:finished).never
+            container = Container.new(
+              image: "alpine",
+              #command: %w[sleep 10],
+              command: ["echo", "line1\nline2\nline3"],
+              name: @name,
+              listener: listener,
+            )
+            container.on_output do |str|
+              sleep 10 and raise "Reader thread was not killed"
             end
-          end
-          container.stub :read_stdout, slow_read_stdout do
+
             run_container(container)
 
             assert_container_stopped
-            @container_result.timed_out?.must_equal false
+            listener.timed_out?.must_equal true
           end
         end
 
@@ -276,6 +283,14 @@ module CC::Analyzer
       Process.expects(:waitpid2).with(pid).returns([nil, status])
 
       return [pid, out, err]
+    end
+
+    def with_timeout(timeout)
+      old_timeout = ENV["CONTAINER_TIMEOUT_SECONDS"]
+      ENV["CONTAINER_TIMEOUT_SECONDS"] = timeout.to_s
+      yield
+    ensure
+      ENV["CONTAINER_TIMEOUT_SECONDS"] = old_timeout
     end
   end
 end
