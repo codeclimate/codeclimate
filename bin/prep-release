@@ -33,16 +33,15 @@ git add VERSION Gemfile.lock
 git commit -m "Release v$version"
 git push origin "$branch"
 
-compare_link="https://github.com/codeclimate/codeclimate/compare/${old_version}...$(git rev-parse --short $branch)"
-pr_description_file=$(mktemp -t cc_commit_message) || exit 1
-printf "Release v$version\n\n$s\n" "$compare_link" > "$pr_description_file"
+branch_head=$(git rev-parse --short $branch)
 if command -v hub > /dev/null 2>&1; then
-  hub pull-request -F "$pr_description_file"
-elif command -v gh > /dev/null 2>&1; then
-  gh pull-request -F "$pr_description_file"
+  hub pull-request -F - <<EOF
+Release v$version
+
+https://github.com/codeclimate/codeclimate/compare/$old_version...$branch_head
+EOF
 else
   echo "hub not installed? Please open the PR manually" >&2
 fi
-rm "$commit_message_file"
 
 echo "After merging the version-bump PR, run bin/release"
