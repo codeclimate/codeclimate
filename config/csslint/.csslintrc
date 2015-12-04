@@ -1,1 +1,2 @@
+--exclude-exts=.min.css
 --ignore=adjoining-classes,ids,order-alphabetical,unqualified-attributes
