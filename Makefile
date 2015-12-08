@@ -1,4 +1,9 @@
+.PHONY: build install uninstall
+
 PREFIX ?= /usr/local
+
+image:
+	docker build -t codeclimate/codeclimate .
 
 install:
 	bin/check
@@ -11,4 +16,3 @@ uninstall:
 	$(RM) $(DESTDIR)$(PREFIX)/bin/codeclimate
 	docker rmi codeclimate/codeclimate:latest
 
-.PHONY: install uninstall
