@@ -38,7 +38,7 @@ if command -v hub > /dev/null 2>&1; then
   hub pull-request -F - <<EOF
 Release v$version
 
-https://github.com/codeclimate/codeclimate/compare/$old_version...$branch_head
+https://github.com/codeclimate/codeclimate/compare/v$old_version...$branch_head
 EOF
 else
   echo "hub not installed? Please open the PR manually" >&2
