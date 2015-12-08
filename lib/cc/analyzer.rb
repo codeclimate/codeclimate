@@ -12,6 +12,7 @@ module CC
     autoload :Filesystem, "cc/analyzer/filesystem"
     autoload :Formatters, "cc/analyzer/formatters"
     autoload :IncludePathsBuilder, "cc/analyzer/include_paths_builder"
+    autoload :Issue, "cc/analyzer/issue"
     autoload :IssueSorter, "cc/analyzer/issue_sorter"
     autoload :LocationDescription, "cc/analyzer/location_description"
     autoload :LoggingContainerListener, "cc/analyzer/logging_container_listener"
