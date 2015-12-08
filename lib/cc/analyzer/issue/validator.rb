@@ -1,6 +1,13 @@
 module CC
   module Analyzer
     class Issue
+      module Validations
+        autoload :CheckNamePresenceValidation, "cc/analyzer/issue/validator/check_name_presence_validation"
+        autoload :PathPresenceValidation, "cc/analyzer/issue/validator/path_presence_validation"
+        autoload :RelativePathValidation, "cc/analyzer/issue/validator/relative_path_validation"
+        autoload :TypeValidation, "cc/analyzer/issue/validator/type_validation"
+      end
+
       class Validator
         CHECKS = [
           Validations::CheckNamePresenceValidation,
