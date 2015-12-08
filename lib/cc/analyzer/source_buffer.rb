@@ -5,6 +5,10 @@ module CC
       attr_reader :name
       attr_reader :source
 
+      def self.from_path(path)
+        new(path, File.read(path))
+      end
+
       def initialize(name, source)
         @name = name
         @source = source
