@@ -156,9 +156,7 @@ module CC::Analyzer
         it "waits for IO parsing to finish" do
           stdout_lines = []
           listener = TestContainerListener.new
-          listener.expects(:finished).once.with do
-            stdout_lines == %w[line1 line2 line3]
-          end
+          listener.expects(:finished).once
           container = Container.new(
             image: "alpine",
             command: ["echo", "line1\nline2\nline3"],
@@ -174,6 +172,7 @@ module CC::Analyzer
 
           assert_container_stopped
           @container_result.timed_out?.must_equal false
+          stdout_lines.must_equal %w[line1 line2 line3]
         end
 
         it "does not wait for IO when timed out" do
