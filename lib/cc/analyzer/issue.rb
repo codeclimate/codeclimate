@@ -1,6 +1,7 @@
 module CC
   module Analyzer
     class Issue
+      autoload :Adapter, "cc/analyzer/issue/adapter"
       autoload :Builder, "cc/analyzer/issue/builder"
       autoload :Validations, "cc/analyzer/issue/validations"
       autoload :Validator, "cc/analyzer/issue/validator"
