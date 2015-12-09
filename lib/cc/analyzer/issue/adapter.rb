@@ -9,9 +9,8 @@ module CC
 
         attr_reader :hash
 
-        def initialize(issue, engine_name)
+        def initialize(issue)
           @issue = issue
-          @engine_name = engine_name
         end
 
         def run
@@ -20,7 +19,6 @@ module CC
               _type: TYPE,
               attrs: issue["attrs"],
               categories: issue["categories"],
-              engine_name: @engine_name,
               check_name: issue["check_name"],
               constant_name: path,
               content: content,

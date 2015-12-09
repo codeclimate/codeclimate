@@ -8,7 +8,7 @@ module CC::Analyzer
       it "returns falsy if the location is bad" do
         location = { "location" => { "path" => "fun.rb" } }
         issue = sample_issue(location)
-        translator = Issue::Adapter.new(issue, "rubocop")
+        translator = Issue::Adapter.new(issue)
         (!translator.run).must_equal(true)
       end
 
@@ -28,7 +28,7 @@ module CC::Analyzer
           }
 
           issue = sample_issue(location)
-          translator = Issue::Adapter.new(issue, "rubocop")
+          translator = Issue::Adapter.new(issue)
           result = translator.run
 
           result[:location][:end_line].must_equal(1)
@@ -41,7 +41,7 @@ module CC::Analyzer
           content = { "body" => "# Title\n\nSome\n\nmarkdown **text**" }
 
           issue = sample_issue("content" => content)
-          translator = Issue::Adapter.new(issue, "rubocop")
+          translator = Issue::Adapter.new(issue)
           result = translator.run
 
           result[:content].must_equal(content)
@@ -72,7 +72,7 @@ module CC::Analyzer
           }
 
           issue = sample_issue(other_locations)
-          translator = Issue::Adapter.new(issue, "rubocop")
+          translator = Issue::Adapter.new(issue)
           result = translator.run
 
           result[:other_locations].count.must_equal(2)
@@ -122,7 +122,7 @@ module CC::Analyzer
 
           location_formats.each do |location|
             issue = sample_issue(location.merge("remediation_points" => nil))
-            translator = Issue::Adapter.new(issue, "rubocop")
+            translator = Issue::Adapter.new(issue)
             result = translator.run
 
             result[:remediation_points].must_equal(0)

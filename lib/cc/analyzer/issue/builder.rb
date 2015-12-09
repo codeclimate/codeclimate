@@ -4,14 +4,13 @@ module CC
       class Builder
         attr_reader :error, :issue
 
-        def initialize(json, engine_name)
+        def initialize(json)
           @json = json
-          @engine_name = engine_name
         end
 
         def run
           validate
-          @issue = Issue.new(smell_adapter.hash) unless @error
+          @issue = Issue.new(adapter.hash) unless @error
         end
 
         private
@@ -31,7 +30,7 @@ module CC
         end
 
         def invalid_location?
-          !smell_adapter.hash
+          !adapter.hash
         end
 
         def invalid_location_error
@@ -46,7 +45,7 @@ module CC
         end
 
         def location_is_directory?
-          File.directory?(Issue.path(smell_adapter.hash))
+          File.directory?(Issue.path(adapter.hash))
         end
 
         def location_is_directory_error
@@ -56,8 +55,8 @@ module CC
           )
         end
 
-        def smell_adapter
-          @smell_adapter ||= Adapter.new(hash_from_json, @engine_name).tap(&:run)
+        def adapter
+          @adapter ||= Adapter.new(hash_from_json).tap(&:run)
         end
 
         def validate
