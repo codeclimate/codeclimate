@@ -11,7 +11,7 @@ module CC
 
         def run
           validate
-          @issue = Engine::Issue.new(smell_adapter.hash) unless @error
+          @issue = Issue.new(smell_adapter.hash) unless @error
         end
 
         private
@@ -24,8 +24,7 @@ module CC
         end
 
         def invalid_json_error
-          IOProcessor::EngineOutputError.new(
-            CC::Builder::Engine::OutputInvalid,
+          CC::Analyzer::Engine::OutputInvalid.new(
             "Issue unparseable: #{@json}",
             output: @json,
           )
@@ -36,8 +35,7 @@ module CC
         end
 
         def invalid_location_error
-          IOProcessor::EngineOutputError.new(
-            CC::Builder::Engine::IssueInvalid,
+          CC::Analyzer::Engine::IssueInvalid.new(
             "Issue has invalid location: #{hash_from_json}",
             output: hash_from_json,
           )
@@ -48,19 +46,18 @@ module CC
         end
 
         def location_is_directory?
-          File.directory?(Engine::Issue.path(smell_adapter.hash))
+          File.directory?(Issue.path(smell_adapter.hash))
         end
 
         def location_is_directory_error
-          IOProcessor::EngineOutputError.new(
-            CC::Builder::Engine::IssueInvalid,
+          CC::Analyzer::Engine::IssueInvalid.new(
             "Issue location is directory: #{hash_from_json}",
             output: hash_from_json,
           )
         end
 
         def smell_adapter
-          @smell_adapter ||= SmellAdapter.new(hash_from_json, @engine_name).tap(&:run)
+          @smell_adapter ||= Adapter.new(hash_from_json, @engine_name).tap(&:run)
         end
 
         def validate
@@ -76,7 +73,7 @@ module CC
         end
 
         def validator
-          @validator ||= IssueValidator.new(hash_from_json).tap(&:validate)
+          @validator ||= Validator.new(hash_from_json).tap(&:validate)
         end
       end
     end

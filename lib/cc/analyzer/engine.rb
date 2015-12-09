@@ -1,11 +1,9 @@
 require "securerandom"
+require "cc/analyzer/engine/errors"
 
 module CC
   module Analyzer
     class Engine
-      EngineFailure = Class.new(StandardError)
-      EngineTimeout = Class.new(StandardError)
-
       attr_reader :name
 
       DEFAULT_MEMORY_LIMIT = 512_000_000.freeze

@@ -31,14 +31,12 @@ module CC
           end
         end
 
-        #TODO: adapt this to still work with builder
-        #def engine_output_error
-        #  IOProcessor::EngineOutputError.new(
-        #    CC::Builder::Engine::IssueInvalid,
-        #    @error[:message],
-        #    output: @error[:message], issue: @error[:issue],
-        #  )
-        #end
+        def engine_output_error
+          CC::Analyzer::Engine::IssueInvalid.new(
+            @error[:message],
+            output: @error[:message], issue: @error[:issue],
+          )
+        end
 
         private
 

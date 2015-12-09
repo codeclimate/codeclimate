@@ -83,10 +83,10 @@ module Factory
     }
   end
 
-  def sample_issue
+  def sample_issue(overrides = {})
     {
       "type" => "issue",
-      "check" => "Rubocop/Style/Documentation",
+      "check_name" => "Rubocop/Style/Documentation",
       "description" => "Missing top-level class documentation comment.",
       "categories" => ["Style"],
       "remediation_points" => 10,
@@ -97,6 +97,10 @@ module Factory
           "end" => 40
         }
       }
-    }
+    }.merge(overrides)
+  end
+
+  def sample_issue_json(overrides = {})
+    JSON.generate(sample_issue(overrides))
   end
 end
