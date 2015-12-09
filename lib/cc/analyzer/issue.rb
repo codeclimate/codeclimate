@@ -6,6 +6,8 @@ module CC
       autoload :Validations, "cc/analyzer/issue/validations"
       autoload :Validator, "cc/analyzer/issue/validator"
 
+      delegate :[], :fetch, to: :raw_smell_document
+
       POINTS_PER_COST = 1_000_000.0
 
       def self.path(raw_smell_document)
@@ -17,7 +19,7 @@ module CC
       end
 
       def fingerprint
-        @raw_smell_document[:fingerprint]
+        raw_smell_document[:fingerprint]
       end
 
       def path
@@ -33,12 +35,16 @@ module CC
       end
 
       def remediation_points
-        @raw_smell_document[:remediation_points]
+        raw_smell_document[:remediation_points]
       end
 
       def smell_document
-        @raw_smell_document.merge(remediation_cost: remediation_cost)
+        raw_smell_document.merge(remediation_cost: remediation_cost)
       end
+
+      private
+
+      attr_reader :raw_smell_document
     end
   end
 end
