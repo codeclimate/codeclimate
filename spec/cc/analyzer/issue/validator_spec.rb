@@ -1,7 +1,7 @@
 require "spec_helper"
 
-module CC::Builder::Issue
-  describe Validator do
+module CC::Analyzer
+  describe Issue::Validator do
     describe "#validate" do
       it "returns true when everything is valid" do
         valid_issue = {
@@ -17,7 +17,7 @@ module CC::Builder::Issue
           "type" => "Issue",
         }
 
-        validator = Validator.new(valid_issue)
+        validator = Issue::Validator.new(valid_issue)
 
         validator.validate.must_equal(true)
       end

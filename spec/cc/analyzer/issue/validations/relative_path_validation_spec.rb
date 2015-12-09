@@ -1,6 +1,6 @@
 require "spec_helper"
 
-module CC::Analyzer::Validations
+module CC::Analyzer::Issue::Validations
   describe RelativePathValidation do
     describe "#valid?" do
       it "returns true" do

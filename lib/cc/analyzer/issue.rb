@@ -2,7 +2,8 @@ module CC
   module Analyzer
     class Issue
       autoload :Builder, "cc/analyzer/issue/builder"
-      autoload :validator, "cc/analyzer/issue/validator"
+      autoload :Validations, "cc/analyzer/issue/validations"
+      autoload :Validator, "cc/analyzer/issue/validator"
 
       POINTS_PER_COST = 1_000_000.0
 
