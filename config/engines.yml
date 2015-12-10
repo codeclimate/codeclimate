@@ -55,7 +55,17 @@ duplication:
   description: Structural duplication detection for Ruby, Python, JavaScript, and PHP.
   community: false
   enable_regexps:
+    - \.js$
+    - \.jsx$
+    - \.php$
+    - \.py$
+    - \.rb$
   default_ratings_paths:
+    - "**.js"
+    - "**.jsx"
+    - "**.php"
+    - "**.py"
+    - "**.rb"
   default_config:
     languages:
       - ruby
