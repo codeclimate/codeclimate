@@ -16,7 +16,7 @@ brakeman:
   upgrade_languages:
     - Ruby
   enable_regexps:
-    - ^script\/rails$
+    - ^app\/.*\.rb
   default_ratings_paths:
     - "Gemfile.lock"
     - "**.erb"
