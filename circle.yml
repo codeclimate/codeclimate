@@ -11,3 +11,7 @@ dependencies:
 test:
   override:
     - make test_only
+
+notify:
+  webhooks:
+    - url: https://cc-slack-proxy.herokuapp.com/circle
