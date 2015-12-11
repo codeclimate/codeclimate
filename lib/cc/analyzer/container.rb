@@ -173,24 +173,7 @@ module CC
         Analyzer.logger.warn("killing container name=#{@name} message=#{message.inspect}")
         POSIX::Spawn::Child.new("docker", "kill", @name)
 
-        # On Circle, the tests around this method fail when run via make test,
-        # within a container process.
-        #
-        # Known:
-        #
-        #   - The docker kill succeeds
-        #   - The container process exits with SIGPIPE and no exit code
-        #   - Therefore, the assertion on the exit code fails
-        #
-        # Theory: docker kill succeeds, but the container hasn't actually
-        # stopped when we go ahead and kill the output reading threads. The loss
-        # of the output readers causes the still-running container to SIGPIPE
-        # which causes the result to not have an exit code.
-        #
-        # This sleep is a bit of a hack, but passes the specs. It shouldn't
-        # negatively impact production as we're already in a kill scenario, so
-        # small delay between killing the engine and killing the output reading
-        # threads doesn't strike me as a huge deal
+        # Required for specs to pass on Circle. See commit message for details.
         sleep 2
       end
 
