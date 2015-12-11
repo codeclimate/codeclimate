@@ -33,9 +33,11 @@ module CC
           listener: composite_listener,
         )
 
-        container.on_output("\0") do |output|
+        container.on_output("\0") do |raw_output|
+          output = EngineOutput.new(raw_output)
+
           unless output_filter.filter?(output)
-            stdout_io.write(output) || container.stop
+            stdout_io.write(output.to_json) || container.stop
           end
         end
 

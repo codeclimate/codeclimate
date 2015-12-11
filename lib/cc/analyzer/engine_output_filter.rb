@@ -8,41 +8,21 @@ module CC
       end
 
       def filter?(output)
-        return true unless output.present?
-
-        if (json = parse_as_json(output))
-          issue?(json) && ignore_issue?(json)
-        else
-          false
-        end
+        output.blank? || (output.issue? && ignore_issue?(output.as_issue))
       end
 
       private
 
-      def parse_as_json(output)
-        JSON.parse(output)
-      rescue JSON::ParserError
-        nil
+      def ignore_issue?(issue)
+        check_disabled?(issue) || ignore_fingerprint?(issue)
       end
 
-      def issue?(json)
-        json["type"] && json["type"].downcase == ISSUE_TYPE
+      def check_disabled?(issue)
+        !check_config(issue.check_name).fetch("enabled", true)
       end
 
-      def ignore_issue?(json)
-        check_disabled?(json) || ignore_fingerprint?(json)
-      end
-
-      def check_disabled?(json)
-        !check_config(json["check_name"]).fetch("enabled", true)
-      end
-
-      def ignore_fingerprint?(json)
-        if (fingerprint = json["fingerprint"])
-          @config.fetch("exclude_fingerprints", []).include?(fingerprint)
-        else
-          false
-        end
+      def ignore_fingerprint?(issue)
+        @config.fetch("exclude_fingerprints", []).include?(issue.fingerprint)
       end
 
       def check_config(check_name)
