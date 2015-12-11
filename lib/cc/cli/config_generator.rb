@@ -2,7 +2,7 @@ module CC
   module CLI
     class ConfigGenerator
       CODECLIMATE_YAML = Command::CODECLIMATE_YAML
-      AUTO_EXCLUDE_PATHS = %w(config/ db/ features/ node_modules/ script/ spec/ test/ tests/ vendor/).freeze
+      AUTO_EXCLUDE_PATHS = %w(.codeclimate.yml .csslintrc .eslintrc .rubocop.yml config/ db/ features/ node_modules/ script/ spec/ test/ tests/ vendor/).freeze
 
       def self.for(filesystem, engine_registry, upgrade_requested)
         if upgrade_requested && upgrade_needed?(filesystem)
