@@ -174,7 +174,7 @@ module CC
         POSIX::Spawn::Child.new("docker", "kill", @name)
 
         # Required for specs to pass on Circle. See commit message for details.
-        sleep 2
+        #sleep 2
       end
 
       def timeout
