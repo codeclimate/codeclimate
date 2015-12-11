@@ -172,6 +172,7 @@ module CC
       def reap_running_container(message)
         Analyzer.logger.warn("killing container name=#{@name} message=#{message.inspect}")
         POSIX::Spawn::Child.new("docker", "kill", @name)
+        POSIX::Spawn::Child.new("docker", "wait", @name, timeout: 5.minutes)
       end
 
       def timeout
