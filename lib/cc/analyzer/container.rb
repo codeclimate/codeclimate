@@ -172,6 +172,9 @@ module CC
       def reap_running_container(message)
         Analyzer.logger.warn("killing container name=#{@name} message=#{message.inspect}")
         POSIX::Spawn::Child.new("docker", "kill", @name)
+
+        # Required for specs to pass on Circle. See commit message for details.
+        #sleep 2
       end
 
       def timeout

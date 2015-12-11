@@ -1,27 +1,17 @@
 machine:
   services:
     - docker
-  environment:
-    CLOUDSDK_CORE_DISABLE_PROMPTS: 1
-    PRIVATE_REGISTRY: us.gcr.io/code_climate
 
 dependencies:
   override:
     # Used by container_spec
     - docker pull alpine
-    - docker build -t=$PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
-    - bundle install
+    - make image
 
 test:
   override:
-    - bundle exec rake
+    - make test_only
 
-deployment:
-  registry:
-    branch: master
-    commands:
-      - echo $gcloud_json_key_base64 | sed 's/ //g' | base64 -d > /tmp/gcloud_key.json
-      - curl https://sdk.cloud.google.com | bash
-      - gcloud auth activate-service-account --key-file /tmp/gcloud_key.json
-      - gcloud docker -a
-      - docker push $PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM
+notify:
+  webhooks:
+    - url: https://cc-slack-proxy.herokuapp.com/circle
