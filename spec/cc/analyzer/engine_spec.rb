@@ -66,9 +66,9 @@ module CC::Analyzer
 
       it "parses stdout for null-delimited issues" do
         container = TestContainer.new([
-          "issue one",
-          "issue two",
-          "issue three",
+          "{}",
+          "{}",
+          "{}",
         ])
         Container.expects(:new).returns(container)
 
@@ -76,7 +76,7 @@ module CC::Analyzer
         engine = Engine.new("", {}, "", {}, "")
         engine.run(stdout, ContainerListener.new)
 
-        stdout.string.must_equal "issue oneissue twoissue three"
+        stdout.string.must_equal "{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}"
       end
 
       it "supports issue filtering by check name" do
