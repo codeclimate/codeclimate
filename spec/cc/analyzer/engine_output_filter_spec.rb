@@ -2,6 +2,8 @@ require "spec_helper"
 
 module CC::Analyzer
   describe EngineOutputFilter do
+    include Factory
+
     it "filters empty output" do
       filter = EngineOutputFilter.new
 
@@ -10,21 +12,15 @@ module CC::Analyzer
       filter.filter?("\n").must_equal true
     end
 
-    it "does not filter arbitrary output" do
+    it "does raises builder error on arbitrary output" do
       filter = EngineOutputFilter.new
 
-      filter.filter?("abritrary output").must_equal false
-    end
-
-    it "does not filter arbitrary json" do
-      filter = EngineOutputFilter.new
-
-      filter.filter?(%{{"arbitrary":"json"}}).must_equal nil
+      (-> { filter.filter?("abritrary output") }).must_raise CC::Analyzer::Engine::OutputInvalid
     end
 
     it "does not filter issues missing or enabled in the config" do
-      foo_issue = build_issue("foo")
-      bar_issue = build_issue("bar")
+      foo_issue = sample_issue_json("check_name" => "foo")
+      bar_issue = sample_issue_json("check_name" => "bar")
 
       filter = EngineOutputFilter.new(
         engine_config(
@@ -34,12 +30,12 @@ module CC::Analyzer
         )
       )
 
-      filter.filter?(foo_issue.to_json).must_equal false
-      filter.filter?(bar_issue.to_json).must_equal false
+      filter.filter?(foo_issue).must_equal false
+      filter.filter?(bar_issue).must_equal false
     end
 
     it "filters issues ignored in the config" do
-      issue = build_issue("foo")
+      issue = sample_issue_json("check_name" => "foo")
 
       filter = EngineOutputFilter.new(
         engine_config(
@@ -49,31 +45,11 @@ module CC::Analyzer
         )
       )
 
-      filter.filter?(issue.to_json).must_equal true
-    end
-
-    it "filters issues ignored in the config even if the type has the wrong case" do
-      issue = {
-        "type" => "Issue", "check_name" => "foo",
-      }
-
-      filter = EngineOutputFilter.new(
-        engine_config(
-          "checks" => {
-            "foo" => { "enabled" => false },
-          }
-        )
-      )
-
-      filter.filter?(issue.to_json).must_equal true
+      filter.filter?(issue).must_equal true
     end
 
     it "filters issues with a fingerprint that matches exclude_fingerprints" do
-      issue = {
-        "type" => "Issue",
-        "check_name" => "foo",
-        "fingerprint" => "05a33ac5659c1e90cad1ce32ff8a91c0"
-      }
+      issue = sample_issue_json("fingerprint" => "05a33ac5659c1e90cad1ce32ff8a91c0")
 
       filter = EngineOutputFilter.new(
         engine_config(
@@ -83,14 +59,19 @@ module CC::Analyzer
         )
       )
 
-      filter.filter?(issue.to_json).must_equal true
+      filter.filter?(issue).must_equal true
     end
 
-    def build_issue(check_name)
-      {
-        "type" => EngineOutputFilter::ISSUE_TYPE,
-        "check_name" => check_name,
-      }
+    it "filters issues with a generated fingerprint that matches exclude_fingerprints" do
+      issue = sample_issue_json
+      fingerprint = "05a33ac5659c1e90cad1ce32ff8a91c0"
+
+      filter = EngineOutputFilter.new(
+        engine_config("exclude_fingerprints" => [fingerprint])
+      )
+
+      Issue::Adapter.any_instance.stubs(:default_fingerprint).returns(fingerprint)
+      filter.filter?(issue).must_equal true
     end
 
     def engine_config(hash)

@@ -2,6 +2,8 @@ require "spec_helper"
 
 module CC::Analyzer
   describe Engine do
+    include Factory
+
     before do
       FileUtils.mkdir_p("/tmp/cc")
     end
@@ -65,26 +67,24 @@ module CC::Analyzer
       end
 
       it "parses stdout for null-delimited issues" do
-        container = TestContainer.new([
-          "issue one",
-          "issue two",
-          "issue three",
-        ])
+        issues = [sample_issue_json] * 3
+        container = TestContainer.new(issues)
         Container.expects(:new).returns(container)
 
         stdout = StringIO.new
         engine = Engine.new("", {}, "", {}, "")
         engine.run(stdout, ContainerListener.new)
 
-        stdout.string.must_equal "issue oneissue twoissue three"
+        stdout.string.must_equal issues.join("")
       end
 
       it "supports issue filtering by check name" do
-        container = TestContainer.new([
-          %{{"type":"issue","check_name":"foo"}},
-          %{{"type":"issue","check_name":"bar"}},
-          %{{"type":"issue","check_name":"baz"}},
-        ])
+        issues = [
+          sample_issue_json("check_name" => "foo"),
+          sample_issue_json("check_name" => "bar"),
+          sample_issue_json("check_name" => "baz"),
+        ]
+        container = TestContainer.new(issues)
         Container.expects(:new).returns(container)
 
         stdout = StringIO.new
@@ -92,7 +92,7 @@ module CC::Analyzer
         engine = Engine.new("", {}, "", config, "")
         engine.run(stdout, ContainerListener.new)
 
-        stdout.string.wont_match(%{"check":"bar"})
+        stdout.string.wont_match(%{"check_name":"bar"})
       end
     end
   end
