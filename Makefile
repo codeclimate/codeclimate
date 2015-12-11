@@ -5,6 +5,14 @@ PREFIX ?= /usr/local
 image:
 	docker build -t codeclimate/codeclimate .
 
+test_only:
+	docker run --rm \
+	  --entrypoint bundle \
+	  --volume /var/run/docker.sock:/var/run/docker.sock \
+	  codeclimate/codeclimate exec rake
+
+test: image test_only
+
 install:
 	bin/check
 	docker pull codeclimate/codeclimate:latest
@@ -15,4 +23,3 @@ install:
 uninstall:
 	$(RM) $(DESTDIR)$(PREFIX)/bin/codeclimate
 	docker rmi codeclimate/codeclimate:latest
-

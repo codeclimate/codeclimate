@@ -9,12 +9,11 @@ dependencies:
   override:
     # Used by container_spec
     - docker pull alpine
-    - docker build -t=$PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
-    - bundle install
+    - make image
 
 test:
   override:
-    - bundle exec rake
+    - make test_only
 
 deployment:
   registry:
