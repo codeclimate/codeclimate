@@ -1,3 +1,5 @@
+.PHONY: build install uninstall
+
 PREFIX ?= /usr/local
 
 image:
@@ -13,5 +15,3 @@ install:
 uninstall:
 	$(RM) $(DESTDIR)$(PREFIX)/bin/codeclimate
 	docker rmi codeclimate/codeclimate:latest
-
-.PHONY: build install uninstall
