@@ -135,22 +135,14 @@ pep8:
   image: codeclimate/codeclimate-pep8
   description: Static analysis tool to check Python code against the style conventions outlined in PEP-8.
   community: false
-  upgrade_languages:
-    - Python
   enable_regexps:
-    - \.py$
   default_ratings_paths:
     - "**.py"
 phpcodesniffer:
   image: codeclimate/codeclimate-phpcodesniffer
   description: Detects violations of a defined set of coding standards in PHP.
   community: false
-  upgrade_languages:
-    - PHP
   enable_regexps:
-    - \.php$
-    - \.module$
-    - \.inc$
   default_ratings_paths:
     - "**.php"
     - "**.module"
