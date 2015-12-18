@@ -31,12 +31,13 @@ module CC::CLI
           YAML.safe_load(new_content).must_equal({
             "engines" => {
               "csslint" => { "enabled"=>true },
-              "duplication" => { "enabled" => true, "config" => { "languages" => ["ruby", "javascript", "python", "php"] } },
+              #"duplication" => { "enabled" => true, "config" => { "languages" => ["ruby", "javascript", "python", "php"] } },
               "eslint" => { "enabled"=>true },
               "fixme" => { "enabled"=>true },
               "rubocop" => { "enabled"=>true },
             },
-            "ratings" => { "paths" => ["**.css", "**.inc", "**.js", "**.jsx", "**.module", "**.php", "**.py", "**.rb"] },
+            #"ratings" => { "paths" => ["**.css", "**.inc", "**.js", "**.jsx", "**.module", "**.php", "**.py", "**.rb"] },
+            "ratings" => { "paths" => ["**.css", "**.js", "**.jsx", "**.rb"] },
             "exclude_paths" => ["config/**/*", "spec/**/*", "vendor/**/*"],
           })
 
@@ -171,12 +172,13 @@ module CC::CLI
           YAML.safe_load(new_content).must_equal({
             "engines" => {
               "csslint" => { "enabled"=>true },
-              "duplication" => { "enabled" => true, "config" => { "languages" => ["ruby", "javascript", "python", "php"] } },
+              #"duplication" => { "enabled" => true, "config" => { "languages" => ["ruby", "javascript", "python", "php"] } },
               "eslint" => { "enabled"=>true },
               "fixme" => { "enabled"=>true },
               "rubocop" => { "enabled"=>true },
             },
-            "ratings" => { "paths" => ["**.css", "**.inc", "**.js", "**.jsx", "**.module", "**.php", "**.py", "**.rb"] },
+            #"ratings" => { "paths" => ["**.css", "**.inc", "**.js", "**.jsx", "**.module", "**.php", "**.py", "**.rb"] },
+            "ratings" => { "paths" => ["**.css", "**.js", "**.jsx", "**.rb"] },
             "exclude_paths" => ["config/**/*", "spec/**/*", "vendor/**/*"],
           })
 
@@ -202,11 +204,12 @@ module CC::CLI
           YAML.safe_load(new_content).must_equal({
             "engines" => {
               "csslint" => { "enabled"=>true },
-              "duplication" => { "enabled" => true, "config" => { "languages" => ["ruby", "javascript", "python", "php"] } },
+              #"duplication" => { "enabled" => true, "config" => { "languages" => ["ruby", "javascript", "python", "php"] } },
               "fixme" => { "enabled"=>true },
               "rubocop" => { "enabled"=>true },
             },
-            "ratings" => { "paths" => ["**.css", "**.inc", "**.js", "**.jsx", "**.module", "**.php", "**.py", "**.rb"] },
+            #"ratings" => { "paths" => ["**.css", "**.inc", "**.js", "**.jsx", "**.module", "**.php", "**.py", "**.rb"] },
+            "ratings" => { "paths" => ["**.css", "**.rb"] },
             "exclude_paths" => ["excluded.rb"],
           })
 
