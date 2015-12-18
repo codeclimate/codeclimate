@@ -5,7 +5,7 @@ Information for Code Climate CLI developers and contributors.
 Build a new image using the local sources:
 
 ```console
-docker build --rm -t codeclimate/codeclimate .
+make image
 ```
 
 If you have the CLI installed, the `codeclimate` wrapper will automatically use
@@ -28,5 +28,5 @@ bin/prep-release VERSION
 Once merged, release it:
 
 ```console
-bin/release VERSION
+bin/release
 ```
