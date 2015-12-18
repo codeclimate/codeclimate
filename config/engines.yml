@@ -125,6 +125,14 @@ foodcritic:
   community: true
   enable_regexps:
   default_ratings_paths:
+hlint:
+  image: codeclimate/codeclimate-hlint
+  description: Linter for Haskell programs.
+  community: true
+  enable_regexps:
+    - \.hs$
+  default_ratings_paths:
+    - "**.hs"
 nodesecurity:
   image: codeclimate/codeclimate-nodesecurity
   description: Security tool for Node.js dependencies.
