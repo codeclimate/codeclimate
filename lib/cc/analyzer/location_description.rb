@@ -10,7 +10,7 @@ module CC
       def to_s
         if location["lines"]
           begin_line = location["lines"]["begin"]
-          end_line = location["lines"]["end"]
+          end_line = location["lines"]["end"] || begin_line
         elsif location["positions"]
           begin_line = position_to_line(location["positions"]["begin"])
           end_line = position_to_line(location["positions"]["end"])
