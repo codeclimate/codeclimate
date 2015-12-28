@@ -216,7 +216,7 @@ Metrics/AbcSize:
                  A calculated magnitude based on number of assignments,
                  branches, and conditions.
   Reference: 'http://c2.com/cgi/wiki?AbcMetric'
-  Enabled: true
+  Enabled: false
   Max: 20
 
 Metrics/BlockNesting:
@@ -234,7 +234,7 @@ Metrics/CyclomaticComplexity:
   Description: >-
                  A complexity metric that is strongly correlated to the number
                  of test cases needed to validate a method.
-  Enabled: false
+  Enabled: true
 
 Metrics/LineLength:
   Description: 'Limit lines to 80 characters.'
