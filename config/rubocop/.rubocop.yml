@@ -216,7 +216,7 @@ Metrics/AbcSize:
                  A calculated magnitude based on number of assignments,
                  branches, and conditions.
   Reference: 'http://c2.com/cgi/wiki?AbcMetric'
-  Enabled: true
+  Enabled: false
   Max: 20
 
 Metrics/BlockNesting:
@@ -226,15 +226,15 @@ Metrics/BlockNesting:
   Max: 4
 
 Metrics/ClassLength:
-  Description: 'Avoid classes longer than 100 lines of code.'
+  Description: 'Avoid classes longer than 250 lines of code.'
   Enabled: true
-  Max: 150
+  Max: 250
 
 Metrics/CyclomaticComplexity:
   Description: >-
                  A complexity metric that is strongly correlated to the number
                  of test cases needed to validate a method.
-  Enabled: false
+  Enabled: true
 
 Metrics/LineLength:
   Description: 'Limit lines to 80 characters.'
@@ -242,14 +242,15 @@ Metrics/LineLength:
   Enabled: false
 
 Metrics/MethodLength:
-  Description: 'Avoid methods longer than 10 lines of code.'
+  Description: 'Avoid methods longer than 30 lines of code.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#short-methods'
-  Enabled: false
+  Enabled: true
+  Max: 30
 
 Metrics/ModuleLength:
-  Description: 'Avoid modules longer than 100 lines of code.'
+  Description: 'Avoid modules longer than 250 lines of code.'
   Enabled: true
-  Max: 150
+  Max: 250
 
 Metrics/ParameterLists:
   Description: 'Avoid parameter lists longer than three or four parameters.'
