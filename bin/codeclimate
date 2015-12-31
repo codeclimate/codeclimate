@@ -1,8 +1,14 @@
 #!/bin/sh
 set -e
 
+subcommand=${1:-help}; shift || true
+
+case "$subcommand" in
+  -h|--help|-?) subcommand=help ;;
+  -v|--version) subcommand=version ;;
+esac
+
 root=$(cd "$(dirname "$0")"/.. && printf "%s" "$PWD")
-subcommand=$1; shift
 subcommand_src=$root/codeclimate-$subcommand
 
 if [ -d "$subcommand_src" ]; then

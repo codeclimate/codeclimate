@@ -42,10 +42,7 @@ module CC
       end
 
       def command_name
-        case command
-        when nil, "-h", "-?", "--help" then "Help"
-        else command.sub(":", "::").underscore.camelize
-        end
+        command.sub(":", "::").underscore.camelize
       end
 
       def command_arguments
