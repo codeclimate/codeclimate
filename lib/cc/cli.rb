@@ -13,6 +13,5 @@ module CC
     autoload :Init, "cc/cli/init"
     autoload :Runner, "cc/cli/runner"
     autoload :Test, "cc/cli/test"
-    autoload :Version, "cc/cli/version"
   end
 end

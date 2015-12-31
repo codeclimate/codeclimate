@@ -44,7 +44,6 @@ module CC
       def command_name
         case command
         when nil, "-h", "-?", "--help" then "Help"
-        when "-v", "--version"         then "Version"
         else command.sub(":", "::").underscore.camelize
         end
       end
