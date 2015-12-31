@@ -1,9 +1,13 @@
-#!/usr/bin/env ruby
-$LOAD_PATH.unshift(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
+#!/bin/sh
+set -e
 
-require "cc/cli"
+root=$(cd "$(dirname "$0")"/.. && printf "%s" "$PWD")
+subcommand=$1; shift
+subcommand_src=$root/codeclimate-$subcommand
 
-ENV["FILESYSTEM_DIR"] ||= "."
-ENV["CODE_PATH"] ||= ENV["PWD"]
-
-CC::CLI::Runner.run(ARGV)
+if [ -d "$subcommand_src" ]; then
+  exec "$subcommand_src/bin/run" "$@"
+else
+  # Fallback to legacy, monolithic executable
+  exec "$root/bin/codeclimate-v1" "$subcommand" "$@"
+fi
