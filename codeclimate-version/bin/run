@@ -1,3 +1,2 @@
 #!/bin/sh
-root=$(cd "$(dirname "$0")"/../.. && printf "%s" "$PWD")
-cat "$root/VERSION"
+cat "$(dirname "$0")"/../../VERSION
