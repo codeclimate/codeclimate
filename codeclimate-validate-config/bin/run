@@ -1,0 +1,78 @@
+#!/usr/bin/env ruby
+#
+# TODO: validate engine names as valid engines. this requires access to the
+# shared engine registry, so we should think carefully if that functionality is
+# worth the coupling.
+#
+###
+require "cc/yaml"
+require "forwardable"
+require "rainbow"
+
+module CC
+  class ValidateConfig
+    extend Forwardable
+
+    CODECLIMATE_YAML = ".codeclimate.yml".freeze
+
+    def_delegators :yaml,
+      :errors, :warnings, :nested_warnings
+
+    def initialize(strict)
+      @strict = strict
+
+      if File.exist?(CODECLIMATE_YAML)
+        @yaml = CC::Yaml.parse(File.read(CODECLIMATE_YAML))
+      else
+        @yaml = MissingConfig.new
+      end
+    end
+
+    def valid?
+      if strict?
+        [errors, warnings, nested_warnings].all?(&:empty?)
+      else
+        errors.empty?
+      end
+    end
+
+    private
+
+    attr_reader :yaml
+
+    def strict?
+      @strict
+    end
+
+    class MissingConfig
+      def errors
+        ["No '#{CODECLIMATE_YAML}' file found. Run 'codeclimate init' to generate a config file."]
+      end
+
+      def warnings; []; end
+      def nested_warnings; []; end
+    end
+  end
+end
+
+def colorize(text, *args)
+  @rainbow ||= Rainbow.new.tap do |rainbow|
+    rainbow.enabled = false unless $stdout.tty?
+  end
+
+  @rainbow.wrap(text).color(*args)
+end
+
+strict = %w[-s --strict].include?(ARGV.first)
+validate = CC::ValidateConfig.new(strict)
+validate.errors.each { |error| $stderr.puts colorize("ERROR: #{error}", :red) }
+validate.warnings.each { |warning| $stderr.puts colorize("WARNING: #{warning}", :red) }
+validate.nested_warnings.each do |(key, _), warning|
+  $stderr.puts colorize("WARNING in #{key}: #{warning}", :red) if key
+end
+
+if validate.valid?
+  exit 0
+else
+  exit 1
+end
