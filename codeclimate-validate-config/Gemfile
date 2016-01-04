@@ -1,0 +1,10 @@
+source "https://rubygems.org"
+
+gem "rainbow", "~> 2.0"
+gem "codeclimate-yaml", "~> 0.6.1"
+
+group :test do
+  gem "rake"
+  gem "rspec"
+  gem "posix-spawn"
+end

@@ -1,0 +1,19 @@
+#!/bin/sh
+underline() { printf "\e[4m%s\e[0m" "$*"; }
+
+cat <<EOM
+Usage: codeclimate COMMAND ...
+
+Available commands:
+    analyze [-f format] [-e engine] <path>
+    console
+    engines:disable $(underline engine_name)
+    engines:enable $(underline engine_name)
+    engines:install
+    engines:list
+    engines:remove $(underline engine_name)
+    help
+    init
+    validate-config
+    version
+EOM

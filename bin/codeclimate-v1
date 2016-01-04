@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
+
+require "cc/cli"
+
+ENV["FILESYSTEM_DIR"] ||= "."
+ENV["CODE_PATH"] ||= ENV["PWD"]
+
+CC::CLI::Runner.run(ARGV)
