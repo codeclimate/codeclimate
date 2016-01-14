@@ -33,7 +33,7 @@ module CC
 
       def engine_config(raw_engine_config)
         config = raw_engine_config.merge(
-          exclude_paths: exclude_paths,
+          exclude_paths: exclude_paths(raw_engine_config.config.fetch("exclude_paths")),
           include_paths: include_paths,
         )
         # The yaml gem turns a config file string into a hash, but engines
@@ -60,9 +60,14 @@ module CC
         IncludePathsBuilder.new(exclude_paths, Array(@requested_paths)).build
       end
 
-      def exclude_paths
-        PathPatterns.new(@config.exclude_paths || []).expanded +
-          gitignore_paths
+      def exclude_paths(raw_engine_config_exclude_paths = nil)
+        paths = PathPatterns.new(@config.exclude_paths || []).expanded + gitignore_paths
+
+        if raw_engine_config_exclude_paths
+          paths += PathPatterns.new(raw_engine_config_exclude_paths).expanded
+        end
+
+        paths.uniq
       end
 
       def gitignore_paths
