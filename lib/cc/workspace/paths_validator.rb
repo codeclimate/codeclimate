@@ -19,7 +19,7 @@ module CC
       attr_reader :paths, :root
 
       def valid?(path)
-        File.expand_path(path).sub(/^#{root}\//, "") == path
+        File.expand_path(path).sub(%r{^#{root}/}, "") == path
       end
 
       def invalid_path_error(path)
