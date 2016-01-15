@@ -59,10 +59,7 @@ module CC
       end
 
       def workspace
-        @workspace ||=
-          Workspace.
-            new(paths: Array(@requested_paths)).
-            filter(@config.exclude_paths)
+        @workspace ||= Workspace.new(paths: Array(@requested_paths)).filter(@config.exclude_paths)
       end
 
       # The yaml gem turns a config file string into a hash, but engines expect
