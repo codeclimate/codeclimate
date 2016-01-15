@@ -1,5 +1,4 @@
 require "spec_helper"
-require "file_utils_ext"
 
 module CC::Analyzer
   describe EnginesRunner do
@@ -65,7 +64,6 @@ module CC::Analyzer
       image = "codeclimate/codeclimate-#{name}"
       engine_config ||= {
         "enabled" => true,
-        exclude_paths: [],
         include_paths: ["./"]
       }
 
