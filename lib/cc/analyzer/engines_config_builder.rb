@@ -39,13 +39,9 @@ module CC
         config = raw_engine_config.merge(
           include_paths: engine_workspace.paths,
         )
-        # The yaml gem turns a config file string into a hash, but engines
-        # expect the string. So we (for now) need to turn it into a string in
-        # that one scenario.
-        # TODO: update the engines to expect the hash and then remove this.
-        if config.fetch("config", {}).keys.size == 1 && config["config"].key?("file")
-          config["config"] = config["config"]["file"]
-        end
+
+        normalize_config_file(config)
+
         config
       end
 
@@ -64,6 +60,15 @@ module CC
           Workspace.
             new(paths: Array(@requested_paths)).
             filter(@config.exclude_paths)
+      end
+
+      # The yaml gem turns a config file string into a hash, but engines expect
+      # the string. So we (for now) need to turn it into a string in that one
+      # scenario.
+      def normalize_config_file(config)
+        if config.fetch("config", {}).keys.size == 1 && config["config"].key?("file")
+          config["config"] = config["config"]["file"]
+        end
       end
     end
   end
