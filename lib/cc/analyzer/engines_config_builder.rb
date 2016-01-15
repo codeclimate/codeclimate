@@ -32,9 +32,11 @@ module CC
       attr_reader :include_paths
 
       def engine_config(raw_engine_config)
+        all_paths_to_exclude = exclude_paths(raw_engine_config.fetch("config", {})["exclude_paths"])
+
         config = raw_engine_config.merge(
-          exclude_paths: exclude_paths(raw_engine_config.fetch("config", {})["exclude_paths"]),
-          include_paths: include_paths,
+          exclude_paths: all_paths_to_exclude,
+          include_paths: include_paths(exclude_paths: all_paths_to_exclude),
         )
         # The yaml gem turns a config file string into a hash, but engines
         # expect the string. So we (for now) need to turn it into a string in
@@ -56,7 +58,7 @@ module CC
         end
       end
 
-      def include_paths
+      def include_paths(exclude_paths: nil)
         IncludePathsBuilder.new(exclude_paths, Array(@requested_paths)).build
       end
 
