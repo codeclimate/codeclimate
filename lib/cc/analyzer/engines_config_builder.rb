@@ -37,7 +37,7 @@ module CC
           engine_workspace = workspace
         end
         config = raw_engine_config.merge(
-          include_paths: engine_workspace.paths
+          include_paths: engine_workspace.paths,
         )
         # The yaml gem turns a config file string into a hash, but engines
         # expect the string. So we (for now) need to turn it into a string in
