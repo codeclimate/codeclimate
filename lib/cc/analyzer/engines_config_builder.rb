@@ -30,12 +30,7 @@ module CC
       private
 
       def engine_config(raw_engine_config)
-        if raw_engine_config.key?("exclude_paths")
-          engine_workspace = workspace.dup
-          engine_workspace.filter(raw_engine_config["exclude_paths"])
-        else
-          engine_workspace = workspace
-        end
+        engine_workspace = engine_workspace(raw_engine_config)
         config = raw_engine_config.merge(
           include_paths: engine_workspace.paths,
         )
@@ -43,6 +38,14 @@ module CC
         normalize_config_file(config)
 
         config
+      end
+
+      def engine_workspace(raw_engine_config)
+        if raw_engine_config.key?("exclude_paths")
+          workspace.dup.filter(raw_engine_config["exclude_paths"])
+        else
+          workspace
+        end
       end
 
       def names_and_raw_engine_configs
