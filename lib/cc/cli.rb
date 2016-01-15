@@ -15,5 +15,16 @@ module CC
     autoload :Test, "cc/cli/test"
     autoload :ValidateConfig, "cc/cli/validate_config"
     autoload :Version, "cc/cli/version"
+
+    def self.debug(message, values = {})
+      if ENV["CODECLIMATE_DEBUG"]
+        if values.any?
+          message << " "
+          message << values.map { |k, v| "#{k}=#{v.inspect}" }.join(" ")
+        end
+
+        $stderr.puts("[DEBUG] #{message}")
+      end
+    end
   end
 end
