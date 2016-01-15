@@ -29,12 +29,15 @@ module CC
 
       private
 
-      attr_reader :include_paths
-
       def engine_config(raw_engine_config)
+        if raw_engine_config.key?("exclude_paths")
+          engine_workspace = workspace.dup
+          engine_workspace.filter(raw_engine_config["exclude_paths"])
+        else
+          engine_workspace = workspace
+        end
         config = raw_engine_config.merge(
-          exclude_paths: exclude_paths,
-          include_paths: include_paths,
+          include_paths: engine_workspace.paths
         )
         # The yaml gem turns a config file string into a hash, but engines
         # expect the string. So we (for now) need to turn it into a string in
@@ -56,21 +59,10 @@ module CC
         end
       end
 
-      def include_paths
-        IncludePathsBuilder.new(exclude_paths, Array(@requested_paths)).build
-      end
-
-      def exclude_paths
-        PathPatterns.new(@config.exclude_paths || []).expanded +
-          gitignore_paths
-      end
-
-      def gitignore_paths
-        if File.exist?(".gitignore")
-          `git ls-files --others -i -z --exclude-from .gitignore`.split("\0")
-        else
-          []
-        end
+      def workspace
+        @workspace ||= Workspace.
+          new(paths: Array(@requested_paths)).
+          filter(@config.exclude_paths)
       end
     end
   end
