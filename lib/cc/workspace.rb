@@ -1,6 +1,7 @@
 module CC
   class Workspace
     autoload :Exclusions, "cc/workspace/exclusions"
+    autoload :PathTree, "cc/workspace/path_tree"
     autoload :PathsValidator, "cc/workspace/paths_validator"
 
     def initialize(paths: nil, prefix: "")
