@@ -41,10 +41,12 @@ module CC
       end
 
       def engine_workspace(raw_engine_config)
-        if raw_engine_config.key?("exclude_paths")
-          workspace.dup.filter(raw_engine_config["exclude_paths"])
+        if raw_engine_config.key?("exclude_paths") && !@requested_paths.present?
+          base_workspace.clone.tap do |workspace|
+            workspace.remove(raw_engine_config["exclude_paths"])
+          end
         else
-          workspace
+          base_workspace
         end
       end
 
@@ -58,8 +60,14 @@ module CC
         end
       end
 
-      def workspace
-        @workspace ||= Workspace.new(paths: Array(@requested_paths)).filter(@config.exclude_paths)
+      def base_workspace
+        @base_workspace ||= Workspace.new.tap do |workspace|
+          workspace.add(@requested_paths)
+          unless @requested_paths.present?
+            workspace.remove([".git"])
+            workspace.remove(@config.exclude_paths)
+          end
+        end
       end
 
       # The yaml gem turns a config file string into a hash, but engines expect

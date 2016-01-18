@@ -4,18 +4,30 @@ module CC
   describe Workspace do
     include FileSystemHelpers
 
-    it "responds with arguments given or \"./\", if unfiltered" do
-      workspace = Workspace.new(paths: %w[foo bar/baz.rb])
-      workspace.paths.must_equal %w[foo bar/baz.rb]
+    it "responds with added paths, if unfiltered" do
+      within_temp_dir do
+        make_tree <<-EOM
+          foo/thing.rb
+          foo/other.rb
+          bar/baz.rb
+          nope/also_nope.rb
+        EOM
 
+        workspace = Workspace.new
+        workspace.add(%w[foo bar/baz.rb])
+        workspace.paths.must_equal %w[foo/ bar/baz.rb]
+      end
+    end
+
+    it "responds with \"./\", if unfiltered" do
       workspace = Workspace.new
       workspace.paths.must_equal ["./"]
     end
 
-    it "doesn't filter if given nil or empty exclude_paths" do
+    it "doesn't remove if given nil or empty exclude_paths" do
       workspace = Workspace.new
-      workspace.filter(nil)
-      workspace.filter([])
+      workspace.remove(nil)
+      workspace.remove([])
       workspace.paths.must_equal ["./"]
     end
 
@@ -46,7 +58,7 @@ module CC
         EOM
 
         workspace = Workspace.new
-        workspace.filter(%w[
+        workspace.remove(%w[
           .bundle
           .git
           .gitignore
@@ -86,10 +98,18 @@ module CC
         EOM
 
         workspace = Workspace.new
-        workspace.filter(%w[.node_modules])
-        workspace.filter(%w[vendor])
+        workspace.remove(%w[.node_modules])
+        workspace2 = workspace.clone
+        workspace2.remove(%w[vendor])
 
         workspace.paths.sort.must_equal %w[
+          Gemfile
+          Gemfile.lock
+          lib/
+          spec/
+          vendor/
+        ]
+        workspace2.paths.sort.must_equal %w[
           Gemfile
           Gemfile.lock
           lib/
@@ -98,7 +118,7 @@ module CC
       end
     end
 
-    it "warns on unsupported patterns" do
+    it "supports patterns" do
       within_temp_dir do
         make_tree <<-EOM
           lib/foo.py
@@ -106,10 +126,9 @@ module CC
         EOM
 
         workspace = Workspace.new
-        _, stderr = capture_io { workspace.filter(%w[*.pyc]) }
+        workspace.remove(%w[**/*.pyc])
 
-        stderr.must_include("WARNING: invalid exclude path: \"*.pyc\"")
-        workspace.paths.sort.must_equal %w[lib/]
+        workspace.paths.sort.must_equal %w[lib/foo.py]
       end
     end
 
@@ -130,8 +149,9 @@ module CC
           vendor/foo/bar.css
         EOM
 
-        workspace = Workspace.new(paths: %w[lib/foo spec/foo/bar_spec.rb])
-        workspace.filter(%w[lib/foo/bar.rb])
+        workspace = Workspace.new
+        workspace.add(%w[lib/foo spec/foo/bar_spec.rb])
+        workspace.remove(%w[lib/foo/bar.rb])
 
         workspace.paths.sort.must_equal %w[
           lib/foo/baz.rb
@@ -140,9 +160,33 @@ module CC
       end
     end
 
-    it "validates paths arguments" do
-      action = ->() { Workspace.new(paths: %w[./]) }
-      action.must_raise(ArgumentError)
+    describe "relative path arguments" do
+      it "supports adding the current path" do
+        within_temp_dir do
+          make_tree <<-EOM
+            foo.txt
+            foo/bar.rb
+          EOM
+
+          workspace = Workspace.new
+          workspace.add(%w[./])
+          workspace.paths.must_equal ["./"]
+        end
+      end
+
+      it "supports adding the current path" do
+        within_temp_dir do
+          make_tree <<-EOM
+            foo.rb
+            bar.rb
+            other/stuff.txt
+          EOM
+
+          workspace = Workspace.new
+          workspace.add(%w[./foo.rb])
+          workspace.paths.must_equal ["foo.rb"]
+        end
+      end
     end
   end
 end

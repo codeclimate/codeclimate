@@ -8,3 +8,4 @@ ratings:
 exclude_paths:
   - .bundle/**/*
   - spec/**/*
+  - benchmarks/**/*
