@@ -41,7 +41,10 @@ module CC
           end
         end
 
+        write_config_file
         container.run(container_options)
+      ensure
+        delete_config_file
       end
 
       private
@@ -63,11 +66,17 @@ module CC
         @container_name ||= "cc-engines-#{name}-#{SecureRandom.uuid}"
       end
 
+      def write_config_file
+        FileUtils.mkdir_p(File.dirname(config_file))
+        File.write(config_file, @config.to_json)
+      end
+
+      def delete_config_file
+        File.delete(config_file) if File.file?(config_file)
+      end
+
       def config_file
-        path = File.join("/tmp/cc", SecureRandom.uuid)
-        FileUtils.mkdir_p("/tmp/cc")
-        File.write(path, @config.to_json)
-        path
+        @config_file ||= File.join("/tmp/cc", SecureRandom.uuid)
       end
 
       def output_filter
