@@ -24,10 +24,10 @@ module CC
 
       protected
 
-      attr_reader :child_dirs, :root_path, :child_files
+      attr_reader :root_path
 
       def populated?
-        !(child_dirs.empty? &&  child_files.empty?)
+        child_dirs.present? || child_files.present?
       end
 
       def delete(path_pieces)
@@ -75,6 +75,14 @@ module CC
       end
 
       private
+
+      def child_files
+        @child_files ||= Set.new
+      end
+
+      def child_dirs
+        @child_dirs ||= Hash.new
+      end
 
       def populate_all
         return if populated?
