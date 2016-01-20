@@ -133,6 +133,18 @@ hlint:
     - \.hs$
   default_ratings_paths:
     - "**.hs"
+kibit:
+  image: codeclimate/codeclimate-kibit
+  description: Static code analyzer for Clojure, ClojureScript, cljx and other Clojure variants.
+  community: true
+  enable_regexps:
+    - \.clj$
+    - \.cljc$
+    - \.cljs$
+  default_ratings_paths:
+    - "**.clj"
+    - "**.cljc"
+    - "**.cljs"
 nodesecurity:
   image: codeclimate/codeclimate-nodesecurity
   description: Security tool for Node.js dependencies.
