@@ -1,8 +1,5 @@
 require "spec_helper"
-require "file_utils_ext"
 require "cc/analyzer"
-require "cc/analyzer/include_paths_builder"
-require "cc/analyzer/path_patterns"
 
 module CC::Analyzer
   describe EnginesConfigBuilder do
@@ -65,7 +62,6 @@ module CC::Analyzer
         expected_config = {
           "enabled" => true,
           "config" => "rubocop.yml",
-          :exclude_paths => [],
           :include_paths => ["./"]
         }
         result = engines_config_builder.run
@@ -73,68 +69,7 @@ module CC::Analyzer
         result.first.name.must_equal("rubocop")
         result.first.registry_entry.must_equal(registry["rubocop"])
         result.first.code_path.must_equal(source_dir)
-        (result.first.config == expected_config).must_equal(true)
-        result.first.container_label.wont_equal nil
-      end
-    end
-
-    describe "with a .gitignore file" do
-      let(:config) do
-        CC::Yaml.parse <<-EOYAML
-          engines:
-            rubocop:
-              enabled: true
-        EOYAML
-      end
-      let(:registry) { registry_with_engine("rubocop") }
-
-      before do
-        make_file(".ignorethis")
-        make_file(".gitignore", ".ignorethis\n")
-      end
-
-      before do
-        FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
-      end
-
-      it "respects those paths" do
-        expected_config = {
-          "enabled" => true,
-          :exclude_paths => %w(.ignorethis),
-          :include_paths => %w(.gitignore)
-        }
-        result = engines_config_builder.run
-        result.size.must_equal(1)
-        result.first.name.must_equal("rubocop")
-        result.first.registry_entry.must_equal(registry["rubocop"])
-        result.first.code_path.must_equal(source_dir)
-        (result.first.config == expected_config).must_equal(true)
-        result.first.container_label.wont_equal nil
-      end
-    end
-
-    describe "when the source directory contains all readable files, and there are no ignored files" do
-      let(:config) { config_with_engine("an_engine") }
-      let(:registry) { registry_with_engine("an_engine") }
-
-      before do
-        make_file("root_file.rb")
-        make_file("subdir/subdir_file.rb")
-      end
-
-      it "gets include_paths from IncludePathBuilder" do
-        IncludePathsBuilder.stubs(:new).with([], []).returns(mock(build: ['.']))
-        expected_config = {
-          "enabled" => true,
-          :exclude_paths => [],
-          :include_paths => ['.']
-        }
-        result = engines_config_builder.run
-        result.size.must_equal(1)
-        result.first.name.must_equal("an_engine")
-        result.first.registry_entry.must_equal(registry["an_engine"])
-        result.first.code_path.must_equal(source_dir)
-        (result.first.config == expected_config).must_equal(true)
+        result.first.config.must_be(:==, expected_config)
         result.first.container_label.wont_equal nil
       end
     end

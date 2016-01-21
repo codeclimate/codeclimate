@@ -29,21 +29,23 @@ module CC
 
       private
 
-      attr_reader :include_paths
-
       def engine_config(raw_engine_config)
+        engine_workspace = engine_workspace(raw_engine_config)
         config = raw_engine_config.merge(
-          exclude_paths: exclude_paths,
-          include_paths: include_paths,
+          include_paths: engine_workspace.paths,
         )
-        # The yaml gem turns a config file string into a hash, but engines
-        # expect the string. So we (for now) need to turn it into a string in
-        # that one scenario.
-        # TODO: update the engines to expect the hash and then remove this.
-        if config.fetch("config", {}).keys.size == 1 && config["config"].key?("file")
-          config["config"] = config["config"]["file"]
-        end
+
+        normalize_config_file(config)
+
         config
+      end
+
+      def engine_workspace(raw_engine_config)
+        if raw_engine_config.key?("exclude_paths")
+          workspace.dup.filter(raw_engine_config["exclude_paths"])
+        else
+          workspace
+        end
       end
 
       def names_and_raw_engine_configs
@@ -56,20 +58,16 @@ module CC
         end
       end
 
-      def include_paths
-        IncludePathsBuilder.new(exclude_paths, Array(@requested_paths)).build
+      def workspace
+        @workspace ||= Workspace.new(paths: Array(@requested_paths)).filter(@config.exclude_paths)
       end
 
-      def exclude_paths
-        PathPatterns.new(@config.exclude_paths || []).expanded +
-          gitignore_paths
-      end
-
-      def gitignore_paths
-        if File.exist?(".gitignore")
-          `git ls-files --others -i -z --exclude-from .gitignore`.split("\0")
-        else
-          []
+      # The yaml gem turns a config file string into a hash, but engines expect
+      # the string. So we (for now) need to turn it into a string in that one
+      # scenario.
+      def normalize_config_file(config)
+        if config.fetch("config", {}).keys.size == 1 && config["config"].key?("file")
+          config["config"] = config["config"]["file"]
         end
       end
     end

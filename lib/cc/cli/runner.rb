@@ -10,9 +10,7 @@ module CC
       rescue => ex
         $stderr.puts("error: (#{ex.class}) #{ex.message}")
 
-        if ENV["CODECLIMATE_DEBUG"]
-          $stderr.puts("backtrace: #{ex.backtrace.join("\n\t")}")
-        end
+        CLI.debug("backtrace: #{ex.backtrace.join("\n\t")}")
       end
 
       def initialize(args)
