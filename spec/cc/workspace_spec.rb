@@ -4,10 +4,20 @@ module CC
   describe Workspace do
     include FileSystemHelpers
 
-    it "responds with arguments given or \"./\", if unfiltered" do
-      workspace = Workspace.new(paths: %w[foo bar/baz.rb])
-      workspace.paths.must_equal %w[foo bar/baz.rb]
+    it "responds with arguments given" do
+      within_temp_dir do
+        make_tree <<-EOM
+          foo
+          bar/baz.rb
+          bar/b.rb
+        EOM
 
+        workspace = Workspace.new(paths: %w[foo bar/baz.rb])
+        workspace.paths.must_equal %w[bar/baz.rb foo]
+      end
+    end
+
+    it "responds with \"./\" if unfiltered" do
       workspace = Workspace.new
       workspace.paths.must_equal ["./"]
     end
@@ -66,6 +76,38 @@ module CC
       end
     end
 
+    it "filters glob patterns" do
+      within_temp_dir do
+        make_tree <<-EOM
+          Gemfile
+          lib/foo.rb
+          lib/foo/bar.rb
+          lib/foo/baz.rb
+          lib/quix/a.rb
+          lib/quix/b.rb
+          spec/foo/bar_spec.rb
+          spec/foo/baz_spec.rb
+          spec/foo_spec.rb
+          vendor/assets/jquery.js
+          vendor/assets/underscore.js
+        EOM
+
+        workspace = Workspace.new
+        workspace.filter(%w[
+          lib/foo
+          spec/**/b*.rb
+        ])
+
+        workspace.paths.sort.must_equal %w[
+          Gemfile
+          lib/foo.rb
+          lib/quix/
+          spec/foo_spec.rb
+          vendor/
+        ]
+      end
+    end
+
     it "can be filtered again, e.g. per engine" do
       within_temp_dir do
         make_tree <<-EOM
@@ -95,21 +137,6 @@ module CC
           lib/
           spec/
         ]
-      end
-    end
-
-    it "warns on unsupported patterns" do
-      within_temp_dir do
-        make_tree <<-EOM
-          lib/foo.py
-          lib/foo.pyc
-        EOM
-
-        workspace = Workspace.new
-        _, stderr = capture_io { workspace.filter(%w[*.pyc]) }
-
-        stderr.must_include("WARNING: invalid exclude path: \"*.pyc\"")
-        workspace.paths.sort.must_equal %w[lib/]
       end
     end
 
