@@ -86,6 +86,9 @@ Rails/Delegate:
 Rails/TimeZone:
   Enabled: false
 
+Rails/Output:
+  Enabled: false
+
 ################################################################################
 # Specs - be more lenient on length checks and block styles
 ################################################################################
