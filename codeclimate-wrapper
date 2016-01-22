@@ -34,7 +34,7 @@ if command -v docker-machine > /dev/null 2>&1; then
 
   docker-machine ssh $DOCKER_MACHINE_NAME -- \
     'test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock"' > /dev/null 2>&1 \
-    && invalid_docker_host $(boot2docker ssh -- 'echo "$DOCKER_HOST"')
+    && invalid_docker_host $(docker-machine ssh $DOCKER_MACHINE_NAME -- 'echo "$DOCKER_HOST"')
 elif command -v boot2docker > /dev/null 2>&1; then
   boot2docker ssh -- \
     test -S /var/run/docker.sock > /dev/null 2>&1 || socket_missing
