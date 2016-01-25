@@ -1,3 +1,5 @@
+require "shellwords"
+
 module CC
   module CLI
     class ConfigGenerator
@@ -37,7 +39,7 @@ module CC
       end
 
       def exclude_paths
-        AUTO_EXCLUDE_PATHS.select { |path| filesystem.exist?(path) }
+        @exclude_paths ||= AUTO_EXCLUDE_PATHS.select { |path| filesystem.exist?(path) }
       end
 
       def post_generation_verb
@@ -59,8 +61,30 @@ module CC
       end
 
       def files_exist?(engine)
-        filesystem.any? do |path|
+        workspace_files.any? do |path|
           engine["enable_regexps"].any? { |re| Regexp.new(re).match(path) }
+        end
+      end
+
+      def non_excluded_paths
+        @non_excluded_paths ||= begin
+          excludes = exclude_paths.map { |path| path.chomp("/") }
+          filesystem.ls.reject do |path|
+            path.starts_with?(".") || excludes.include?(path)
+          end
+        end
+      end
+
+      def workspace_files
+        @workspace_files ||= Dir.chdir(filesystem.root) do
+          if non_excluded_paths.empty?
+            []
+          else
+            find_cmd = "find #{non_excluded_paths.map(&:shellescape).join(' ')} -type f -print0"
+            `#{find_cmd}`.strip.split("\0").map do |path|
+              path.sub(%r{^\.\/}, "")
+            end
+          end
         end
       end
     end
