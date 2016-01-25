@@ -121,7 +121,8 @@ module CC::CLI
         it "still generates default config files" do
           filesystem.exist?(".codeclimate.yml").must_equal(false)
 
-          File.new(".codeclimate.yml", "w")
+          yaml = "---\nengines:\n  rubocop:\n    enabled: true"
+          File.write(".codeclimate.yml", yaml)
 
           filesystem.exist?(".codeclimate.yml").must_equal(true)
 
@@ -129,7 +130,7 @@ module CC::CLI
 
           init.expects(:create_default_engine_configs)
 
-          _, stderr, exit_code = capture_io_and_exit_code do
+          capture_io_and_exit_code do
             init.run
           end
         end
