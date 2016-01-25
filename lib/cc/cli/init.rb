@@ -10,7 +10,7 @@ module CC
       def run
         if !upgrade? && filesystem.exist?(CODECLIMATE_YAML)
           warn "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
-          create_default_engine_configs
+          create_default_engine_configs if engines_enabled?
         elsif upgrade? && engines_enabled?
           fatal "--upgrade should not be used on a .codeclimate.yml configured for the Platform.\nTry running 'validate-config' to check configuration."
         else
@@ -63,27 +63,32 @@ module CC
       end
 
       def available_engine_configs
-        all_paths = config_generator.eligible_engines.flat_map do |engine_name, _|
+        engine_names = existing_cc_config.engines.select do |_, config|
+          config.enabled?
+        end.keys
+
+        all_paths = engine_names.flat_map do |engine_name|
           engine_directory = File.expand_path("../../../../config/#{engine_name}", __FILE__)
           Dir.glob("#{engine_directory}/*", File::FNM_DOTMATCH)
         end
-
-        all_paths.reject { |path| [".", ".."].include?(File.basename(path)) }
+        all_paths.reject do |path|
+          %w[. ..].include?(File.basename(path))
+        end
       end
 
       def engines_enabled?
-        unless @engines_enabled.nil?
-          return @engines_enabled
-        end
-
-        if filesystem.exist?(CODECLIMATE_YAML)
-          config = CC::Analyzer::Config.new(File.read(CODECLIMATE_YAML))
-          @engines_enabled ||= config.engine_names.any?
-        end
+        cc_config = existing_cc_config
+        cc_config.present? && cc_config.engines.present?
       end
 
       def config_generator
         @config_generator ||= ConfigGenerator.for(filesystem, engine_registry, upgrade?)
+      end
+
+      def existing_cc_config
+        if filesystem.exist?(CODECLIMATE_YAML)
+          CC::Yaml.parse(filesystem.read_path(CODECLIMATE_YAML))
+        end
       end
     end
   end
