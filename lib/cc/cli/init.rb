@@ -10,11 +10,11 @@ module CC
       def run
         if !upgrade? && filesystem.exist?(CODECLIMATE_YAML)
           warn "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
-          create_default_configs
+          create_default_engine_configs
         elsif upgrade? && engines_enabled?
           fatal "--upgrade should not be used on a .codeclimate.yml configured for the Platform.\nTry running 'validate-config' to check configuration."
         else
-          generate_config
+          generate_all_config
         end
       end
 
@@ -24,7 +24,7 @@ module CC
         @args.include?("--upgrade")
       end
 
-      def generate_config
+      def generate_all_config
         unless config_generator.can_generate?
           config_generator.errors.each do |error|
             $stderr.puts colorize("ERROR: #{error}", :red)
@@ -34,7 +34,7 @@ module CC
 
         create_codeclimate_yaml
         success "Config file .codeclimate.yml successfully #{config_generator.post_generation_verb}.\nEdit and then try running 'validate-config' to check configuration."
-        create_default_configs
+        create_default_engine_configs
       end
 
       def create_codeclimate_yaml
@@ -49,9 +49,9 @@ module CC
         filesystem.write_path(CODECLIMATE_YAML, config.to_yaml)
       end
 
-      def create_default_configs
+      def create_default_engine_configs
         say "Generating default configuration for engines..."
-        available_configs.each do |config_path|
+        available_engine_configs.each do |config_path|
           file_name = File.basename(config_path)
           if filesystem.exist?(file_name)
             say "Skipping generating #{file_name} file (already exists)."
@@ -62,7 +62,7 @@ module CC
         end
       end
 
-      def available_configs
+      def available_engine_configs
         all_paths = config_generator.eligible_engines.flat_map do |engine_name, _|
           engine_directory = File.expand_path("../../../../config/#{engine_name}", __FILE__)
           Dir.glob("#{engine_directory}/*", File::FNM_DOTMATCH)

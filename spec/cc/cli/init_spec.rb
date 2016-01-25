@@ -127,7 +127,7 @@ module CC::CLI
 
           init = Init.new
 
-          init.expects(:create_default_configs)
+          init.expects(:create_default_engine_configs)
 
           _, stderr, exit_code = capture_io_and_exit_code do
             init.run
