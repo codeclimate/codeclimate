@@ -38,6 +38,7 @@ module CC
       end
 
       def create_codeclimate_yaml
+        say "Generating .codeclimate.yml..."
         config = CC::CLI::Config.new
 
         config_generator.eligible_engines.each do |(engine_name, engine_config)|
@@ -49,6 +50,7 @@ module CC
       end
 
       def create_default_configs
+        say "Generating default configuration for engines..."
         available_configs.each do |config_path|
           file_name = File.basename(config_path)
           if filesystem.exist?(file_name)
