@@ -1,8 +1,5 @@
 require "spec_helper"
-require "file_utils_ext"
 require "cc/analyzer"
-require "cc/analyzer/include_paths_builder"
-require "cc/analyzer/path_patterns"
 
 module CC::Analyzer
   describe EnginesConfigBuilder do
@@ -65,7 +62,6 @@ module CC::Analyzer
         expected_config = {
           "enabled" => true,
           "config" => "rubocop.yml",
-          :exclude_paths => [],
           :include_paths => ["./"]
         }
         result = engines_config_builder.run
@@ -73,69 +69,109 @@ module CC::Analyzer
         result.first.name.must_equal("rubocop")
         result.first.registry_entry.must_equal(registry["rubocop"])
         result.first.code_path.must_equal(source_dir)
-        (result.first.config == expected_config).must_equal(true)
+        result.first.config.must_be(:==, expected_config)
         result.first.container_label.wont_equal nil
       end
     end
 
-    describe "with a .gitignore file" do
-      let(:config) do
-        CC::Yaml.parse <<-EOYAML
-          engines:
-            rubocop:
-              enabled: true
-        EOYAML
+    describe "workspace calculation" do
+      let(:registry) { registry_with_engine("rubocop", "fixme") }
+
+      describe "with multiple engines & exclude_paths" do
+        let(:config) do
+          CC::Yaml.parse <<-EOYAML
+            engines:
+              rubocop:
+                enabled: true
+              fixme:
+                enabled: true
+                exclude_paths:
+                  - doc/
+            exclude_paths:
+              - spec/**/*
+              - app/b*
+          EOYAML
+        end
+
+        it "keeps that config and adds some entries" do
+          within_temp_dir do
+            make_tree <<-EOM
+              app/moo.rb
+              app/bar.rb
+              doc/README
+              foo.rb
+              spec/bar.rb
+            EOM
+            expected_rubocop_config = {
+              "enabled" => true,
+              :include_paths => ["app/moo.rb", "doc/", "foo.rb"]
+            }
+            expected_fixme_config = {
+              "enabled" => true,
+              "exclude_paths" => ["doc/"],
+              :include_paths => ["app/moo.rb", "foo.rb"]
+            }
+            result = engines_config_builder.run
+            result.size.must_equal(2)
+            result[0].name.must_equal("rubocop")
+            result[0].registry_entry.must_equal(registry["rubocop"])
+            result[0].code_path.must_equal(source_dir)
+            result[0].config[:include_paths].sort!
+            result[0].config.must_be(:==, expected_rubocop_config)
+            result[0].container_label.wont_equal nil
+            result[1].name.must_equal("fixme")
+            result[1].registry_entry.must_equal(registry["fixme"])
+            result[1].code_path.must_equal(source_dir)
+            result[1].config[:include_paths].sort!
+            result[1].config.must_be(:==, expected_fixme_config)
+            result[1].container_label.wont_equal nil
+          end
+        end
       end
-      let(:registry) { registry_with_engine("rubocop") }
 
-      before do
-        make_file(".ignorethis")
-        make_file(".gitignore", ".ignorethis\n")
+      describe "with no explicit exclude_paths" do
+        let(:config) { config_with_engine("rubocop") }
+
+        it "should always exclude the .git directory" do
+          within_temp_dir do
+            make_tree <<-EOM
+              .git/refs/heads/master
+              doc/README
+              foo.rb
+            EOM
+
+            result = engines_config_builder.run
+            result.size.must_equal(1)
+            result.first.config[:include_paths].sort.must_equal %w[doc/ foo.rb]
+          end
+        end
       end
 
-      before do
-        FileUtils.stubs(:readable_by_all?).at_least_once.returns(true)
-      end
+      describe "when explicit include paths are given" do
+        let(:config) do
+          CC::Yaml.parse <<-EOYAML
+            engines:
+              rubocop:
+                enabled: true
+            exclude_paths:
+              - doc/
+          EOYAML
+        end
+        let(:requested_paths) { ["./doc", "foo.rb"] }
 
-      it "respects those paths" do
-        expected_config = {
-          "enabled" => true,
-          :exclude_paths => %w(.ignorethis),
-          :include_paths => %w(.gitignore)
-        }
-        result = engines_config_builder.run
-        result.size.must_equal(1)
-        result.first.name.must_equal("rubocop")
-        result.first.registry_entry.must_equal(registry["rubocop"])
-        result.first.code_path.must_equal(source_dir)
-        (result.first.config == expected_config).must_equal(true)
-        result.first.container_label.wont_equal nil
-      end
-    end
+        it "uses the given include paths, and does not exclude" do
+          within_temp_dir do
+            make_tree <<-EOM
+              app/thing.rb
+              doc/README
+              foo.rb
+            EOM
 
-    describe "when the source directory contains all readable files, and there are no ignored files" do
-      let(:config) { config_with_engine("an_engine") }
-      let(:registry) { registry_with_engine("an_engine") }
-
-      before do
-        make_file("root_file.rb")
-        make_file("subdir/subdir_file.rb")
-      end
-
-      it "gets include_paths from IncludePathBuilder" do
-        IncludePathsBuilder.stubs(:new).with([], []).returns(mock(build: ['.']))
-        expected_config = {
-          "enabled" => true,
-          :exclude_paths => [],
-          :include_paths => ['.']
-        }
-        result = engines_config_builder.run
-        result.size.must_equal(1)
-        result.first.name.must_equal("an_engine")
-        result.first.registry_entry.must_equal(registry["an_engine"])
-        result.first.code_path.must_equal(source_dir)
-        (result.first.config == expected_config).must_equal(true)
-        result.first.container_label.wont_equal nil
+            result = engines_config_builder.run
+            result.size.must_equal(1)
+            result.first.config[:include_paths].sort.must_equal %w[doc/ foo.rb]
+          end
+        end
       end
     end
 
