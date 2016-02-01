@@ -37,7 +37,7 @@ module CC::CLI
               "rubocop" => { "enabled"=>true },
             },
             "ratings" => { "paths" => ["**.css", "**.inc", "**.js", "**.jsx", "**.module", "**.php", "**.py", "**.rb"] },
-            "exclude_paths" => ["config/**/*", "spec/**/*", "vendor/**/*"],
+            "exclude_paths" => ["config/", "spec/", "vendor/"],
           })
 
           CC::Yaml.parse(new_content).errors.must_be_empty
@@ -178,7 +178,7 @@ module CC::CLI
               "rubocop" => { "enabled"=>true },
             },
             "ratings" => { "paths" => ["**.css", "**.inc", "**.js", "**.jsx", "**.module", "**.php", "**.py", "**.rb"] },
-            "exclude_paths" => ["config/**/*", "spec/**/*", "vendor/**/*"],
+            "exclude_paths" => ["config/", "spec/", "vendor/"],
           })
 
           CC::Yaml.parse(new_content).errors.must_be_empty
