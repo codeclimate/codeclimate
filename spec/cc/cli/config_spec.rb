@@ -41,7 +41,7 @@ module CC::CLI
         config.add_exclude_paths(["foo/"])
 
         exclude_paths = YAML.load(config.to_yaml)["exclude_paths"]
-        exclude_paths.must_equal(["foo/**/*"])
+        exclude_paths.must_equal(["foo/"])
       end
 
       it "does not glob paths that aren't directories" do

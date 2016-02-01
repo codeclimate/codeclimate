@@ -21,13 +21,7 @@ module CC
 
       def add_exclude_paths(paths)
         config["exclude_paths"] ||= []
-        config["exclude_paths"] += paths.map do |path|
-          if path.ends_with?("/")
-            "#{path}**/*"
-          else
-            path
-          end
-        end
+        config["exclude_paths"] |= paths
       end
 
       private
