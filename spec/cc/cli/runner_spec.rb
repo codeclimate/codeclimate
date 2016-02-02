@@ -14,17 +14,17 @@ module CC::CLI
           Runner.run(["explode"])
         end
 
-        stderr.must_match(/error: \(StandardError\) boom/)
+        expect(stderr).to match(/error: \(StandardError\) boom/)
       end
     end
 
     describe "#command_name" do
       it "parses subclasses" do
-        Runner.new(["analyze:this"]).command_name.must_equal("Analyze::This")
+        expect(Runner.new(["analyze:this"]).command_name).to eq("Analyze::This")
       end
 
       it "returns class names" do
-        Runner.new(["analyze"]).command_name.must_equal("Analyze")
+        expect(Runner.new(["analyze"]).command_name).to eq("Analyze")
       end
     end
   end

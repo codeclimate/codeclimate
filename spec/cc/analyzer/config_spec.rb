@@ -8,7 +8,7 @@ describe CC::Analyzer::Config do
       it "returns false" do
         parsed_yaml = CC::Analyzer::Config.new(Factory.yaml_without_jshint)
 
-        parsed_yaml.engine_present?("jshint").must_equal(false)
+        expect(parsed_yaml.engine_present?("jshint")).to eq(false)
       end
     end
 
@@ -16,7 +16,7 @@ describe CC::Analyzer::Config do
       it "returns false" do
         parsed_yaml = CC::Analyzer::Config.new(Factory.yaml_with_rubocop_enabled)
 
-        parsed_yaml.engine_present?("rubocop").must_equal(true)
+        expect(parsed_yaml.engine_present?("rubocop")).to eq(true)
       end
     end
   end
@@ -31,19 +31,19 @@ describe CC::Analyzer::Config do
             enabled: true
         }
       config = CC::Analyzer::Config.new(yaml)
-      config.engine_names.must_equal(["curses"])
+      expect(config.engine_names).to eq(["curses"])
     end
   end
 
   describe "#engine_config" do
     it "returns the config" do
       config = CC::Analyzer::Config.new(Factory.yaml_with_rubocop_enabled)
-      config.engine_config("rubocop").must_equal({"enabled" => true})
+      expect(config.engine_config("rubocop")).to eq({"enabled" => true})
     end
 
     it "returns an empty hash" do
       config = CC::Analyzer::Config.new(Factory.yaml_with_rubocop_enabled)
-      config.engine_config("bugfixer").must_equal({})
+      expect(config.engine_config("bugfixer")).to eq({})
     end
   end
 
@@ -52,7 +52,7 @@ describe CC::Analyzer::Config do
       it "returns true" do
         parsed_yaml = CC::Analyzer::Config.new(Factory.yaml_with_rubocop_enabled)
 
-        parsed_yaml.engine_enabled?("rubocop").must_equal(true)
+        expect(parsed_yaml.engine_enabled?("rubocop")).to eq(true)
       end
     end
 
@@ -60,7 +60,7 @@ describe CC::Analyzer::Config do
       it "returns false" do
         parsed_yaml = CC::Analyzer::Config.new(Factory.yaml_without_rubocop_enabled)
 
-        parsed_yaml.engine_enabled?("rubocop").must_equal(false)
+        expect(parsed_yaml.engine_enabled?("rubocop")).to eq(false)
       end
     end
   end
@@ -69,22 +69,22 @@ describe CC::Analyzer::Config do
     describe "when the engine is present but unabled" do
       it "enables engine" do
         parsed_yaml = CC::Analyzer::Config.new(Factory.yaml_without_rubocop_enabled)
-        parsed_yaml.engine_enabled?("rubocop").must_equal(false)
+        expect(parsed_yaml.engine_enabled?("rubocop")).to eq(false)
 
         parsed_yaml.enable_engine("rubocop")
 
-        parsed_yaml.engine_enabled?("rubocop").must_equal(true)
+        expect(parsed_yaml.engine_enabled?("rubocop")).to eq(true)
       end
     end
 
     describe "when the engine is not present" do
       it "adds engine to list of engines and enables it" do
         parsed_yaml = CC::Analyzer::Config.new(Factory.yaml_without_jshint)
-        parsed_yaml.engine_present?("jshint").must_equal(false)
+        expect(parsed_yaml.engine_present?("jshint")).to eq(false)
 
         parsed_yaml.enable_engine("jshint")
 
-        parsed_yaml.engine_enabled?("jshint").must_equal(true)
+        expect(parsed_yaml.engine_enabled?("jshint")).to eq(true)
       end
     end
   end

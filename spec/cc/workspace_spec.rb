@@ -15,20 +15,20 @@ module CC
 
         workspace = Workspace.new
         workspace.add(%w[foo bar/baz.rb])
-        workspace.paths.must_equal %w[foo/ bar/baz.rb]
+        expect(workspace.paths).to eq %w[foo/ bar/baz.rb]
       end
     end
 
     it "responds with \"./\", if unfiltered" do
       workspace = Workspace.new
-      workspace.paths.must_equal ["./"]
+      expect(workspace.paths).to eq ["./"]
     end
 
     it "doesn't remove if given nil or empty exclude_paths" do
       workspace = Workspace.new
       workspace.remove(nil)
       workspace.remove([])
-      workspace.paths.must_equal ["./"]
+      expect(workspace.paths).to eq ["./"]
     end
 
     it "filters to a minimized set of paths in the current directory" do
@@ -68,7 +68,7 @@ module CC
           vendor/**
         ])
 
-        workspace.paths.sort.must_equal %w[
+        expect(workspace.paths.sort).to eq %w[
           Gemfile
           Gemfile.lock
           lib/
@@ -102,14 +102,14 @@ module CC
         workspace2 = workspace.clone
         workspace2.remove(%w[vendor])
 
-        workspace.paths.sort.must_equal %w[
+        expect(workspace.paths.sort).to eq %w[
           Gemfile
           Gemfile.lock
           lib/
           spec/
           vendor/
         ]
-        workspace2.paths.sort.must_equal %w[
+        expect(workspace2.paths.sort).to eq %w[
           Gemfile
           Gemfile.lock
           lib/
@@ -128,7 +128,7 @@ module CC
         workspace = Workspace.new
         workspace.remove(%w[**/*.pyc])
 
-        workspace.paths.sort.must_equal %w[lib/foo.py]
+        expect(workspace.paths.sort).to eq %w[lib/foo.py]
       end
     end
 
@@ -153,7 +153,7 @@ module CC
         workspace.add(%w[lib/foo spec/foo/bar_spec.rb])
         workspace.remove(%w[lib/foo/bar.rb])
 
-        workspace.paths.sort.must_equal %w[
+        expect(workspace.paths.sort).to eq %w[
           lib/foo/baz.rb
           spec/foo/bar_spec.rb
         ]
@@ -170,7 +170,7 @@ module CC
 
           workspace = Workspace.new
           workspace.add(%w[./])
-          workspace.paths.must_equal ["./"]
+          expect(workspace.paths).to eq ["./"]
         end
       end
 
@@ -184,7 +184,7 @@ module CC
 
           workspace = Workspace.new
           workspace.add(%w[./foo.rb])
-          workspace.paths.must_equal ["foo.rb"]
+          expect(workspace.paths).to eq ["foo.rb"]
         end
       end
     end

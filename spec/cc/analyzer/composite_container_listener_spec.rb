@@ -4,12 +4,12 @@ module CC::Analyzer
   describe CompositeContainerListener do
     describe "#started" do
       it "delegates to the listeners given" do
-        listener_a = stub
-        listener_b = stub
+        listener_a = double
+        listener_b = double
 
-        data = stub
-        listener_a.expects(:started).with(data)
-        listener_b.expects(:started).with(data)
+        data = double
+        expect(listener_a).to receive(:started).with(data)
+        expect(listener_b).to receive(:started).with(data)
 
         listener = CompositeContainerListener.new(listener_a, listener_b)
         listener.started(data)
@@ -18,12 +18,12 @@ module CC::Analyzer
 
     describe "#timed_out" do
       it "delegates to the listeners given" do
-        listener_a = stub
-        listener_b = stub
+        listener_a = double
+        listener_b = double
 
-        data = stub
-        listener_a.expects(:timed_out).with(data)
-        listener_b.expects(:timed_out).with(data)
+        data = double
+        expect(listener_a).to receive(:timed_out).with(data)
+        expect(listener_b).to receive(:timed_out).with(data)
 
         listener = CompositeContainerListener.new(listener_a, listener_b)
         listener.timed_out(data)
@@ -32,12 +32,12 @@ module CC::Analyzer
 
     describe "#finished" do
       it "delegates to the listeners given" do
-        listener_a = stub
-        listener_b = stub
+        listener_a = double
+        listener_b = double
 
-        data = stub
-        listener_a.expects(:finished).with(data)
-        listener_b.expects(:finished).with(data)
+        data = double
+        expect(listener_a).to receive(:finished).with(data)
+        expect(listener_b).to receive(:finished).with(data)
 
         listener = CompositeContainerListener.new(listener_a, listener_b)
         listener.finished(data)

@@ -35,3 +35,7 @@ module FileSystemHelpers
     File.write("config/foo.rb", ".main {}")
   end
 end
+
+RSpec.configure do |conf|
+  conf.include(FileSystemHelpers)
+end

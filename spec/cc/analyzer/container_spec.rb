@@ -51,7 +51,7 @@ module CC::Analyzer
 
         container.run
 
-        collected_output.must_equal %w[ foo bar ]
+        expect(collected_output).to eq %w[ foo bar ]
       end
 
       it "logs a start event to the given container listener" do
@@ -61,8 +61,8 @@ module CC::Analyzer
 
         container.run
 
-        listener.started_image.must_equal "codeclimate/foo"
-        listener.started_name.must_equal "name"
+        expect(listener.started_image).to eq "codeclimate/foo"
+        expect(listener.started_name).to eq "name"
       end
 
       it "logs a finished event with status and stderr" do
@@ -73,30 +73,29 @@ module CC::Analyzer
         err.puts("error one")
         err.puts("error two")
         err.rewind
-        status = stub("Process::Status", exitstatus: 123)
+        status = double("Process::Status", exitstatus: 123)
         stub_spawn(status: status, err: err)
 
         container.run
 
-        listener.finished_image.must_equal "codeclimate/foo"
-        listener.finished_name.must_equal "name"
-        listener.finished_stderr.must_equal "error one\nerror two\n"
+        expect(listener.finished_image).to eq "codeclimate/foo"
+        expect(listener.finished_name).to eq "name"
+        expect(listener.finished_stderr).to eq "error one\nerror two\n"
       end
 
       it "returns a result object" do
         container = Container.new(image: "codeclimate/foo", name: "name")
         stub_spawn
         result = container.run
-        result.exit_status.must_equal 0
-        result.timed_out?.must_equal false
-        result.duration.must_be :>=, 0
-        result.duration.must_be :<, 2_000
-        result.stderr.must_equal ""
+        expect(result.exit_status).to eq 0
+        expect(result.timed_out?).to eq false
+        expect(result.duration).to be_between(-1, 2_000)
+        expect(result.stderr).to eq ""
       end
 
       # N.B. these specs actually docker-runs things. This logic is critical and
       # so the real-world interaction is valuable.
-      describe "stopping containers" do
+      describe "stopping containers", slow: true do
         before do
           @name = "codeclimate-container-test"
           system("docker kill #{@name} &>/dev/null")
@@ -105,7 +104,7 @@ module CC::Analyzer
 
         it "can be stopped" do
           listener = TestContainerListener.new
-          listener.expects(:timed_out).never
+          expect(listener).to receive(:timed_out).never
           container = Container.new(
             image: "alpine",
             command: %w[sleep 10],
@@ -120,18 +119,17 @@ module CC::Analyzer
           end
 
           assert_container_stopped
-          listener.finished_image.must_equal "alpine"
-          listener.finished_name.must_equal @name
-          @container_result.timed_out?.must_equal false
-          @container_result.exit_status.wont_equal nil
-          @container_result.duration.must_be :>=, 0
-          @container_result.duration.must_be :<, 10_000
+          expect(listener.finished_image).to eq "alpine"
+          expect(listener.finished_name).to eq @name
+          expect(@container_result.timed_out?).to eq false
+          expect(@container_result.exit_status).to be_present
+          expect(@container_result.duration).to be_between(-1, 10_000)
         end
 
         it "times out slow containers" do
           with_timeout(1) do
             listener = TestContainerListener.new
-            listener.expects(:finished).never
+            expect(listener).to receive(:finished).never
             container = Container.new(
               image: "alpine",
               command: %w[sleep 10],
@@ -142,21 +140,20 @@ module CC::Analyzer
             run_container(container)
 
             assert_container_stopped
-            listener.timed_out?.must_equal true
-            listener.timed_out_image.must_equal "alpine"
-            listener.timed_out_name.must_equal @name
-            listener.timed_out_seconds.must_equal 1
-            @container_result.timed_out?.must_equal true
-            @container_result.exit_status.wont_equal nil
-            @container_result.duration.must_be :>=, 0
-            @container_result.duration.must_be :<, 2_000
+            expect(listener.timed_out?).to eq true
+            expect(listener.timed_out_image).to eq "alpine"
+            expect(listener.timed_out_name).to eq @name
+            expect(listener.timed_out_seconds).to eq 1
+            expect(@container_result.timed_out?).to eq true
+            expect(@container_result.exit_status).to be_present
+            expect(@container_result.duration).to be_between(-1, 2_000)
           end
         end
 
         it "waits for IO parsing to finish" do
           stdout_lines = []
           listener = TestContainerListener.new
-          listener.expects(:finished).once
+          expect(listener).to receive(:finished).once
           container = Container.new(
             image: "alpine",
             command: ["echo", "line1\nline2\nline3"],
@@ -171,14 +168,14 @@ module CC::Analyzer
           run_container(container)
 
           assert_container_stopped
-          @container_result.timed_out?.must_equal false
-          stdout_lines.must_equal %w[line1 line2 line3]
+          expect(@container_result.timed_out?).to eq false
+          expect(stdout_lines).to eq %w[line1 line2 line3]
         end
 
         it "does not wait for IO when timed out" do
           with_timeout(1) do
             listener = TestContainerListener.new
-            listener.expects(:finished).never
+            expect(listener).to receive(:finished).never
             container = Container.new(
               image: "alpine",
               #command: %w[sleep 10],
@@ -193,7 +190,7 @@ module CC::Analyzer
             run_container(container)
 
             assert_container_stopped
-            listener.timed_out?.must_equal true
+            expect(listener.timed_out?).to eq true
           end
         end
 
@@ -211,10 +208,10 @@ module CC::Analyzer
             run_container(container)
 
             assert_container_stopped
-            @container_result.maximum_output_exceeded?.must_equal true
-            @container_result.timed_out?.must_equal false
-            @container_result.exit_status.wont_equal nil
-            @container_result.output_byte_count.must_be :>, 4
+            expect(@container_result.maximum_output_exceeded?).to eq true
+            expect(@container_result.timed_out?).to eq false
+            expect(@container_result.exit_status).to be_present
+            expect(@container_result.output_byte_count).to be > 4
           ensure
             ENV.delete("CONTAINER_MAXIMUM_OUTPUT_BYTES")
           end
@@ -233,7 +230,7 @@ module CC::Analyzer
         end
 
         def assert_container_stopped
-          `docker ps --quiet --filter name=#{@name}`.strip.must_equal ""
+          expect(`docker ps --quiet --filter name=#{@name}`.strip).to eq ""
         end
       end
     end
@@ -245,41 +242,43 @@ module CC::Analyzer
         err.puts("error one")
         err.puts("error two")
         err.rewind
-        status = stub("Process::Status", exitstatus: 123)
+        status = double("Process::Status", exitstatus: 123)
         stub_spawn(status: status, err: err)
       end
 
       it "returns a result object" do
         result = @container.run
-        result.exit_status.must_equal 123
-        result.timed_out?.must_equal false
-        result.duration.must_be :present?
-        result.stderr.must_equal "error one\nerror two\n"
+        expect(result.exit_status).to eq 123
+        expect(result.timed_out?).to eq false
+        expect(result.duration).to be_present
+        expect(result.stderr).to eq "error one\nerror two\n"
       end
     end
 
     describe "new with a blank image" do
       it "raises an exception" do
-        -> { CC::Analyzer::Container.new(image: "", name: "name") }.must_raise(CC::Analyzer::Container::ImageRequired)
+        expect { CC::Analyzer::Container.new(image: "", name: "name") }.to raise_error(
+          CC::Analyzer::Container::ImageRequired
+        )
       end
     end
 
     def stub_spawn(status: nil, out: StringIO.new, err: StringIO.new)
       pid = 42
-      status ||= stub("Process::Status", exitstatus: 0)
+      status ||= double("Process::Status", exitstatus: 0)
 
-      POSIX::Spawn.stubs(:popen4).returns([pid, nil, out, err])
-      Process.stubs(:waitpid2).with(pid).returns([nil, status])
+      allow(POSIX::Spawn).to receive(:popen4).and_return([pid, nil, out, err])
+      allow(Process).to receive(:waitpid2).with(pid).and_return([nil, status])
 
       return [pid, out, err]
     end
 
     def expect_spawn(args, status: nil, out: StringIO.new, err: StringIO.new)
       pid = 42
-      status ||= stub("Process::Status", exitstatus: 0)
+      status ||= double("Process::Status", exitstatus: 0)
 
-      POSIX::Spawn.expects(:popen4).with(*args).returns([pid, nil, out, err])
-      Process.expects(:waitpid2).with(pid).returns([nil, status])
+      expect(POSIX::Spawn).to receive(:popen4).with(*args).and_return([pid, nil, out, err])
+      expect(Process).to receive(:waitpid2).with(pid).and_return([nil, status])
 
       return [pid, out, err]
     end

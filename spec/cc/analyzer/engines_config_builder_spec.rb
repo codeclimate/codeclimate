@@ -32,8 +32,8 @@ module CC::Analyzer
 
       it "contains that engine" do
         result = engines_config_builder.run
-        result.size.must_equal(1)
-        result.first.name.must_equal("an_engine")
+        expect(result.size).to eq(1)
+        expect(result.first.name).to eq("an_engine")
       end
     end
 
@@ -65,12 +65,12 @@ module CC::Analyzer
           :include_paths => ["./"]
         }
         result = engines_config_builder.run
-        result.size.must_equal(1)
-        result.first.name.must_equal("rubocop")
-        result.first.registry_entry.must_equal(registry["rubocop"])
-        result.first.code_path.must_equal(source_dir)
-        result.first.config.must_be(:==, expected_config)
-        result.first.container_label.wont_equal nil
+        expect(result.size).to eq(1)
+        expect(result.first.name).to eq("rubocop")
+        expect(result.first.registry_entry).to eq(registry["rubocop"])
+        expect(result.first.code_path).to eq(source_dir)
+        expect(result.first.config).to eq expected_config
+        expect(result.first.container_label).to be_present
       end
     end
 
@@ -112,19 +112,19 @@ module CC::Analyzer
               :include_paths => ["app/moo.rb", "foo.rb"]
             }
             result = engines_config_builder.run
-            result.size.must_equal(2)
-            result[0].name.must_equal("rubocop")
-            result[0].registry_entry.must_equal(registry["rubocop"])
-            result[0].code_path.must_equal(source_dir)
+            expect(result.size).to eq(2)
+            expect(result[0].name).to eq("rubocop")
+            expect(result[0].registry_entry).to eq(registry["rubocop"])
+            expect(result[0].code_path).to eq(source_dir)
             result[0].config[:include_paths].sort!
-            result[0].config.must_be(:==, expected_rubocop_config)
-            result[0].container_label.wont_equal nil
-            result[1].name.must_equal("fixme")
-            result[1].registry_entry.must_equal(registry["fixme"])
-            result[1].code_path.must_equal(source_dir)
+            expect(result[0].config).to eq expected_rubocop_config
+            expect(result[0].container_label).to be_present
+            expect(result[1].name).to eq("fixme")
+            expect(result[1].registry_entry).to eq(registry["fixme"])
+            expect(result[1].code_path).to eq(source_dir)
             result[1].config[:include_paths].sort!
-            result[1].config.must_be(:==, expected_fixme_config)
-            result[1].container_label.wont_equal nil
+            expect(result[1].config).to eq expected_fixme_config
+            expect(result[1].container_label).to be_present
           end
         end
       end
@@ -141,8 +141,8 @@ module CC::Analyzer
             EOM
 
             result = engines_config_builder.run
-            result.size.must_equal(1)
-            result.first.config[:include_paths].sort.must_equal %w[doc/ foo.rb]
+            expect(result.size).to eq(1)
+            expect(result.first.config[:include_paths].sort).to eq %w[doc/ foo.rb]
           end
         end
       end
@@ -168,8 +168,8 @@ module CC::Analyzer
             EOM
 
             result = engines_config_builder.run
-            result.size.must_equal(1)
-            result.first.config[:include_paths].sort.must_equal %w[doc/ foo.rb]
+            expect(result.size).to eq(1)
+            expect(result.first.config[:include_paths].sort).to eq %w[doc/ foo.rb]
           end
         end
       end
@@ -192,8 +192,8 @@ module CC::Analyzer
     end
 
     def null_formatter
-      formatter = stub(started: nil, write: nil, run: nil, finished: nil, close: nil)
-      formatter.stubs(:engine_running).yields
+      formatter = double(started: nil, write: nil, run: nil, finished: nil, close: nil)
+      allow(formatter).to receive(:engine_running).and_yield
       formatter
     end
   end

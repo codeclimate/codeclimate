@@ -14,7 +14,7 @@ module CC::CLI
       it "is true when existing config is valid" do
         File.write(".codeclimate.yml", create_classic_yaml)
 
-        generator.can_generate?.must_equal true
+        expect(generator.can_generate?).to eq true
       end
 
       it "is false when existing config is not valid" do
@@ -26,7 +26,7 @@ module CC::CLI
             - excluded.rb
         })
 
-        generator.can_generate?.must_equal false
+        expect(generator.can_generate?).to eq false
       end
     end
 
@@ -39,7 +39,7 @@ module CC::CLI
         expected_engines = engine_registry.list.select do |name, _|
           expected_engine_names.include?(name)
         end
-        generator.eligible_engines.must_equal expected_engines
+        expect(generator.eligible_engines).to eq expected_engines
       end
     end
 
@@ -48,7 +48,7 @@ module CC::CLI
         File.write(".codeclimate.yml", create_classic_yaml)
 
         expected_paths = %w(excluded.rb)
-        generator.exclude_paths.must_equal expected_paths
+        expect(generator.exclude_paths).to eq expected_paths
       end
 
       it "uses existing exclude_paths from yaml when coerced from string" do
@@ -59,7 +59,7 @@ module CC::CLI
         })
 
         expected_paths = %w(excluded.rb)
-        generator.exclude_paths.must_equal expected_paths
+        expect(generator.exclude_paths).to eq expected_paths
       end
     end
 

@@ -9,8 +9,8 @@ module CC::Analyzer
 
         filesystem = Filesystem.new(root)
 
-        filesystem.exist?("foo.rb").must_equal(true)
-        filesystem.exist?("bar.rb").must_equal(false)
+        expect(filesystem.exist?("foo.rb")).to eq(true)
+        expect(filesystem.exist?("bar.rb")).to eq(false)
       end
     end
 
@@ -22,8 +22,8 @@ module CC::Analyzer
 
         filesystem = Filesystem.new(root)
 
-        filesystem.read_path("foo.rb").must_equal("Foo")
-        filesystem.read_path("bar.rb").must_equal("Bar")
+        expect(filesystem.read_path("foo.rb")).to eq("Foo")
+        expect(filesystem.read_path("bar.rb")).to eq("Bar")
       end
     end
 
@@ -33,8 +33,8 @@ module CC::Analyzer
 
         filesystem.write_path("foo.js", "Hello world")
 
-        filesystem.exist?("foo.js").must_equal(true)
-        filesystem.read_path("foo.js").must_equal("Hello world")
+        expect(filesystem.exist?("foo.js")).to eq(true)
+        expect(filesystem.read_path("foo.js")).to eq("Hello world")
       end
     end
   end

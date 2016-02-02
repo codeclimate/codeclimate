@@ -3,7 +3,9 @@ require "spec_helper"
 module CC::CLI
   describe Analyze do
     describe "#run" do
-      before { CC::Analyzer::Engine.any_instance.stubs(:run) }
+      before do
+        allow_any_instance_of(CC::Analyzer::Engine).to receive(:run)
+      end
 
       describe "when no engines are specified" do
         it "exits and reports no engines are enabled" do
@@ -11,10 +13,10 @@ module CC::CLI
             create_yaml(Factory.create_yaml_with_no_engines)
 
             _, stderr = capture_io do
-              lambda { Analyze.new.run }.must_raise SystemExit
+              expect { Analyze.new.run }.to raise_error SystemExit
             end
 
-            stderr.must_match("No enabled engines. Add some to your .codeclimate.yml file!")
+            expect(stderr).to match("No enabled engines. Add some to your .codeclimate.yml file!")
           end
         end
       end
@@ -34,7 +36,7 @@ module CC::CLI
               Analyze.new.run
             end
 
-            stderr.must_match("")
+            expect(stderr).to match("")
           end
         end
       end
@@ -53,7 +55,7 @@ module CC::CLI
             analyze = Analyze.new(args)
             qualified_config = analyze.send(:config)
 
-            qualified_config.engines.must_equal("eslint" => { "enabled" => true })
+            expect(qualified_config.engines).to eq("eslint" => { "enabled" => true })
           end
         end
       end
@@ -74,7 +76,7 @@ module CC::CLI
 
             analyze = Analyze.new(args)
 
-            analyze.send(:path_options).must_equal(paths)
+            expect(analyze.send(:path_options)).to eq(paths)
           end
         end
       end
@@ -94,9 +96,9 @@ module CC::CLI
             paths = ["foo.rb"]
 
             analyze = Analyze.new(args)
-            engines_runner = stub(run: "peace")
+            engines_runner = double(run: "peace")
 
-            CC::Analyzer::EnginesRunner.expects(:new).with(anything, anything, anything, anything, paths).returns(engines_runner)
+            expect(CC::Analyzer::EnginesRunner).to receive(:new).with(anything, anything, anything, anything, paths).and_return(engines_runner)
 
             analyze.run
           end
@@ -105,7 +107,7 @@ module CC::CLI
 
       describe "when a formatter argument is passed" do
         it "instantiates the correct formatter with a proper Filesystem argument" do
-          CC::Analyzer::Formatters::JSONFormatter.expects(:new).
+          expect(CC::Analyzer::Formatters::JSONFormatter).to receive(:new).
             with(kind_of(CC::Analyzer::Filesystem))
 
           Analyze.new(%w[-f json])

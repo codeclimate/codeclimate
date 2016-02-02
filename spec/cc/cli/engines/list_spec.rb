@@ -11,7 +11,7 @@ module CC::CLI::Engines
         engines = YAML.safe_load_file("config/engines.yml")
 
         engines.each do |name, engine|
-          stdout.must_match(name)
+          expect(stdout).to match(name)
         end
       end
     end

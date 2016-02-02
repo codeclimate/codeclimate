@@ -9,7 +9,7 @@ test: image
 	docker run --rm \
 	  --entrypoint bundle \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
-	  codeclimate/codeclimate exec rake
+	  codeclimate/codeclimate exec rake spec:all spec:benchmark
 
 citest:
 	docker run \
@@ -21,7 +21,7 @@ citest:
 	  --entrypoint bundle \
 	  --volume $(PWD)/.git:/usr/src/app/.git:ro \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
-	  codeclimate/codeclimate exec rake
+	  codeclimate/codeclimate exec rake spec:all spec:benchmark
 
 install:
 	bin/check

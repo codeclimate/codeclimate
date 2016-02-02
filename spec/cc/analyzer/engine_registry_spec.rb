@@ -6,14 +6,14 @@ module CC::Analyzer
       it "returns an entry of engines.yml" do
         registry = EngineRegistry.new
 
-        registry["madeup"].must_equal nil
-        registry["rubocop"]["image"].must_equal "codeclimate/codeclimate-rubocop"
+        expect(registry["madeup"]).to eq nil
+        expect(registry["rubocop"]["image"]).to eq "codeclimate/codeclimate-rubocop"
       end
 
       it "returns a fake registry entry if in dev mode" do
         registry = EngineRegistry.new(true)
 
-        registry["madeup"].must_equal(
+        expect(registry["madeup"]).to eq(
           "image" => "codeclimate/codeclimate-madeup:latest"
         )
       end

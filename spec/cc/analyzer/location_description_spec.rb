@@ -6,13 +6,13 @@ module CC::Analyzer
       it "adds the suffix" do
         location = { "lines" => { "begin" => 1, "end" => 3 } }
 
-        LocationDescription.new(Object.new, location, "!").to_s.must_equal("1-3!")
+        expect(LocationDescription.new(Object.new, location, "!").to_s).to eq("1-3!")
       end
 
       it "with lines" do
         location = {"lines" => {"begin" => 1, "end" => 3}}
 
-        LocationDescription.new(Object.new, location).to_s.must_equal("1-3")
+        expect(LocationDescription.new(Object.new, location).to_s).to eq("1-3")
       end
 
       it "with linecols" do
@@ -29,7 +29,7 @@ module CC::Analyzer
           }
         }
 
-        LocationDescription.new(Object.new, location).to_s.must_equal("1-3")
+        expect(LocationDescription.new(Object.new, location).to_s).to eq("1-3")
       end
 
       it "with offsets" do
@@ -45,7 +45,7 @@ module CC::Analyzer
         }
 
         source_buffer = SourceBuffer.new("foo.rb", "foo\nbar")
-        LocationDescription.new(source_buffer, location).to_s.must_equal("1-2")
+        expect(LocationDescription.new(source_buffer, location).to_s).to eq("1-2")
       end
     end
   end

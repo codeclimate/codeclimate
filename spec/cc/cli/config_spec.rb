@@ -13,7 +13,7 @@ module CC::CLI
         config.add_engine("foo", engine_config)
 
         engine = YAML.load(config.to_yaml)["engines"]["foo"]
-        engine.must_equal({ "enabled" => true })
+        expect(engine).to eq({ "enabled" => true })
       end
 
       it "copies over default configuration" do
@@ -26,12 +26,12 @@ module CC::CLI
         config.add_engine("foo", engine_config)
 
         engine = YAML.load(config.to_yaml)["engines"]["foo"]
-        engine.must_equal({
+        expect(engine).to eq(
           "enabled" => true,
           "config" => {
             "awesome" => true
           }
-        })
+        )
       end
     end
 
@@ -41,7 +41,7 @@ module CC::CLI
         config.add_exclude_paths(["foo/"])
 
         exclude_paths = YAML.load(config.to_yaml)["exclude_paths"]
-        exclude_paths.must_equal(["foo/"])
+        expect(exclude_paths).to eq(["foo/"])
       end
 
       it "does not glob paths that aren't directories" do
@@ -49,7 +49,7 @@ module CC::CLI
         config.add_exclude_paths(["foo.rb"])
 
         exclude_paths = YAML.load(config.to_yaml)["exclude_paths"]
-        exclude_paths.must_equal(["foo.rb"])
+        expect(exclude_paths).to eq(["foo.rb"])
       end
     end
   end

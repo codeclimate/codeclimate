@@ -16,7 +16,8 @@ module CC::Analyzer
           line_1_col_50 = { "location" => { "positions" => { "begin" => { "line" => 1, "column" => 50} } } },
         ].shuffle
 
-        IssueSorter.new(issues).by_location.must_equal([
+        sorted = IssueSorter.new(issues).by_location
+        expect(sorted).to eq([
           whole_file,
           line_1_col_50,
           line_3,
