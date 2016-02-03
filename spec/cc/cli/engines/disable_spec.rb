@@ -7,13 +7,13 @@ module CC::CLI::Engines
         it "says engine does not exist" do
           within_temp_dir do
             create_yaml
-            filesystem.exist?(".codeclimate.yml").must_equal(true)
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
 
             stdout, stderr = capture_io do
               Disable.new(args = ["the_litte_engine_that_could"]).run
             end
 
-            stdout.must_match("Engine not found. Run 'codeclimate engines:list' for a list of valid engines.")
+            expect(stdout).to match("Engine not found. Run 'codeclimate engines:list' for a list of valid engines.")
           end
         end
       end
@@ -27,7 +27,7 @@ module CC::CLI::Engines
               Disable.new(args = ["rubocop"]).run
             end
 
-            stdout.must_match("Engine already disabled.")
+            expect(stdout).to match("Engine already disabled.")
           end
         end
       end
@@ -44,9 +44,9 @@ module CC::CLI::Engines
 
             content_after = File.read(".codeclimate.yml")
 
-            stdout.must_match("Engine disabled.")
-            CC::Analyzer::Config.new(content_before).engine_enabled?("rubocop").must_equal(true)
-            CC::Analyzer::Config.new(content_after).engine_enabled?("rubocop").must_equal(false)
+            expect(stdout).to match("Engine disabled.")
+            expect(CC::Analyzer::Config.new(content_before).engine_enabled?("rubocop")).to eq(true)
+            expect(CC::Analyzer::Config.new(content_after).engine_enabled?("rubocop")).to eq(false)
           end
         end
       end

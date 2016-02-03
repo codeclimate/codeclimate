@@ -19,8 +19,8 @@ module CC::Analyzer
       }.to_json
       issue = Issue.new(output)
 
-      issue.must_respond_to("check_name")
-      issue.check_name.must_equal("Rubocop/Style/Documentation")
+      expect(issue.respond_to?("check_name")).to eq true
+      expect(issue.check_name).to eq("Rubocop/Style/Documentation")
     end
 
     describe "#fingerprint" do
@@ -41,7 +41,7 @@ module CC::Analyzer
         }.to_json
         issue = Issue.new(output)
 
-        issue.fingerprint.must_equal "9d20301efe0bbb8f87fb4eb15a71fc81"
+        expect(issue.fingerprint).to eq "9d20301efe0bbb8f87fb4eb15a71fc81"
       end
 
       it "doesn't overwrite fingerprints within output" do
@@ -62,7 +62,7 @@ module CC::Analyzer
         }.to_json
         issue = Issue.new(output)
 
-        issue.fingerprint.must_equal "foo"
+        expect(issue.fingerprint).to eq "foo"
       end
     end
 
@@ -87,7 +87,7 @@ module CC::Analyzer
         }
         issue = Issue.new(output.to_json)
 
-        issue.as_json.must_equal(output.merge(expected_additions))
+        expect(issue.as_json).to eq(output.merge(expected_additions))
       end
     end
   end

@@ -22,7 +22,7 @@ class CC::Workspace
         end
         puts "PathTree over #{`find . -type f -print | wc -l`.strip} files, with #{exclude_paths.count} excludes took: #{elapsed}s"
 
-        elapsed.must_be(:<, MAX_FILTER_SECONDS)
+        expect(elapsed).to be_between(0, MAX_FILTER_SECONDS)
       end
     end
 

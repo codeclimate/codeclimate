@@ -4,23 +4,23 @@ module CC::Analyzer
   describe LoggingContainerListener do
     describe "#started" do
       it "logs it" do
-        logger = stub
+        logger = double
         listener = LoggingContainerListener.new("foo-engine", logger)
 
-        logger.expects(:info).with { |msg| msg.must_match /foo-engine/ }
+        expect(logger).to receive(:info).with(/foo-engine/)
 
-        listener.started(stub)
+        listener.started(double)
       end
     end
 
     describe "#finished" do
       it "logs it" do
-        logger = stub
+        logger = double
         listener = LoggingContainerListener.new("foo-engine", logger)
 
-        logger.expects(:info).with { |msg| msg.must_match /foo-engine/ }
+        expect(logger).to receive(:info).with(/foo-engine/)
 
-        listener.finished(stub)
+        listener.finished(double)
       end
     end
   end

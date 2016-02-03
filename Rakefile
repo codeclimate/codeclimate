@@ -1,14 +1,16 @@
-require "rake/testtask"
-require "bundler/gem_tasks"
+require "rspec/core/rake_task"
 
-Rake::TestTask.new do |t|
-  t.test_files = Dir.glob("spec/**/*_spec.rb")
-  t.libs = %w[lib spec]
+desc "Run (quick) specs"
+RSpec::Core::RakeTask.new(:spec) do |task|
+  task.rspec_opts = "--tag ~slow"
 end
 
-Rake::TestTask.new("benchmarks") do |t|
-  t.test_files = Dir.glob("benchmarks/**/*_benchmark.rb")
-  t.libs = %w[lib spec benchmarks]
+desc "Run all specs, including slow ones"
+RSpec::Core::RakeTask.new("spec:all")
+
+desc "Run benchmark specs"
+RSpec::Core::RakeTask.new("spec:benchmark") do |task|
+  task.pattern = "benchmarks/**/*_benchmark.rb"
 end
 
-task(default: :test)
+task(default: :spec)

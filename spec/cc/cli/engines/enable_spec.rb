@@ -3,19 +3,21 @@ require "spec_helper"
 module CC::CLI::Engines
   describe Enable do
     describe "#run" do
-      before { Install.any_instance.stubs(:run) }
+      before do
+        allow_any_instance_of(Install).to receive(:run)
+      end
 
       describe "when the engine requested does not exist" do
         it "says engine does not exist" do
           within_temp_dir do
             create_yaml
-            filesystem.exist?(".codeclimate.yml").must_equal(true)
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
 
             stdout, stderr = capture_io do
               Enable.new(args = ["the_litte_engine_that_could"]).run
             end
 
-            stdout.must_match("Engine not found. Run 'codeclimate engines:list' for a list of valid engines.")
+            expect(stdout).to match("Engine not found. Run 'codeclimate engines:list' for a list of valid engines.")
           end
         end
       end
@@ -30,8 +32,8 @@ module CC::CLI::Engines
 
             content_after = File.read(".codeclimate.yml")
 
-            stdout.must_match("Engine already enabled.")
-            content_after.must_equal(Factory.yaml_with_rubocop_enabled)
+            expect(stdout).to match("Engine already enabled.")
+            expect(content_after).to eq(Factory.yaml_with_rubocop_enabled)
           end
         end
       end
@@ -46,8 +48,8 @@ module CC::CLI::Engines
 
             content_after = File.read(".codeclimate.yml")
 
-            stdout.must_match("Engine added")
-            CC::Analyzer::Config.new(content_after).engine_enabled?("rubocop").must_equal(true)
+            expect(stdout).to match("Engine added")
+            expect(CC::Analyzer::Config.new(content_after).engine_enabled?("rubocop")).to eq(true)
           end
         end
       end
@@ -63,9 +65,9 @@ module CC::CLI::Engines
 
             content_after = File.read(".codeclimate.yml")
 
-            stdout.must_match("Engine added")
+            expect(stdout).to match("Engine added")
             config = CC::Analyzer::Config.new(content_after).engine_config("duplication")
-            config["config"].must_equal("languages" => %w[ruby javascript python php])
+            expect(config["config"]).to eq("languages" => %w[ruby javascript python php])
           end
         end
       end
@@ -83,7 +85,7 @@ module CC::CLI::Engines
 
             config = CC::Analyzer::Config.new(content_after).engine_config("coffeelint")
 
-            config.must_equal({"enabled" => true})
+            expect(config).to eq({"enabled" => true})
           end
         end
       end

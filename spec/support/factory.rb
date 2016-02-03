@@ -100,3 +100,7 @@ module Factory
     }
   end
 end
+
+RSpec.configure do |conf|
+  conf.include(Factory)
+end

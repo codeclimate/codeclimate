@@ -4,8 +4,8 @@ module CC::Analyzer
   describe StatsdContainerListener do
     describe "#started" do
       it "increments a metric in statsd" do
-        statsd = stub(increment: nil)
-        statsd.expects(:increment).with("engines.started")
+        statsd = double(increment: nil)
+        expect(statsd).to receive(:increment).with("engines.started")
 
         listener = StatsdContainerListener.new("engine", statsd)
         listener.started(nil)
@@ -14,36 +14,36 @@ module CC::Analyzer
 
     describe "#timed_out" do
       it "increments a metric in statsd" do
-        statsd = stub(timing: nil, increment: nil)
-        statsd.expects(:timing).with("engines.time", 10)
-        statsd.expects(:increment).with("engines.result.error")
-        statsd.expects(:increment).with("engines.result.error.timeout")
+        statsd = double(timing: nil, increment: nil)
+        expect(statsd).to receive(:timing).with("engines.time", 10)
+        expect(statsd).to receive(:increment).with("engines.result.error")
+        expect(statsd).to receive(:increment).with("engines.result.error.timeout")
 
         listener = StatsdContainerListener.new("engine", statsd)
-        listener.timed_out(stub(duration: 10))
+        listener.timed_out(double(duration: 10))
       end
 
     end
 
     describe "#finished" do
       it "increments a metric for success" do
-        statsd = stub(timing: nil, increment: nil)
-        statsd.expects(:timing).with("engines.time", 10)
-        statsd.expects(:increment).with("engines.finished")
-        statsd.expects(:increment).with("engines.result.success")
+        statsd = double(timing: nil, increment: nil)
+        expect(statsd).to receive(:timing).with("engines.time", 10)
+        expect(statsd).to receive(:increment).with("engines.finished")
+        expect(statsd).to receive(:increment).with("engines.result.success")
 
         listener = StatsdContainerListener.new("engine", statsd)
-        listener.finished(stub(duration: 10, status: stub(success?: true)))
+        listener.finished(double(duration: 10, status: double(success?: true)))
       end
 
       it "increments a metric for failure" do
-        statsd = stub(timing: nil, increment: nil)
-        statsd.expects(:timing).with("engines.time", 10)
-        statsd.expects(:increment).with("engines.finished")
-        statsd.expects(:increment).with("engines.result.error")
+        statsd = double(timing: nil, increment: nil)
+        expect(statsd).to receive(:timing).with("engines.time", 10)
+        expect(statsd).to receive(:increment).with("engines.finished")
+        expect(statsd).to receive(:increment).with("engines.result.error")
 
         listener = StatsdContainerListener.new("engine", statsd)
-        listener.finished(stub(duration: 10, status: stub(success?: false)))
+        listener.finished(double(duration: 10, status: double(success?: false)))
       end
     end
   end

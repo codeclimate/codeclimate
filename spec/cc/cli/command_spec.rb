@@ -6,10 +6,10 @@ module CC::CLI
       it "exits if the file doesn't exist" do
         Dir.chdir(Dir.mktmpdir) do
           _, stderr = capture_io do
-            lambda { Command.new.require_codeclimate_yml }.must_raise SystemExit
+            expect { Command.new.require_codeclimate_yml }.to raise_error SystemExit
           end
 
-          stderr.must_match("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.")
+          expect(stderr).to match("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.")
         end
       end
     end

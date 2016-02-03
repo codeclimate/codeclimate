@@ -6,23 +6,23 @@ module CC::CLI
       describe "when a .codeclimate.yml file is present in working directory" do
         it "analyzes the .codeclimate.yml file without altering it" do
           within_temp_dir do
-            filesystem.exist?(".codeclimate.yml").must_equal(false)
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(false)
 
             yaml_content_before = "This is a test yaml!"
             File.write(".codeclimate.yml", yaml_content_before)
 
-            filesystem.exist?(".codeclimate.yml").must_equal(true)
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
 
             capture_io do
               validate_config = ValidateConfig.new
               validate_config.run
             end
 
-            filesystem.exist?(".codeclimate.yml").must_equal(true)
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
 
             content_after = File.read(".codeclimate.yml")
 
-            content_after.must_equal(yaml_content_before)
+            expect(content_after).to eq(yaml_content_before)
           end
         end
 
@@ -36,7 +36,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("ERROR")
+              expect(stdout).to match("ERROR")
             end
           end
         end
@@ -53,7 +53,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("WARNING:")
+              expect(stdout).to match("WARNING:")
             end
           end
         end
@@ -68,7 +68,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("ERROR: invalid \"engines\" section")
+              expect(stdout).to match("ERROR: invalid \"engines\" section")
             end
           end
         end
@@ -83,7 +83,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("ERROR: invalid \"engines\" section")
+              expect(stdout).to match("ERROR: invalid \"engines\" section")
             end
           end
         end
@@ -98,7 +98,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_match("No errors or warnings found in .codeclimate.yml file.")
+              expect(stdout).to match("No errors or warnings found in .codeclimate.yml file.")
             end
           end
         end
@@ -124,7 +124,7 @@ module CC::CLI
                 ValidateConfig.new.run
               end
 
-              stdout.must_include("WARNING: unknown engine <madeup>")
+              expect(stdout).to include("WARNING: unknown engine <madeup>")
             end
           end
         end

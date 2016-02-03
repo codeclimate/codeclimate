@@ -8,15 +8,15 @@ module CC::Analyzer
 
     describe "#run" do
       it "passes the correct options to Container" do
-        container = stub
-        container.stubs(:on_output).yields("")
-        container.stubs(:run)
+        container = double
+        allow(container).to receive(:on_output).and_yield("")
+        allow(container).to receive(:run)
 
-        Container.expects(:new).with do |args|
-          args[:image].must_equal "codeclimate/foo"
-          args[:command].must_equal "bar"
-          args[:name].must_match /^cc-engines-foo/
-        end.returns(container)
+        expect(Container).to receive(:new) do |args|
+          expect(args[:image]).to eq "codeclimate/foo"
+          expect(args[:command]).to eq "bar"
+          expect(args[:name]).to match(/^cc-engines-foo/)
+        end.and_return(container)
 
         metadata = { "image" => "codeclimate/foo", "command" => "bar" }
         engine = Engine.new("foo", metadata, "", {}, "")
@@ -24,10 +24,10 @@ module CC::Analyzer
       end
 
       it "runs a Container in a constrained environment" do
-        container = stub
-        container.stubs(:on_output).yields("")
+        container = double
+        allow(container).to receive(:on_output).and_yield("")
 
-        container.expects(:run).with(includes(
+        expect(container).to receive(:run).with(including(
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=a-label",
           "--memory", "512000000",
@@ -37,28 +37,28 @@ module CC::Analyzer
           "--user", "9000:9000",
         ))
 
-        Container.expects(:new).returns(container)
+        expect(Container).to receive(:new).and_return(container)
         engine = Engine.new("", {}, "/code", {}, "a-label")
         engine.run(StringIO.new, ContainerListener.new)
       end
 
       it "passes a composite container listener wrapping the given one" do
-        container = stub
-        container.stubs(:on_output).yields("")
-        container.stubs(:run)
+        container = double
+        allow(container).to receive(:on_output).and_yield("")
+        allow(container).to receive(:run)
 
-        given_listener = stub
-        container_listener = stub
-        CompositeContainerListener.expects(:new).
+        given_listener = double
+        container_listener = double
+        expect(CompositeContainerListener).to receive(:new).
           with(
             given_listener,
             kind_of(LoggingContainerListener),
             kind_of(StatsdContainerListener),
             kind_of(RaisingContainerListener),
           ).
-          returns(container_listener)
-        Container.expects(:new).
-          with(has_entry(listener: container_listener)).returns(container)
+          and_return(container_listener)
+        expect(Container).to receive(:new).
+          with(including(listener: container_listener)).and_return(container)
 
         engine = Engine.new("", {}, "", {}, "")
         engine.run(StringIO.new, given_listener)
@@ -70,13 +70,13 @@ module CC::Analyzer
           "{}",
           "{}",
         ])
-        Container.expects(:new).returns(container)
+        expect(Container).to receive(:new).and_return(container)
 
         stdout = StringIO.new
         engine = Engine.new("", {}, "", {}, "")
         engine.run(stdout, ContainerListener.new)
 
-        stdout.string.must_equal "{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}"
+        expect(stdout.string).to eq "{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}"
       end
 
       it "supports issue filtering by check name" do
@@ -85,14 +85,14 @@ module CC::Analyzer
           %{{"type":"issue","check_name":"bar"}},
           %{{"type":"issue","check_name":"baz"}},
         ])
-        Container.expects(:new).returns(container)
+        expect(Container).to receive(:new).and_return(container)
 
         stdout = StringIO.new
         config = { "checks" => { "bar" => { "enabled" => false } } }
         engine = Engine.new("", {}, "", config, "")
         engine.run(stdout, ContainerListener.new)
 
-        stdout.string.wont_match(%{"check":"bar"})
+        expect(stdout.string).not_to include %{"check":"bar"}
       end
     end
   end
