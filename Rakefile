@@ -1,4 +1,7 @@
+require "bundler/gem_helper"
 require "rspec/core/rake_task"
+
+Bundler::GemHelper.install_tasks
 
 desc "Run (quick) specs"
 RSpec::Core::RakeTask.new(:spec) do |task|
