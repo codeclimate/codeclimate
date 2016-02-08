@@ -64,6 +64,16 @@ module CC::CLI
 
         expect(generator.eligible_engines.keys).not_to include("eslint")
       end
+
+      it "raises if `find` fails" do
+        make_tree <<-EOM
+          foo.rb
+        EOM
+
+        allow(POSIX::Spawn::Child).to receive(:new).and_return(double(status: double(success?: false, to_i: 1), err: "error message"))
+
+        expect { generator.eligible_engines }.to raise_error(CC::CLI::ConfigGenerator::ConfigGeneratorError)
+      end
     end
 
     describe "#errors" do

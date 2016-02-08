@@ -1,3 +1,4 @@
+require "posix/spawn"
 require "shellwords"
 
 module CC
@@ -5,6 +6,8 @@ module CC
     class ConfigGenerator
       CODECLIMATE_YAML = Command::CODECLIMATE_YAML
       AUTO_EXCLUDE_PATHS = %w(config/ db/ dist/ features/ node_modules/ script/ spec/ test/ tests/ vendor/).freeze
+
+      ConfigGeneratorError = Class.new(StandardError)
 
       def self.for(filesystem, engine_registry, upgrade_requested)
         if upgrade_requested && upgrade_needed?(filesystem)
@@ -80,11 +83,21 @@ module CC
           if non_excluded_paths.empty?
             []
           else
-            find_cmd = "find #{non_excluded_paths.map(&:shellescape).join(' ')} -type f -print0"
-            `#{find_cmd}`.strip.split("\0").map do |path|
-              path.sub(%r{^\.\/}, "")
-            end
+            find_workspace_files
           end
+        end
+      end
+
+      def find_workspace_files
+        find_cmd = %w[find] + non_excluded_paths + %w[-type f -print0]
+        child = POSIX::Spawn::Child.new(*find_cmd)
+
+        if child.status.success?
+          child.out.strip.split("\0").map do |path|
+            path.sub(%r{^\.\/}, "")
+          end
+        else
+          raise ConfigGeneratorError, "Failed to find analyzable files.\nRan '#{find_cmd.shelljoin}', exited with code #{child.status.to_i} and stderr:\n'#{child.err}'"
         end
       end
     end
