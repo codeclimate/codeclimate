@@ -64,6 +64,10 @@ module CC::CLI
 
         expect(generator.eligible_engines.keys).not_to include("eslint")
       end
+
+      it "raises if the workspace is empty" do
+        expect { generator.eligible_engines }.to raise_error(CC::CLI::ConfigGenerator::EmptyWorkspaceError)
+      end
     end
 
     describe "#errors" do

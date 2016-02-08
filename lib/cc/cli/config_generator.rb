@@ -6,6 +6,8 @@ module CC
       CODECLIMATE_YAML = Command::CODECLIMATE_YAML
       AUTO_EXCLUDE_PATHS = %w(config/ db/ dist/ features/ node_modules/ script/ spec/ test/ tests/ vendor/).freeze
 
+      EmptyWorkspaceError = Class.new(StandardError)
+
       def self.for(filesystem, engine_registry, upgrade_requested)
         if upgrade_requested && upgrade_needed?(filesystem)
           UpgradeConfigGenerator.new(filesystem, engine_registry)
@@ -78,7 +80,7 @@ module CC
       def workspace_files
         @workspace_files ||= Dir.chdir(filesystem.root) do
           if non_excluded_paths.empty?
-            []
+            raise EmptyWorkspaceError, "Your workspace is empty: there are no files for us to check!"
           else
             find_cmd = "find #{non_excluded_paths.map(&:shellescape).join(' ')} -type f -print0"
             `#{find_cmd}`.strip.split("\0").map do |path|
