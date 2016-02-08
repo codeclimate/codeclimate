@@ -9,5 +9,11 @@ module CC::Analyzer
         expect(EngineOutput.new(output).issue?).to eq(true)
       end
     end
+
+    it "removes characters from the docker logs" do
+      output = "\u0002"
+
+      expect(EngineOutput.new(output).blank?).to eq(true)
+    end
   end
 end
