@@ -97,7 +97,6 @@ module CC
       def docker_run_command(options)
         [
           "docker", "run",
-          "--rm",
           "--name", @name,
           options,
           @image,
