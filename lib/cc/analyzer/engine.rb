@@ -56,6 +56,7 @@ module CC
           "--memory", memory_limit,
           "--memory-swap", "-1",
           "--net", "none",
+          "--rm",
           "--volume", "#{@code_path}:/code:ro",
           "--volume", "#{config_file}:/config.json:ro",
           "--user", "9000:9000"

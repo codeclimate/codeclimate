@@ -6,7 +6,7 @@ module CC::Analyzer
       it "spawns docker run with the image, name, and options given" do
         container = Container.new(image: "codeclimate/foo", name: "name")
 
-        expect_spawn(%w[ docker run --rm --name name -i -t codeclimate/foo ])
+        expect_spawn(%w[ docker run --name name -i -t codeclimate/foo ])
 
         container.run(%w[ -i -t ])
       end
@@ -14,7 +14,7 @@ module CC::Analyzer
       it "spawns the command if present" do
         container = Container.new(image: "codeclimate/foo", command: "bar", name: "name")
 
-        expect_spawn(%w[ docker run --rm --name name codeclimate/foo bar ])
+        expect_spawn(%w[ docker run --name name codeclimate/foo bar ])
 
         container.run
       end
@@ -22,7 +22,7 @@ module CC::Analyzer
       it "spawns an array command if given" do
         container = Container.new(image: "codeclimate/foo", command: %w[ bar baz ], name: "name")
 
-        expect_spawn(%w[ docker run --rm --name name codeclimate/foo bar baz ])
+        expect_spawn(%w[ docker run --name name codeclimate/foo bar baz ])
 
         container.run
       end
@@ -34,7 +34,7 @@ module CC::Analyzer
           name: "name",
         )
 
-        expect_spawn(%w[ docker run --rm --name name codeclimate/foo bar baz\ bat ])
+        expect_spawn(%w[ docker run --name name codeclimate/foo bar baz\ bat ])
 
         container.run
       end

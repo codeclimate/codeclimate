@@ -33,6 +33,7 @@ module CC::Analyzer
           "--memory", "512000000",
           "--memory-swap", "-1",
           "--net", "none",
+          "--rm",
           "--volume", "/code:/code:ro",
           "--user", "9000:9000",
         ))
