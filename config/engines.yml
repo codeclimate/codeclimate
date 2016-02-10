@@ -228,3 +228,11 @@ watson:
   enable_regexps:
   default_ratings_paths:
     - "app/**"
+vint:
+  image: codeclimate/codeclimate-vint
+  description: Fast and Highly Extensible Vim script Language Lint implemented by Python.
+  community: true
+  enable_regexps:
+    - \.vim$
+  default_ratings_paths:
+    - "**.vim"
