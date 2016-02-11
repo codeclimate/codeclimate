@@ -953,7 +953,7 @@ Style/SpaceAfterComma:
   Enabled: false
 
 Style/SpaceAroundKeyword:
-  Description: 'Use spaces arounr keywords.'
+  Description: 'Use spaces around keywords.'
   Enabled: false
 
 Style/SpaceAfterMethodName:
