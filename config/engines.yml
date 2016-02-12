@@ -207,6 +207,13 @@ rubocop:
     - \.rb$
   default_ratings_paths:
     - "**.rb"
+rubocop-v35:
+  image: codeclimate/codeclimate-rubocop:v35
+  description: A Ruby static code analyzer, based on the community Ruby style guide. Version 0.35.1 of RuboCop.
+  community: false
+  enable_regexps:
+  default_ratings_paths:
+    - "**.rb"
 rubymotion:
   image: codeclimate/codeclimate-rubymotion
   description: Rubymotion-specific rubocop checks.
