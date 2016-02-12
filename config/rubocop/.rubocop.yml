@@ -148,6 +148,12 @@ Lint/ShadowingOuterLocalVariable:
                  for block arguments or block local variables.
   Enabled: true
 
+Lint/SpaceBeforeFirstArg:
+  Description: >-
+                 Put a space between a method name and the first argument
+                 in a method call without parentheses.
+  Enabled: true
+
 Lint/StringConversionInInterpolation:
   Description: 'Checks for Object#to_s usage in string interpolation.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-to-s'
@@ -323,6 +329,10 @@ Rails/Date:
   Description: >-
                   Checks the correct usage of date aware methods,
                   such as Date.today, Date.current etc.
+  Enabled: false
+
+Rails/DefaultScope:
+  Description: 'Checks if the argument passed to default_scope is a block.'
   Enabled: false
 
 Rails/Delegate:
@@ -837,6 +847,7 @@ Style/ParallelAssignment:
                   matches on both sides of the assignment.
                   This also provides performance benefits
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#parallel-assignment'
+  Reference: 'https://github.com/JuanitoFatas/fast-ruby#parallel-assignment-vs-sequential-assignment-code'
   Enabled: false
 
 Style/ParenthesesAroundCondition:
@@ -936,11 +947,11 @@ Style/SingleLineMethods:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-single-line-methods'
   Enabled: false
 
-Style/SpaceBeforeFirstArg:
+Style/SingleSpaceBeforeFirstArg:
   Description: >-
                  Checks that exactly one space is used between a method name
                  and the first argument for method calls without parentheses.
-  Enabled: true
+  Enabled: false
 
 Style/SpaceAfterColon:
   Description: 'Use spaces after colons.'
@@ -952,8 +963,8 @@ Style/SpaceAfterComma:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-operators'
   Enabled: false
 
-Style/SpaceAroundKeyword:
-  Description: 'Use spaces around keywords.'
+Style/SpaceAfterControlKeyword:
+  Description: 'Use spaces after if/elsif/unless/while/until/case/when.'
   Enabled: false
 
 Style/SpaceAfterMethodName:
@@ -1015,6 +1026,10 @@ Style/SpaceAroundEqualsInParameterDefault:
 Style/SpaceAroundOperators:
   Description: 'Use a single space around operators.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-operators'
+  Enabled: false
+
+Style/SpaceBeforeModifierKeyword:
+  Description: 'Put a space before the modifier keyword.'
   Enabled: false
 
 Style/SpaceInsideBrackets:
@@ -1081,13 +1096,8 @@ Style/TrailingBlankLines:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#newline-eof'
   Enabled: false
 
-Style/TrailingCommaInArguments:
-  Description: 'Checks for trailing comma in parameter lists.'
-  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-trailing-params-comma'
-  Enabled: false
-
-Style/TrailingCommaInLiteral:
-  Description: 'Checks for trailing comma in literals.'
+Style/TrailingComma:
+  Description: 'Checks for trailing comma in parameter lists and literals.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-trailing-array-commas'
   Enabled: false
 
