@@ -12,7 +12,8 @@ module CC
           warn "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
           create_default_engine_configs if engines_enabled?
         elsif upgrade? && engines_enabled?
-          fatal "--upgrade should not be used on a .codeclimate.yml configured for the Platform.\nTry running 'validate-config' to check configuration."
+          warn "Config file .codeclimate.yml already configured for the Platform.\nTry running 'validate-config' to check configuration."
+          create_default_engine_configs
         else
           generate_all_config
         end

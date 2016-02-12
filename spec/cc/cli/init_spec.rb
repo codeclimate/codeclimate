@@ -138,7 +138,7 @@ module CC::CLI
       end
 
       describe "when --upgrade flag is on" do
-        it "refuses to upgrade a platform config" do
+        it "generates engine configs for a platform .codeclimate.yml" do
           expect(filesystem.exist?(".codeclimate.yml")).to eq(false)
 
           yaml_content_before = yaml_with_rubocop_enabled
@@ -146,8 +146,12 @@ module CC::CLI
 
           expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
 
-          _, stderr, exit_code = capture_io_and_exit_code do
-            Init.new(["--upgrade"]).run
+          init = Init.new(["--upgrade"])
+
+          expect(init).to receive(:create_default_engine_configs)
+
+          stdout, _, exit_code = capture_io_and_exit_code do
+            init.run
           end
 
           content_after = File.read(".codeclimate.yml")
@@ -155,8 +159,8 @@ module CC::CLI
           expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
           expect(content_after).to eq(yaml_content_before)
 
-          expect(stderr).to include("--upgrade should not be used on a .codeclimate.yml configured for the Platform")
-          expect(exit_code).to eq 1
+          expect(stdout).to include("configured for the Platform")
+          expect(exit_code).to eq 0
         end
 
         it "behaves normally if no .codeclimate.yml present" do
