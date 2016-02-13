@@ -16,6 +16,7 @@ module CC
     autoload :IssueSorter, "cc/analyzer/issue_sorter"
     autoload :LocationDescription, "cc/analyzer/location_description"
     autoload :LoggingContainerListener, "cc/analyzer/logging_container_listener"
+    autoload :MountedPath, "cc/analyzer/mounted_path"
     autoload :RaisingContainerListener, "cc/analyzer/raising_container_listener"
     autoload :SourceBuffer, "cc/analyzer/source_buffer"
     autoload :StatsdContainerListener, "cc/analyzer/statsd_container_listener"

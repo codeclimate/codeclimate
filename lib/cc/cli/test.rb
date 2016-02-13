@@ -1,4 +1,3 @@
-require "shellwords"
 require "cc/yaml"
 
 module CC
@@ -181,15 +180,12 @@ module CC
       def codeclimate_analyze(relative_path)
         codeclimate_path = File.expand_path(File.join(File.dirname(__FILE__), "../../../bin/codeclimate"))
 
-        system([
-          "unset CODE_PATH &&",
-          "unset FILESYSTEM_DIR &&",
-          Shellwords.escape(codeclimate_path),
-          "analyze",
-          "--engine", Shellwords.escape(@engine_name),
+        system(
+          codeclimate_path, "analyze",
+          "--engine", @engine_name,
           "-f", "json",
-          Shellwords.escape(relative_path)
-        ].join(" "))
+          relative_path
+        )
       end
 
       def prepare_working_dir

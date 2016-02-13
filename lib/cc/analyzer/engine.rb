@@ -43,7 +43,7 @@ module CC
         end
 
         write_config_file
-        CLI.debug "engine config: #{File.read(config_file).inspect}"
+        CLI.debug "engine config: #{config_file.read.inspect}"
         container.run(container_options)
       ensure
         delete_config_file
@@ -60,7 +60,7 @@ module CC
           "--net", "none",
           "--rm",
           "--volume", "#{@code_path}:/code:ro",
-          "--volume", "#{config_file}:/config.json:ro",
+          "--volume", "#{config_file.host_path}:/config.json:ro",
           "--user", "9000:9000"
         ]
       end
@@ -70,16 +70,15 @@ module CC
       end
 
       def write_config_file
-        FileUtils.mkdir_p(File.dirname(config_file))
-        File.write(config_file, @config.to_json)
+        config_file.write(@config.to_json)
       end
 
       def delete_config_file
-        File.delete(config_file) if File.file?(config_file)
+        config_file.delete if config_file.file?
       end
 
       def config_file
-        @config_file ||= File.join("/tmp/cc", SecureRandom.uuid)
+        @config_file ||= MountedPath.tmp.join(SecureRandom.uuid)
       end
 
       def output_filter
