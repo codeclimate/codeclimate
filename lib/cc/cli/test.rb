@@ -89,14 +89,8 @@ module CC
         remove_null_container
       end
 
-      def within_tempdir
-        tmpdir = create_tmpdir
-
-        Dir.chdir(tmpdir) do
-          yield
-        end
-      ensure
-        FileUtils.rm_rf(tmpdir)
+      def within_tempdir(&block)
+        Dir.mktmpdir { |tmp| Dir.chdir(tmp, &block) }
       end
 
       def unpack_tests
@@ -219,12 +213,6 @@ module CC
             end
           end
         end
-      end
-
-      def create_tmpdir
-        tmpdir = File.join("/tmp/cc", SecureRandom.uuid)
-        FileUtils.mkdir_p(tmpdir)
-        tmpdir
       end
 
       def unpack(path)
