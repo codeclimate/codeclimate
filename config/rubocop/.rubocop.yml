@@ -510,9 +510,7 @@ Style/CommandLiteral:
   Enabled: false
 
 Style/CommentAnnotation:
-  Description: >-
-                 Checks formatting of special comments
-                 (TODO, FIXME, OPTIMIZE, HACK, REVIEW).
+  Description: 'Checks formatting of annotation comments.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#annotate-keywords'
   Enabled: false
 
