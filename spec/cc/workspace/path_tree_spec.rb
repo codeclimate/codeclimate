@@ -8,7 +8,7 @@ class CC::Workspace
       within_temp_dir do
         make_fixture_tree
 
-        tree = PathTree.new(".")
+        tree = PathTree.for_path(".")
         expect(tree.all_paths).to eq ["./"]
       end
     end
@@ -17,7 +17,7 @@ class CC::Workspace
       within_temp_dir do
         make_fixture_tree
 
-        tree = PathTree.new(".")
+        tree = PathTree.for_path(".")
         tree.exclude_paths([".git/refs", "code/a/bar.rb"])
         expect(tree.all_paths.sort).to eq [".git/FETCH_HEAD", "code/a/baz.rb", "code/foo.rb", "foo.txt", "lib/"]
       end
@@ -27,7 +27,7 @@ class CC::Workspace
       within_temp_dir do
         make_fixture_tree
 
-        tree = PathTree.new(".")
+        tree = PathTree.for_path(".")
         tree.include_paths([".git/refs/", "code/"])
         expect(tree.all_paths.sort).to eq [".git/refs/", "code/"]
       end
@@ -37,7 +37,7 @@ class CC::Workspace
       within_temp_dir do
         make_fixture_tree
 
-        tree = PathTree.new(".")
+        tree = PathTree.for_path(".")
         tree.include_paths([".git/refs/", "code/"])
         tree.exclude_paths([".git/refs/heads/master", "code/a/bar.rb"])
         expect(tree.all_paths.sort).to eq ["code/a/baz.rb", "code/foo.rb"]
@@ -48,7 +48,7 @@ class CC::Workspace
       within_temp_dir do
         make_fixture_tree
 
-        tree = PathTree.new(".")
+        tree = PathTree.for_path(".")
         tree.include_paths(["does-not-exist"])
         expect(tree.all_paths.sort).to eq ["./"]
       end
@@ -58,7 +58,7 @@ class CC::Workspace
       within_temp_dir do
         make_fixture_tree
 
-        tree = PathTree.new(".")
+        tree = PathTree.for_path(".")
         tree.exclude_paths(["code/does-not-exist"])
         expect(tree.all_paths.sort).to eq [".git/", "code/a/", "code/foo.rb", "foo.txt", "lib/"]
       end
