@@ -29,7 +29,7 @@ module CC
 
           if (child = children[head])
             child.remove(*tail)
-            children.delete(head) unless child.populated?
+            children.delete(head) if !child.populated? || tail.empty?
           end
         end
 
