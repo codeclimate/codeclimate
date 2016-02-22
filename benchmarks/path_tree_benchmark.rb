@@ -16,7 +16,7 @@ class CC::Workspace
         exclude_paths = make_exclude_paths
 
         elapsed = Benchmark.realtime do
-          tree = PathTree.new(".")
+          tree = PathTree.for_path(".")
           tree.exclude_paths(exclude_paths)
           tree.all_paths
         end

@@ -3,7 +3,7 @@ module CC
     autoload :Exclusion, "cc/workspace/exclusion"
     autoload :PathTree, "cc/workspace/path_tree"
 
-    def initialize(path_tree = PathTree.new("."))
+    def initialize(path_tree = PathTree.for_path("."))
       @path_tree = path_tree
     end
 
