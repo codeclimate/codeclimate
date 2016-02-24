@@ -191,6 +191,16 @@ radon:
     - \.py$
   default_ratings_paths:
     - "**.py"
+reek:
+  image: codeclimate/codeclimate-reek
+  description: "Reek examines Ruby classes, modules, and methods and reports any code smells it finds."
+  community: true
+  upgrade_languages:
+    - Ruby
+  enable_regexps:
+    - \.rb$
+  default_ratings_paths:
+    - "**.rb"
 requiresafe:
   image: codeclimate/codeclimate-nodesecurity
   description: Security tool for Node.js dependencies.
