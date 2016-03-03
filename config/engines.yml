@@ -153,6 +153,16 @@ kibit:
     - "**.clj"
     - "**.cljc"
     - "**.cljs"
+markdownlint:
+  image: codeclimate/codeclimate-markdownlint
+  description: Flags style issues within Markdown files.
+  community: true
+  enable_regexps:
+    - \.markdown$
+    - \.md$
+  default_ratings_paths:
+    - "**.markdown"
+    - "**.md"
 nodesecurity:
   image: codeclimate/codeclimate-nodesecurity
   description: Security tool for Node.js dependencies.
