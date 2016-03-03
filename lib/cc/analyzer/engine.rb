@@ -34,6 +34,7 @@ module CC
         )
 
         container.on_output("\0") do |raw_output|
+          CLI.debug "engine output: #{raw_output.inspect}"
           output = EngineOutput.new(raw_output)
 
           unless output_filter.filter?(output)
@@ -42,6 +43,7 @@ module CC
         end
 
         write_config_file
+        CLI.debug "engine config: #{File.read(config_file).inspect}"
         container.run(container_options)
       ensure
         delete_config_file
