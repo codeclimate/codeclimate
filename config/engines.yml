@@ -125,6 +125,14 @@ foodcritic:
   community: true
   enable_regexps:
   default_ratings_paths:
+gnu-complexity:
+  image: codeclimate/codeclimate-gnu-complexity
+  description: Checks complexity of C code
+  community: true
+  enable_regexps:
+    - \.c$
+  default_ratings_paths:
+    - "**.c"
 hlint:
   image: codeclimate/codeclimate-hlint
   description: Linter for Haskell programs.
