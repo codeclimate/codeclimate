@@ -52,6 +52,7 @@ docker_run() {
   exec docker run \
     --interactive --rm \
     --env CODE_PATH="$PWD" \
+    --env CODECLIMATE_DEBUG \
     --volume "$PWD":/code \
     --volume /tmp/cc:/tmp/cc \
     --volume /var/run/docker.sock:/var/run/docker.sock \
