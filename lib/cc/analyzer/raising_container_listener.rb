@@ -8,7 +8,7 @@ module CC
       end
 
       def timed_out(data)
-        message = "engine #{engine_name} ran for #{data.duration} seconds"
+        message = "engine #{engine_name} ran for #{data.duration / 1000} seconds"
         message << " and was killed"
 
         raise timeout_ex, message
