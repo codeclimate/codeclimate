@@ -256,6 +256,14 @@ scss-lint:
   enable_regexps:
   default_ratings_paths:
     - "**.scss"
+shellcheck:
+  image: codeclimate/codeclimate-shellcheck
+  description: A static analysis tool for shell scripts.
+  community: true
+  enable_regexps:
+    - \.sh$
+  default_ratings_paths:
+    - "**.sh"
 watson:
   image: codeclimate/codeclimate-watson
   description: A young Ember Doctor to help you fix your code.
