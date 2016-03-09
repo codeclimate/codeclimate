@@ -249,6 +249,16 @@ rubymotion:
   enable_regexps:
   default_ratings_paths:
     - "**.rb"
+
+shellcheck:
+  image: codeclimate/codeclimate-shellcheck
+  description: A static analysis tool for shell scripts
+  community: true
+  enable_regexps:
+    - \.sh$
+  default_ratings_paths:
+    - "**.sh"
+
 scss-lint:
   image: codeclimate/codeclimate-scss-lint
   description: Configurable tool for writing clean and consistent SCSS.
