@@ -249,6 +249,13 @@ rubymotion:
   enable_regexps:
   default_ratings_paths:
     - "**.rb"
+scss-lint:
+  image: codeclimate/codeclimate-scss-lint
+  description: Configurable tool for writing clean and consistent SCSS.
+  community: true
+  enable_regexps:
+  default_ratings_paths:
+    - "**.scss"
 shellcheck:
   image: codeclimate/codeclimate-shellcheck
   description: A static analysis tool for shell scripts.
@@ -257,13 +264,6 @@ shellcheck:
     - \.sh$
   default_ratings_paths:
     - "**.sh"
-scss-lint:
-  image: codeclimate/codeclimate-scss-lint
-  description: Configurable tool for writing clean and consistent SCSS.
-  community: true
-  enable_regexps:
-  default_ratings_paths:
-    - "**.scss"
 watson:
   image: codeclimate/codeclimate-watson
   description: A young Ember Doctor to help you fix your code.
