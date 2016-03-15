@@ -15,7 +15,7 @@ module CC
       def run
         require_codeclimate_yml
 
-        Dir.chdir(ENV["FILESYSTEM_DIR"]) do
+        Dir.chdir(MountedPath.code.container_path) do
           runner = EnginesRunner.new(registry, formatter, source_dir, config, path_options)
           runner.run
         end
@@ -57,7 +57,7 @@ module CC
       end
 
       def source_dir
-        ENV["CODE_PATH"]
+        MountedPath.code.host_path
       end
 
       def config

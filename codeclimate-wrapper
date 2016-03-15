@@ -51,13 +51,17 @@ fi
 docker_run() {
   exec docker run \
     --interactive --rm \
-    --env CODE_PATH="$PWD" \
+    --env CODECLIMATE_CODE \
+    --env CODECLIMATE_TMP \
     --env CODECLIMATE_DEBUG \
-    --volume "$PWD":/code \
-    --volume /tmp/cc:/tmp/cc \
+    --volume "$CODECLIMATE_CODE":/code \
+    --volume "$CODECLIMATE_TMP":/tmp/cc \
     --volume /var/run/docker.sock:/var/run/docker.sock \
     "$@"
 }
+
+: ${CODECLIMATE_CODE:=$PWD}
+: ${CODECLIMATE_TMP:=/tmp/cc}
 
 if [ -t 0 ] && [ -t 1 ]; then
   docker_run --tty codeclimate/codeclimate "$@"

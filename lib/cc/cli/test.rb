@@ -1,4 +1,3 @@
-require "shellwords"
 require "cc/yaml"
 
 module CC
@@ -89,14 +88,8 @@ module CC
         remove_null_container
       end
 
-      def within_tempdir
-        tmpdir = create_tmpdir
-
-        Dir.chdir(tmpdir) do
-          yield
-        end
-      ensure
-        FileUtils.rm_rf(tmpdir)
+      def within_tempdir(&block)
+        Dir.mktmpdir { |tmp| Dir.chdir(tmp, &block) }
       end
 
       def unpack_tests
@@ -187,15 +180,12 @@ module CC
       def codeclimate_analyze(relative_path)
         codeclimate_path = File.expand_path(File.join(File.dirname(__FILE__), "../../../bin/codeclimate"))
 
-        system([
-          "unset CODE_PATH &&",
-          "unset FILESYSTEM_DIR &&",
-          Shellwords.escape(codeclimate_path),
-          "analyze",
-          "--engine", Shellwords.escape(@engine_name),
+        system(
+          codeclimate_path, "analyze",
+          "--engine", @engine_name,
           "-f", "json",
-          Shellwords.escape(relative_path)
-        ].join(" "))
+          relative_path
+        )
       end
 
       def prepare_working_dir
@@ -219,12 +209,6 @@ module CC
             end
           end
         end
-      end
-
-      def create_tmpdir
-        tmpdir = File.join("/tmp/cc", SecureRandom.uuid)
-        FileUtils.mkdir_p(tmpdir)
-        tmpdir
       end
 
       def unpack(path)

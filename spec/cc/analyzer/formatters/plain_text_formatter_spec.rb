@@ -5,7 +5,9 @@ module CC::Analyzer::Formatters
     include Factory
 
     let(:formatter) do
-      filesystem ||= CC::Analyzer::Filesystem.new(ENV['FILESYSTEM_DIR'])
+      filesystem ||= CC::Analyzer::Filesystem.new(
+        CC::Analyzer::MountedPath.code.container_path
+      )
       PlainTextFormatter.new(filesystem)
     end
 

@@ -9,4 +9,5 @@ Dir.glob("spec/support/**/*.rb").each(&method(:load))
 
 SafeYAML::OPTIONS[:default_mode] = :safe
 
-ENV["FILESYSTEM_DIR"] = "."
+ENV.delete("CODECLIMATE_DOCKER")
+ENV["CODECLIMATE_TMP"] = Dir.mktmpdir

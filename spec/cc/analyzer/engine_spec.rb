@@ -2,10 +2,6 @@ require "spec_helper"
 
 module CC::Analyzer
   describe Engine do
-    before do
-      FileUtils.mkdir_p("/tmp/cc")
-    end
-
     describe "#run" do
       it "passes the correct options to Container" do
         container = double

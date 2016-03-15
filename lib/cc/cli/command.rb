@@ -58,7 +58,9 @@ module CC
       end
 
       def filesystem
-        @filesystem ||= CC::Analyzer::Filesystem.new(ENV["FILESYSTEM_DIR"])
+        @filesystem ||= CC::Analyzer::Filesystem.new(
+          CC::Analyzer::MountedPath.code.container_path
+        )
       end
 
       def terminal
