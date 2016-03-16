@@ -49,7 +49,7 @@ module CC
         @listener.started(container_data)
 
         command = docker_run_command(options)
-        CLI.debug("docker run: #{command.inspect}")
+        Analyzer.logger.debug("docker run: #{command.inspect}")
         pid, _, out, err = POSIX::Spawn.popen4(*command)
 
         @t_out = read_stdout(out)

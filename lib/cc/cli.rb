@@ -17,15 +17,25 @@ module CC
     autoload :ValidateConfig, "cc/cli/validate_config"
     autoload :Version, "cc/cli/version"
 
-    def self.debug(message, values = {})
-      if ENV["CODECLIMATE_DEBUG"]
-        if values.any?
-          message << " "
-          message << values.map { |k, v| "#{k}=#{v.inspect}" }.join(" ")
-        end
+    class Logger
+      def debug(message, values = {})
+        if ENV["CODECLIMATE_DEBUG"]
+          if values.any?
+            message << " "
+            message << values.map { |k, v| "#{k}=#{v.inspect}" }.join(" ")
+          end
 
-        $stderr.puts("[DEBUG] #{message}")
+          # Leading and trailing newlines to prevent mangling
+          $stderr.print("\n[DEBUG] #{message}\n")
+        end
+      end
+
+      # Any non-DEBUG output is handled not via logging
+      def method_missing(*)
+        yield if block_given?
       end
     end
+
+    CC::Analyzer.logger = Logger.new
   end
 end
