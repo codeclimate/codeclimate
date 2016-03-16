@@ -1,6 +1,7 @@
 .PHONY: build install uninstall image test citest
 
 PREFIX ?= /usr/local
+SKIP_ENGINES ?= 0
 
 image:
 	docker build -t codeclimate/codeclimate .
@@ -26,7 +27,10 @@ citest:
 install:
 	bin/check
 	docker pull codeclimate/codeclimate:latest
-	docker images | awk '/codeclimate\/codeclimate-/ { print $$1 }' | xargs -n1 docker pull || true
+	@[ $(SKIP_ENGINES) -eq 1 ] || \
+	  docker images | \
+	  awk '/codeclimate\/codeclimate-/ { print $$1 }' | \
+	  xargs -n1 docker pull 2>/dev/null || true
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	docker run --rm \
 	  --volume $(DESTDIR)$(PREFIX)/bin:/host-bin \
