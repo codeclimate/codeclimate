@@ -28,7 +28,10 @@ install:
 	docker pull codeclimate/codeclimate:latest
 	docker images | awk '/codeclimate\/codeclimate-/ { print $$1 }' | xargs -n1 docker pull || true
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	install -m 0755 codeclimate-wrapper $(DESTDIR)$(PREFIX)/bin/codeclimate
+	docker run --rm \
+	  --volume $(DESTDIR)$(PREFIX)/bin:/host-bin \
+	  --entrypoint /bin/cp codeclimate/codeclimate \
+	    /usr/src/app/codeclimate-wrapper /host-bin/codeclimate
 
 uninstall:
 	$(RM) $(DESTDIR)$(PREFIX)/bin/codeclimate
