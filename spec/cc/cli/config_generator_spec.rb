@@ -74,6 +74,14 @@ module CC::CLI
 
         expect { generator.eligible_engines }.to raise_error(CC::CLI::ConfigGenerator::ConfigGeneratorError)
       end
+
+      it "doesn't die on - files" do
+        make_tree <<-EOM
+          -H
+        EOM
+
+        expect { generator.eligible_engines }.not_to raise_error
+      end
     end
 
     describe "#errors" do

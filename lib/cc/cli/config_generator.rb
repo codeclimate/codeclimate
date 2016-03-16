@@ -73,7 +73,7 @@ module CC
         @non_excluded_paths ||= begin
           excludes = exclude_paths.map { |path| path.chomp("/") }
           filesystem.ls.reject do |path|
-            path.starts_with?(".") || excludes.include?(path)
+            path.starts_with?("-") || path.starts_with?(".") || excludes.include?(path)
           end
         end
       end
