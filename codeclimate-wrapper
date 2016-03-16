@@ -60,8 +60,13 @@ docker_run() {
     "$@"
 }
 
-: ${CODECLIMATE_CODE:=$PWD}
-: ${CODECLIMATE_TMP:=/tmp/cc}
+if [ -z "$CODECLIMATE_CODE" ]; then
+  export CODECLIMATE_CODE=$PWD
+fi
+
+if [ -z "$CODECLIMATE_TMP" ]; then
+  export CODECLIMATE_TMP=/tmp/cc
+fi
 
 if [ -t 0 ] && [ -t 1 ]; then
   docker_run --tty codeclimate/codeclimate "$@"
