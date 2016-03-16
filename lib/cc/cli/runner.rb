@@ -10,7 +10,7 @@ module CC
       rescue => ex
         $stderr.puts("error: (#{ex.class}) #{ex.message}")
 
-        CLI.debug("backtrace: #{ex.backtrace.join("\n\t")}")
+        Analyzer.logger.debug("backtrace: #{ex.backtrace.join("\n\t")}")
       end
 
       def initialize(args)

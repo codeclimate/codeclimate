@@ -40,7 +40,7 @@ module CC
             children[entry.basename.to_s] = PathTree.node_for_pathname(entry)
             children[entry.basename.to_s].add(*tail)
           else
-            CLI.debug("Couldn't include because part of path doesn't exist.", path: File.join(root_path, head))
+            Analyzer.logger.debug("Couldn't include because part of path doesn't exist.", path: File.join(root_path, head))
           end
         end
 
