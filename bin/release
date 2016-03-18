@@ -23,7 +23,13 @@ docker tag codeclimate/codeclimate "codeclimate/codeclimate:$version"
 docker push "codeclimate/codeclimate:$version"
 
 (cd ../homebrew-formulae/ && bin/release "$version")
-(cd ../marketingsite/ && bin/set-cli-version "$version" && bin/deploy)
+(cd ../marketingsite/ && bin/set-cli-version "$version" && bin/deploy) || {
+  cat >&2 <<EOF
+--------------------------------------------------------------------------------
+- WARNING: Marketing site update failed. Please do this manually.              -
+--------------------------------------------------------------------------------
+EOF
+}
 
 echo "Be sure to update release notes:"
 echo ""
