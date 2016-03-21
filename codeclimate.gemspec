@@ -23,5 +23,4 @@ Gem::Specification.new do |s|
   s.add_dependency "posix-spawn", "~> 0.3", ">= 0.3.11"
   s.add_dependency "pry", "~> 0.10.1"
   s.add_dependency "rainbow", "~> 2.0", ">= 2.0.0"
-  s.add_dependency "safe_yaml", "~> 1.0", ">= 1.0.4"
 end

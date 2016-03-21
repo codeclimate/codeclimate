@@ -1,11 +1,9 @@
-require "safe_yaml"
-
 module CC
   module Analyzer
     class EngineRegistry
       def initialize(dev_mode = false)
         @path = File.expand_path("../../../../config/engines.yml", __FILE__)
-        @config = YAML.safe_load_file(@path)
+        @config = YAML.safe_load(File.read(@path))
         @dev_mode = dev_mode
       end
 

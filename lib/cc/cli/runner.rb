@@ -1,6 +1,5 @@
 require "active_support"
 require "active_support/core_ext"
-require "safe_yaml"
 
 module CC
   module CLI
@@ -14,8 +13,6 @@ module CC
       end
 
       def initialize(args)
-        SafeYAML::OPTIONS[:default_mode] = :safe
-
         @args = args
       end
 

@@ -8,7 +8,7 @@ module CC::CLI::Engines
           List.new.run
         end
 
-        engines = YAML.safe_load_file("config/engines.yml")
+        engines = YAML.safe_load(File.read("config/engines.yml"))
 
         engines.each do |name, engine|
           expect(stdout).to match(name)
