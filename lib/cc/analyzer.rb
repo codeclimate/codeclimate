@@ -1,3 +1,5 @@
+require "yaml"
+
 module CC
   module Analyzer
     autoload :CompositeContainerListener, "cc/analyzer/composite_container_listener"

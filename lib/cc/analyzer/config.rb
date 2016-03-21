@@ -1,5 +1,3 @@
-require "yaml"
-
 module CC
   module Analyzer
     # TODO: replace each use of this with CC::Yaml and remove it
