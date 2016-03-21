@@ -8,7 +8,6 @@ PATH
       posix-spawn (~> 0.3, >= 0.3.11)
       pry (~> 0.10.1)
       rainbow (~> 2.0, >= 2.0.0)
-      safe_yaml (~> 1.0, >= 1.0.4)
       tty-spinner (~> 0.1.0)
 
 GEM
@@ -53,7 +52,6 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
-    safe_yaml (1.0.4)
     secure_string (1.3.3)
     simplecov (0.10.0)
       docile (~> 1.1.0)
