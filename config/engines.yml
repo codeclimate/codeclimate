@@ -176,6 +176,18 @@ pep8:
   enable_regexps:
   default_ratings_paths:
     - "**.py"
+phan:
+  image: codeclimate/codeclimate-phan
+  description: Phan is a static analyzer for PHP.
+  community: true
+  enable_regexps:
+    - \.php$
+    - \.module$
+    - \.inc$
+  default_ratings_paths:
+    - "**.php"
+    - "**.module"
+    - "**.inc"
 phpcodesniffer:
   image: codeclimate/codeclimate-phpcodesniffer
   description: Detects violations of a defined set of coding standards in PHP.
