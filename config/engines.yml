@@ -219,6 +219,16 @@ phpmd:
     - "**.php"
     - "**.module"
     - "**.inc"
+pylint:
+  image: codeclimate/codeclimate-pylint
+  description: Pylint is a source code bug and quality checker for the Python programming language.
+  community: true
+  upgrade_languages:
+    - Python
+  enable_regexps:
+    - \.py$
+  default_ratings_paths:
+    - "**.py"
 radon:
   image: codeclimate/codeclimate-radon
   description: Python tool used to compute Cyclomatic Complexity.
