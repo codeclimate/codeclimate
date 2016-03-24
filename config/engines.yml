@@ -276,6 +276,14 @@ shellcheck:
     - \.sh$
   default_ratings_paths:
     - "**.sh"
+tailor:
+  image: codeclimate/codeclimate-tailor
+  description: Cross-platform static analyzer and linter for Swift.
+  community: true
+  enable_regexps:
+    - \.swift$
+  default_ratings_paths:
+    - "**.swift"
 watson:
   image: codeclimate/codeclimate-watson
   description: A young Ember Doctor to help you fix your code.
