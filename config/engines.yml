@@ -133,6 +133,14 @@ gnu-complexity:
     - \.c$
   default_ratings_paths:
     - "**.c"
+haxe-checkstyle:
+  image: codeclimate/codeclimate-haxe-checkstyle
+  description: Checkstyle is a development library to help developers write Haxe code that adheres to a coding standard.
+  community: true
+  enable_regexps:
+    - \.hx$
+  default_ratings_paths:
+    - "**.hx"
 hlint:
   image: codeclimate/codeclimate-hlint
   description: Linter for Haskell programs.
