@@ -18,8 +18,12 @@ module CC
     autoload :ValidateConfig, "cc/cli/validate_config"
     autoload :Version, "cc/cli/version"
 
+    def self.debug?
+      ENV["CODECLIMATE_DEBUG"]
+    end
+
     def self.debug(message, values = {})
-      if ENV["CODECLIMATE_DEBUG"]
+      if debug?
         if values.any?
           message << " "
           message << values.map { |k, v| "#{k}=#{v.inspect}" }.join(" ")
