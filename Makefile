@@ -1,4 +1,4 @@
-.PHONY: build install uninstall image test citest
+.PHONY: install uninstall image test citest
 
 PREFIX ?= /usr/local
 SKIP_ENGINES ?= 0
