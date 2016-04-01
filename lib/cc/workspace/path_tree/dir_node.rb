@@ -4,11 +4,13 @@ module CC
       class DirNode
         def initialize(root_path, children = {})
           @root_path = root_path.dup.freeze
-          @children = children
+          @children = children.each_with_object({}) do |(k, v), memo|
+            memo[k.clone] = v.clone
+          end
         end
 
         def clone
-          self.class.new(root_path, children.dup)
+          self.class.new(root_path, children)
         end
 
         def all_paths
@@ -37,8 +39,8 @@ module CC
           return if head.nil? && tail.empty?
 
           if (entry = find_direct_child(head))
-            children[entry.basename.to_s] = PathTree.node_for_pathname(entry)
-            children[entry.basename.to_s].add(*tail)
+            children[entry.basename.to_s.dup.freeze] = PathTree.node_for_pathname(entry)
+            children[entry.basename.to_s.dup.freeze].add(*tail)
           else
             CLI.debug("Couldn't include because part of path doesn't exist.", path: File.join(root_path, head))
           end
