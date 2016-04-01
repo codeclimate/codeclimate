@@ -90,6 +90,8 @@ module CC
           lib/foo/baz.rb
           lib/quix/a.rb
           lib/quix/b.rb
+          skeleton/torso/ribcage/heart.rb
+          skeleton/torso/belly/liver.rb
           spec/foo/bar_spec.rb
           spec/foo/baz_spec.rb
           spec/foo_spec.rb
@@ -100,12 +102,13 @@ module CC
         workspace = Workspace.new
         workspace.remove(%w[.node_modules])
         workspace2 = workspace.clone
-        workspace2.remove(%w[vendor])
+        workspace2.remove(%w[vendor **/ribcage/**])
 
         expect(workspace.paths.sort).to eq %w[
           Gemfile
           Gemfile.lock
           lib/
+          skeleton/
           spec/
           vendor/
         ]
@@ -113,6 +116,7 @@ module CC
           Gemfile
           Gemfile.lock
           lib/
+          skeleton/torso/belly/
           spec/
         ]
       end
