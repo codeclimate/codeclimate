@@ -6,7 +6,9 @@ module CC::Analyzer
       it "passes the correct options to Container" do
         container = double
         allow(container).to receive(:on_output).and_yield("")
-        allow(container).to receive(:run)
+        allow(container).to receive(:run).and_return(
+          Container::Result.new(0, false, 1, false, 10, ""),
+        )
 
         expect(Container).to receive(:new) do |args|
           expect(args[:image]).to eq "codeclimate/foo"
@@ -32,7 +34,7 @@ module CC::Analyzer
           "--rm",
           "--volume", "/code:/code:ro",
           "--user", "9000:9000",
-        ))
+        )).and_return(Container::Result.new(0, false, 1, false, 10, ""))
 
         expect(Container).to receive(:new).and_return(container)
         engine = Engine.new("", {}, "/code", {}, "a-label")
@@ -42,7 +44,9 @@ module CC::Analyzer
       it "passes a composite container listener wrapping the given one" do
         container = double
         allow(container).to receive(:on_output).and_yield("")
-        allow(container).to receive(:run)
+        allow(container).to receive(:run).and_return(
+          Container::Result.new(0, false, 1, false, 10, "")
+        )
 
         given_listener = double
         container_listener = double
