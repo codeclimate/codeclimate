@@ -44,6 +44,21 @@ module CC::CLI
           expect(CC::Yaml.parse(new_content).errors).to be_empty
         end
 
+        it "runs when the directory is empty" do
+          _, _, exit_code = capture_io_and_exit_code do
+            init = Init.new
+            init.run
+          end
+
+          expect(exit_code).to eq(0)
+          config = YAML.safe_load(File.read(".codeclimate.yml"))
+          expect(config).to eq({
+            "engines" => {},
+            "ratings" => { "paths" => [] },
+            "exclude_paths" => []
+          })
+        end
+
         describe 'when default config for engine is available' do
           describe 'when no config file for this engine exists in working directory' do
             it 'creates .engine.yml with default config' do

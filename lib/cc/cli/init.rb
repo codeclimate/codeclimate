@@ -64,9 +64,8 @@ module CC
       end
 
       def available_engine_configs
-        engine_names = existing_cc_config.engines.select do |_, config|
-          config.enabled?
-        end.keys
+        engines = existing_cc_config.engines || {}
+        engine_names = engines.select { |_, config| config.enabled? }.keys
 
         all_paths = engine_names.flat_map do |engine_name|
           engine_directory = File.expand_path("../../../../config/#{engine_name}", __FILE__)
