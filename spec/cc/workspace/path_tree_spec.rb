@@ -28,8 +28,8 @@ class CC::Workspace
         make_fixture_tree
 
         tree = PathTree.for_path(".")
-        tree.include_paths([".git/refs/", "code/"])
-        expect(tree.all_paths.sort).to eq [".git/refs/", "code/"]
+        tree.include_paths([".git/refs/", "code/foo.rb", "code/a/bar.rb"])
+        expect(tree.all_paths.sort).to eq [".git/refs/", "code/a/bar.rb", "code/foo.rb"]
       end
     end
 

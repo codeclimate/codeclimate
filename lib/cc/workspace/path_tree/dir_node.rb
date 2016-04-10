@@ -39,7 +39,7 @@ module CC
           return if head.nil? && tail.empty?
 
           if (entry = find_direct_child(head))
-            children[entry.basename.to_s.dup.freeze] = PathTree.node_for_pathname(entry)
+            children[entry.basename.to_s.dup.freeze] ||= PathTree.node_for_pathname(entry)
             children[entry.basename.to_s.dup.freeze].add(*tail)
           else
             CLI.debug("Couldn't include because part of path doesn't exist.", path: File.join(root_path, head))
