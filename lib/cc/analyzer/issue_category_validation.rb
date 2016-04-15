@@ -9,7 +9,7 @@ module CC
         "Duplication",
         "Performance",
         "Security",
-        "Style"
+        "Style",
       ].freeze
 
       def valid?

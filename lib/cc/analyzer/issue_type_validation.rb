@@ -2,7 +2,7 @@ module CC
   module Analyzer
     class IssueTypeValidation < Validation
       def valid?
-        type && type.downcase == "issue"
+        type && type.casecmp("issue").zero?
       end
 
       def message
