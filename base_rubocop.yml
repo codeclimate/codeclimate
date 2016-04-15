@@ -1,0 +1,127 @@
+################################################################################
+# Metrics
+################################################################################
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+################################################################################
+# Style
+################################################################################
+
+# Executables are conventionally named bin/foo-bar
+Style/FileName:
+  Exclude:
+  - bin/**/*
+
+# We don't (currently) document our code
+Style/Documentation:
+  Enabled: false
+
+# Always use double-quotes to keep things simple
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+# Use a trailing comma to keep diffs clean when elements are inserted or removed
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+
+# We avoid GuardClause because it can result in "suprise return"
+Style/GuardClause:
+  Enabled: false
+
+# We avoid IfUnlessModifier because it can result in "suprise if"
+Style/IfUnlessModifier:
+  Enabled: false
+
+# We don't care about the fail/raise distinction
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+# Common globals we allow
+Style/GlobalVars:
+  AllowedVariables:
+  - "$statsd"
+  - "$mongo"
+  - "$rollout"
+
+# Using english names requires loading an extra module, which is annoying, so
+# we prefer the perl names for consistency.
+Style/SpecialGlobalVars:
+  EnforcedStyle: use_perl_names
+
+# We have common cases where has_ and have_ make sense
+Style/PredicateName:
+  Enabled: true
+  NamePrefixBlacklist:
+  - is_
+
+# We use %w[ ], not %w( ) because the former looks like an array
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    "%w": []
+    "%W": []
+
+# Allow "trivial" accessors when defined as a predicate? method
+Style/TrivialAccessors:
+  AllowPredicates: true
+
+Style/Next:
+  Enabled: false
+
+# We think it's OK to use the "extend self" module pattern
+Style/ModuleFunction:
+  Enabled: false
+
+# Disallow extra spacing for token alignment
+Style/ExtraSpacing:
+  AllowForAlignment: false
+
+################################################################################
+# Performance
+################################################################################
+
+Performance/RedundantMerge:
+  Enabled: false
+
+################################################################################
+# Rails - disable things because we're primarily non-rails
+################################################################################
+
+Rails/Delegate:
+  Enabled: false
+
+Rails/TimeZone:
+  Enabled: false
+
+################################################################################
+# Specs - be more lenient on length checks and block styles
+################################################################################
+
+Metrics/ModuleLength:
+  Exclude:
+  - spec/**/*
+
+Metrics/MethodLength:
+  Exclude:
+  - spec/**/*
+
+Style/ClassAndModuleChildren:
+  Exclude:
+  - spec/**/*
+
+Style/BlockDelimiters:
+  Exclude:
+  - spec/**/*

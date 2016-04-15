@@ -5,11 +5,11 @@ module CC
   module Analyzer
     class Container
       ContainerData = Struct.new(
-        :image,         # image used to create the container
-        :name,          # name given to the container when created
-        :duration,      # duration, for a finished event
-        :status,        # status, for a finished event
-        :stderr,        # stderr, for a finished event
+        :image, # image used to create the container
+        :name, # name given to the container when created
+        :duration, # duration, for a finished event
+        :status, # status, for a finished event
+        :stderr, # stderr, for a finished event
       )
       ImageRequired = Class.new(StandardError)
       Result = Struct.new(

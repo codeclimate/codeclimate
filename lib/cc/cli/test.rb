@@ -72,7 +72,7 @@ module CC
         @engine_name = @args.first
 
         if @engine_name.blank?
-          fatal "Usage: codeclimate test #{rainbow.wrap('engine_name').underline}"
+          fatal "Usage: codeclimate test #{rainbow.wrap("engine_name").underline}"
         end
 
         test_engine

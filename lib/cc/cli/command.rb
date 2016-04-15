@@ -13,7 +13,7 @@ module CC
       end
 
       def run
-        $stderr.puts "unknown command #{self.class.name.split('::').last.underscore}"
+        $stderr.puts "unknown command #{self.class.name.split("::").last.underscore}"
       end
 
       def self.command_name
@@ -59,7 +59,7 @@ module CC
 
       def filesystem
         @filesystem ||= CC::Analyzer::Filesystem.new(
-          CC::Analyzer::MountedPath.code.container_path
+          CC::Analyzer::MountedPath.code.container_path,
         )
       end
 
