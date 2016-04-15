@@ -37,6 +37,12 @@ module CC
           CLI.debug("#{name} engine output: #{raw_output.strip}")
           output = EngineOutput.new(raw_output)
 
+          unless output.valid?
+            puts output.error
+            stdout_io.failed("#{name} produced invalid output: #{output.error[:message]}")
+            container.stop
+          end
+
           unless output_filter.filter?(output)
             stdout_io.write(output.to_json) || container.stop
           end

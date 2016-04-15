@@ -67,24 +67,24 @@ module CC::Analyzer
 
       it "parses stdout for null-delimited issues" do
         container = TestContainer.new([
-          "{}",
-          "{}",
-          "{}",
+          %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb"}}},
+          %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb"}}},
+          %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb"}}},
         ])
         expect(Container).to receive(:new).and_return(container)
 
-        stdout = StringIO.new
+        stdout = TestFormatter.new
         engine = Engine.new("", {}, "", {}, "")
         engine.run(stdout, ContainerListener.new)
 
-        expect(stdout.string).to eq "{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}{\"fingerprint\":\"b99834bc19bbad24580b3adfa04fb947\"}"
+        expect(stdout.string).to eq "{\"type\":\"issue\",\"check_name\":\"foo\",\"location\":{\"path\":\"foo.rb\"},\"fingerprint\":\"bf3ef3a12aa392f5c83ee15e2a8f213e\"}{\"type\":\"issue\",\"check_name\":\"bar\",\"location\":{\"path\":\"foo.rb\"},\"fingerprint\":\"1db3b65f978773283dc75a6ccca493d9\"}{\"type\":\"issue\",\"check_name\":\"baz\",\"location\":{\"path\":\"foo.rb\"},\"fingerprint\":\"e56aefc8514d527dfc2e46d28ada42d6\"}"
       end
 
       it "supports issue filtering by check name" do
         container = TestContainer.new([
-          %{{"type":"issue","check_name":"foo"}},
-          %{{"type":"issue","check_name":"bar"}},
-          %{{"type":"issue","check_name":"baz"}},
+          %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb"}}},
+          %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb"}}},
+          %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb"}}},
         ])
         expect(Container).to receive(:new).and_return(container)
 
