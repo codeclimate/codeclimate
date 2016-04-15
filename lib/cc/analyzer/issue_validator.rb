@@ -4,6 +4,7 @@ module CC
       CHECKS = [
         IssueCategoryValidation,
         IssueCheckNamePresenceValidation,
+        IssueDescriptionPresenceValidation,
         IssuePathPresenceValidation,
         IssueRelativePathValidation,
         IssueTypeValidation,
