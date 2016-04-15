@@ -2,6 +2,7 @@ module CC
   module Analyzer
     class IssueValidator
       CHECKS = [
+        IssueCategoryValidation,
         IssueCheckNamePresenceValidation,
         IssuePathPresenceValidation,
         IssueRelativePathValidation,

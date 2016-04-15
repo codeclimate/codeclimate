@@ -15,6 +15,7 @@ module CC
     autoload :Filesystem, "cc/analyzer/filesystem"
     autoload :Formatters, "cc/analyzer/formatters"
     autoload :Issue, "cc/analyzer/issue"
+    autoload :IssueCategoryValidation, "cc/analyzer/issue_category_validation"
     autoload :IssueCheckNamePresenceValidation, "cc/analyzer/issue_check_name_presence_validation"
     autoload :IssuePathPresenceValidation, "cc/analyzer/issue_path_presence_validation"
     autoload :IssueRelativePathValidation, "cc/analyzer/issue_relative_path_validation"
