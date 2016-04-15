@@ -2,7 +2,7 @@ require "spec_helper"
 
 module CC::Analyzer
   describe IssueValidator do
-    describe "#validate" do
+    describe "#valid?" do
       it "returns true when everything is valid" do
         valid_issue = {
           "categories" => ["Security"],
@@ -19,13 +19,13 @@ module CC::Analyzer
 
         validator = IssueValidator.new(valid_issue)
 
-        expect(validator.validate).to eq(true)
+        expect(validator).to be_valid
       end
 
       it "stores an error for invalid issues" do
         CC::Analyzer.logger.stubs(:error) # quiet spec
         validator = IssueValidator.new({})
-        expect(validator.validate).to eq(false)
+        expect(validator).not_to be_valid
         expect(validator.error).to eq(
           message: "Category must be at least one of Bug Risk, Clarity, Compatibility, Complexity, Duplication, Performance, Security, Style; Check name must be present; Description must be present; File does not exist: ''; Path must be present; Path must be relative; Type must be 'issue' but was '': `{}`.",
           issue: {},

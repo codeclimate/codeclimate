@@ -18,18 +18,16 @@ module CC
       end
 
       def valid?
-        @error.blank?
-      end
+        return @valid unless @valid.nil?
 
-      def validate
         if issue && invalid_messages.any?
           @error = {
             message: "#{invalid_messages.join("; ")}: `#{issue}`.",
             issue: issue,
           }
-          false
+          @valid = false
         else
-          true
+          @valid = true
         end
       end
 

@@ -37,7 +37,7 @@ module CC
       end
 
       def validator
-        IssueValidator.new(parsed_output).tap(&:validate)
+        IssueValidator.new(parsed_output)
       end
     end
   end
