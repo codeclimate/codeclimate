@@ -2,14 +2,14 @@ module CC
   module Analyzer
     class IssueCategoryValidation < Validation
       CATEGORIES = [
-        "Bug Risk",
-        "Clarity",
-        "Compatibility",
-        "Complexity",
-        "Duplication",
-        "Performance",
-        "Security",
-        "Style",
+        "Bug Risk".freeze,
+        "Clarity".freeze,
+        "Compatibility".freeze,
+        "Complexity".freeze,
+        "Duplication".freeze,
+        "Performance".freeze,
+        "Security".freeze,
+        "Style".freeze,
       ].freeze
 
       def valid?
