@@ -66,34 +66,42 @@ module CC::Analyzer
       end
 
       it "parses stdout for null-delimited issues" do
-        container = TestContainer.new([
-          %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-          %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-          %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-        ])
-        expect(Container).to receive(:new).and_return(container)
+        within_temp_dir do
+          make_file("foo.rb")
 
-        stdout = TestFormatter.new
-        engine = Engine.new("", {}, "", {}, "")
-        engine.run(stdout, ContainerListener.new)
+          container = TestContainer.new([
+            %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
+          ])
+          expect(Container).to receive(:new).and_return(container)
 
-        expect(stdout.string).to eq "{\"type\":\"issue\",\"check_name\":\"foo\",\"location\":{\"path\":\"foo.rb\"},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"bf3ef3a12aa392f5c83ee15e2a8f213e\"}{\"type\":\"issue\",\"check_name\":\"bar\",\"location\":{\"path\":\"foo.rb\"},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"1db3b65f978773283dc75a6ccca493d9\"}{\"type\":\"issue\",\"check_name\":\"baz\",\"location\":{\"path\":\"foo.rb\"},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"e56aefc8514d527dfc2e46d28ada42d6\"}"
+          stdout = TestFormatter.new
+          engine = Engine.new("", {}, "", {}, "")
+          engine.run(stdout, ContainerListener.new)
+
+          expect(stdout.string).to eq "{\"type\":\"issue\",\"check_name\":\"foo\",\"location\":{\"path\":\"foo.rb\"},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"bf3ef3a12aa392f5c83ee15e2a8f213e\"}{\"type\":\"issue\",\"check_name\":\"bar\",\"location\":{\"path\":\"foo.rb\"},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"1db3b65f978773283dc75a6ccca493d9\"}{\"type\":\"issue\",\"check_name\":\"baz\",\"location\":{\"path\":\"foo.rb\"},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"e56aefc8514d527dfc2e46d28ada42d6\"}"
+        end
       end
 
       it "supports issue filtering by check name" do
-        container = TestContainer.new([
-          %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-          %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-          %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-        ])
-        expect(Container).to receive(:new).and_return(container)
+        within_temp_dir do
+          make_file("foo.rb")
 
-        stdout = StringIO.new
-        config = { "checks" => { "bar" => { "enabled" => false } } }
-        engine = Engine.new("", {}, "", config, "")
-        engine.run(stdout, ContainerListener.new)
+          container = TestContainer.new([
+            %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
+          ])
+          expect(Container).to receive(:new).and_return(container)
 
-        expect(stdout.string).not_to include %{"check":"bar"}
+          stdout = StringIO.new
+          config = { "checks" => { "bar" => { "enabled" => false } } }
+          engine = Engine.new("", {}, "", config, "")
+          engine.run(stdout, ContainerListener.new)
+
+          expect(stdout.string).not_to include %{"check":"bar"}
+        end
       end
     end
   end

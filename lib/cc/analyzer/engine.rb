@@ -38,7 +38,6 @@ module CC
           output = EngineOutput.new(raw_output)
 
           unless output.valid?
-            puts output.error
             stdout_io.failed("#{name} produced invalid output: #{output.error[:message]}")
             container.stop
           end

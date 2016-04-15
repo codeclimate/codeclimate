@@ -5,6 +5,7 @@ module CC
         IssueCategoryValidation,
         IssueCheckNamePresenceValidation,
         IssueDescriptionPresenceValidation,
+        IssuePathExistenceValidation,
         IssuePathPresenceValidation,
         IssueRelativePathValidation,
         IssueTypeValidation,
@@ -23,7 +24,7 @@ module CC
       def validate
         if issue && invalid_messages.any?
           @error = {
-            message: "#{invalid_messages.join(", ")}: `#{issue}`.",
+            message: "#{invalid_messages.join("; ")}: `#{issue}`.",
             issue: issue,
           }
           false

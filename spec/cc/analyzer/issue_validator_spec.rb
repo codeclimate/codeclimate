@@ -27,7 +27,7 @@ module CC::Analyzer
         validator = IssueValidator.new({})
         expect(validator.validate).to eq(false)
         expect(validator.error).to eq(
-          message: "Category must be at least one of Bug Risk, Clarity, Compatibility, Complexity, Duplication, Performance, Security, Style, Check name must be present, Description must be present, Path must be present, Path must be relative, Type must be 'issue' but was '': `{}`.",
+          message: "Category must be at least one of Bug Risk, Clarity, Compatibility, Complexity, Duplication, Performance, Security, Style; Check name must be present; Description must be present; File does not exist: ''; Path must be present; Path must be relative; Type must be 'issue' but was '': `{}`.",
           issue: {},
         )
       end
