@@ -18,14 +18,26 @@ module CC
         Issue.new(raw_output)
       end
 
+      def valid?
+        validator.valid?
+      end
+
+      def error
+        validator.error
+      end
+
       private
 
       attr_accessor :raw_output
 
       def parsed_output
-        JSON.parse(raw_output)
+        @parsed_output ||= JSON.parse(raw_output)
       rescue JSON::ParserError
         nil
+      end
+
+      def validator
+        IssueValidator.new(parsed_output)
       end
     end
   end
