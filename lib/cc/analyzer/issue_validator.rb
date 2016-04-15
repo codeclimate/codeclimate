@@ -39,7 +39,6 @@ module CC
         @invalid_messages ||= CHECKS.each_with_object([]) do |check, result|
           validator = check.new(issue)
           result << validator.message unless validator.valid?
-          CLI.debug("#{check} #{validator.valid?}")
         end
       end
     end
