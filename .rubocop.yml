@@ -6,3 +6,6 @@ AllCops:
 Lint/Debugger:
   Exclude:
   - lib/cc/cli/console.rb
+
+Style/SpecialGlobalVars:
+  Enabled: false
