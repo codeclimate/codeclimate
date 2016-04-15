@@ -4,22 +4,26 @@ module CC::Analyzer
   describe IssueValidator do
     describe "#valid?" do
       it "returns true when everything is valid" do
-        valid_issue = {
-          "categories" => ["Security"],
-          "check_name" => "Insecure Dependency",
-          "description" => "RDoc 2.3.0 through 3.12 XSS Exploit",
-          "engine_name" => "bundler-audit",
-          "location" => {
-            "lines" => { "begin" => 140, "end" => 140 },
-            "path" => "Gemfile.lock",
-          },
-          "remediation_points" => 500_000,
-          "type" => "Issue",
-        }
+        within_temp_dir do
+          make_file("Gemfile.lock", "gem rails")
 
-        validator = IssueValidator.new(valid_issue)
+          valid_issue = {
+            "categories" => ["Security"],
+            "check_name" => "Insecure Dependency",
+            "description" => "RDoc 2.3.0 through 3.12 XSS Exploit",
+            "engine_name" => "bundler-audit",
+            "location" => {
+              "lines" => { "begin" => 1, "end" => 1 },
+              "path" => "Gemfile.lock",
+            },
+            "remediation_points" => 500_000,
+            "type" => "Issue",
+          }
 
-        expect(validator).to be_valid
+          validator = IssueValidator.new(valid_issue)
+
+          expect(validator).to be_valid
+        end
       end
 
       it "stores an error for invalid issues" do
@@ -27,7 +31,7 @@ module CC::Analyzer
         validator = IssueValidator.new({})
         expect(validator).not_to be_valid
         expect(validator.error).to eq(
-          message: "Category must be at least one of Bug Risk, Clarity, Compatibility, Complexity, Duplication, Performance, Security, Style; Check name must be present; Description must be present; File does not exist: ''; Path must be present; Path must be relative; Type must be 'issue' but was '': `{}`.",
+          message: "Category must be at least one of Bug Risk, Clarity, Compatibility, Complexity, Duplication, Performance, Security, Style; Check name must be present; Description must be present; Location does not exist in the file; File does not exist: ''; Path must be present; Path must be relative; Type must be 'issue' but was '': `{}`.",
           issue: {},
         )
       end
