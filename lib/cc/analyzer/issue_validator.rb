@@ -5,6 +5,8 @@ module CC
         IssueCategoryValidation,
         IssueCheckNamePresenceValidation,
         IssueDescriptionPresenceValidation,
+        IssueLocationFormatValidation,
+        IssueOtherLocationsFormatValidation,
         IssuePathExistenceValidation,
         IssuePathPresenceValidation,
         IssueRelativePathValidation,
