@@ -15,9 +15,10 @@ module CC
 
       def initialize(issue)
         @issue = issue
+        validate
       end
 
-      def valid?
+      def validate
         return @valid unless @valid.nil?
 
         if issue && invalid_messages.any?
@@ -30,6 +31,7 @@ module CC
           @valid = true
         end
       end
+      alias valid? validate
 
       private
 
