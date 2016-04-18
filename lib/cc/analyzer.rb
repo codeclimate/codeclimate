@@ -18,6 +18,8 @@ module CC
     autoload :IssueCategoryValidation, "cc/analyzer/issue_category_validation"
     autoload :IssueCheckNamePresenceValidation, "cc/analyzer/issue_check_name_presence_validation"
     autoload :IssueDescriptionPresenceValidation, "cc/analyzer/issue_description_presence_validation"
+    autoload :IssueLocationFormatValidation, "cc/analyzer/issue_location_format_validation"
+    autoload :IssueOtherLocationsFormatValidation, "cc/analyzer/issue_other_locations_format_validation"
     autoload :IssuePathExistenceValidation, "cc/analyzer/issue_path_existence_validation"
     autoload :IssuePathPresenceValidation, "cc/analyzer/issue_path_presence_validation"
     autoload :IssueRelativePathValidation, "cc/analyzer/issue_relative_path_validation"

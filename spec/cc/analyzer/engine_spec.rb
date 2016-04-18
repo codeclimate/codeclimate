@@ -70,9 +70,9 @@ module CC::Analyzer
           make_file("foo.rb")
 
           container = TestContainer.new([
-            %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-            %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-            %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb","lines":{"begin":1,"end":1}},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb","lines":{"begin":1,"end":1}},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb","lines":{"begin":1,"end":1}},"description":"foo","categories":["Style"]}},
           ])
           expect(Container).to receive(:new).and_return(container)
 
@@ -80,7 +80,7 @@ module CC::Analyzer
           engine = Engine.new("", {}, "", {}, "")
           engine.run(stdout, ContainerListener.new)
 
-          expect(stdout.string).to eq "{\"type\":\"issue\",\"check_name\":\"foo\",\"location\":{\"path\":\"foo.rb\"},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"bf3ef3a12aa392f5c83ee15e2a8f213e\"}{\"type\":\"issue\",\"check_name\":\"bar\",\"location\":{\"path\":\"foo.rb\"},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"1db3b65f978773283dc75a6ccca493d9\"}{\"type\":\"issue\",\"check_name\":\"baz\",\"location\":{\"path\":\"foo.rb\"},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"e56aefc8514d527dfc2e46d28ada42d6\"}"
+          expect(stdout.string).to eq "{\"type\":\"issue\",\"check_name\":\"foo\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"bf3ef3a12aa392f5c83ee15e2a8f213e\"}{\"type\":\"issue\",\"check_name\":\"bar\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"1db3b65f978773283dc75a6ccca493d9\"}{\"type\":\"issue\",\"check_name\":\"baz\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"e56aefc8514d527dfc2e46d28ada42d6\"}"
         end
       end
 
@@ -89,9 +89,9 @@ module CC::Analyzer
           make_file("foo.rb")
 
           container = TestContainer.new([
-            %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-            %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
-            %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb"},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb","lines":{"begin":1,"end":1}},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"bar","location":{"path":"foo.rb","lines":{"begin":1,"end":1}},"description":"foo","categories":["Style"]}},
+            %{{"type":"issue","check_name":"baz","location":{"path":"foo.rb","lines":{"begin":1,"end":1}},"description":"foo","categories":["Style"]}},
           ])
           expect(Container).to receive(:new).and_return(container)
 
