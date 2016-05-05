@@ -30,13 +30,13 @@ module CC
       def valid_position?(position)
         position &&
           (
-            (position["line"] && position["column"]) ||
-            position["offset"]
+            [position["line"], position["column"]].all? { |value| value.is_a?(Integer) } ||
+            position["offset"].is_a?(Integer)
           )
       end
 
       def valid_lines?(lines)
-        lines.is_a?(Hash) && lines.key?("begin") && lines.key?("end")
+        lines.is_a?(Hash) && [lines["begin"], lines["end"]].all? { |value| value.is_a?(Integer) }
       end
     end
   end
