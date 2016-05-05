@@ -31,6 +31,8 @@ module CC
     autoload :MountedPath, "cc/analyzer/mounted_path"
     autoload :RaisingContainerListener, "cc/analyzer/raising_container_listener"
     autoload :SourceBuffer, "cc/analyzer/source_buffer"
+    autoload :SourceExtractor, "cc/analyzer/source_extractor"
+    autoload :SourceFingerprint, "cc/analyzer/source_fingerprint"
     autoload :StatsdContainerListener, "cc/analyzer/statsd_container_listener"
     autoload :Validation, "cc/analyzer/validation"
 

@@ -58,7 +58,10 @@ module CC::Analyzer
       issue = EngineOutput.new({
         "type" => "Issue",
         "check_name" => "foo",
-        "fingerprint" => "05a33ac5659c1e90cad1ce32ff8a91c0"
+        "fingerprint" => "05a33ac5659c1e90cad1ce32ff8a91c0",
+        "location" => {
+          "path" => "spec/fixtures/source.rb",
+        },
       }.to_json)
 
       filter = EngineOutputFilter.new(
@@ -76,6 +79,9 @@ module CC::Analyzer
       EngineOutput.new({
         "type" => EngineOutputFilter::ISSUE_TYPE,
         "check_name" => check_name,
+        "location" => {
+          "path" => "spec/fixtures/source.rb",
+        },
       }.to_json)
     end
 

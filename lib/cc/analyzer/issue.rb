@@ -34,24 +34,20 @@ module CC
         end
       end
 
+      def path
+        parsed_output.fetch("location", {}).fetch("path", "")
+      end
+
       private
 
       attr_reader :output
 
       def default_fingerprint
-        digest = Digest::MD5.new
-        digest << path
-        digest << "|"
-        digest << check_name.to_s
-        digest.to_s
+        SourceFingerprint.new(self).compute
       end
 
       def parsed_output
         @parsed_output ||= JSON.parse(output)
-      end
-
-      def path
-        parsed_output.fetch("location", {}).fetch("path", "")
       end
     end
   end
