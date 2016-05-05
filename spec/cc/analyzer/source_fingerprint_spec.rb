@@ -61,6 +61,23 @@ module CC::Analyzer
 
         expect(fingerprint.compute).to eq("eef541a28f83417a45808139d58b631d")
       end
+
+      it "clears out invalid UTF-8 bytes" do
+        output["location"] = {
+          "lines" => {
+            "begin" => 1,
+            "end" => 1
+          },
+          "path" => "spec/fixtures/stub.rb"
+        }
+
+        allow(File).to receive(:read).and_return("hi \255".force_encoding(Encoding::UTF_8))
+
+        issue = Issue.new(output.to_json)
+        fingerprint = SourceFingerprint.new(issue)
+
+        expect(fingerprint.compute).to eq("717ddedd698e51037903bad1d2b06c1b")
+      end
     end
   end
 end

@@ -21,7 +21,10 @@ module CC
 
       def relevant_source
         source = SourceExtractor.new(raw_source).extract(issue.location)
-        source if source && !source.empty?
+
+        if source && !source.empty?
+          source.encode(Encoding::UTF_8, "binary", invalid: :replace, undef: :replace, replace: "")
+        end
       end
 
       def raw_source
