@@ -24,7 +24,7 @@ module CC
       end
 
       def fingerprint
-        parsed_output.fetch("fingerprint", default_fingerprint)
+        parsed_output.fetch("fingerprint") { default_fingerprint }
       end
 
       # Allow access to hash keys as methods

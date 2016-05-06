@@ -58,6 +58,37 @@ module CC::Analyzer
           }
         })).not_to be_valid
       end
+
+      it "returns false if the location line values are not integers" do
+        location = {
+          "lines" => {
+            "begin" => "1",
+            "end" => "2"
+          }
+        }
+
+        validation = IssueLocationFormatValidation.new("location" => location)
+
+        expect(validation).not_to be_valid
+      end
+
+      it "returns false if the location position values are not integers" do
+        location = {
+          "positions" => {
+            "begin" => {
+              "line" => "1",
+              "column" => "2"
+            },
+            "end" => {
+              "offset" => "20"
+            }
+          }
+        }
+
+        validation = IssueLocationFormatValidation.new("location" => location)
+
+        expect(validation).not_to be_valid
+      end
     end
   end
 end
