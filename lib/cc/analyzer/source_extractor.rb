@@ -39,17 +39,17 @@ module CC
       end
 
       def convert_to_offsets(positions)
-        positions.each do |key, value|
-          next if value["offset"]
+        positions.each_with_object({}) do |(key, value), memo|
+          if value.key?("offset")
+            memo[key] = value
+          else
+            validate_position_format!(value)
 
-          validate_position_format!(value)
-
-          positions[key] = {
-            "offset" => to_offset(value["line"] - 1, value["column"] - 1),
-          }
+            memo[key] = {
+              "offset" => to_offset(value["line"] - 1, value["column"] - 1),
+            }
+          end
         end
-
-        positions
       end
 
       def validate_position_format!(position)
