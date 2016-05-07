@@ -22,6 +22,7 @@ citest:
 	  --entrypoint bundle \
 	  --volume $(PWD)/.git:/usr/src/app/.git:ro \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
+	  --volume $(CIRCLE_TEST_REPORTS):/usr/src/app/spec/reports \
 	  codeclimate/codeclimate exec rake spec:all spec:benchmark
 
 install:
