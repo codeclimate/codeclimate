@@ -10,7 +10,7 @@ module CC
       end
 
       def message
-        "Path must be relative"
+        "Path must be relative to the project directory"
       end
 
       private
