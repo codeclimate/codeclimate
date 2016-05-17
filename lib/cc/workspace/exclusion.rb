@@ -2,6 +2,7 @@ module CC
   class Workspace
     class Exclusion
       def initialize(pattern)
+        @original_pattern = pattern
         @pattern = simplify(pattern)
       end
 
@@ -17,12 +18,16 @@ module CC
         pattern.include?("*")
       end
 
+      def remover?
+        !original_pattern.start_with?("!")
+      end
+
       private
 
-      attr_reader :pattern
+      attr_reader :original_pattern, :pattern
 
       def simplify(pattern)
-        pattern.to_s.sub(%r{(/\*\*)?(/\*)?$}, "")
+        pattern.to_s.sub(%r{(/\*\*)?(/\*)?$}, "").sub(/^\!/, '')
       end
     end
   end

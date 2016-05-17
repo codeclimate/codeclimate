@@ -136,6 +136,37 @@ module CC
       end
     end
 
+    it "supports anti-exclude patterns, like git does with !" do
+      within_temp_dir do
+        make_tree <<-EOM
+          lib/foo.py
+          lib/foo.pyc
+          lib/fafa.pyc
+        EOM
+
+        workspace = Workspace.new
+        workspace.remove(%w[**/*.pyc !lib/fafa.pyc])
+
+        expect(workspace.paths.sort).to eq %w[lib/fafa.pyc lib/foo.py]
+      end
+    end
+
+    it "supports anti-exclude patterns, like git does with ! and also this respects globs" do
+      within_temp_dir do
+        make_tree <<-EOM
+          test/dog.rb
+          test/test_helper.rb
+          test/dog_helper.rb
+          test/something_else_helper.rb
+        EOM
+
+        workspace = Workspace.new
+        workspace.remove(%w[test/*.rb !test/*_helper.rb test/dog_helper.rb])
+
+        expect(workspace.paths.sort).to eq %w[test/something_else_helper.rb test/test_helper.rb]
+      end
+    end
+
     it "can be given an explicit set of initial paths" do
       within_temp_dir do
         make_tree <<-EOM

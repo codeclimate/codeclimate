@@ -23,7 +23,12 @@ module CC
 
     def remove(patterns)
       Array(patterns).each do |pattern|
-        path_tree.exclude_paths(Exclusion.new(pattern).expand)
+        exclusion = Exclusion.new(pattern)
+        if exclusion.remover?
+          path_tree.exclude_paths(exclusion.expand)
+        else
+          path_tree.include_paths(exclusion.expand)
+        end
       end
     end
 
