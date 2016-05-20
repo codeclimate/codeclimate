@@ -8,6 +8,7 @@ module CC
         IssueLocationFormatValidation,
         IssueOtherLocationsFormatValidation,
         IssuePathExistenceValidation,
+        IssuePathIsFileValidation,
         IssuePathPresenceValidation,
         IssueRelativePathValidation,
         IssueTypeValidation,
