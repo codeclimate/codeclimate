@@ -83,7 +83,7 @@ module Factory
     }
   end
 
-  def sample_issue
+  def sample_issue(options = {})
     {
       "type" => "issue",
       "check" => "Rubocop/Style/Documentation",
@@ -97,7 +97,7 @@ module Factory
           "end" => 40
         }
       }
-    }
+    }.merge(options)
   end
 end
 

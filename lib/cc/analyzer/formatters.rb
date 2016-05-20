@@ -2,11 +2,13 @@ module CC
   module Analyzer
     module Formatters
       autoload :Formatter, "cc/analyzer/formatters/formatter"
+      autoload :HTMLFormatter, "cc/analyzer/formatters/html_formatter"
       autoload :JSONFormatter, "cc/analyzer/formatters/json_formatter"
       autoload :PlainTextFormatter, "cc/analyzer/formatters/plain_text_formatter"
       autoload :Spinner, "cc/analyzer/formatters/spinner"
 
       FORMATTERS = {
+        html: HTMLFormatter,
         json: JSONFormatter,
         text: PlainTextFormatter,
       }.freeze

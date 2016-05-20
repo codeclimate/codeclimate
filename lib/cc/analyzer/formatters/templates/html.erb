@@ -1,0 +1,53 @@
+<html>
+  <head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </head>
+  <body>
+  <div class="container">
+    <h2>Code Climate Analysis</h2>
+
+    <h3><%= pluralize(@issue_count, "issue") %> found in <%= @issues_by_path.size %> files.</h3>
+
+    <% @issues_by_path.each do |path, file_issues| %>
+      <hr>
+      <h4><a name='<%= path %>'><%= path %></a> (<%= pluralize(file_issues.size, "issue") %>)</h4>
+      <hr>
+      <% file_issues.each do |issue| %>
+        <table class="table table-striped">
+          <tr>
+            <td>Description</td><td><%= issue["description"] %></td>
+          </tr>
+          <tr>
+            <td>Location</td><td><%= path %>:<b><%= issue["location"] %></td>
+          </tr>
+          <tr>
+            <td>Engine</td><td><%= issue["engine_name"] %></td>
+          </tr>
+          <tr>
+            <td>Category</td><td><%= issue["categories"].join(",") %></td>
+          </tr>
+          <tr>
+            <td>Remediation points</td><td><%= issue["remediation_points"] %></td>
+          </tr>
+        </table>
+        <% if issue["content"] %>
+          <br/>
+          <button data-toggle="collapse"
+                  data-target='#readup<%= issue['fingerprint'] %>'>
+                  Toggle Readup
+          </button>
+          <div id='readup<%= issue["fingerprint"] %>' class='collapse'>
+            <hr>
+            <%= issue["content"]["body"] %>
+            <hr>
+          </div>
+        <% end %>
+        <hr>
+      <% end %>
+    <% end %>
+  </div>
+  </body>
+</html>
