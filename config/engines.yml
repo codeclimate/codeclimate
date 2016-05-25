@@ -9,6 +9,11 @@
 # the `default_ratings_paths` globs, which are used during analysis to determine
 # which files should be rated.
 #
+apexmetrics:
+  channels:
+    stable: codeclimate/codeclimate-apexmetrics
+  description: ApexMetrics is a static code analysis tool for Salesforce.com Apex.
+  community: true
 brakeman:
   channels:
     stable: codeclimate/codeclimate-brakeman
