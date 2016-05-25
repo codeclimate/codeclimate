@@ -7,7 +7,7 @@ module CC::Analyzer
         registry = EngineRegistry.new
 
         expect(registry["madeup"]).to eq nil
-        expect(registry["rubocop"]["image"]).to eq "codeclimate/codeclimate-rubocop"
+        expect(registry["rubocop"]["channels"]["stable"]).to eq "codeclimate/codeclimate-rubocop"
       end
 
       it "returns a fake registry entry if in dev mode" do
