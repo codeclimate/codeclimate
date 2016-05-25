@@ -3,6 +3,19 @@ require "securerandom"
 module CC
   module Analyzer
     class EnginesConfigBuilder
+      class RegistryAdapter < SimpleDelegator
+        # Calling this is guarded by Registry#key?(name) so we can assume
+        # metadata itself will be present. We own the YAML loaded into the
+        # registry, so we can also assume the "channels" key will be present. We
+        # can't assume it will have a key for the given channel, but the nil
+        # value for the returned image key will trigger the desired error
+        # handling.
+        def fetch(name, channel)
+          metadata = self[name]
+          metadata.merge("image" => metadata["channels"][channel])
+        end
+      end
+
       Result = Struct.new(
         :name,
         :registry_entry,
@@ -12,7 +25,7 @@ module CC
       )
 
       def initialize(registry:, config:, container_label:, source_dir:, requested_paths:)
-        @registry = registry
+        @registry = RegistryAdapter.new(registry)
         @config = config
         @container_label = container_label
         @requested_paths = requested_paths
@@ -23,7 +36,8 @@ module CC
         names_and_raw_engine_configs.map do |name, raw_engine_config|
           label = @container_label || SecureRandom.uuid
           engine_config = engine_config(raw_engine_config)
-          Result.new(name, @registry[name], @source_dir, engine_config, label)
+          engine_metadata = @registry.fetch(name, raw_engine_config.channel)
+          Result.new(name, engine_metadata, @source_dir, engine_config, label)
         end
       end
 

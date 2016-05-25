@@ -16,8 +16,8 @@ module CC
         def pull_docker_images
           engine_names.each do |name|
             if engine_registry.exists?(name)
-              image = engine_image(name)
-              pull_engine_image(image)
+              images = engine_registry[name]["channels"].values
+              images.each { |image| pull_engine_image(image) }
             else
               warn("unknown engine name: #{name}")
             end
@@ -26,10 +26,6 @@ module CC
 
         def engine_names
           @engine_names ||= parsed_yaml.engine_names
-        end
-
-        def engine_image(engine_name)
-          engine_registry_list[engine_name]["image"]
         end
 
         def pull_engine_image(engine_image)

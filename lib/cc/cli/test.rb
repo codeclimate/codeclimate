@@ -234,7 +234,7 @@ module CC
       end
 
       def engine_image
-        engine_registry[@engine_name]["image"]
+        engine_registry[@engine_name]["channels"]["stable"]
       end
 
       # Stolen from ActiveSupport (where it was deprecated)

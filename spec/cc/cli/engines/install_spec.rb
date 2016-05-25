@@ -52,8 +52,8 @@ module CC::CLI::Engines
     end
 
     def stub_engine_image(engine)
-      allow_any_instance_of(EngineCommand).to receive(:engine_registry_list).
-        and_return("#{engine}" => { "image" => "#{engine}_img" })
+      allow_any_instance_of(CC::Analyzer::EngineRegistry).to receive(:[]).with(engine).
+        and_return("channels" => { "stable" => "#{engine}_img" })
     end
   end
 end

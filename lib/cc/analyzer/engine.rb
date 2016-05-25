@@ -52,6 +52,11 @@ module CC
         container.run(container_options).tap do |result|
           CLI.debug("#{name} engine stderr: #{result.stderr}")
         end
+      rescue Container::ImageRequired
+        # Provide a clearer message given the context we have
+        message = "Unable to find an image for #{name}:#{@config["channel"]}."
+        message << " Available channels: #{@metadata["channels"].keys.inspect}."
+        raise Container::ImageRequired, message
       ensure
         delete_config_file
       end
