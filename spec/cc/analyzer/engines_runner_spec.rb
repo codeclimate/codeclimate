@@ -45,7 +45,13 @@ module CC::Analyzer
     end
 
     def registry_with_engine(name)
-      { name => { "image" => "codeclimate/codeclimate-#{name}" } }
+      {
+        name => {
+          "channels" => {
+            "stable" => "codeclimate/codeclimate-#{name}"
+          }
+        }
+      }
     end
 
     def config_with_engine(name)

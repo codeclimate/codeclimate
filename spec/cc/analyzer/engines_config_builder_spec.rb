@@ -46,6 +46,21 @@ module CC::Analyzer
       end
     end
 
+    describe "with an alternate channel" do
+      it "selects the proper image" do
+        name = "an_engine"
+        registry = registry_with_engine(name)
+        registry[name]["channels"]["stable"] = "images/stable"
+        registry[name]["channels"]["beta"] = "images/beta"
+        config = config_with_engine(name)
+        config.engines[name].channel = "beta"
+
+        result = build_configs(registry, config).first
+
+        expect(result.registry_entry["image"]).to eq "images/beta"
+      end
+    end
+
     describe "with engine-specific config" do
       let(:config) do
         CC::Yaml.parse <<-EOYAML
@@ -67,7 +82,7 @@ module CC::Analyzer
         result = engines_config_builder.run
         expect(result.size).to eq(1)
         expect(result.first.name).to eq("rubocop")
-        expect(result.first.registry_entry).to eq(registry["rubocop"])
+        expect(result.first.registry_entry["image"]).to eq("codeclimate/codeclimate-rubocop")
         expect(result.first.code_path).to eq(source_dir)
         expect(result.first.config).to eq expected_config
         expect(result.first.container_label).to be_present
@@ -114,13 +129,13 @@ module CC::Analyzer
             result = engines_config_builder.run
             expect(result.size).to eq(2)
             expect(result[0].name).to eq("rubocop")
-            expect(result[0].registry_entry).to eq(registry["rubocop"])
+            expect(result[0].registry_entry["image"]).to eq("codeclimate/codeclimate-rubocop")
             expect(result[0].code_path).to eq(source_dir)
             result[0].config[:include_paths].sort!
             expect(result[0].config).to eq expected_rubocop_config
             expect(result[0].container_label).to be_present
             expect(result[1].name).to eq("fixme")
-            expect(result[1].registry_entry).to eq(registry["fixme"])
+            expect(result[1].registry_entry["image"]).to eq("codeclimate/codeclimate-fixme")
             expect(result[1].code_path).to eq(source_dir)
             result[1].config[:include_paths].sort!
             expect(result[1].config).to eq expected_fixme_config
@@ -175,10 +190,26 @@ module CC::Analyzer
       end
     end
 
+    def build_configs(registry, config)
+      builder = EnginesConfigBuilder.new(
+        registry: registry,
+        config: config,
+        container_label: nil,
+        source_dir: "/code",
+        requested_paths: [],
+      )
+
+      builder.run
+    end
+
     def registry_with_engine(*names)
       {}.tap do |result|
         names.each do |name|
-          result[name] = { "image" => "codeclimate/codeclimate-#{name}" }
+          result[name] = {
+            "channels" => {
+              "stable" => "codeclimate/codeclimate-#{name}"
+            }
+          }
         end
       end
     end
