@@ -83,10 +83,15 @@ module CC
 
       def add_engine_options
         engine_options.each do |engine|
+          name, channel = engine.split(":", 2)
+
           if config.engines.include?(engine)
-            config.engines[engine].enabled = true
+            config.engines[name].enabled = true
+            config.engines[name].channel = channel if channel
           else
-            config.engines[engine] = CC::Yaml::Nodes::Engine.new(config.engines).with_value("enabled" => true)
+            value = { "enabled" => true }
+            value["channel"] = channel if channel
+            config.engines[name] = CC::Yaml::Nodes::Engine.new(config.engines).with_value(value)
           end
         end
       end
