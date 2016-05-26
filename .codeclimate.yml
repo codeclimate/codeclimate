@@ -1,18 +1,11 @@
 ---
 # TODO
-# SUP
-# marjory
+# FIXME
 engines:
   rubocop:
     enabled: true
   fixme:
     enabled: true
-    exclude_paths:
-      - config/engines.yml
-      - .codeclimate.yml
-  fixme:
-    enabled: true
-
 ratings:
   paths:
   - "**.rb"
