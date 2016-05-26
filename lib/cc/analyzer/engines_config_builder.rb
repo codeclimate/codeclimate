@@ -12,7 +12,7 @@ module CC
         # handling.
         def fetch(name, channel)
           metadata = self[name]
-          metadata.merge("image" => metadata["channels"][channel])
+          metadata.merge("image" => metadata["channels"][channel.to_s])
         end
       end
 
