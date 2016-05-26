@@ -84,6 +84,7 @@ duplication:
 eslint:
   channels:
     stable: codeclimate/codeclimate-eslint
+    eslint-2: codeclimate/codeclimate-eslint:eslint-2
   description: A JavaScript/JSX linting utility.
   community: false
   upgrade_languages:
