@@ -1,11 +1,11 @@
 ---
+# TODO
+# FIXME
 engines:
   rubocop:
     enabled: true
   fixme:
     enabled: true
-    exclude_paths:
-      - config/engines.yml
 ratings:
   paths:
   - "**.rb"
