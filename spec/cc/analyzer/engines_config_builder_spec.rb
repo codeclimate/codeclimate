@@ -67,6 +67,7 @@ module CC::Analyzer
           engines:
             rubocop:
               enabled: true
+              channel: stable
               config:
                 file: rubocop.yml
         EOYAML
@@ -76,6 +77,7 @@ module CC::Analyzer
       it "keeps that config and adds some entries" do
         expected_config = {
           "enabled" => true,
+          "channel" => "stable",
           "config" => "rubocop.yml",
           :include_paths => ["./"]
         }
