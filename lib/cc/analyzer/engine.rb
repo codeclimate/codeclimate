@@ -21,9 +21,9 @@ module CC
       def run(stdout_io, container_listener)
         composite_listener = CompositeContainerListener.new(
           container_listener,
-          LoggingContainerListener.new(name, Analyzer.logger),
-          StatsdContainerListener.new(name, Analyzer.statsd),
-          RaisingContainerListener.new(name, EngineFailure, EngineTimeout),
+          LoggingContainerListener.new(qualified_name, Analyzer.logger),
+          StatsdContainerListener.new(qualified_name.tr(":", "."), Analyzer.statsd),
+          RaisingContainerListener.new(qualified_name, EngineFailure, EngineTimeout),
         )
 
         container = Container.new(
@@ -34,11 +34,11 @@ module CC
         )
 
         container.on_output("\0") do |raw_output|
-          CLI.debug("#{name} engine output: #{raw_output.strip}")
+          CLI.debug("#{qualified_name} engine output: #{raw_output.strip}")
           output = EngineOutput.new(raw_output)
 
           unless output.valid?
-            stdout_io.failed("#{name} produced invalid output: #{output.error[:message]}")
+            stdout_io.failed("#{qualified_name} produced invalid output: #{output.error[:message]}")
             container.stop
           end
 
@@ -48,13 +48,13 @@ module CC
         end
 
         write_config_file
-        CLI.debug("#{name} engine config: #{config_file.read}")
+        CLI.debug("#{qualified_name} engine config: #{config_file.read}")
         container.run(container_options).tap do |result|
-          CLI.debug("#{name} engine stderr: #{result.stderr}")
+          CLI.debug("#{qualified_name} engine stderr: #{result.stderr}")
         end
       rescue Container::ImageRequired
         # Provide a clearer message given the context we have
-        message = "Unable to find an image for #{name}:#{@config["channel"]}."
+        message = "Unable to find an image for #{qualified_name}."
         message << " Available channels: #{@metadata["channels"].keys.inspect}."
         raise Container::ImageRequired, message
       ensure
@@ -62,6 +62,10 @@ module CC
       end
 
       private
+
+      def qualified_name
+        "#{name}:#{@config.fetch("channel", "stable")}"
+      end
 
       def container_options
         [
@@ -78,7 +82,7 @@ module CC
       end
 
       def container_name
-        @container_name ||= "cc-engines-#{name}-#{SecureRandom.uuid}"
+        @container_name ||= "cc-engines-#{qualified_name.tr(":", "-")}-#{SecureRandom.uuid}"
       end
 
       def write_config_file
