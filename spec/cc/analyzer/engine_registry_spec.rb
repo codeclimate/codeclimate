@@ -14,7 +14,7 @@ module CC::Analyzer
         registry = EngineRegistry.new(true)
 
         expect(registry["madeup"]).to eq(
-          "image" => "codeclimate/codeclimate-madeup:latest"
+          "channels" => { "stable" => "codeclimate/codeclimate-madeup:latest" }
         )
       end
     end
