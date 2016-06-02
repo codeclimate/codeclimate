@@ -71,12 +71,28 @@ module CC::Analyzer
           "path" => "spec/fixtures/stub.rb"
         }
 
+        allow(File).to receive(:file?).and_return(true)
         allow(File).to receive(:read).and_return("hi \255".force_encoding(Encoding::UTF_8))
 
         issue = Issue.new(output.to_json)
         fingerprint = SourceFingerprint.new(issue)
 
         expect(fingerprint.compute).to eq("717ddedd698e51037903bad1d2b06c1b")
+      end
+
+      it "excludes the source when the file doesn't exist" do
+        output["location"] = {
+          "lines" => {
+            "begin" => 1,
+            "end" => 1
+          },
+          "path" => "doesnotexist"
+        }
+
+        issue = Issue.new(output.to_json)
+        fingerprint = SourceFingerprint.new(issue)
+
+        expect(fingerprint.compute).to eq("8b425ee5d6c63f873d62d9985676b2d9")
       end
     end
   end
