@@ -28,7 +28,12 @@ module CC
       end
 
       def raw_source
-        @raw_source ||= File.read(issue.path)
+        @raw_source ||=
+          if File.file?(issue.path)
+            File.read(issue.path)
+          else
+            ""
+          end
       end
     end
   end
