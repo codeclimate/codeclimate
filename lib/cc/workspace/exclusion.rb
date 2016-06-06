@@ -27,7 +27,7 @@ module CC
       attr_reader :negated, :pattern
 
       def simplify(pattern)
-        pattern.to_s.sub(%r{(/\*\*)?(/\*)?$}, "").sub(/^\!/, '')
+        pattern.to_s.sub(%r{(/\*\*)?(/\*)?$}, "").sub(/^\!/, "")
       end
     end
   end
