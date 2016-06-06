@@ -136,7 +136,7 @@ module CC
       end
     end
 
-    it "supports anti-exclude patterns, like git does with !" do
+    it "supports negated exclude patterns" do
       within_temp_dir do
         make_tree <<-EOM
           lib/foo.py
@@ -151,7 +151,7 @@ module CC
       end
     end
 
-    it "supports anti-exclude patterns, like git does with ! and also this respects globs" do
+    it "supports negated exclude patterns and also this respects globs" do
       within_temp_dir do
         make_tree <<-EOM
           test/dog.rb
