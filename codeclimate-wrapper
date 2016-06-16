@@ -47,6 +47,9 @@ docker_run() {
     --env CODECLIMATE_CODE \
     --env CODECLIMATE_TMP \
     --env CODECLIMATE_DEBUG \
+    --env CONTAINER_MAXIMUM_OUTPUT_BYTES \
+    --env CONTAINER_TIMEOUT_SECONDS \
+    --env ENGINE_MEMORY_LIMIT_BYTES \
     --volume "$CODECLIMATE_CODE":/code \
     --volume "$CODECLIMATE_TMP":/tmp/cc \
     --volume /var/run/docker.sock:/var/run/docker.sock \
