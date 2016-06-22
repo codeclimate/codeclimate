@@ -1,18 +1,7 @@
 module CC
   module Analyzer
     class IssueValidator
-      CHECKS = [
-        IssueCategoryValidation,
-        IssueCheckNamePresenceValidation,
-        IssueDescriptionPresenceValidation,
-        IssueLocationFormatValidation,
-        IssueOtherLocationsFormatValidation,
-        IssuePathExistenceValidation,
-        IssuePathIsFileValidation,
-        IssuePathPresenceValidation,
-        IssueRelativePathValidation,
-        IssueTypeValidation,
-      ].freeze
+      CHECKS = IssueValidations.validations.freeze
 
       attr_reader :error
 
