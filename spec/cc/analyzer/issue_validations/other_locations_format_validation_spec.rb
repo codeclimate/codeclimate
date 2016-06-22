@@ -1,7 +1,7 @@
 require "spec_helper"
 
-module CC::Analyzer
-  describe IssueOtherLocationsFormatValidation do
+module CC::Analyzer::IssueValidations
+  describe OtherLocationsFormatValidation do
     describe "#valid?" do
       it "returns true if the other locations are all valid" do
         within_temp_dir do
@@ -28,7 +28,7 @@ module CC::Analyzer
             },
           ]
 
-          expect(IssueOtherLocationsFormatValidation.new("other_locations" => locations)).to be_valid
+          expect(OtherLocationsFormatValidation.new("other_locations" => locations)).to be_valid
         end
       end
 
@@ -50,7 +50,7 @@ module CC::Analyzer
             },
           ]
 
-          expect(IssueOtherLocationsFormatValidation.new("other_locations" => locations)).not_to be_valid
+          expect(OtherLocationsFormatValidation.new("other_locations" => locations)).not_to be_valid
         end
       end
     end
