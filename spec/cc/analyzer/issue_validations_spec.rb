@@ -7,6 +7,7 @@ module CC::Analyzer
         expected = [
           IssueValidations::CategoryValidation,
           IssueValidations::CheckNamePresenceValidation,
+          IssueValidations::ContentValidation,
           IssueValidations::DescriptionPresenceValidation,
           IssueValidations::LocationFormatValidation,
           IssueValidations::OtherLocationsFormatValidation,

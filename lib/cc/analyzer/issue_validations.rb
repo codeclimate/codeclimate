@@ -3,6 +3,7 @@ module CC
     module IssueValidations
       autoload :CategoryValidation, "cc/analyzer/issue_validations/category_validation"
       autoload :CheckNamePresenceValidation, "cc/analyzer/issue_validations/check_name_presence_validation"
+      autoload :ContentValidation, "cc/analyzer/issue_validations/content_validation"
       autoload :DescriptionPresenceValidation, "cc/analyzer/issue_validations/description_presence_validation"
       autoload :LocationFormatValidation, "cc/analyzer/issue_validations/location_format_validation"
       autoload :OtherLocationsFormatValidation, "cc/analyzer/issue_validations/other_locations_format_validation"
