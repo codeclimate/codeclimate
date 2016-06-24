@@ -37,6 +37,14 @@ following:
 
 If you'd still like to report this issue, please follow these guidelines:
 
+- Make sure your problem exists in the latest version of the CLI and any engines
+  you're using, the following commands will update everything:
+
+  ```
+  docker pull codeclimate/codeclimate
+  codeclimate engines:install
+  ```
+
 - Include the exact command you're running and its complete output
 
   Please enable debug for these invocations:
