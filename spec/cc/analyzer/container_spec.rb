@@ -217,6 +217,34 @@ module CC::Analyzer
           end
         end
 
+        it "rescues and records metrics when containers fail to stop" do
+          with_timeout(1) do
+            name = "cc-engines-rubocop-stable-abc-123"
+            container = Container.new(
+              image: "alpine",
+              command: %w[sleep 10],
+              name: "cc-engines-rubocop-stable-abc-123",
+              listener: TestContainerListener.new,
+            )
+
+            allow(POSIX::Spawn::Child).to receive(:new).
+              and_raise(POSIX::Spawn::TimeoutExceeded)
+
+            expect(CC::Analyzer.statsd).to receive(:increment).
+              with("container.zombie")
+            expect(CC::Analyzer.statsd).to receive(:increment).
+              with("container.zombie.engine.rubocop.stable")
+
+            begin
+              run_container(container)
+            ensure
+              # Cleanup manually
+              system("docker stop #{name} >/dev/null")
+              system("docker rm #{name} >/dev/null")
+            end
+          end
+        end
+
         def run_container(container)
           thread = Thread.new { @container_result = container.run }
 
