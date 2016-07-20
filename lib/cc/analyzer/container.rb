@@ -174,6 +174,10 @@ module CC
         Analyzer.logger.warn("killing container name=#{@name} message=#{message.inspect}")
         POSIX::Spawn::Child.new("docker", "kill", @name, timeout: 2.minutes)
         POSIX::Spawn::Child.new("docker", "wait", @name, timeout: 2.minutes)
+      rescue POSIX::Spawn::TimeoutExceeded
+        Analyzer.logger.error("unable to kill container name=#{@name} message=#{message.inspect}")
+        Analyzer.statsd.increment("container.zombie")
+        Analyzer.statsd.increment("container.zombie.#{metric_name}") if metric_name
       end
 
       def timeout
@@ -182,6 +186,14 @@ module CC
 
       def maximum_output_bytes
         ENV.fetch("CONTAINER_MAXIMUM_OUTPUT_BYTES", DEFAULT_MAXIMUM_OUTPUT_BYTES).to_i
+      end
+
+      def metric_name
+        if /^cc-engines-(?<engine>[^-]+)-(?<channel>[^-]+)-/ =~ @name
+          "engine.#{engine}.#{channel}"
+        elsif /^builder-(?<action>[^-]+)-/ =~ @name
+          "builder.#{action}"
+        end
       end
     end
   end
