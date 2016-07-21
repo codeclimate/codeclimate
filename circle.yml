@@ -14,4 +14,4 @@ test:
 
 notify:
   webhooks:
-    - url: https://cc-slack-proxy.herokuapp.com/circle
+    - url: https://xaxadmin.slack.com/
