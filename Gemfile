@@ -1,10 +1,7 @@
-source "https://rubygems.org"
+gem "codeclimate-test-reporter"
 
-gemspec
+group: :test
 
-group :test do
-  gem "rake"
-  gem "rspec"
-  gem "rspec_junit_formatter"
-  gem "codeclimate-test-reporter", require: nil
+ require: nil
+
 end
