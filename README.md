@@ -4,9 +4,7 @@
 
 ## Overview
 
-`codeclimate` is a command line interface for the Code Climate analysis
-platform. It allows you to run Code Climate engines on your local machine inside
-of Docker containers.
+[![Issue Count](https://codeclimate.com/repos/5791093519758f5b49002831/badges/cd82efefefaac935c2a1/issue_count.svg)](https://codeclimate.com/repos/5791093519758f5b49002831/feed)
 
 ## Prerequisites
 
