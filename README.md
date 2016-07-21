@@ -1,6 +1,6 @@
 # Code Climate CLI<br>
 
-[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)
+[![Code Climate](https://codeclimate.com/repos/5791093519758f5b49002831/badges/cd82efefefaac935c2a1/gpa.svg)](https://codeclimate.com/repos/5791093519758f5b49002831/feed)
 
 ## Overview
 
