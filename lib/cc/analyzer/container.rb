@@ -56,9 +56,13 @@ module CC
         @t_err = read_stderr(err)
         t_timeout = timeout_thread
 
-        # blocks until the engine stops. there may still be stdout in flight if
-        # it was being produced more quickly than consumed.
-        _, status = Process.waitpid2(pid)
+        # blocks until the engine stops. this is put in a thread so that we can
+        # explicitly abort it as part of #stop. otherwise a run-away container
+        # could still block here forever if the docker-kill/wait is not
+        # successful. there may still be stdout in flight if it was being
+        # produced more quickly than consumed.
+        @t_wait = Thread.new { _, @status = Process.waitpid2(pid) }
+        @t_wait.join
 
         # blocks until all readers are done. they're still governed by the
         # timeout thread at this point. if we hit the timeout while processing
@@ -71,11 +75,11 @@ module CC
           @listener.timed_out(container_data(duration: duration))
         else
           duration = ((Time.now - started) * 1000).round
-          @listener.finished(container_data(duration: duration, status: status))
+          @listener.finished(container_data(duration: duration, status: @status))
         end
 
         Result.new(
-          status.exitstatus,
+          @status && @status.exitstatus,
           @timed_out,
           duration,
           @maximum_output_exceeded,
@@ -90,6 +94,7 @@ module CC
       def stop(message = nil)
         reap_running_container(message)
         kill_reader_threads
+        kill_wait_thread
       end
 
       private
@@ -168,6 +173,10 @@ module CC
       def kill_reader_threads
         @t_out.kill if @t_out
         @t_err.kill if @t_err
+      end
+
+      def kill_wait_thread
+        @t_wait.kill if @t_wait
       end
 
       def reap_running_container(message)
