@@ -33,6 +33,17 @@ following:
   correctly. That's why we ship the `codeclimate` wrapper script. Please take a
   look at the README for a working `docker run` example.
 
+- Are you having trouble using this project as a gem or not via Docker?
+
+  While this project is currently available as a gem, that is not a supported
+  use-case. It is more an accident of history due to the way our own
+  infrastructure is currently designed. Once we address this, we will stop
+  releasing this project as a gem.
+
+  We may accept Pull Requests that fix issues with using the project as a gem
+  (e.g. correcting version bounds), but we will not ourselves address any Issues
+  in this area.
+
 ## Guidelines
 
 If you'd still like to report this issue, please follow these guidelines:
