@@ -40,6 +40,8 @@ module CC
             @engine_options << @args.shift
           when "--dev"
             @dev_mode = true
+          when "--timeout"
+            ENV["CONTAINER_TIMEOUT_SECONDS"] = @args.shift
           else
             @path_options << arg
           end

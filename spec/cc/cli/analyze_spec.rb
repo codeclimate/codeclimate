@@ -113,6 +113,16 @@ module CC::CLI
           Analyze.new(%w[-f json])
         end
       end
+
+      describe "when a timeout argument is passed" do
+        it "sets the maximum container timeout in ENV" do
+
+          Analyze.new(%w[--timeout 1800])
+
+          expect(ENV["CONTAINER_TIMEOUT_SECONDS"]).to eq("1800")
+        end
+      end
+
     end
 
     def within_temp_dir(&block)
