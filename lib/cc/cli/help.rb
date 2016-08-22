@@ -14,7 +14,7 @@ module CC
 
       def commands
         [
-          "analyze [-f format] [-e engine(:channel)] <path>",
+          "analyze [-f format] [-e engine(:channel)] <path> [--dev dev mode] [--timeout seconds]",
           "console",
           "engines:disable #{underline("engine_name")}",
           "engines:enable #{underline("engine_name")}",
