@@ -1,4 +1,4 @@
-# Code Climate CLI<br>
+# Code Climate CLI
 
 [![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)
 
@@ -75,7 +75,7 @@ A list of available commands is accessible by running `codeclimate` or
 $ codeclimate help
 
 Available commands:
-    analyze [-f format]
+    analyze [-f format] [-e engine(:channel)] <path> [--dev]
     console
     engines:disable engine_name
     engines:enable engine_name
@@ -90,17 +90,64 @@ Available commands:
 
 The following is a brief explanation of each available command.
 
-* `analyze`: Analyze all relevant files in the current working directory. All engines that are enabled in your `.codeclimate.yml` file will run, one after another. The `-f` (or `format`) argument allows you to set the output format of the analysis (using `json`, `text`, or `html`).
-* `console`: start an interactive session providing access to the classes within the CLI. Useful for engine developers and maintainers.
-* `engines:disable engine_name`: Changes the engine's `enabled:` node to be `false` in your `.codeclimate.yml` file. This engine will not be run the next time your project is analyzed.
-* `engines:enable engine_name`: Installs the specified engine (`engine_name`). Also changes the engine's `enabled:` node to be `true` in your `.codeclimate.yml` file. This engine will be run the next time your project is analyzed.
-* `engines:install`: Compares the list of engines in your `.codeclimate.yml` file to those that are currently installed, then installs any missing engines.
-* `engines:list`: Lists all available engines in the [Code Climate Docker Hub](https://hub.docker.com/u/codeclimate/).
-* `engines:remove engine_name`: Removes an engine from your `.codeclimate.yml` file.
-* `help`: Displays a list of commands that can be passed to the Code Climate CLI.
-* `init`: Generates a new `.codeclimate.yml` file in the current working directory.
-* `validate-config`: Validates the `.codeclimate.yml` file in the current working directory.
-* `version`: Displays the current version of the Code Climate CLI.
+* `analyze`
+  Analyze all relevant files in the current working directory. All
+  engines that are enabled in your `.codeclimate.yml` file will run, one after
+  another. The `-f` (or `format`) argument allows you to set the output format of
+  the analysis (using `json`, `text`, or `html`). The `--dev` flag lets you run
+  engines not known to the CLI, for example if you're an engine author developing
+  your own, unreleased image.
+* `console`
+  start an interactive session providing access to the classes
+  within the CLI. Useful for engine developers and maintainers.
+* `engines:disable engine_name`
+  Changes the engine's `enabled:` node to be `false` in your `.codeclimate.yml`
+  file. This engine will not be run the next time your project is analyzed.
+* `engines:enable engine_name`
+  Installs the specified engine (`engine_name`). Also changes the engine's
+  `enabled:` node to be `true` in your `.codeclimate.yml` file. This engine
+  will be run the next time your project is analyzed.
+* `engines:install`
+  Compares the list of engines in your `.codeclimate.yml` file to those that
+  are currently installed, then installs any missing engines.
+* `engines:list`
+  Lists all available engines in the
+  [Code Climate Docker Hub](https://hub.docker.com/u/codeclimate/)
+  .
+* `engines:remove engine_name`
+  Removes an engine from your `.codeclimate.yml` file.
+* `help`
+  Displays a list of commands that can be passed to the Code Climate CLI.
+* `init`
+  Generates a new `.codeclimate.yml` file in the current working directory.
+* `validate-config`
+  Validates the `.codeclimate.yml` file in the current working directory.
+* `version`
+  Displays the current version of the Code Climate CLI.
+
+## Environment Variables
+
+* To run `codeclimate` in debug mode:
+
+  ```
+  CODECLIMATE_DEBUG=1 codeclimate analyze
+  ```
+
+  Prints additional information about the analysis steps, including any stderr
+  produced by engines.
+
+* To increase the amount of time each engine container may run (default 15 min):
+
+  ```
+  CONTAINER_TIMEOUT_SECONDS=1800 codeclimate analyze // 30 minutes
+  ```
+
+* You can also configure the default alotted memory with which each engine runs
+  (default is 512_000_000 bytes):
+
+  ```
+  ENGINE_MEMORY_LIMIT_BYTES=1_000_000_000 codeclimate analyze // 30 minutes
+  ```
 
 ## Copyright
 
