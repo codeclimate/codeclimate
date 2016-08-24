@@ -102,6 +102,33 @@ The following is a brief explanation of each available command.
 * `validate-config`: Validates the `.codeclimate.yml` file in the current working directory.
 * `version`: Displays the current version of the Code Climate CLI.
 
+## Debugging
+
+Occasionally light may be shed on issues encountered during analysis by turning
+on debug mode and tweaking some additional settings that may be configured via
+environment variables.
+
+- To run `codeclimate` in debug mode:
+
+  ```
+  CODECLIMATE_DEBUG=1 codeclimate analyze
+  ```
+
+  Prints additional information about the analysis steps, including any stderr
+  produced by engines.
+
+- To increase the amount of time each engine container may run (default 15 min):
+
+  ```
+  CONTAINER_TIMEOUT_SECONDS=1800 codeclimate analyze // 30 minutes
+  ```
+- You can also configure the default alotted memory with which each engine runs
+  (default is 512_000_000 bytes):
+
+  ```
+  ENGINE_MEMORY_LIMIT_BYTES=1_000_000_000 codeclimate analyze // 30 minutes
+  ```
+
 ## Copyright
 
 See [LICENSE](LICENSE)
