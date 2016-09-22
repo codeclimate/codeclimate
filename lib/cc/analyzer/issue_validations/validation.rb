@@ -17,6 +17,18 @@ module CC
         private
 
         attr_reader :object
+
+        def path
+          object.fetch("location", {})["path"]
+        end
+
+        def type
+          object["type"]
+        end
+
+        def content
+          object["content"]
+        end
       end
     end
   end

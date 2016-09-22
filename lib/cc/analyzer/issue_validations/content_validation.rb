@@ -15,10 +15,6 @@ module CC
         def has_content?
           object.key?("content")
         end
-
-        def content
-          object["content"]
-        end
       end
     end
   end

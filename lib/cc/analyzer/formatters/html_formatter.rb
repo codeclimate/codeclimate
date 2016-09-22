@@ -26,20 +26,6 @@ module CC
           end
         end
 
-        def write(data)
-          json = JSON.parse(data)
-          json["engine_name"] = current_engine.name
-
-          case json["type"].downcase
-          when "issue"
-            issues << json
-          when "warning"
-            warnings << json
-          else
-            raise "Invalid type found: #{json["type"]}"
-          end
-        end
-
         def finished
           template = ReportTemplate.new(issues.length, issues_by_path)
           puts template.render

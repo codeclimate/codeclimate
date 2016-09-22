@@ -9,12 +9,6 @@ module CC
         def message
           "Path must be present"
         end
-
-        private
-
-        def path
-          object.fetch("location", {})["path"]
-        end
       end
     end
   end

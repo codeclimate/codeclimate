@@ -22,10 +22,6 @@ module CC
 
           expanded_path.start_with?(expanded_base)
         end
-
-        def path
-          object.fetch("location", {})["path"]
-        end
       end
     end
   end
