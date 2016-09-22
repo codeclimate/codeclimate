@@ -2,6 +2,11 @@
 engines:
   rubocop:
     enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - "ruby"
   fixme:
     enabled: true
     exclude_paths:
