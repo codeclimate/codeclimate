@@ -14,16 +14,16 @@ test: image
 
 citest:
 	docker run \
+	  --entrypoint sh \
 	  --env CIRCLECI=$(CIRCLECI) \
 	  --env CIRCLE_BUILD_NUM=$(CIRCLE_BUILD_NUM) \
 	  --env CIRCLE_BRANCH=$(CIRCLE_BRANCH) \
 	  --env CIRCLE_SHA1=$(CIRCLE_SHA1) \
 	  --env CODECLIMATE_REPO_TOKEN=$(CODECLIMATE_REPO_TOKEN) \
-	  --entrypoint bundle \
 	  --volume $(PWD)/.git:/usr/src/app/.git:ro \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
 	  --volume $(CIRCLE_TEST_REPORTS):/usr/src/app/spec/reports \
-	  codeclimate/codeclimate exec rake spec:all spec:benchmark
+	  codeclimate/codeclimate -c "bundle exec rake spec:all && bundle exec codeclimate-test-reporter && bundle exec rake spec:benchmark"
 
 install:
 	bin/check
