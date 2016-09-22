@@ -23,7 +23,7 @@ citest:
 	  --volume $(PWD)/.git:/usr/src/app/.git:ro \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
 	  --volume $(CIRCLE_TEST_REPORTS):/usr/src/app/spec/reports \
-	  codeclimate/codeclimate -c "bundle exec rake spec:all spec:benchmark && bundle exec codeclimate-test-reporter"
+	  codeclimate/codeclimate -c "bundle exec rake spec:all && bundle exec codeclimate-test-reporter && bundle exec rake spec:benchmark"
 
 install:
 	bin/check
