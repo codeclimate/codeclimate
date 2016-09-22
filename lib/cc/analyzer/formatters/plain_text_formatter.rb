@@ -10,20 +10,6 @@ module CC
           puts colorize("Starting analysis", :green)
         end
 
-        def write(data)
-          json = JSON.parse(data)
-          json["engine_name"] = current_engine.name
-
-          case json["type"].downcase
-          when "issue"
-            issues << json
-          when "warning"
-            warnings << json
-          else
-            raise "Invalid type found: #{json["type"]}"
-          end
-        end
-
         def finished
           puts
 
