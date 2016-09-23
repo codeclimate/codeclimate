@@ -146,7 +146,7 @@ The following is a brief explanation of each available command.
   (default is 512_000_000 bytes):
 
   ```
-  ENGINE_MEMORY_LIMIT_BYTES=1_000_000_000 codeclimate analyze // 30 minutes
+  ENGINE_MEMORY_LIMIT_BYTES=1_000_000_000 codeclimate analyze // 1_000_000_000 bytes
   ```
 
 ## Copyright
