@@ -142,11 +142,13 @@ The following is a brief explanation of each available command.
   CONTAINER_TIMEOUT_SECONDS=1800 codeclimate analyze // 30 minutes
   ```
 
+  Note: CONTAINER_TIMEOUT_SECONDS is not currently honored in the CLI.
+
 * You can also configure the default alotted memory with which each engine runs
   (default is 512_000_000 bytes):
 
   ```
-  ENGINE_MEMORY_LIMIT_BYTES=1_000_000_000 codeclimate analyze // 30 minutes
+  ENGINE_MEMORY_LIMIT_BYTES=1_000_000_000 codeclimate analyze // 1_000_000_000 bytes
   ```
 
 ## Copyright
