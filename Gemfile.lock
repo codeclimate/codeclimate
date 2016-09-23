@@ -20,7 +20,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     builder (3.2.2)
-    codeclimate-test-reporter (1.0.0.pre.rc1)
+    codeclimate-test-reporter (1.0.0.pre.rc2)
     codeclimate-yaml (0.9.0)
       activesupport
       secure_string
@@ -74,7 +74,7 @@ PLATFORMS
 
 DEPENDENCIES
   codeclimate!
-  codeclimate-test-reporter (= 1.0.0.pre.rc1)
+  codeclimate-test-reporter (= 1.0.0.pre.rc2)
   rake
   rspec
   rspec_junit_formatter
