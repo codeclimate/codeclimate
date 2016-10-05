@@ -61,6 +61,7 @@ coffeelint:
     - "**.coffee"
 duplication:
   channels:
+    beta: codeclimate/codeclimate-duplication:beta
     stable: codeclimate/codeclimate-duplication
   description: Structural duplication detection for Ruby, Python, JavaScript, and PHP.
   community: false
