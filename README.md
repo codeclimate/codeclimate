@@ -139,14 +139,16 @@ The following is a brief explanation of each available command.
 * To increase the amount of time each engine container may run (default 15 min):
 
   ```
-  CONTAINER_TIMEOUT_SECONDS=1800 codeclimate analyze // 30 minutes
+  # 30 minutes
+  CONTAINER_TIMEOUT_SECONDS=1800 codeclimate analyze
   ```
 
 * You can also configure the default alotted memory with which each engine runs
-  (default is 512_000_000 bytes):
+  (default is 512,000,000 bytes):
 
   ```
-  ENGINE_MEMORY_LIMIT_BYTES=1_000_000_000 codeclimate analyze // 30 minutes
+  # 100,000,0000 bytes
+  ENGINE_MEMORY_LIMIT_BYTES=1000000000 codeclimate analyze
   ```
 
 ## Copyright
