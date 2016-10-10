@@ -59,6 +59,19 @@ coffeelint:
     - \.coffee$
   default_ratings_paths:
     - "**.coffee"
+credo:
+  channels:
+    beta: codeclimate/codeclimate-credo:beta
+  description: >
+    A static code analysis tool for the Elixir language with a focus on code
+    consistency and teaching.
+  community: true
+  enable_regexps:
+    - \.ex$
+    - \.exs$
+  default_ratings_paths:
+    - "**.ex"
+    - "**.exs"
 duplication:
   channels:
     beta: codeclimate/codeclimate-duplication:beta
