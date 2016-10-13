@@ -293,6 +293,7 @@ requiresafe:
 rubocop:
   channels:
     stable: codeclimate/codeclimate-rubocop
+    chanenel-support: codeclimate/codeclimate-rubocop:channel-support
   description: A Ruby static code analyzer, based on the community Ruby style guide.
   community: false
   upgrade_languages:
