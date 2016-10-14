@@ -63,7 +63,7 @@ brew upgrade codeclimate
 
 Create two files:
 
-codeclimate
+codeclimate (give this file execution permissions)
 
 ```szh
 #!/bin/sh
@@ -86,8 +86,8 @@ docker run --interactive --rm ^
 -v /var/run/docker.sock:/var/run/docker.sock ^
 -v %CODECLIMATE_CODE%:/code codeclimate/codeclimate %*
 ```
-Place the two file in the same folder and then add that folder to you PATH
 
+Place the two file in the same folder and then add that folder to you PATH
 for example
 
 ```console
