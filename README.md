@@ -59,6 +59,38 @@ brew update
 brew upgrade codeclimate
 ```
 
+### WINDOWS
+
+Create two files:
+
+codeclimate
+```szh
+#!/bin/sh
+codeclimate.cmd $@
+```
+
+codeclimate.cmd
+```bash
+@ECHO OFF
+SETLOCAL
+SET CODECLIMATE_CODE=%CD:\=/%
+SET CODECLIMATE_CODE=%CODECLIMATE_CODE:C:=/c%
+SET CODECLIMATE_TMP=%TEMP:\=/%/codeclimate
+SET CODECLIMATE_TMP=%CODECLIMATE_TMP:C:=/c%
+
+docker run --interactive --rm ^
+--env CODECLIMATE_CODE --env CODECLIMATE_TMP ^
+-v "%CODECLIMATE_TMP%":/tmp/cc ^
+-v /var/run/docker.sock:/var/run/docker.sock ^
+-v %CODECLIMATE_CODE%:/code codeclimate/codeclimate %*
+```
+Place the two file in the same folder and then add that folder to you PATH
+
+for example
+```console
+setx PATH %PATH%;C:\Program Files\codeclimate\
+```
+
 ### Anywhere
 
 ```console
