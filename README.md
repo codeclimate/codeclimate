@@ -64,12 +64,14 @@ brew upgrade codeclimate
 Create two files:
 
 codeclimate
+
 ```szh
 #!/bin/sh
 codeclimate.cmd $@
 ```
 
 codeclimate.cmd
+
 ```bash
 @ECHO OFF
 SETLOCAL
@@ -87,6 +89,7 @@ docker run --interactive --rm ^
 Place the two file in the same folder and then add that folder to you PATH
 
 for example
+
 ```console
 setx PATH %PATH%;C:\Program Files\codeclimate\
 ```
