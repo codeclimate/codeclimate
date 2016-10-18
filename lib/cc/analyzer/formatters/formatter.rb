@@ -40,6 +40,10 @@ module CC
         def failed(_output)
         end
 
+        def empty?
+          issues.empty?
+        end
+
         InvalidFormatterError = Class.new(StandardError)
 
         private

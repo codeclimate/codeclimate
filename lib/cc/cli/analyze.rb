@@ -20,6 +20,9 @@ module CC
           runner.run
         end
 
+        unless formatter.empty?
+          exit 1
+        end
       rescue EnginesRunner::InvalidEngineName => ex
         fatal(ex.message)
       rescue EnginesRunner::NoEnabledEngines
