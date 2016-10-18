@@ -36,7 +36,7 @@ module CC::Analyzer
         listener.finished(double(duration: 10, status: double(success?: true)))
       end
 
-      it "increments a metric for failure" do
+      it "increments a metric for error" do
         statsd = double(timing: nil, increment: nil)
         expect(statsd).to receive(:timing).with("engines.time", 10)
         expect(statsd).to receive(:increment).with("engines.finished")

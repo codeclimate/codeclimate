@@ -27,8 +27,8 @@ module CC
           @emitted = true
         end
 
-        def failed(output)
-          $stderr.puts "\nAnalysis failed with the following output:"
+        def errored(output)
+          $stderr.puts "\nAnalysis errored with the following output:"
           $stderr.puts output
           exit 1
         end

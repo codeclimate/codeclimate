@@ -1,9 +1,9 @@
 module CC
   module Analyzer
     class RaisingContainerListener < ContainerListener
-      def initialize(engine_name, failure_ex, timeout_ex)
+      def initialize(engine_name, error_ex, timeout_ex)
         @engine_name = engine_name
-        @failure_ex = failure_ex
+        @error_ex = error_ex
         @timeout_ex = timeout_ex
       end
 
@@ -16,17 +16,17 @@ module CC
 
       def finished(data)
         unless data.status.success?
-          message = "engine #{engine_name} failed"
+          message = "engine #{engine_name} errored"
           message << " with status #{data.status.exitstatus}"
           message << " and stderr \n#{data.stderr}"
 
-          raise failure_ex, message
+          raise error_ex, message
         end
       end
 
       private
 
-      attr_reader :engine_name, :failure_ex, :timeout_ex
+      attr_reader :engine_name, :error_ex, :timeout_ex
     end
   end
 end

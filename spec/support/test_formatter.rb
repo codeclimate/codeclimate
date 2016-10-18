@@ -9,7 +9,7 @@ class TestFormatter
     string << data
   end
 
-  def failed(output)
+  def errored(output)
     output
   end
 end

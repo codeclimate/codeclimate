@@ -37,7 +37,7 @@ module CC
         def close
         end
 
-        def failed(_output)
+        def errored(_output)
         end
 
         def empty?
