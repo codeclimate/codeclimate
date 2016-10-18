@@ -60,7 +60,16 @@ module CC
 
         def render_readup_markdown(body)
           html = Redcarpet::Render::HTML.new(escape_html: false, link_attributes: { target: "_blank" })
-          Redcarpet::Markdown.new(html, autolink: true, fenced_code_blocks: true, tables: true).render(body)
+          Redcarpet::Markdown.new(html, markdown_options).render(body)
+        end
+
+        def markdown_options
+          {
+            autolink: true,
+            fenced_code_blocks: true,
+            no_intra_emphasis: true,
+            tables: true,
+          }
         end
       end
     end
