@@ -29,11 +29,16 @@ module CC
             puts
           end
 
-          print(colorize("Analysis complete! Found #{pluralize(issues.size, "issue")}", :green))
-          if warnings.size > 0
-            print(colorize(" and #{pluralize(warnings.size, "warning")}", :green))
+          if issues.size > 0
+            print(colorize("Analysis complete! Found #{pluralize(issues.size, "issue")}.", :red))
+          else
+            print(colorize("Analysis complete! No issues found!", :green))
           end
-          puts(colorize(".", :green))
+
+          if warnings.size > 0
+            print(colorize("Found #{pluralize(warnings.size, "warning")}.", :yellow))
+          end
+          puts
         end
 
         def engine_running(engine, &block)
