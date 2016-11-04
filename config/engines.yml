@@ -335,6 +335,19 @@ shellcheck:
     - \.sh$
   default_ratings_paths:
     - "**.sh"
+stylelint:
+  channels:
+    beta: codeclimate/codeclimate-stylelint:beta
+  description: A mighty, modern CSS linter
+  community: true
+  enable_regexps:
+    - \.less$
+    - \.scss$
+    - \.sss$
+  default_ratings_paths:
+    - "**.less"
+    - "**.scss"
+    - "**.sss"
 tailor:
   channels:
     stable: codeclimate/codeclimate-tailor
