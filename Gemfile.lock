@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.38.1)
+    codeclimate (0.40.1)
       activesupport (>= 4.2.1, < 5.1)
-      codeclimate-yaml (~> 0.9.0)
+      codeclimate-yaml (~> 0.10.0)
       highline (~> 1.7, >= 1.7.2)
       posix-spawn (~> 0.3, >= 0.3.11)
       pry (~> 0.10.1)
@@ -21,7 +21,7 @@ GEM
       tzinfo (~> 1.1)
     builder (3.2.2)
     codeclimate-test-reporter (1.0.0.pre.rc2)
-    codeclimate-yaml (0.9.0)
+    codeclimate-yaml (0.10.1)
       activesupport
       secure_string
     coderay (1.1.1)
@@ -33,7 +33,7 @@ GEM
     json (1.8.3)
     method_source (0.8.2)
     minitest (5.9.1)
-    posix-spawn (0.3.11)
+    posix-spawn (0.3.12)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -81,4 +81,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   1.13.3
+   1.13.6
