@@ -11,6 +11,7 @@ module CC
     autoload :Command, "cc/cli/command"
     autoload :Console, "cc/cli/console"
     autoload :Engines, "cc/cli/engines"
+    autoload :Dependencies, "cc/cli/dependencies"
     autoload :Help, "cc/cli/help"
     autoload :Init, "cc/cli/init"
     autoload :Runner, "cc/cli/runner"
