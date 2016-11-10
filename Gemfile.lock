@@ -21,7 +21,7 @@ GEM
       tzinfo (~> 1.1)
     builder (3.2.2)
     codeclimate-test-reporter (1.0.0.pre.rc2)
-    codeclimate-yaml (0.10.2)
+    codeclimate-yaml (0.10.3)
       activesupport
       secure_string
     coderay (1.1.1)
