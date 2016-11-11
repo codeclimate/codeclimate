@@ -21,7 +21,7 @@ module CC
           "engines:install",
           "engines:list",
           "engines:remove #{underline("engine_name")}",
-          "dependencies",
+          "prepare",
           "help",
           "init",
           "validate-config",
