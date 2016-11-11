@@ -9,7 +9,7 @@ require "uri"
 
 module CC
   module CLI
-    class Dependencies < Command
+    class Prepare < Command
       InternalHostError = Class.new(StandardError)
       FetchError = Class.new(StandardError)
 
@@ -24,10 +24,10 @@ module CC
 
       def run
         require_codeclimate_yml
-        fatal("No file dependencies configured") unless files.present?
+        fatal("No fetches configured") unless fetches.present?
 
         ::CC::Resolv.with_fixed_dns { fetch_all }
-        success("All file dependencies fetched")
+        success("All fetches fetched")
       rescue FetchError, InternalHostError => ex
         fatal(ex.message)
       end
@@ -38,8 +38,8 @@ module CC
         @args.include?("--allow-internal-ips")
       end
 
-      def files
-        @files ||= config.dependencies && config.dependencies.files
+      def fetches
+        @fetches ||= config[:prepare] && config[:prepare].fetch
       end
 
       def config
@@ -47,7 +47,7 @@ module CC
       end
 
       def fetch_all
-        files.each do |entry|
+        fetches.each do |entry|
           fetch(entry.url, entry.path)
         end
       end

@@ -1,13 +1,13 @@
 require "spec_helper"
 
 module CC::CLI
-  describe Dependencies do
+  describe Prepare do
     include FileSystemHelpers
     include ProcHelpers
 
     FIXTURE_CONFIG = <<YAML
-dependencies:
-  files:
+prepare:
+  fetch:
   - url: "http://example.com/foo.json"
     path: bar.json
 YAML
@@ -23,7 +23,7 @@ YAML
 
         stub_resp("example.com", "255.255.255.255", resp)
         stdout, stderr = capture_io do
-          Dependencies.new.run
+          Prepare.new.run
         end
         expect(stdout).to match("Wrote http://example.com/foo.json to bar.json")
 
@@ -37,7 +37,7 @@ YAML
 
         stub_resp("example.com", "127.0.0.1", resp)
         stdout, stderr, _ = capture_io_and_exit_code do
-          Dependencies.new.run
+          Prepare.new.run
         end
         expect(stderr).to match("maps to an internal address")
 
@@ -50,7 +50,7 @@ YAML
 
         stub_resp("example.com", "127.0.0.1", resp)
         stdout, stderr = capture_io do
-          Dependencies.new(["--allow-internal-ips"]).run
+          Prepare.new(["--allow-internal-ips"]).run
         end
         expect(stdout).to match("Wrote http://example.com/foo.json to bar.json")
 
@@ -64,7 +64,7 @@ YAML
 
         stub_resp("example.com", "255.255.255.255", resp)
         stdout, stderr, _ = capture_io_and_exit_code do
-          Dependencies.new.run
+          Prepare.new.run
         end
         expect(stderr).to match("Failed fetching")
 
