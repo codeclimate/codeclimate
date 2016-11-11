@@ -11,6 +11,8 @@ module ProcHelpers
     yield
 
     [$stdout.string, $stderr.string]
+  rescue SystemExit => ex
+    fail  "Unexpected SystemExit in capture_io: stdout=#{$stdout.string}, stderr=#{$stderr.string}"
   ensure
     $stdout = stdout
     $stderr = stdout
