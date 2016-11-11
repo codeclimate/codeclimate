@@ -3,7 +3,7 @@ PATH
   specs:
     codeclimate (0.41.0)
       activesupport (>= 4.2.1, < 5.1)
-      codeclimate-yaml (~> 0.10.0)
+      codeclimate-yaml (~> 0.11.0)
       highline (~> 1.7, >= 1.7.2)
       posix-spawn (~> 0.3, >= 0.3.11)
       pry (~> 0.10.1)
@@ -21,7 +21,7 @@ GEM
       tzinfo (~> 1.1)
     builder (3.2.2)
     codeclimate-test-reporter (1.0.0.pre.rc2)
-    codeclimate-yaml (0.10.3)
+    codeclimate-yaml (0.11.0)
       activesupport
       secure_string
     coderay (1.1.1)
