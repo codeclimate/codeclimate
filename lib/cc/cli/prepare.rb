@@ -26,7 +26,9 @@ module CC
         require_codeclimate_yml
         fatal("No fetches configured") unless fetches.present?
 
-        ::CC::Resolv.with_fixed_dns { fetch_all }
+        Dir.chdir(CC::Analyzer::MountedPath.code.container_path) do
+          ::CC::Resolv.with_fixed_dns { fetch_all }
+        end
         success("All fetches fetched")
       rescue FetchError, InternalHostError => ex
         fatal(ex.message)
