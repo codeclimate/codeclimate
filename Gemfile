@@ -7,5 +7,5 @@ group :test do
   gem "rake"
   gem "rspec"
   gem "rspec_junit_formatter"
-  gem "codeclimate-test-reporter", "1.0.0.pre.rc2"
+  gem "codeclimate-test-reporter", "~> 1.0.0"
 end
