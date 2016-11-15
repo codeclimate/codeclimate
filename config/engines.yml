@@ -59,6 +59,17 @@ coffeelint:
     - \.coffee$
   default_ratings_paths:
     - "**.coffee"
+codescan:
+  channels:
+    beta: codeclimate/codeclimate-codescan:beta
+  description: >
+    A static analysis tool for Salesforce.com Apex, Visual Force, Aura and
+    Lightning.
+  community: true
+  enable_regexps:
+    - \.cls$
+  default_ratings_paths:
+    - "**.cls"
 credo:
   channels:
     beta: codeclimate/codeclimate-credo:beta
