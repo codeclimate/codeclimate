@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.42.0)
+    codeclimate (0.43.0)
       activesupport (>= 4.2.1, < 5.1)
       codeclimate-yaml (~> 0.11.0)
       highline (~> 1.7, >= 1.7.2)
@@ -20,7 +20,8 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     builder (3.2.2)
-    codeclimate-test-reporter (1.0.0.pre.rc2)
+    codeclimate-test-reporter (1.0.3)
+      simplecov
     codeclimate-yaml (0.11.0)
       activesupport
       secure_string
@@ -74,7 +75,7 @@ PLATFORMS
 
 DEPENDENCIES
   codeclimate!
-  codeclimate-test-reporter (= 1.0.0.pre.rc2)
+  codeclimate-test-reporter (~> 1.0.0)
   rake
   rspec
   rspec_junit_formatter
