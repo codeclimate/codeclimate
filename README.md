@@ -75,10 +75,10 @@ A list of available commands is accessible by running `codeclimate` or
 $ codeclimate help
 
 Available commands:
-    analyze [-f format] [-e engine(:channel)] <path> [--dev]
+    analyze [-f format] [-e engine(:channel)] [--dev] [path]
     console
-    engines:disable engine_name
-    engines:enable engine_name
+    engines:disable <engine_name>
+    engines:enable <engine_name>
     engines:install
     engines:list
     engines:remove
@@ -97,6 +97,12 @@ The following is a brief explanation of each available command.
   the analysis (using `json`, `text`, or `html`). The `--dev` flag lets you run
   engines not known to the CLI, for example if you're an engine author developing
   your own, unreleased image.
+
+  You can optionally provide a specific path to analyze. If not provided, the
+  CLI will analyze your entire repository, except for your configured
+  `exclude_paths`. When you do provide an explicit path to analyze, your
+  configured `exclude_paths` are ignored, and normally excluded files will be
+  analyzed.
 * `console`
   start an interactive session providing access to the classes
   within the CLI. Useful for engine developers and maintainers.
