@@ -22,11 +22,11 @@ module CC
       private
 
       def engine_eligible?(engine)
-        base_eligble = super
+        base_eligible = super
         if engine["upgrade_languages"].present?
-          base_eligble && (engine["upgrade_languages"] & classic_languages).any?
+          base_eligible && (engine["upgrade_languages"] & classic_languages).any?
         else
-          base_eligble
+          base_eligible
         end
       end
 
