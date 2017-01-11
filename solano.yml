@@ -1,8 +1,0 @@
-ruby_version: ruby-2.2.2
-bundler_version: 1.13.6
-environment:
-  'CODECLIMATE_REPO_TOKEN': 'ff371333a151338708d2e42b3ef68594ddf909597a145c24e68eb88e700cdf6a'
-test_pattern:
-  - spec/**/*_spec.rb
-tests:
-  - bundle exec rake
