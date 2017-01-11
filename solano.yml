@@ -1,0 +1,6 @@
+ruby_version: ruby-2.2.2
+bundler_version: 1.13.6
+test_pattern:
+  - spec/**/*_spec.rb
+tests:
+  - bundle exec rake
