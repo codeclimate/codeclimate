@@ -24,8 +24,7 @@ module CC::Analyzer::Formatters
           formatter.finished
         end
 
-        expect(stdout).to include("1 issue found in 1 files.")
-        expect(stdout).to include("<a name='lib/cc/analyzer/config.rb'>lib/cc/analyzer/config.rb</a> (1 issue)")
+        expect(stdout).to include("lib/cc/analyzer/config.rb")
         expect(stdout).to include("<h3>Sample Issue</h3>")
       end
     end
