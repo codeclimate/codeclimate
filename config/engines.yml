@@ -41,6 +41,15 @@ bundler-audit:
     - ^Gemfile\.lock$
   default_ratings_paths:
     - Gemfile.lock
+checkstyle:
+  channels:
+    beta: codeclimate/codeclimate-checkstyle:beta
+  description: Helps programmers write Java that adheres to a coding standard.
+  community: false
+  enable_regexps:
+    - \.java$
+  default_ratings_paths:
+    - "**.java"
 csslint:
   channels:
     stable: codeclimate/codeclimate-csslint
