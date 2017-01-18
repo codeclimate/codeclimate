@@ -294,6 +294,15 @@ phpmd:
     - "**.php"
     - "**.module"
     - "**.inc"
+pmd:
+  channels:
+    beta: codeclimate/codeclimate-pmd:beta
+  description: Source code analyzer for Java.
+  community: false
+  enable_regexps:
+    - \.java$
+  default_ratings_paths:
+    - "**.java"
 radon:
   channels:
     stable: codeclimate/codeclimate-radon
