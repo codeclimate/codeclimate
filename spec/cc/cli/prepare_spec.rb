@@ -71,10 +71,5 @@ YAML
         expect(File.exist?("bar.json")).to eq(false)
       end
     end
-
-    def stub_resp(host, addr, resp)
-      stub_resolv(host, addr)
-      allow(Net::HTTP).to receive(:get_response).and_return(resp)
-    end
   end
 end
