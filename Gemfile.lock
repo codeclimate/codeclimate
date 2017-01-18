@@ -20,7 +20,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     builder (3.2.3)
-    codeclimate-test-reporter (1.0.5)
+    codeclimate-test-reporter (1.0.6)
       simplecov
     codeclimate-yaml (0.12.0)
       activesupport
@@ -80,3 +80,6 @@ DEPENDENCIES
   rspec
   rspec_junit_formatter
   simplecov
+
+BUNDLED WITH
+   1.14.3
