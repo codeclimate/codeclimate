@@ -269,6 +269,10 @@ module CC
             collection.push(issue)
           end
 
+          def any?
+            collection.any?
+          end
+
           def syntaxes
             collection.flat_map do |issue|
               issue.source.syntaxes

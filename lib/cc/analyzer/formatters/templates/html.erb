@@ -232,8 +232,15 @@
             list.classList.add('filter-engine-all');
           }
 
-          updateInView();
-          enableInView();
+          if (list.offsetHeight) {
+            $('#filtered-out-message').hide();
+
+            updateInView();
+            enableInView();
+          }
+          else {
+            $('#filtered-out-message').show();
+          }
         }
 
         $('#category-filter, #engine-filter').on('change', applyFilters);
@@ -531,6 +538,7 @@
         background: #fff;
         padding: 20px;
         overflow: hidden;
+        position: relative;
       }
       .issue-filters {
         float: right;
@@ -552,6 +560,10 @@
         border-bottom: 1px solid #f6f6f5;
         padding-top: 10px;
         padding-bottom: 20px;
+      }
+      #smells > li:last-of-type {
+        border-bottom: 0px none;
+        padding-bottom: 0;
       }
       #smells > li > h2 {
         font-weight: bold;
@@ -615,6 +627,27 @@
       details[open] summary::before {
         content: "▼ ";
       }
+
+      #filtered-out-message {
+        display: none;
+        text-align: center;
+        position: absolute;
+        left: 0;
+        width: 720px;
+        text-align: center;
+        top: 50%;
+        margin-top: -1em;
+        line-height: 2em;
+      }
+
+      #no-issues-message {
+        text-align: center;
+      }
+      #no-issues-message::before {
+        content: "🎉";
+        font-size: 3em;
+          display: block;
+      }
     </style>
   </head>
   <body>
@@ -633,63 +666,70 @@
         </ul>
       </nav>
       <div id="main-container">
-        <div class="issue-filters">
-          <label for="category-filter">Category</label>
-          <select id="category-filter">
-            <option value="">All Categories</option>
-            <%- issues.categories.each do |category| -%>
-            <option value="<%= param category %>"><%= category %></option>
+        <%- if issues.any? %>
+          <div class="issue-filters">
+            <label for="category-filter">Category</label>
+            <select id="category-filter">
+              <option value="">All Categories</option>
+              <%- issues.categories.each do |category| -%>
+              <option value="<%= param category %>"><%= category %></option>
+              <%- end -%>
+            </select>
+            <label for="engine-filter">Engine</label>
+            <select id="engine-filter">
+              <option value="">All Engines</option>
+              <%- issues.engines.each do |engine| -%>
+              <option value="<%= param engine %>"><%= engine %></option>
+              <%- end -%>
+            </select>
+          </div>
+          <ul id="smells">
+            <%- issues.each do |issue| -%>
+            <li
+              data-categories="<%= params issue.categories %>"
+              data-engine="<%= param issue.engine_name %>">
+              <h2><%= h issue.description %></h2>
+              <div class="code">
+                <pre class="line-numbers <%= issue.source.syntaxes.map {|l| "language-#{l}" }.join ' ' %>"
+                  data-line="<%= issue.location %>"><code><%=
+                  h issue.source.code
+                %></code></pre>
+              </div>
+              <a href="#" class="code-toggle">View more</a>
+              <%- if issue.other_locations.any? %>
+                <details>
+                  <summary>Other instances</summary>
+                  <%- issue.other_locations.each do |source, location| -%>
+                    <h4><%= source.path %></h3>
+                    <div class="code">
+                      <pre class="line-numbers <%= source.syntaxes.map { |l| "language-#{l}" }.join ' ' %>"
+                        data-line="<%= source.location location %>"><code><%=
+                        source.code
+                      %></code></pre>
+                    </div>
+                    <a href="#" class="code-toggle">View more</a>
+                  <%- end -%>
+                </details>
+              <%- end -%>
+              <%- if issue.body -%>
+                <details>
+                  <summary>Details</summary>
+                  <%= issue.body -%>
+                </details>
+              <%- end -%>
+              <div class="found-in">
+                Found in <%= h issue.source.path %> by
+                <a href="https://docs.codeclimate.com/docs/<%= issue.engine_name %>"><%= issue.engine_name %></a>
+              </div>
+            </li>
             <%- end -%>
-          </select>
-          <label for="engine-filter">Engine</label>
-          <select id="engine-filter">
-            <option value="">All Engines</option>
-            <%- issues.engines.each do |engine| -%>
-            <option value="<%= param engine %>"><%= engine %></option>
-            <%- end -%>
-          </select>
-        </div>
-        <ul id="smells">
-          <%- issues.each do |issue| -%>
-          <li
-            data-categories="<%= params issue.categories %>"
-            data-engine="<%= param issue.engine_name %>">
-            <h2><%= h issue.description %></h2>
-            <div class="code">
-              <pre class="line-numbers <%= issue.source.syntaxes.map {|l| "language-#{l}" }.join ' ' %>"
-                data-line="<%= issue.location %>"><code><%=
-                h issue.source.code
-              %></code></pre>
-            </div>
-            <a href="#" class="code-toggle">View more</a>
-            <%- if issue.other_locations.any? %>
-              <details>
-                <summary>Other instances</summary>
-                <%- issue.other_locations.each do |source, location| -%>
-                  <h4><%= source.path %></h3>
-                  <div class="code">
-                    <pre class="line-numbers <%= source.syntaxes.map { |l| "language-#{l}" }.join ' ' %>"
-                      data-line="<%= source.location location %>"><code><%=
-                      source.code
-                    %></code></pre>
-                  </div>
-                  <a href="#" class="code-toggle">View more</a>
-                <%- end -%>
-              </details>
-            <%- end -%>
-            <%- if issue.body -%>
-              <details>
-                <summary>Details</summary>
-                <%= issue.body -%>
-              </details>
-            <%- end -%>
-            <div class="found-in">
-              Found in <%= h issue.source.path %> by
-              <a href="https://docs.codeclimate.com/docs/<%= issue.engine_name %>"><%= issue.engine_name %></a>
-            </div>
-          </li>
-          <%- end -%>
-        </ul>
+          </ul>
+          <div id="filtered-out-message">All issues have been filtered out</div>
+        <%- else %>
+          <div id="no-issues-message">
+            No issues have been found!
+          </div>
+        <%- end -%>
       </div>
     </div>
   </div>
