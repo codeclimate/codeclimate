@@ -8,8 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-clike.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
-    <%- languages.each do |lang| -%>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-<%= lang %>.min.js"></script>
+    <%- issues.syntaxes.each do |syntax| -%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-<%= syntax %>.min.js"></script>
     <%- end -%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-numbers/prism-line-numbers.min.css" />
@@ -249,23 +249,23 @@
       });
     </script>
     <style>
-      <%- categories.each do |category| -%>
+      <%- issues.categories.each do |category| -%>
       .filter-category-<%= param category %> > li,
       <%- end -%>
-      <%- engines.each do |engine| -%>
-      .filter-engine-bug-<%= param engine %> > li,
+      <%- issues.engines.each do |engine| -%>
+      .filter-engine-<%= param engine %> > li,
       <%- end -%>
       .filter-none > li {
         display: none;
       }
 
-      <%- engines.each do |engine| -%>
+      <%- issues.engines.each do |engine| -%>
       .filter-category-all.filter-engine-<%= param engine%> > li[data-engine="<%= param engine %>"],
       <%- end -%>
-      <%- categories.each do |category| -%>
+      <%- issues.categories.each do |category| -%>
       .filter-category-<%= param category %>.filter-engine-all > li[data-categories~="<%= param category %>"],
       <%- end -%>
-      <%- (['all'] + categories).product(['all'] + engines).each do |category, engine| -%>
+      <%- (['all'] + issues.categories).product(['all'] + issues.engines).each do |category, engine| -%>
       .filter-category-<%= param category %>.filter-engine-<%= param engine%> > li[data-categories~="<%= param category %>"][data-engine="<%= param engine %>"],
       <%- end -%>
       .filter-category-all.filter-engine-all > li {
@@ -637,14 +637,14 @@
           <label for="category-filter">Category</label>
           <select id="category-filter">
             <option value="">All Categories</option>
-            <%- categories.each do |category| -%>
+            <%- issues.categories.each do |category| -%>
             <option value="<%= param category %>"><%= category %></option>
             <%- end -%>
           </select>
           <label for="engine-filter">Engine</label>
           <select id="engine-filter">
             <option value="">All Engines</option>
-            <%- engines.each do |engine| -%>
+            <%- issues.engines.each do |engine| -%>
             <option value="<%= param engine %>"><%= engine %></option>
             <%- end -%>
           </select>
@@ -652,40 +652,40 @@
         <ul id="smells">
           <%- issues.each do |issue| -%>
           <li
-            data-categories="<%= params issue["categories"] %>"
-            data-engine="<%= param issue["engine_name"] %>">
-            <h2><%= h issue['description'] %></h2>
+            data-categories="<%= params issue.categories %>"
+            data-engine="<%= param issue.engine_name %>">
+            <h2><%= h issue.description %></h2>
             <div class="code">
-              <pre class="line-numbers <%= lang(issue).map {|l| "language-#{l}" }.join ' ' %>"
-                data-line="<%= location issue %>"><code><%=
-                code issue["location"]["path"]
+              <pre class="line-numbers <%= issue.source.syntaxes.map {|l| "language-#{l}" }.join ' ' %>"
+                data-line="<%= issue.location %>"><code><%=
+                h issue.source.code
               %></code></pre>
             </div>
             <a href="#" class="code-toggle">View more</a>
-            <%- if other_locations(issue).any? %>
+            <%- if issue.other_locations.any? %>
               <details>
                 <summary>Other instances</summary>
-                <%- other_locations(issue).each do |path, lines| -%>
-                  <h4><%= path %></h3>
+                <%- issue.other_locations.each do |source, location| -%>
+                  <h4><%= source.path %></h3>
                   <div class="code">
-                    <pre class="line-numbers <%= lang(issue).map {|l| "language-#{l}" }.join ' ' %>"
-                      data-line="<%= lines %>"><code><%=
-                      code path
+                    <pre class="line-numbers <%= source.syntaxes.map { |l| "language-#{l}" }.join ' ' %>"
+                      data-line="<%= source.location location %>"><code><%=
+                      source.code
                     %></code></pre>
                   </div>
                   <a href="#" class="code-toggle">View more</a>
                 <%- end -%>
               </details>
             <%- end -%>
-            <%- if body? issue -%>
+            <%- if issue.body -%>
               <details>
                 <summary>Details</summary>
-                <%= body(issue) -%>
+                <%= issue.body -%>
               </details>
             <%- end -%>
             <div class="found-in">
-              Found in <%= h issue["location"]["path"] %> by
-              <a href="https://docs.codeclimate.com/docs/<%= issue["engine_name"] %>"><%= issue["engine_name"] %></a>
+              Found in <%= h issue.source.path %> by
+              <a href="https://docs.codeclimate.com/docs/<%= issue.engine_name %>"><%= issue.engine_name %></a>
             </div>
           </li>
           <%- end -%>

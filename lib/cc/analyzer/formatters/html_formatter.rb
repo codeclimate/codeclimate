@@ -154,21 +154,149 @@ module CC
                       "yml" => "yaml",
                     ).freeze
 
+        class SourceFile
+          def initialize(path, filesystem)
+            @path = path
+            @filesystem = filesystem
+          end
+
+          attr_reader :path
+
+          def syntaxes
+            ext = File.basename(path).split(".").last.downcase
+            Array(LANGUAGES[ext])
+          end
+
+          def code
+            filesystem.read_path(path)
+          end
+
+          def buffer
+            SourceBuffer.new(path, code)
+          end
+
+          def location(loc)
+            LocationDescription.new(buffer, loc)
+          end
+
+          private
+
+          attr_reader :filesystem
+        end
+
+        class Issue
+          MARKDOWN_CONFIG = { autolink: true, fenced_code_blocks: true, no_intra_emphasis: true, tables: true }.freeze
+
+          def initialize(data, filesystem)
+            @data = data
+            @filesystem = filesystem
+          end
+
+          def description
+            data["description"]
+          end
+
+          def body
+            @body ||=
+              begin
+                text = data.fetch("content", {}).fetch("body", "").strip
+                unless text.empty?
+                  markdown(text)
+                end
+              end
+          end
+
+          def source
+            @source ||= SourceFile.new(
+              data.fetch("location", {}).fetch("path", ""),
+              filesystem,
+            )
+          end
+
+          def location
+            @location ||=
+              LocationDescription.new(
+                source.buffer,
+                data["location"],
+              )
+          end
+
+          def other_locations
+            @other_locations ||=
+              begin
+                data.fetch("other_locations", []).map do |loc|
+                  [SourceFile.new(loc["path"], filesystem), loc]
+                end.to_h
+              end
+          end
+
+          def categories
+            data.fetch("categories", [])
+          end
+
+          def engine_name
+            data["engine_name"]
+          end
+
+          private
+
+          attr_reader :data, :filesystem
+
+          def markdown(text)
+            html = Redcarpet::Render::HTML.new(
+              escape_html: false,
+              link_attributes: { target: "_blank" },
+            )
+            redcarpet = Redcarpet::Markdown.new(html, MARKDOWN_CONFIG)
+            redcarpet.render(text)
+          end
+        end
+
+        class IssueCollection
+          def initialize(filesystem)
+            @collection = []
+            @filesystem = filesystem
+          end
+
+          def each(&block)
+            collection.each(&block)
+          end
+
+          def <<(issue)
+            if issue.is_a? Hash
+              issue = Issue.new(issue, filesystem)
+            end
+            collection.push(issue)
+          end
+
+          def syntaxes
+            collection.flat_map do |issue|
+              issue.source.syntaxes
+            end.uniq.sort
+          end
+
+          def categories
+            collection.flat_map(&:categories).uniq.sort
+          end
+
+          def engines
+            collection.map(&:engine_name).uniq.compact.sort
+          end
+
+          private
+
+          attr_reader :collection, :filesystem
+        end
+
         class ReportTemplate
           include ERB::Util
           attr_reader :issues
 
           TEMPLATE_PATH = File.expand_path(File.join(File.dirname(__FILE__), "templates/html.erb"))
 
-          MARKDOWN_CONFIG = { autolink: true, fenced_code_blocks: true, no_intra_emphasis: true, tables: true }.freeze
-
           def initialize(issues, filesystem)
             @issues = issues
             @filesystem = filesystem
-          end
-
-          def project_name
-            File.basename(filesystem.root)
           end
 
           def render
@@ -176,57 +304,8 @@ module CC
             ERB.new(template, nil, "-").result(binding)
           end
 
-          def lang(issue)
-            ext = File.basename(issue["location"]["path"]).split(".").last.downcase
-            Array(LANGUAGES[ext])
-          end
-
-          def body?(issue)
-            issue["content"] && issue["content"]["body"] &&
-              !issue["content"]["body"].strip.empty?
-          end
-
-          def body(issue)
-            return "" unless body?(issue)
-
-            content = issue["content"]["body"].strip
-            markdown(content)
-          end
-
-          def code(path)
-            h filesystem.read_path(path)
-          end
-
-          def location(issue)
-            (lines(issue["location"]["lines"]) ||
-             positions(issue)).uniq.sort.join("-")
-          end
-
-          def other_locations(issue)
-            locations = issue.fetch("other_locations", [])
-            Hash[
-              locations.map do |loc|
-                [loc["path"], lines(loc["lines"]).uniq.sort.join("-")]
-              end
-            ]
-          end
-
-          def languages
-            issues.flat_map do |issue|
-              lang issue
-            end.uniq.sort
-          end
-
-          def categories
-            issues.flat_map do |issue|
-              issue["categories"]
-            end.uniq.sort
-          end
-
-          def engines
-            issues.map do |issue|
-              issue["engine_name"]
-            end.uniq.sort
+          def project_name
+            File.basename(filesystem.root)
           end
 
           def param(str)
@@ -240,37 +319,6 @@ module CC
           private
 
           attr_reader :filesystem
-
-          def redcarpet
-            @redcarpet ||=
-              begin
-                html = Redcarpet::Render::HTML.new(
-                  escape_html: false,
-                  link_attributes: { target: "_blank" },
-                )
-                Redcarpet::Markdown.new(html, MARKDOWN_CONFIG)
-              end
-          end
-
-          def markdown(text)
-            redcarpet.render(text)
-          end
-
-          def positions(issue)
-            positions = issue["location"]["positions"]
-            if positions
-              [
-                positions["begin"]["line"],
-                positions["end"]["line"],
-              ].uniq.sort.join("-")
-            end
-          end
-
-          def lines(lines)
-            if lines
-              [lines["begin"], lines["end"]]
-            end
-          end
         end
 
         def finished
@@ -284,7 +332,7 @@ module CC
         private
 
         def issues
-          @issues ||= []
+          @issues ||= IssueCollection.new(@filesystem)
         end
 
         def warnings
