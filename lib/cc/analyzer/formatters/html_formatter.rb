@@ -154,6 +154,69 @@ module CC
                       "yml" => "yaml",
                     ).freeze
 
+        class Location
+          CONTEXT_LINES = 2
+          MAX_LINES = 10
+
+          def initialize(source_buffer, location)
+            @source_buffer = source_buffer
+            @location = location
+          end
+
+          def begin_line
+            @begin_line ||= line("begin")
+          end
+
+          def end_line
+            @end_line ||= line("end")
+          end
+
+          def to_s
+            [
+              begin_line,
+              end_line,
+            ].uniq.join("-")
+          end
+
+          def start
+            [begin_line - CONTEXT_LINES, 1].max
+          end
+
+          def line_offset
+            start - 1
+          end
+
+          def code
+            first_line = start
+            last_line = [
+              end_line + CONTEXT_LINES,
+              begin_line + MAX_LINES + CONTEXT_LINES,
+              source_buffer.line_count,
+            ].min
+            source_buffer.source.lines[(first_line - 1)..(last_line - 1)].join("")
+          end
+
+          private
+
+          attr_reader :location, :source_buffer
+
+          def line(type)
+            if location["lines"]
+              location["lines"][type]
+            elsif location["positions"]
+              position_to_line(location["positions"][type])
+            end
+          end
+
+          def position_to_line(position)
+            if position["line"]
+              position["line"]
+            else
+              @source_buffer.decompose_position(position["offset"]).first
+            end
+          end
+        end
+
         class SourceFile
           def initialize(path, filesystem)
             @path = path
@@ -172,11 +235,11 @@ module CC
           end
 
           def buffer
-            SourceBuffer.new(path, code)
+            @buffer ||= SourceBuffer.new(path, code)
           end
 
           def location(loc)
-            LocationDescription.new(buffer, loc)
+            Location.new(buffer, loc)
           end
 
           private
@@ -215,7 +278,7 @@ module CC
 
           def location
             @location ||=
-              LocationDescription.new(
+              Location.new(
                 source.buffer,
                 data["location"],
               )
