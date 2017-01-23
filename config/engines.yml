@@ -126,6 +126,18 @@ eslint:
   default_ratings_paths:
     - "**.js"
     - "**.jsx"
+flog:
+  channels:
+    beta: codeclimate/codeclimate-flog:beta
+  description: Easy to read reporting of complexity/pain for Ruby code.
+  community: true
+  enable_regexpos:
+    - \.rb$
+  default_ratings_paths:
+    - "**.rb"
+  default_config:
+    all: false
+    threshold: 0.6
 gofmt:
   channels:
     stable: codeclimate/codeclimate-gofmt
