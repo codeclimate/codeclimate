@@ -1,53 +1,637 @@
+<!doctype html>
 <html>
   <head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Code Climate Report for <%= h project_name %></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-core.min.js" data-manual></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
+    <%- issues.syntaxes.each do |syntax| -%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-<%= syntax %>.min.js"></script>
+    <%- end -%>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-numbers/prism-line-numbers.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-highlight/prism-line-highlight.min.css" />
+    <script>
+      /**
+       * Report JS
+       */
+
+      (function(){
+        Prism.hooks.add('complete', function(env) {
+          var pre = env.element.parentNode;
+          var lines = pre && pre.dataset.line;
+
+          if (!pre || !lines || !/pre/i.test(pre.nodeName)) {
+            console.log('nope');
+            return;
+          }
+
+          var container = pre.parentElement;
+
+          if (!container || !container.classList.contains('code')) {
+            return;
+          }
+
+          console.log('collapsing', container);
+          container.style.height = 'auto';
+        });
+      })();
+
+      jQuery(function(){
+        function isVisible(element) {
+          return !!(
+            element.offsetWidth ||
+            element.offsetHeight ||
+            element.getClientRects().length
+          );
+        };
+
+        var pendingElements = [];
+        // Convert node list to arrays
+        pendingElements.push.apply(
+          pendingElements,
+          document.querySelectorAll('#smells .code')
+        );
+
+        var waypoints = [];
+
+        function updateInView() {
+          if (!pendingElements.length) {
+            return;
+          }
+
+          var visibleElements = pendingElements.filter(isVisible);
+          waypoints = visibleElements.map(function(element){
+            var $e = $(element),
+            elementTop = $e.offset().top;
+            return [
+              elementTop,
+              elementTop + $e.outerHeight(),
+              element
+            ];
+          });
+        };
+
+        function inView() {
+          var yTop = window.scrollY,
+          yBottom = window.scrollY + window.innerHeight;
+
+          return waypoints.filter(function(entry){
+            return (entry[0] <= yTop && entry[1] >= yTop) ||
+              (entry[0] > yTop && entry[1] < yBottom) ||
+              (entry[0] <= yBottom && entry[1] >= yBottom);
+          });
+        }
+
+        var inViewHandler = function(){
+          var entries = inView();
+          if (entries.length) {
+            entries.forEach(function(entry){
+              var containerElement = entry[2];
+
+              if (pendingElements.indexOf(containerElement) === -1) {
+                return;
+              }
+
+              element = containerElement.querySelector('pre code');
+
+              element.parentElement.style.visibility = 'visible';
+              Prism.highlightElement(element);
+
+              pendingElements.splice(
+                pendingElements.indexOf(containerElement),
+                1
+              );
+            });
+            updateInView();
+          }
+        };
+
+        function enableInView() {
+          window.addEventListener('scroll', inViewHandler);
+          window.addEventListener('resize', inViewHandler);
+          inViewHandler();
+        }
+
+        function disableInView() {
+          window.removeEventListener('scroll', inViewHandler);
+          window.removeEventListener('resize', inViewHandler);
+        }
+
+        updateInView();
+
+        function applyFilters() {
+          disableInView();
+          var category = $('#category-filter').val();
+          var engine = $('#engine-filter').val();
+          var list = document.getElementById('smells');
+          list.className = '';
+
+          var selector = '#smells li';
+
+          var suffix = '';
+          if (category !== '') {
+            list.classList.add('filter-category-' + category);
+          }
+          else {
+            list.classList.add('filter-category-all');
+          }
+          if (engine !== '') {
+            list.classList.add('filter-engine-' + engine);
+          }
+          else {
+            list.classList.add('filter-engine-all');
+          }
+
+          if (list.offsetHeight) {
+            $('#filtered-out-message').hide();
+
+            updateInView();
+            enableInView();
+          }
+          else {
+            $('#filtered-out-message').show();
+          }
+        }
+
+        $('#category-filter, #engine-filter').on('change', applyFilters);
+        applyFilters();
+
+        $('summary').on('click', function() {
+          setTimeout(function(){
+            updateInView();
+            inViewHandler();
+          },
+          1);
+        });
+      });
+    </script>
+    <style>
+      <%- issues.categories.each do |category| -%>
+      .filter-category-<%= param category %> > li,
+      <%- end -%>
+      <%- issues.engines.each do |engine| -%>
+      .filter-engine-<%= param engine %> > li,
+      <%- end -%>
+      .filter-none > li {
+        display: none;
+      }
+
+      <%- issues.engines.each do |engine| -%>
+      .filter-category-all.filter-engine-<%= param engine%> > li[data-engine="<%= param engine %>"],
+      <%- end -%>
+      <%- issues.categories.each do |category| -%>
+      .filter-category-<%= param category %>.filter-engine-all > li[data-categories~="<%= param category %>"],
+      <%- end -%>
+      <%- (['all'] + issues.categories).product(['all'] + issues.engines).each do |category, engine| -%>
+      .filter-category-<%= param category %>.filter-engine-<%= param engine%> > li[data-categories~="<%= param category %>"][data-engine="<%= param engine %>"],
+      <%- end -%>
+      .filter-category-all.filter-engine-all > li {
+        display: block;
+      }
+    </style>
+    <style>
+      /**
+      * prism.js Code Climate theme based on Coy theme
+      */
+
+      code[class*="language-"],
+      pre[class*="language-"] {
+        color: black;
+        font-family: Consolas, 'Bitstream Vera Sans Mono', Monaco, Courier, monospace;
+        direction: ltr;
+        text-align: left;
+        white-space: pre;
+        word-spacing: normal;
+        word-break: normal;
+        tab-size: 4;
+        hyphens: none;
+        font-size: 12px;
+      }
+
+      pre[class*="language-"] {
+        position:relative;
+        background-color: #fdfdfd;
+        background-image: linear-gradient(rgba(69, 142, 209, 0.0) 50%, rgba(69, 142, 209, 0.04) 50%);
+        background-size: 3em 3em;
+        background-origin: content-box;
+        overflow: hidden;
+        /*border: 1px solid #dde8ef;*/
+        margin-top: 1em;
+      }
+
+      pre > code[class*="language-"] {
+        display: block;
+        z-index: 100;
+      }
+
+      /* Inline code */
+      :not(pre) > code[class*="language-"] {
+        position:relative;
+        padding: .2em;
+        -webkit-border-radius: 0.3em;
+        -moz-border-radius: 0.3em;
+        -ms-border-radius: 0.3em;
+        -o-border-radius: 0.3em;
+        border-radius: 0.3em;
+      }
+
+      .token.comment,
+      .token.block-comment,
+      .token.prolog,
+      .token.doctype,
+      .token.cdata {
+        color: #999988;
+      }
+
+      .token.punctuation {
+        font-weight: bold;
+      }
+
+      .token.constant {
+        color: #555555
+      }
+
+      .token.symbol {
+        color: #990073;
+      }
+
+      .token.number {
+        color: #009999;
+      }
+
+      .token.property,
+      .token.tag,
+      .token.boolean,
+      .token.function-name,
+      .token.deleted {
+        color: #c92c2c;
+      }
+
+      .token.string {
+        color: #D14
+      }
+      .token.selector,
+      .token.attr-name,
+      .token.builtin,
+      .token.inserted {
+        color: #2f9c0a;
+      }
+
+      .token.variable {
+        color: #008080;
+      }
+
+      .token.operator {
+        font-weight: bold;
+      }
+
+      .token.entity,
+      .token.url {
+        color: #a67f59;
+      }
+
+      .token.keyword {
+        font-weight: bold;
+      }
+
+      .token.class-name {
+        color: #445588;
+        font-weight: bold;
+      }
+
+      .token.atrule,
+      .token.attr-value {
+        color: #1990b8;
+      }
+
+      .token.regex {
+        color: #808000;
+      }
+
+      .token.important {
+        color: #e90;
+      }
+
+      .style .token.string {
+        color: #a67f59;
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      .token.important {
+        font-weight: normal;
+      }
+
+      .token.entity {
+        cursor: help;
+      }
+
+      .namespace {
+        opacity: .7;
+      }
+
+      pre.line-numbers {
+        position: relative;
+        padding-left: 40px;
+        counter-reset: linenumber;
+      }
+
+      pre.line-numbers > code {
+        position: relative;
+        padding-left: 4px;
+      }
+
+      .line-numbers .line-numbers-rows {
+        position: absolute;
+        pointer-events: none;
+        top: 0;
+        font-size: 100%;
+        left: -3.8em;
+        width: 3.8em; /* works for line-numbers below 1000 lines */
+        letter-spacing: -1px;
+        padding-top: 1px;
+        user-select: none;
+        background-color: #f1f1f1;
+        color: #757575;
+      }
+
+      .line-numbers-rows > span {
+        pointer-events: none;
+        display: block;
+        counter-increment: linenumber;
+      }
+
+      .line-numbers-rows > span:before {
+        content: counter(linenumber);
+        color: #999;
+        display: block;
+        padding-right: 0.8em;
+        text-align: right;
+      }
+    </style>
+    <style>
+      /**
+       * Report styles
+       */
+
+      html, body {
+        font-size: 15px;
+        line-height: 1.333;
+        background: #f6f6f5;
+        color: #323543;
+        font-family: "BentonSans", helvetica, arial, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        min-width: 960px;
+        margin: 0;
+        padding: 0;
+      }
+      a {
+        color:#007dce;
+        text-decoration: none;
+      }
+      a:hover {
+        color:#005e9b;
+        text-decoration: underline;
+      }
+      .container {
+        width: 960px;
+        margin: 0 auto;
+      }
+      #top {
+        color: #fff;
+        background: #323543;
+          padding: 5px 0;
+      }
+      #logo {
+        background: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22144%22%20height%3D%22144%22%20viewBox%3D%220%200%20144%20144%22%3E%3Cg%20fill%3D%22%23FFF%22%3E%3Cpath%20d%3D%22M93.548%2037.327L69.856%2061.02l14.09%2014.09%209.602-9.6%2027.243%2027.243%2014.09-14.092M65.483%2065.393l-14.03-14.03-35.78%2035.783-5.554%205.552%2014.09%2014.09%205.553-5.552%2018.14-18.138%203.55-3.552%2014.03%2014.028%2013.214%2013.216%2014.09-14.093-13.215-13.213%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E') center center no-repeat;
+        background-size: 35px 40px;
+        height: 40px;
+        width: 40px;
+        display: inline-block;
+        overflow: hidden;
+        text-indent: -99999px;
+        color: #fff;
+        vertical-align: middle;
+      }
+      #top h1 {
+        display: inline-block;
+        font-size: 16px;
+        font-weight: normal;
+        margin: 0;
+        vertical-align: middle;
+      }
+      #top h1::before {
+        content: '/ ';
+      }
+      nav ul, #smells {
+        margin: 0;
+        padding: 0;
+      }
+      nav li {
+        list-style: none;
+        padding: 10px 20px;
+        color: #5e637d;
+        position: relative;
+        display: inline-block;
+      }
+      nav li::after {
+        content: '';
+        position: absolute;
+        border-bottom: 8px solid #fff;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: 0px;
+        left: 50%;
+        margin-left: -8px;
+      }
+      #main-container {
+        background: #fff;
+        padding: 20px;
+        overflow: hidden;
+        position: relative;
+      }
+      .issue-filters {
+        float: right;
+        width: 200px;
+      }
+      .issue-filters label,
+      .issue-filters select {
+        display: block;
+        width: 100%;
+      }
+      .issue-filters label {
+        margin-top: 10px;
+      }
+      #smells {
+        max-width: 680px;
+      }
+      #smells > li {
+        list-style: none;
+        border-bottom: 1px solid #f6f6f5;
+        padding-top: 10px;
+        padding-bottom: 20px;
+      }
+      #smells > li:last-of-type {
+        border-bottom: 0px none;
+        padding-bottom: 0;
+      }
+      #smells > li > h2 {
+        font-weight: bold;
+        margin-top: 0;
+        font-size: inherit;
+      }
+
+      #smells .code {
+        position: relative;
+        overflow: hidden;
+        border-radius: 3px;
+        border: 1px solid #dde8ef;
+        height: 6em;
+        margin: 10px 0;
+      }
+      #smells .code > pre {
+        visibility: hidden;
+      }
+      #smells .code > pre,
+      #smells .code > pre .line-highlight {
+        margin-bottom: 0;
+        margin-top: 0;
+        padding-bottom: 0;
+        padding-top: 0;
+      }
+
+      .found-in {
+        font-size: 12px;
+        line-height: 20px;
+        color: #9999a1;
+        margin-top: 10px;
+        margin-bottom: 15px;
+      }
+      .found-in a {
+        color: #35b0ff;
+      }
+      ::-webkit-details-marker {display: none;}
+      details summary {
+        display: block;
+      }
+      details summary::before {
+        content: "► ";
+
+      }
+      details[open] summary::before {
+        content: "▼ ";
+      }
+
+      #filtered-out-message {
+        display: none;
+        text-align: center;
+        position: absolute;
+        left: 0;
+        width: 720px;
+        text-align: center;
+        top: 50%;
+        margin-top: -1em;
+        line-height: 2em;
+      }
+
+      #no-issues-message {
+        text-align: center;
+      }
+      #no-issues-message::before {
+        content: "🎉";
+        font-size: 3em;
+          display: block;
+      }
+    </style>
   </head>
   <body>
-  <div class="container">
-    <h2>Code Climate Analysis</h2>
-
-    <h3><%= pluralize(@issue_count, "issue") %> found in <%= @issues_by_path.size %> files.</h3>
-
-    <% @issues_by_path.each do |path, file_issues| %>
-      <hr>
-      <h4><a name='<%= path %>'><%= path %></a> (<%= pluralize(file_issues.size, "issue") %>)</h4>
-      <hr>
-      <% file_issues.each do |issue| %>
-        <table class="table table-striped">
-          <tr>
-            <td>Description</td><td><%= issue["description"] %></td>
-          </tr>
-          <tr>
-            <td>Location</td><td><%= path %>:<b><%= issue["location"] %></td>
-          </tr>
-          <tr>
-            <td>Engine</td><td><%= issue["engine_name"] %></td>
-          </tr>
-          <tr>
-            <td>Category</td><td><%= issue["categories"].join(",") %></td>
-          </tr>
-          <tr>
-            <td>Remediation points</td><td><%= issue["remediation_points"] %></td>
-          </tr>
-        </table>
-        <% if issue["content"] %>
-          <br/>
-          <button data-toggle="collapse"
-                  data-target='#readup<%= issue['fingerprint'] %>'>
-                  Toggle Readup
-          </button>
-          <div id='readup<%= issue["fingerprint"] %>' class='collapse'>
-            <hr>
-            <%= issue["content"]["body"] %>
-            <hr>
+    <header id="top">
+      <div class="container">
+        <a id="logo" href="https://codeclimate.com/">Code Climate</a>
+        <h1><%= h project_name %></h1>
+      </div>
+    </header>
+    <div class="container">
+      <nav>
+        <ul>
+          <li>
+            Issues
+          </li>
+        </ul>
+      </nav>
+      <div id="main-container">
+        <%- if issues.any? %>
+          <div class="issue-filters">
+            <label for="category-filter">Category</label>
+            <select id="category-filter">
+              <option value="">All Categories</option>
+              <%- issues.categories.each do |category| -%>
+              <option value="<%= param category %>"><%= category %></option>
+              <%- end -%>
+            </select>
+            <label for="engine-filter">Engine</label>
+            <select id="engine-filter">
+              <option value="">All Engines</option>
+              <%- issues.engines.each do |engine| -%>
+              <option value="<%= param engine %>"><%= engine %></option>
+              <%- end -%>
+            </select>
           </div>
-        <% end %>
-        <hr>
-      <% end %>
-    <% end %>
+          <ul id="smells">
+            <%- issues.each do |issue| -%>
+            <li
+              data-categories="<%= params issue.categories %>"
+              data-engine="<%= param issue.engine_name %>">
+              <h2><%= h issue.description %></h2>
+              <div class="code">
+                <pre class="line-numbers <%= issue.source.syntaxes.map {|l| "language-#{l}" }.join ' ' %>"
+                     data-line="<%= issue.location %>"
+                     data-start="<%= issue.location.start %>"
+                     data-line-offset="<%= issue.location.line_offset %>"><code><%=
+                  h issue.location.code
+                %></code></pre>
+              </div>
+              <%- if issue.other_locations.any? %>
+                <details>
+                  <summary>Other instances</summary>
+                  <%- issue.other_locations.each do |source, location| -%>
+                    <h4><%= source.path %></h3>
+                    <div class="code">
+                      <pre class="line-numbers <%= source.syntaxes.map { |l| "language-#{l}" }.join ' ' %>"
+                           data-line="<%= source.location location %>"
+                           data-start="<%= source.location(location).start %>"
+                           data-line-offset="<%= source.location(location).line_offset %>"><code><%=
+                        source.location(location).code
+                      %></code></pre>
+                    </div>
+                  <%- end -%>
+                </details>
+              <%- end -%>
+              <%- if issue.body -%>
+                <details>
+                  <summary>Details</summary>
+                  <%= issue.body -%>
+                </details>
+              <%- end -%>
+              <div class="found-in">
+                Found in <%= h issue.source.path %> by
+                <a href="https://docs.codeclimate.com/docs/<%= issue.engine_name %>"><%= issue.engine_name %></a>
+              </div>
+            </li>
+            <%- end -%>
+          </ul>
+          <div id="filtered-out-message">All issues have been filtered out</div>
+        <%- else %>
+          <div id="no-issues-message">
+            No issues have been found!
+          </div>
+        <%- end -%>
+      </div>
+    </div>
   </div>
   </body>
 </html>
