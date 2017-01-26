@@ -7,6 +7,48 @@ module CC
   module CLI
     class Command
       CODECLIMATE_YAML = ".codeclimate.yml".freeze
+      NAMESPACE = name.split('::')[0..-2].join("::").freeze
+
+      def self.abstract!
+        @abstract = true
+      end
+
+      def self.abstract?
+        @abstract == true
+      end
+
+      def self.all
+        @@subclasses.select { |klass| !klass.abstract? }
+      end
+
+      def self.[](name)
+        all.find { |command| command.name == "#{NAMESPACE}::#{name}" || command.command_name == name }
+      end
+
+      def self.inherited(subclass)
+        @@subclasses ||= []
+        @@subclasses << subclass
+      end
+
+      def self.synopsis
+        "#{command_name} #{self::ARGUMENT_LIST if const_defined?(:ARGUMENT_LIST)}".strip
+      end
+
+      def self.short_help
+        if const_defined? :SHORT_HELP
+          self::SHORT_HELP
+        else
+          ""
+        end
+      end
+
+      def self.help
+        if const_defined? :HELP
+          self::HELP
+        else
+          short_help
+        end
+      end
 
       def initialize(args = [])
         @args = args
@@ -17,7 +59,9 @@ module CC
       end
 
       def self.command_name
-        name[/[^:]*$/].split(/(?=[A-Z])/).map(&:downcase).join("-")
+        name.gsub(/^#{NAMESPACE}::/, "").split("::").map do |part|
+          part.split(/(?=[A-Z])/).map(&:downcase).join("-")
+        end.join(":")
       end
 
       def execute

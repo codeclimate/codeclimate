@@ -31,17 +31,14 @@ module CC
       end
 
       def command_class
-        CLI.const_get(command_name)
+        command_const = Command[command]
+        if command_const.abstract?
+          nil
+        else
+          command_const
+        end
       rescue NameError
         nil
-      end
-
-      def command_name
-        case command
-        when nil, "-h", "-?", "--help" then "Help"
-        when "-v", "--version" then "Version"
-        else command.sub(":", "::").underscore.camelize
-        end
       end
 
       def command_arguments
@@ -49,7 +46,15 @@ module CC
       end
 
       def command
-        @args.first
+        command_name = @args.first
+        case command_name
+        when nil, "-h", "-?", "--help"
+          "help"
+        when "-v", "--version"
+          "version"
+        else
+          command_name
+        end
       end
     end
   end

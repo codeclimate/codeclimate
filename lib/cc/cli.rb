@@ -5,19 +5,20 @@ require "cc/analyzer"
 require "cc/workspace"
 require "cc/yaml"
 
+require "cc/cli/analyze"
+require "cc/cli/command"
+require "cc/cli/console"
+require "cc/cli/engines"
+require "cc/cli/help"
+require "cc/cli/init"
+require "cc/cli/prepare"
+require "cc/cli/runner"
+require "cc/cli/test"
+require "cc/cli/validate_config"
+require "cc/cli/version"
+
 module CC
   module CLI
-    autoload :Analyze, "cc/cli/analyze"
-    autoload :Command, "cc/cli/command"
-    autoload :Console, "cc/cli/console"
-    autoload :Engines, "cc/cli/engines"
-    autoload :Help, "cc/cli/help"
-    autoload :Init, "cc/cli/init"
-    autoload :Prepare, "cc/cli/prepare"
-    autoload :Runner, "cc/cli/runner"
-    autoload :Test, "cc/cli/test"
-    autoload :ValidateConfig, "cc/cli/validate_config"
-    autoload :Version, "cc/cli/version"
 
     def self.debug?
       ENV["CODECLIMATE_DEBUG"]

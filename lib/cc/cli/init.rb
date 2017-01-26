@@ -7,6 +7,12 @@ module CC
     class Init < Command
       include CC::Analyzer
 
+      ARGUMENT_LIST = "[--upgrade]"
+      SHORT_HELP = "Generate a configuration and install the right images based on the contents of your repo."
+      HELP = "#{SHORT_HELP}\n" \
+        "\n" \
+        "    --upgrade    Upgrade existing configuration"
+
       def run
         if !upgrade? && filesystem.exist?(CODECLIMATE_YAML)
           warn "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."

@@ -10,6 +10,12 @@ require "uri"
 module CC
   module CLI
     class Prepare < Command
+      ARGUMENT_LIST = "[--allow-internal-ips]"
+      SHORT_HELP = "Run the commands in your prepare step."
+      HELP = "#{SHORT_HELP}\n" \
+        "\n" \
+        "    --allow-internal-ips    Allow fetching from internal IPs."
+
       InternalHostError = Class.new(StandardError)
       FetchError = Class.new(StandardError)
 
