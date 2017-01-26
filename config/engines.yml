@@ -131,7 +131,7 @@ flog:
     beta: codeclimate/codeclimate-flog:beta
   description: Easy to read reporting of complexity/pain for Ruby code.
   community: true
-  enable_regexpos:
+  enable_regexps:
     - \.rb$
   default_ratings_paths:
     - "**.rb"
