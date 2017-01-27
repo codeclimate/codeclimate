@@ -3,12 +3,12 @@ require "rainbow"
 module CC
   module CLI
     class Help < Command
-      ARGUMENT_LIST = "[commad]"
-      SHORT_HELP = "Show help."
+      ARGUMENT_LIST = "[commad]".freeze
+      SHORT_HELP = "Show help.".freeze
       HELP = "#{SHORT_HELP}\n" \
         "\n" \
         "    no arguments   Show help summary for all commands.\n" \
-        "    [command]      Show help for specific commands. Can be scpecified multiple times."
+        "    [command]      Show help for specific commands. Can be scpecified multiple times.".freeze
 
       def run
         if @args.any?
@@ -32,13 +32,8 @@ module CC
 
       def show_help_summary
         short_helps =
-          Command.all
-          .sort_by(&:command_name)
-          .map do |command|
-            [
-              command.synopsis,
-              command.short_help
-            ]
+          Command.all.sort_by(&:command_name).map do |command|
+            [command.synopsis, command.short_help]
           end.compact.to_h
 
         longest_command_length = short_helps.keys.map(&:length).max

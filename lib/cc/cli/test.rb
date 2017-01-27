@@ -69,11 +69,11 @@ module CC
     end
 
     class Test < Command
-      ARGUMENT_LIST = "<engine_name>"
-      SHORT_HELP = "Test engine"
+      ARGUMENT_LIST = "<engine_name>".freeze
+      SHORT_HELP = "Test engine".freeze
       HELP = "#{SHORT_HELP}\n" \
         "\n"\
-        "    <engine_name>    Engine to test"
+        "    <engine_name>    Engine to test".freeze
 
       def run
         @engine_name = @args.first

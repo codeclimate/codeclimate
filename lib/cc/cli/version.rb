@@ -1,7 +1,7 @@
 module CC
   module CLI
     class Version < Command
-      SHORT_HELP = "Display the CLI version."
+      SHORT_HELP = "Display the CLI version.".freeze
 
       def run
         say version

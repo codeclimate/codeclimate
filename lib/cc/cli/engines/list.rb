@@ -2,7 +2,7 @@ module CC
   module CLI
     module Engines
       class List < EngineCommand
-        SHORT_HELP = "List all available engines"
+        SHORT_HELP = "List all available engines".freeze
 
         def run
           say "Available engines:"

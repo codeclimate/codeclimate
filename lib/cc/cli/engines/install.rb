@@ -2,7 +2,7 @@ module CC
   module CLI
     module Engines
       class Install < EngineCommand
-        SHORT_HELP = "Pull the latest images for enabled engines in your codeclimate.yml."
+        SHORT_HELP = "Pull the latest images for enabled engines in your codeclimate.yml.".freeze
 
         ImagePullFailure = Class.new(StandardError)
 

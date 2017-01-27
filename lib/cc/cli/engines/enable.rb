@@ -4,11 +4,11 @@ module CC
   module CLI
     module Engines
       class Enable < EngineCommand
-        ARGUMENT_LIST = "<engine_name>"
-        SHORT_HELP = "Enable an engine in your codeclimate.yml."
+        ARGUMENT_LIST = "<engine_name>".freeze
+        SHORT_HELP = "Enable an engine in your codeclimate.yml.".freeze
         HELP = "#{SHORT_HELP}\n" \
           "\n"\
-          "    <engine_name>    Engine to enable in your codeclimate.yml"
+          "    <engine_name>    Engine to enable in your codeclimate.yml".freeze
 
         def run
           require_codeclimate_yml

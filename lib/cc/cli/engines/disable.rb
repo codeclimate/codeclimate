@@ -5,11 +5,11 @@ module CC
   module CLI
     module Engines
       class Disable < EngineCommand
-        ARGUMENT_LIST = "<engine_name>"
-        SHORT_HELP = "Disable an engine in your codeclimate.yml."
+        ARGUMENT_LIST = "<engine_name>".freeze
+        SHORT_HELP = "Disable an engine in your codeclimate.yml.".freeze
         HELP = "#{SHORT_HELP}\n" \
           "\n"\
-          "    <engine_name>    Engine to disable in your codeclimate.yml"
+          "    <engine_name>    Engine to disable in your codeclimate.yml".freeze
 
         def run
           require_codeclimate_yml

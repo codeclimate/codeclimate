@@ -19,7 +19,6 @@ require "cc/cli/version"
 
 module CC
   module CLI
-
     def self.debug?
       ENV["CODECLIMATE_DEBUG"]
     end

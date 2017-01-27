@@ -7,7 +7,7 @@ module CC
   module CLI
     class Command
       CODECLIMATE_YAML = ".codeclimate.yml".freeze
-      NAMESPACE = name.split('::')[0..-2].join("::").freeze
+      NAMESPACE = name.split("::")[0..-2].join("::").freeze
 
       def self.abstract!
         @abstract = true
@@ -25,10 +25,12 @@ module CC
         all.find { |command| command.name == "#{NAMESPACE}::#{name}" || command.command_name == name }
       end
 
+      # rubocop: disable Style/ClassVars
       def self.inherited(subclass)
         @@subclasses ||= []
         @@subclasses << subclass
       end
+      # rubocop: enable Style/ClassVars
 
       def self.synopsis
         "#{command_name} #{self::ARGUMENT_LIST if const_defined?(:ARGUMENT_LIST)}".strip
