@@ -18,13 +18,33 @@ module CC::CLI
       end
     end
 
-    describe "#command_name" do
-      it "parses subclasses" do
-        expect(Runner.new(["analyze:this"]).command_name).to eq("Analyze::This")
+    describe "#command_class" do
+      it "resolves command class from arguments" do
+        Hello = Class.new(Command)
+
+        expect(Runner.new(["hello"]).command_class).to eq ::CC::CLI::Hello
       end
 
-      it "returns class names" do
-        expect(Runner.new(["analyze"]).command_name).to eq("Analyze")
+      it "resolves namespaced command class from arguments" do
+        module World
+          Hello = Class.new(Command)
+        end
+
+        expect(Runner.new(["world:hello"]).command_class)
+          .to eq ::CC::CLI::World::Hello
+      end
+    end
+
+    describe "#command" do
+      {
+        [nil, "-h", "-?", "--help"] => "help",
+        ["-v", "--version"] => "version"
+      }.each do |args, command|
+        args.each do |arg|
+          it "maps #{arg} to #{command}" do
+            expect(Runner.new([arg]).command).to eq command
+          end
+        end
       end
     end
   end
