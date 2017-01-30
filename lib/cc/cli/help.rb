@@ -43,10 +43,6 @@ module CC
           say format("    %-#{longest_command_length}s    %s\n", command, help)
         end
       end
-
-      def underline(string)
-        Rainbow.new.wrap(string).underline
-      end
     end
   end
 end
