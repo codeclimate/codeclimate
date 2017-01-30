@@ -4,6 +4,12 @@ module CC
   module CLI
     module Engines
       class Remove < EngineCommand
+        ARGUMENT_LIST = "<engine_name>".freeze
+        SHORT_HELP = "Remove an engine from your codeclimate.yml.".freeze
+        HELP = "#{SHORT_HELP} This command deletes the config rather than setting it to disabled.\n" \
+          "\n"\
+          "    <engine_name>    Engine to remove from your codeclimate.yml".freeze
+
         def run
           require_codeclimate_yml
 

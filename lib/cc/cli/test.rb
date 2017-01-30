@@ -1,4 +1,5 @@
 require "cc/yaml"
+require "tmpdir"
 
 module CC
   module CLI
@@ -68,6 +69,12 @@ module CC
     end
 
     class Test < Command
+      ARGUMENT_LIST = "<engine_name>".freeze
+      SHORT_HELP = "Test an engine.".freeze
+      HELP = "Validate that an engine is behaving correctly.\n" \
+        "\n"\
+        "    <engine_name>    Engine to test".freeze
+
       def run
         @engine_name = @args.first
 

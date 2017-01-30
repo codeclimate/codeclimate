@@ -3,6 +3,8 @@ require "cc/yaml"
 module CC
   module CLI
     class ValidateConfig < Command
+      SHORT_HELP = "Validate your .codeclimate.yml.".freeze
+
       include CC::Analyzer
       include CC::Yaml
 

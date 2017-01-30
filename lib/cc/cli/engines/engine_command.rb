@@ -6,6 +6,8 @@ module CC
       class EngineCommand < Command
         include CC::Analyzer
 
+        abstract!
+
         private
 
         def engine_name

@@ -7,6 +7,12 @@ module CC
     class Init < Command
       include CC::Analyzer
 
+      ARGUMENT_LIST = "[--upgrade]".freeze
+      SHORT_HELP = "Generate a configuration based on the contents of your repo.".freeze
+      HELP = "#{SHORT_HELP}\n" \
+        "\n" \
+        "    --upgrade    Upgrade a Code Climate Classic configuration".freeze
+
       def run
         if !upgrade? && filesystem.exist?(CODECLIMATE_YAML)
           warn "Config file .codeclimate.yml already present.\nTry running 'validate-config' to check configuration."
