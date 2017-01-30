@@ -18,7 +18,7 @@ module CC
       end
 
       def self.all
-        @@subclasses.select { |klass| !klass.abstract? }
+        @@subclasses.reject(&:abstract?)
       end
 
       def self.[](name)

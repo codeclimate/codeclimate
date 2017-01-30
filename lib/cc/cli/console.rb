@@ -1,7 +1,7 @@
 module CC
   module CLI
     class Console < Command
-      SHORT_HELP = "Open a ruby console for the CLI. Only useful for people developing against the CLI".freeze
+      SHORT_HELP = "Open a ruby console for the CLI. Useful for developing against the CLI.".freeze
 
       def run
         require "pry"

@@ -8,10 +8,10 @@ module CC
       include CC::Analyzer
 
       ARGUMENT_LIST = "[--upgrade]".freeze
-      SHORT_HELP = "Generate a configuration and install the right images based on the contents of your repo.".freeze
+      SHORT_HELP = "Generate a configuration based on the contents of your repo.".freeze
       HELP = "#{SHORT_HELP}\n" \
         "\n" \
-        "    --upgrade    Upgrade existing configuration".freeze
+        "    --upgrade    Upgrade a Code Climate Classic configuration".freeze
 
       def run
         if !upgrade? && filesystem.exist?(CODECLIMATE_YAML)

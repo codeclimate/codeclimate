@@ -9,7 +9,7 @@ module CC
         "\n" \
         "    -f <format>, --format <format>   Format of output. Possible values: #{CC::Analyzer::Formatters::FORMATTERS.keys.join ", "}\n" \
         "    -e <engine[:channel]>            Engine to run. Can be specified multiple times.\n" \
-        "    --dev                            Run in development mode.\n" \
+        "    --dev                            Run in development mode. Engines installed locally that are not in the manifest will be run.\n" \
         "    path                             Path to check. Can be specified multiple times.".freeze
 
       include CC::Analyzer
