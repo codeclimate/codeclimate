@@ -138,6 +138,7 @@ eslint:
 flog:
   channels:
     beta: codeclimate/codeclimate-flog:beta
+    stable: codeclimate/codeclimate-flog:beta
   description: Easy to read reporting of complexity/pain for Ruby code.
   community: true
   enable_regexps:
