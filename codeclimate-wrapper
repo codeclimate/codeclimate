@@ -18,15 +18,25 @@ EOF
   exit 1
 }
 
+docker_for_mac() {
+  test -S /var/tmp/docker.sock > /dev/null 2>&1
+}
+
 socket_missing() {
-  invalid_setup "/var/run/docker.sock must exist as a Unix domain socket"
+  invalid_setup "$socket_path must exist as a Unix domain socket"
 }
 
 invalid_docker_host() {
   local host=$1
 
-  invalid_setup "invalid DOCKER_HOST=$host, must be unset or unix:///var/run/docker.sock"
+  invalid_setup "invalid DOCKER_HOST=$host, must be unset or unix://$socket_path"
 }
+
+socket_path=/var/run/docker.sock
+
+if docker_for_mac; then
+  socket_path=/var/tmp/docker.sock
+fi
 
 if [ -n "$DOCKER_MACHINE_NAME" ] && command -v docker-machine > /dev/null 2>&1; then
   docker-machine ssh $DOCKER_MACHINE_NAME -- \
@@ -36,8 +46,8 @@ if [ -n "$DOCKER_MACHINE_NAME" ] && command -v docker-machine > /dev/null 2>&1; 
     'test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock"' > /dev/null 2>&1 \
     && invalid_docker_host $(docker-machine ssh $DOCKER_MACHINE_NAME -- 'echo "$DOCKER_HOST"')
 else
-  test -S /var/run/docker.sock || socket_missing
-  test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock" \
+  test -S $socket_path || socket_missing
+  test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix://$socket_path" \
     && invalid_docker_host "$DOCKER_HOST"
 fi
 
@@ -52,7 +62,7 @@ docker_run() {
     --env ENGINE_MEMORY_LIMIT_BYTES \
     --volume "$CODECLIMATE_CODE":/code \
     --volume "$CODECLIMATE_TMP":/tmp/cc \
-    --volume /var/run/docker.sock:/var/run/docker.sock \
+    --volume "$socket_path":/var/run/docker.sock \
     "$@"
 }
 
