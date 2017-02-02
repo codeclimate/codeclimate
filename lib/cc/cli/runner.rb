@@ -1,4 +1,5 @@
 require "net/http"
+require "rainbow"
 require "active_support"
 require "active_support/core_ext"
 
@@ -32,25 +33,34 @@ module CC
         false
       end
 
-      def is_outdated?(version)
-        latest_version = version.sub('v', '')
-        current_version = File.read(File.expand_path("../../../../VERSION", __FILE__)).sub('v', '')
-
-        Gem::Version.new(latest_version) > Gem::Version.new(current_version)
+      def version
+        @_version ||= begin
+          File.read(File.expand_path("../../../../VERSION", __FILE__)).sub('v', '')
+        end
       end
 
       def check_version
         return if should_not_check?
 
         Timeout.timeout(5) do
-          url = ENV.fetch("CODE_CLIMATE_VERSIONS_URL", "versions.codeclimate.com")
+          url = ENV.fetch("CODE_CLIMATE_VERSIONS_URL", "https://versions.codeclimate.com")
           uri = URI.parse(url)
+
+          values = { version: version, uname: `uname -a` }
+          uri.query = values.to_query
+
           resp = Net::HTTP.get_response(uri)
           json = JSON.parse(resp.body)
-          latest_version = json["version"]
 
-          warn "Needs update" if is_outdated?(latest_version)
+          is_outdated = json["outdated"] == true
+          latest = json["latest"]
+
+          needs_update_to_version(latest) if is_outdated
         end
+      end
+
+      def needs_update_to_version(latest)
+        warn Rainbow("~~~ Needs update to version #{latest}, currently #{version} ~~~").red
       end
 
       def command_not_found
