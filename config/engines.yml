@@ -400,6 +400,15 @@ tailor:
     - \.swift$
   default_ratings_paths:
     - "**.swift"
+tslint:
+  channels:
+    beta: codeclimate/codeclimate-tslint
+  description: An extensible linter for the TypeScript language
+  community: true
+  enable_regexps:
+    - \.ts$
+  default_ratings_paths:
+    - "**.ts"
 watson:
   channels:
     stable: codeclimate/codeclimate-watson
