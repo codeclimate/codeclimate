@@ -178,6 +178,42 @@ module CC::CLI
           expect(exit_code).to eq 0
         end
 
+        describe "generating codeclimate checks" do
+          before do
+            @original_env = ENV["BUILDER_RUN_CODECLIMATE_CHECKS"]
+            ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] = "true"
+          end
+
+          after do
+            ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] = @original_env
+          end
+
+          it "adds codeclimate checks when the feature is enabled" do
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(false)
+
+            yaml_content_before = yaml_with_rubocop_enabled
+            File.write(".codeclimate.yml", yaml_content_before)
+
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
+
+            init = Init.new(["--upgrade"])
+
+            expect(init).to receive(:create_default_engine_configs)
+
+            stdout, _, exit_code = capture_io_and_exit_code do
+              init.run
+            end
+
+            content_after = CC::Yaml.parse(File.read(".codeclimate.yml"))
+
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
+
+            engine_names = content_after.engines.keys
+            expect(engine_names).to include("complexity-ruby")
+            expect(exit_code).to eq 0
+          end
+        end
+
         it "behaves normally if no .codeclimate.yml present" do
           expect(filesystem.exist?(".codeclimate.yml")).to eq(false)
           write_fixture_source_files
