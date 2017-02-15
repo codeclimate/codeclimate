@@ -44,6 +44,35 @@ module CC::CLI
           expect(CC::Yaml.parse(new_content).errors).to be_empty
         end
 
+        describe "generating codeclimate checks" do
+          before do
+            @original_env = ENV["BUILDER_RUN_CODECLIMATE_CHECKS"]
+            ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] = "true"
+          end
+
+          after do
+            ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] = @original_env
+          end
+
+          it "adds codeclimate checks when the feature is enabled" do
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(false)
+
+            init = Init.new
+
+            stdout, _, exit_code = capture_io_and_exit_code do
+              init.run
+            end
+
+            content_after = CC::Yaml.parse(File.read(".codeclimate.yml"))
+
+            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
+
+            engine_names = content_after.engines.keys
+            expect(engine_names).to include("complexity-ruby")
+            expect(exit_code).to eq 0
+          end
+        end
+
         it "runs when the directory is empty" do
           _, _, exit_code = capture_io_and_exit_code do
             init = Init.new

@@ -23,6 +23,7 @@ module CC
           create_default_engine_configs
         else
           generate_all_config
+          create_codeclimate_checks
         end
       end
 
