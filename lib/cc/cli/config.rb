@@ -3,7 +3,7 @@ module CC
     class Config
       delegate :to_yaml, to: :config
 
-      def initialize(config={})
+      def initialize(config = {})
         @config = default_config.merge(config)
       end
 

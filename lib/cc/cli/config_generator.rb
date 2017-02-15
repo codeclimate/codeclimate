@@ -38,10 +38,7 @@ module CC
       end
 
       def codeclimate_checks
-        return @codeclimate_checks if @codeclimate_checks
-
-        engines = engine_registry.list
-        @codeclimate_checks = engines.each_with_object({}) do |(name, config), result|
+        @codeclimate_checks ||= engine_registry.list.each_with_object({}) do |(name, config), result|
           if code_climate_check?(config)
             result[name] = config
           end
