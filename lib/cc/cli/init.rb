@@ -59,7 +59,7 @@ module CC
       end
 
       def create_codeclimate_checks
-        if ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] == "true"
+        if ENV["RUN_CODECLIMATE_CHECKS"] == "true"
           say "Generating codeclimate checks..."
           plain_config_hash = JSON.parse(CC::Yaml::Serializer::Json.serialize(existing_cc_config))
           config = CC::CLI::Config.new(plain_config_hash)

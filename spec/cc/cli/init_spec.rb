@@ -46,12 +46,12 @@ module CC::CLI
 
         describe "generating codeclimate checks" do
           before do
-            @original_env = ENV["BUILDER_RUN_CODECLIMATE_CHECKS"]
-            ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] = "true"
+            @original_env = ENV["RUN_CODECLIMATE_CHECKS"]
+            ENV["RUN_CODECLIMATE_CHECKS"] = "true"
           end
 
           after do
-            ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] = @original_env
+            ENV["RUN_CODECLIMATE_CHECKS"] = @original_env
           end
 
           it "adds codeclimate checks when the feature is enabled" do
@@ -209,12 +209,12 @@ module CC::CLI
 
         describe "generating codeclimate checks" do
           before do
-            @original_env = ENV["BUILDER_RUN_CODECLIMATE_CHECKS"]
-            ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] = "true"
+            @original_env = ENV["RUN_CODECLIMATE_CHECKS"]
+            ENV["RUN_CODECLIMATE_CHECKS"] = "true"
           end
 
           after do
-            ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] = @original_env
+            ENV["RUN_CODECLIMATE_CHECKS"] = @original_env
           end
 
           it "adds codeclimate checks when the feature is enabled" do

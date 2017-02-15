@@ -72,7 +72,7 @@ module CC
       end
 
       def code_climate_check?(engine)
-        engine["code_climate_check"] && ENV["BUILDER_RUN_CODECLIMATE_CHECKS"] == "true"
+        engine["code_climate_check"] && ENV["RUN_CODECLIMATE_CHECKS"] == "true"
       end
 
       def files_exist?(engine)

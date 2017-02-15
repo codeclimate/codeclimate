@@ -86,14 +86,14 @@ module CC::CLI
 
     describe "#codecliamte_checks" do
       it "returns codeclimate checks found in the registry" do
-        allow(ENV).to receive(:[]).with("BUILDER_RUN_CODECLIMATE_CHECKS").
+        allow(ENV).to receive(:[]).with("RUN_CODECLIMATE_CHECKS").
           and_return("true")
 
         expect(generator.codeclimate_checks.keys).to eq %w(complexity-ruby)
       end
 
       it "returns an empty hash when the feature is disabled" do
-        allow(ENV).to receive(:[]).with("BUILDER_RUN_CODECLIMATE_CHECKS").
+        allow(ENV).to receive(:[]).with("RUN_CODECLIMATE_CHECKS").
           and_return("false")
 
         expect(generator.codeclimate_checks.keys).to be_empty
