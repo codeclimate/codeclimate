@@ -34,6 +34,19 @@ module CC::Analyzer
         result = engines_config_builder.run
         expect(result.size).to eq(1)
         expect(result.first.name).to eq("an_engine")
+        expect(result.first.registry_entry["code_climate_check"]).to eq(false)
+      end
+    end
+
+    describe "with a codeclimate check" do
+      let(:config) { config_with_engine("a_code_climate_check") }
+      let(:registry) { registry_with_engine("a_code_climate_check", code_climate_check: true) }
+
+      it "contains that engine" do
+        result = engines_config_builder.run
+        expect(result.size).to eq(1)
+        expect(result.first.name).to eq("a_code_climate_check")
+        expect(result.first.registry_entry["code_climate_check"]).to eq(true)
       end
     end
 
@@ -204,7 +217,7 @@ module CC::Analyzer
       builder.run
     end
 
-    def registry_with_engine(*names)
+    def registry_with_engine(*names, code_climate_check: false)
       {}.tap do |result|
         names.each do |name|
           result[name] = {
@@ -212,6 +225,8 @@ module CC::Analyzer
               "stable" => "codeclimate/codeclimate-#{name}"
             }
           }
+
+          result[name]["code_climate_check"] = true if code_climate_check
         end
       end
     end
