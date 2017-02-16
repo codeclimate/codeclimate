@@ -14,6 +14,13 @@ module CC
           config["engines"][engine_name]["config"] = engine_config["default_config"]
         end
 
+        # we may not want this code in the general case.
+        # for now, we need it to test one of our own Maintainability engines
+        # which is in the 'beta' channel
+        if engine_config.key?("channels") && !engine_config["channels"].include?("stable")
+          config["engines"][engine_name]["channel"] = engine_config["channels"].first.first
+        end
+
         config["ratings"]["paths"] |= engine_config["default_ratings_paths"]
       end
 

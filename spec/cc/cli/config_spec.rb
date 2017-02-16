@@ -33,6 +33,25 @@ module CC::CLI
           }
         )
       end
+
+      it "supports engines in non-stable channels by selecting the first entry" do
+        config = CC::CLI::Config.new()
+        engine_config = {
+          "default_ratings_paths" => ["foo"],
+          "channels" => [
+            [ "beta", "some/path" ],
+            [ "gamma", "some/other-path" ],
+          ],
+        }
+
+        config.add_engine("foo", engine_config)
+
+        engine = YAML.load(config.to_yaml)["engines"]["foo"]
+        expect(engine).to eq(
+          "enabled" => true,
+          "channel" => "beta",
+        )
+      end
     end
 
     describe "#add_exclude_paths" do
