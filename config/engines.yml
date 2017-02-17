@@ -52,7 +52,7 @@ checkstyle:
     - "**.java"
 complexity-ruby:
   channels:
-    beta: codeclimate/codeclimate-complexity-ruby:b44
+    beta: codeclimate/codeclimate-complexity-ruby:b47
   description: Code Climate Complexity Checks for Ruby
   community: false
   code_climate_check: true
