@@ -38,3 +38,9 @@ install:
 uninstall:
 	$(RM) $(DESTDIR)$(PREFIX)/bin/codeclimate
 	docker rmi codeclimate/codeclimate:latest
+
+Gemfile.lock: image
+	docker run --rm \
+	  --entrypoint sh \
+	  --volume $(PWD):/usr/src/app \
+	  codeclimate/codeclimate -c bundle
