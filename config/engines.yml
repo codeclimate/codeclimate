@@ -134,6 +134,7 @@ duplication:
 eslint:
   channels:
     stable: codeclimate/codeclimate-eslint
+    eslint-1: codeclimate/codeclimate-eslint:eslint-1
     eslint-2: codeclimate/codeclimate-eslint:eslint-2
     eslint-3: codeclimate/codeclimate-eslint:eslint-3
   description: A JavaScript/JSX linting utility.
