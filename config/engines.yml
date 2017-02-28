@@ -41,6 +41,20 @@ bundler-audit:
     - ^Gemfile\.lock$
   default_ratings_paths:
     - Gemfile.lock
+checks:
+  channels:
+    beta: codeclimate/checks:beta
+  description: Maintainability and reliability checks for PHP, Python, JS, and more.
+  community: false
+  default_ratings_paths:
+    - "**.js"
+    - "**.py"
+    - "**.php"
+  default_config:
+    languages:
+      - javascript
+      - python
+      - php
 checkstyle:
   channels:
     beta: codeclimate/codeclimate-checkstyle:beta
