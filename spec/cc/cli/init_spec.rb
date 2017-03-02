@@ -126,6 +126,24 @@ module CC::CLI
               expect(content_after).to eq(content_before)
             end
           end
+
+          describe "when an invalid engine is specified" do
+            it "does not error" do
+              config = <<-EOF
+                engines:
+                  hal9000:
+                    enabled: true
+              EOF
+              File.write(".codeclimate.yml", config)
+
+              _, _, exit_code = capture_io_and_exit_code do
+                init = Init.new
+                init.run
+              end
+
+              expect(exit_code).to eq(0)
+            end
+          end
         end
       end
 

@@ -75,11 +75,12 @@ module CC
       def create_default_engine_configs
         say "Generating default configuration for engines..."
         available_engine_configs.each do |(engine_name, config_paths)|
-          engine = engine_registry[engine_name]
-          config_mapping = Hash.new { |_, k| [k] }.merge(engine.fetch("config_files", {}))
+          if (engine = engine_registry[engine_name])
+            config_mapping = Hash.new { |_, k| [k] }.merge(engine.fetch("config_files", {}))
 
-          config_paths.each do |config_path|
-            generate_config(config_path, config_mapping[File.basename(config_path)])
+            config_paths.each do |config_path|
+              generate_config(config_path, config_mapping[File.basename(config_path)])
+            end
           end
         end
       end
