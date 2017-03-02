@@ -70,10 +70,6 @@ rules:
   no-div-regex: error
   no-else-return: off
   no-empty-function: off
-  no-labels:
-    - error
-    - allowLoop: true
-      allowSwitch: true
   no-empty-pattern: error
   no-eq-null: error
   no-eval: error
