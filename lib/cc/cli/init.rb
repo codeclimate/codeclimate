@@ -74,14 +74,26 @@ module CC
 
       def create_default_engine_configs
         say "Generating default configuration for engines..."
-        available_engine_configs.each do |config_path|
-          file_name = File.basename(config_path)
-          if filesystem.exist?(file_name)
-            say "Skipping generating #{file_name} file (already exists)."
-          else
-            filesystem.write_path(file_name, File.read(config_path))
-            success "Config file #{file_name} successfully generated."
+        available_engine_configs.each do |(engine_name, config_paths)|
+          engine = engine_registry[engine_name]
+          config_mapping = Hash.new { |_, k| [k] }.merge(engine.fetch("config_files", {}))
+
+          config_paths.each do |config_path|
+            generate_config(config_path, config_mapping[File.basename(config_path)])
           end
+        end
+      end
+
+      def generate_config(config_path, possible_names)
+        file_name = File.basename(config_path)
+        existing_files = possible_names.select do |f|
+          filesystem.exist? f
+        end
+        if existing_files.any?
+          say "Skipping generating #{file_name}, existing file(s) found: #{existing_files.join(", ")}"
+        else
+          filesystem.write_path(file_name, File.read(config_path))
+          success "Config file #{file_name} successfully generated."
         end
       end
 
@@ -89,12 +101,13 @@ module CC
         engines = existing_cc_config.engines || {}
         engine_names = engines.select { |_, config| config.enabled? }.keys
 
-        all_paths = engine_names.flat_map do |engine_name|
-          engine_directory = File.expand_path("../../../../config/#{engine_name}", __FILE__)
-          Dir.glob("#{engine_directory}/*", File::FNM_DOTMATCH)
-        end
-        all_paths.reject do |path|
-          %w[. ..].include?(File.basename(path))
+        engine_names.map do |engine_name|
+          engine_directory = File.expand_path("../../../config/#{engine_name}", __dir__)
+          [
+            engine_name,
+            Dir.glob("#{engine_directory}/*", File::FNM_DOTMATCH).
+              reject { |path| %w[. ..].include?(File.basename(path)) },
+          ]
         end
       end
 

@@ -161,6 +161,12 @@ eslint:
   default_ratings_paths:
     - "**.js"
     - "**.jsx"
+  config_files:
+    .eslintrc:
+      - .eslintrc.js
+      - .eslintrc.json
+      - .eslintrc.yaml
+      - .eslintrc.yml
 flog:
   channels:
     beta: codeclimate/codeclimate-flog:beta

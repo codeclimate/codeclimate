@@ -121,7 +121,7 @@ module CC::CLI
 
               content_after = File.read('.rubocop.yml')
 
-              expect(stdout).to include('Skipping generating .rubocop.yml file (already exists).')
+              expect(stdout).to include('Skipping generating .rubocop.yml, existing file(s) found: .rubocop.yml')
               expect(filesystem.exist?('.rubocop.yml')).to eq(true)
               expect(content_after).to eq(content_before)
             end
@@ -178,6 +178,47 @@ module CC::CLI
           capture_io_and_exit_code do
             init.run
           end
+        end
+
+        it "doesn't overwrite existing engine configs" do
+          yaml = "---\nengines:\n  rubocop:\n    enabled: true"
+          default_config = File.read(File.expand_path("../../../config/rubocop/.rubocop.yml", __dir__))
+          existing_config = default_config + "\n# This is not a default config\n"
+
+          File.write(".codeclimate.yml", yaml)
+          File.write(".rubocop.yml", existing_config)
+
+          init = Init.new
+
+          capture_io_and_exit_code do
+            init.run
+          end
+
+          engine_config = File.read(".rubocop.yml")
+          expect(engine_config).to_not eq(default_config)
+          expect(engine_config).to eq(existing_config)
+        end
+
+        it "doesn't generate default configs when alternative configs exist" do
+          yaml = "---\nengines:\n  rubocop:\n    enabled: true"
+
+          File.write(".codeclimate.yml", yaml)
+          File.write(".rubocop.yml.alt", "---\n")
+
+          init = Init.new
+          allow(init).to receive(:engine_registry).and_return(
+            "rubocop" => {
+              "config_files" => {
+                ".rubocop.yml" => [".rubocop.yml.alt"],
+              },
+            },
+          )
+
+          capture_io_and_exit_code do
+            init.run
+          end
+
+          expect(File.exist?(".rubocop.yml")).to eq false
         end
       end
 
