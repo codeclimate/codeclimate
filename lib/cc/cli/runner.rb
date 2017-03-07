@@ -18,7 +18,7 @@ module CC
       end
 
       def run
-        VersionChecker.new.check if check_version?
+        VersionChecker.new.check
 
         if command_class
           command = command_class.new(command_arguments)
@@ -57,18 +57,6 @@ module CC
           "version"
         else
           command_name
-        end
-      end
-
-      private
-
-      def check_version?
-        first_arg = ARGV.first
-        if %w[--check-version].include? first_arg
-          ARGV.shift
-          true
-        else
-          false
         end
       end
     end
