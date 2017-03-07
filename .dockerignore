@@ -7,3 +7,5 @@ bin/release
 circle.yml
 pkg
 tags
+*.sw*
+*~
