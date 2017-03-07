@@ -68,6 +68,7 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
     slop (3.6.0)
+    stackprof (0.2.10)
     systemu (2.6.5)
     thread_safe (0.3.6)
     tty-spinner (0.1.0)
@@ -86,3 +87,4 @@ DEPENDENCIES
   rspec
   rspec_junit_formatter
   simplecov
+  stackprof
