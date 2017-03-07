@@ -41,17 +41,31 @@ else
     && invalid_docker_host "$DOCKER_HOST"
 fi
 
+: ${XDG_CONFIG_HOME:=$HOME/.config/}
+CC_CONFIG="${CODECLIMATE_CONFIG:-$XDG_CONFIG_HOME/codeclimate/config.yml}"
+
+: ${XDG_CACHE_HOME:=$HOME/.cache/}
+CC_CACHE="${CODECLIMATE_CACHE:-$XDG_CACHE_HOME/codeclimate/cache.yml}"
+
+for f in "$CC_CONFIG" "$CC_CACHE"; do
+  mkdir -p "$(dirname "$f")"
+  touch "$f"
+done
+
 docker_run() {
   exec docker run \
     --interactive --rm \
     --env CODECLIMATE_CODE \
     --env CODECLIMATE_TMP \
     --env CODECLIMATE_DEBUG \
+    --env CODECLIMATE_VERSIONS_URL \
     --env CONTAINER_MAXIMUM_OUTPUT_BYTES \
     --env CONTAINER_TIMEOUT_SECONDS \
     --env ENGINE_MEMORY_LIMIT_BYTES \
     --volume "$CODECLIMATE_CODE":/code \
     --volume "$CODECLIMATE_TMP":/tmp/cc \
+    --volume "$CC_CONFIG":/config.yml \
+    --volume "$CC_CACHE":/cache.yml \
     --volume /var/run/docker.sock:/var/run/docker.sock \
     "$@"
 }
