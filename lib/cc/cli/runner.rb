@@ -1,11 +1,10 @@
 require "active_support"
 require "active_support/core_ext"
+require "cc/cli/version_checker"
 
 module CC
   module CLI
     class Runner
-      include CC::CLI::Checker
-
       def self.run(argv)
         new(argv).run
       rescue => ex
@@ -19,7 +18,7 @@ module CC
       end
 
       def run
-        check_version
+        VersionChecker.new.check
 
         if command_class
           command = command_class.new(command_arguments)

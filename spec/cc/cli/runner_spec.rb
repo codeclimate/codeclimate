@@ -22,6 +22,18 @@ module CC::CLI
 
         expect(stderr).to match(/error: \(StandardError\) boom/)
       end
+
+      it "checks for new versions" do
+        checker = instance_double("Version checker")
+        allow(CC::CLI::VersionChecker).to receive(:new).and_return(checker)
+        allow(checker).to receive(:check)
+
+        capture_io do
+          Runner.run([])
+        end
+
+        expect(checker).to have_received(:check)
+      end
     end
 
     describe "#command_class" do
