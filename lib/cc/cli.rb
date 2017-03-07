@@ -6,7 +6,6 @@ require "cc/workspace"
 require "cc/yaml"
 
 require "cc/cli/analyze"
-require "cc/cli/checker"
 require "cc/cli/command"
 require "cc/cli/console"
 require "cc/cli/engines"
