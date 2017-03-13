@@ -41,17 +41,34 @@ else
     && invalid_docker_host "$DOCKER_HOST"
 fi
 
+CC_XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-~/.config/}
+CC_XDG_CONFIG="${CC_XDG_CONFIG_HOME}/codeclimate/config.yml"
+CC_XDG_CONFIG_DIR=$(dirname "${CC_XDG_CONFIG}")
+[ -d "$CC_XDG_CONFIG_DIR" ] || mkdir -p "$CC_XDG_CONFIG_DIR"
+[ -f "$CC_XDG_CONFIG" ] || ( echo "---" > "$CC_XDG_CONFIG" )
+
+CC_XDG_CACHE_HOME=${XDG_CACHE_HOME:-~/.cache/}
+CC_XDG_CACHE="${CC_XDG_CACHE_HOME}/codeclimate/cache.yml"
+CC_XDG_CACHE_DIR=$(dirname "${CC_XDG_CACHE}")
+[ -d "$CC_XDG_CACHE_DIR" ] || mkdir -p "$CC_XDG_CACHE_DIR"
+[ -f "$CC_XDG_CACHE" ] || ( echo "---" > "$CC_XDG_CACHE" )
+
 docker_run() {
-  exec docker run \
+  docker run \
     --interactive --rm \
     --env CODECLIMATE_CODE \
     --env CODECLIMATE_TMP \
     --env CODECLIMATE_DEBUG \
+    --env CODECLIMATE_VERSIONS_URL \
     --env CONTAINER_MAXIMUM_OUTPUT_BYTES \
     --env CONTAINER_TIMEOUT_SECONDS \
     --env ENGINE_MEMORY_LIMIT_BYTES \
+    --env XDG_CONFIG_HOME="/xdg/config" \
+    --env XDG_CACHE_HOME="/xdg/cache" \
     --volume "$CODECLIMATE_CODE":/code \
     --volume "$CODECLIMATE_TMP":/tmp/cc \
+    --volume "${CC_XDG_CONFIG}":/xdg/config/codeclimate/config.yml \
+    --volume "${CC_XDG_CACHE}":/xdg/cache/codeclimate/cache.yml \
     --volume /var/run/docker.sock:/var/run/docker.sock \
     "$@"
 }
