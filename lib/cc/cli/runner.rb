@@ -1,5 +1,6 @@
 require "active_support"
 require "active_support/core_ext"
+require "cc/cli/version_checker"
 
 module CC
   module CLI
@@ -17,6 +18,8 @@ module CC
       end
 
       def run
+        VersionChecker.new.check
+
         if command_class
           command = command_class.new(command_arguments)
           command.execute

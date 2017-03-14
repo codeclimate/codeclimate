@@ -2,10 +2,13 @@ require "highline"
 require "active_support"
 require "active_support/core_ext"
 require "rainbow"
+require "cc/cli/output"
 
 module CC
   module CLI
     class Command
+      include CC::CLI::Output
+
       CODECLIMATE_YAML = ".codeclimate.yml".freeze
       NAMESPACE = name.split("::")[0..-2].join("::").freeze
 
@@ -70,23 +73,6 @@ module CC
         run
       end
 
-      def success(message)
-        terminal.say colorize(message, :green)
-      end
-
-      def say(message)
-        terminal.say message
-      end
-
-      def warn(message)
-        terminal.say(colorize("WARNING: #{message}", :yellow))
-      end
-
-      def fatal(message)
-        $stderr.puts colorize(message, :red)
-        exit 1
-      end
-
       def require_codeclimate_yml
         unless filesystem.exist?(CODECLIMATE_YAML)
           fatal("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.")
@@ -95,22 +81,10 @@ module CC
 
       private
 
-      def colorize(string, *args)
-        rainbow.wrap(string).color(*args)
-      end
-
-      def rainbow
-        @rainbow ||= Rainbow.new
-      end
-
       def filesystem
         @filesystem ||= CC::Analyzer::Filesystem.new(
           CC::Analyzer::MountedPath.code.container_path,
         )
-      end
-
-      def terminal
-        @terminal ||= HighLine.new($stdin, $stdout)
       end
 
       def engine_registry
