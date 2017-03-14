@@ -2,14 +2,20 @@ require "spec_helper"
 
 describe CC::CLI::VersionChecker do
   around(:each) do |example|
-    Dir.mktmpdir do |cache_dir|
-      ENV["XDG_CACHE_HOME"] = cache_dir
-      Dir.mktmpdir do |config_dir|
-        ENV["XDG_CONFIG_HOME"] = config_dir
-        example.run
-        ENV.delete "XDG_CONFIG_HOME"
-      end
-      ENV.delete "XDG_CACHE_HOME"
+    Dir.mktmpdir do |dir|
+      original_config = CC::CLI::GlobalConfig.send :remove_const, :FILE_NAME
+      CC::CLI::GlobalConfig.const_set :FILE_NAME, File.join(dir, "config.yml")
+
+      original_cache = CC::CLI::GlobalCache.send :remove_const, :FILE_NAME
+      CC::CLI::GlobalCache.const_set :FILE_NAME, File.join(dir, "cache.yml")
+
+      example.run
+
+      CC::CLI::GlobalConfig.send :remove_const, :FILE_NAME
+      CC::CLI::GlobalConfig.const_set :FILE_NAME, original_config
+
+      CC::CLI::GlobalCache.send :remove_const, :FILE_NAME
+      CC::CLI::GlobalCache.const_set :FILE_NAME, original_cache
     end
   end
 

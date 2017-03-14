@@ -1,12 +1,9 @@
-require "cc/cli/xdg_file"
+require "cc/cli/file_store"
 
 module CC
   module CLI
-    class GlobalCache < XDGFile
-      XDG_ENV_VAR = "XDG_CACHE_HOME".freeze
-      XDG_HOME = "~/.cache".freeze
-      NAMESPACE = "codeclimate".freeze
-      FILE_NAME = "cache.yml".freeze
+    class GlobalCache < FileStore
+      FILE_NAME = "/cache.yml".freeze
 
       # Cache entries
 

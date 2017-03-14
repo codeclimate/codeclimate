@@ -1,22 +1,22 @@
 require "spec_helper"
 
-RSpec.describe CC::CLI::GlobalCache do
+describe CC::CLI::GlobalCache do
   around(:each) do |example|
     Dir.mktmpdir do |dir|
-      ENV["XDG_CACHE_HOME"] = dir
+      original_file_name = described_class.send :remove_const, :FILE_NAME
+      described_class.const_set :FILE_NAME, File.join(dir, "cache.yml")
       example.run
-      ENV.delete "XDG_CACHE_HOME"
+      described_class.send :remove_const, :FILE_NAME
+      described_class.const_set :FILE_NAME, original_file_name
     end
   end
 
   def write_cache_file(content)
-    dir = File.join(ENV["XDG_CACHE_HOME"], described_class::NAMESPACE)
-    Dir.mkdir dir
-    File.write(File.join(dir, described_class::FILE_NAME), content)
+    File.write(described_class::FILE_NAME, content)
   end
 
   def read_cache_file
-    File.read File.join(ENV["XDG_CACHE_HOME"], described_class::NAMESPACE, described_class::FILE_NAME)
+    File.read described_class::FILE_NAME
   end
 
   let(:cache) { described_class.new }

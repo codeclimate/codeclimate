@@ -1,13 +1,10 @@
-require "cc/cli/xdg_file"
+require "cc/cli/file_store"
 require "uuid"
 
 module CC
   module CLI
-    class GlobalConfig < XDGFile
-      XDG_ENV_VAR = "XDG_CONFIG_HOME".freeze
-      XDG_HOME = "~/.config".freeze
-      NAMESPACE = "codeclimate".freeze
-      FILE_NAME = "config.yml".freeze
+    class GlobalConfig < FileStore
+      FILE_NAME = "/config.yml".freeze
 
       DEFAULT_CONFIG = {
         "check-version" => true,
