@@ -68,7 +68,10 @@ module CC
       end
 
       def engine_eligible?(engine)
-        !engine["community"] && engine["enable_regexps"].present? && files_exist?(engine)
+        engine["channels"].keys.any? { |channel| channel == "stable" } &&
+          !engine["community"] &&
+          engine["enable_regexps"].present? &&
+          files_exist?(engine)
       end
 
       def code_climate_check?(engine)
