@@ -45,7 +45,7 @@ module CC
       end
 
       def command_arguments
-        @args[1..-1]
+        Array(@args[1..-1])
       end
 
       def command
