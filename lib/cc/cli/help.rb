@@ -23,11 +23,14 @@ module CC
       private
 
       def show_help(command_name)
-        command = Command[command_name]
-        say "Usage: codeclimate #{command.synopsis}\n"
-        say "\n"
-        say "#{command.help}\n"
-        say "\n\n"
+        if (command = Command[command_name])
+          say "Usage: codeclimate #{command.synopsis}\n"
+          say "\n"
+          say "#{command.help}\n"
+          say "\n\n"
+        else
+          say "Unknown command: #{command_name}"
+        end
       end
 
       def show_help_summary
