@@ -82,6 +82,27 @@ module CC::CLI
 
         expect { generator.eligible_engines }.not_to raise_error
       end
+
+      it "doesn't include beta-only engines" do
+        # Note: included several beta-only engines so we don't need to update
+        # this spec too much when one or more of these engines is promoted to
+        # stable
+        make_tree <<-EOM
+          foo.cls
+          foo.java
+          foo.ex
+          foo.rb
+          foo.ts
+        EOM
+
+        engines = generator.eligible_engines.keys
+        expect(engines).not_to include("codescan")
+        expect(engines).not_to include("pmd")
+        expect(engines).not_to include("tslint")
+        expect(engines).not_to include("checkstyle")
+        expect(engines).to include("duplication")
+        expect(engines).to include("rubocop")
+      end
     end
 
     describe "#codecliamte_checks" do
