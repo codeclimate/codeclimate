@@ -9,6 +9,16 @@ module CC::CLI
     end
 
     describe ".run" do
+      it "prints help when no command is passed" do
+        stdout, stderr, exit_code = capture_io_and_exit_code do
+          Runner.run([])
+        end
+
+        expect(exit_code).to eq(0)
+        expect(stderr).to be_blank
+        expect(stdout).to include("Available commands")
+      end
+
       it "rescues exceptions and prints a friendlier message" do
         checker = instance_double("Version checker")
         allow(VersionChecker).to receive(:new).and_return(checker)
