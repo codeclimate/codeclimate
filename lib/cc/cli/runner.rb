@@ -63,12 +63,11 @@ module CC
       private
 
       def check_version?
-        first_arg = ARGV.first
-        if %w[--check-version].include? first_arg
+        if ARGV.first == "--no-check-version"
           ARGV.shift
-          true
-        else
           false
+        else
+          true
         end
       end
     end

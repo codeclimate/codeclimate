@@ -10,6 +10,10 @@ module CC::CLI
 
     describe ".run" do
       it "rescues exceptions and prints a friendlier message" do
+        checker = instance_double("Version checker")
+        allow(VersionChecker).to receive(:new).and_return(checker)
+        allow(checker).to receive(:check)
+
         Explode = Class.new(Command) do
           def run
             raise StandardError, "boom"
@@ -23,11 +27,12 @@ module CC::CLI
         expect(stderr).to match(/error: \(StandardError\) boom/)
       end
 
-      it "doesn't check checks for new version by default" do
+      it "doesn't check for new version when --no-check-version is passed" do
         checker = instance_double("Version checker")
         allow(VersionChecker).to receive(:new).and_return(checker)
         allow(checker).to receive(:check)
 
+        ARGV.unshift("--no-check-version")
         capture_io do
           Runner.run([])
         end
@@ -35,12 +40,11 @@ module CC::CLI
         expect(checker).to_not have_received(:check)
       end
 
-      it "check for new version when --check-version is passed" do
+      it "checks for new version by default" do
         checker = instance_double("Version checker")
         allow(VersionChecker).to receive(:new).and_return(checker)
         allow(checker).to receive(:check)
 
-        ARGV.unshift("--check-version")
         capture_io do
           Runner.run([])
         end
