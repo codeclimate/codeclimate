@@ -50,6 +50,7 @@ describe CC::CLI::GlobalConfig do
   end
 
   it "saves config" do
+    write_config_file("---")
     config.check_version = false
     config.uuid
     config.save

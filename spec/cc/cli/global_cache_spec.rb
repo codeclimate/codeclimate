@@ -5,6 +5,7 @@ describe CC::CLI::GlobalCache do
     Dir.mktmpdir do |dir|
       original_file_name = described_class.send :remove_const, :FILE_NAME
       described_class.const_set :FILE_NAME, File.join(dir, "cache.yml")
+      write_cache_file "---"
       example.run
       described_class.send :remove_const, :FILE_NAME
       described_class.const_set :FILE_NAME, original_file_name

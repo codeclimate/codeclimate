@@ -13,6 +13,8 @@ module CC
         return unless global_config.check_version?
 
         print_new_version_message if outdated?
+
+        global_config.save
       rescue => error
         CLI.debug(error)
       end

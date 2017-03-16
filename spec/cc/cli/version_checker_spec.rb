@@ -5,9 +5,11 @@ describe CC::CLI::VersionChecker do
     Dir.mktmpdir do |dir|
       original_config = CC::CLI::GlobalConfig.send :remove_const, :FILE_NAME
       CC::CLI::GlobalConfig.const_set :FILE_NAME, File.join(dir, "config.yml")
+      File.write CC::CLI::GlobalConfig::FILE_NAME, "---"
 
       original_cache = CC::CLI::GlobalCache.send :remove_const, :FILE_NAME
       CC::CLI::GlobalCache.const_set :FILE_NAME, File.join(dir, "cache.yml")
+      File.write CC::CLI::GlobalCache::FILE_NAME, "---"
 
       example.run
 
@@ -49,6 +51,22 @@ describe CC::CLI::VersionChecker do
     end
 
     expect(out).to include "A new version (v0.1.2) is available"
+  end
+
+  it "persistes config" do
+    stub_version_request(latest: "0.1.2", outdated: true)
+    allow(UUID).to receive(:new).
+      and_return(instance_double("UUID", generate: "definitely-a-uuid"))
+
+    config = File.read CC::CLI::GlobalCache::FILE_NAME
+    expect(config).to eq "---"
+
+    capture_io do
+      checker.check
+    end
+
+    config = File.read CC::CLI::GlobalConfig::FILE_NAME
+    expect(config).to include "uuid: definitely-a-uuid"
   end
 
   it "prints nothing when up to date" do
