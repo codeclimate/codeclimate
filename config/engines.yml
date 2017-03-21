@@ -106,6 +106,7 @@ codescan:
     - "**.cls"
 credo:
   channels:
+    stable: codeclimate/codeclimate-credo
     beta: codeclimate/codeclimate-credo:beta
   description: >
     A static code analysis tool for the Elixir language with a focus on code
