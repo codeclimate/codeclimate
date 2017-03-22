@@ -392,6 +392,15 @@ rubymotion:
   enable_regexps:
   default_ratings_paths:
     - "**.rb"
+rustfmt:
+  channels:
+    beta: codeclimate/codeclimate-rustfmt:beta
+  description: A tool for formatting Rust code according to style guidelines.
+  community: true
+  enable_regexps:
+    - \.rs$
+  default_ratings_paths:
+    - "**.rs"
 scss-lint:
   channels:
     stable: codeclimate/codeclimate-scss-lint
