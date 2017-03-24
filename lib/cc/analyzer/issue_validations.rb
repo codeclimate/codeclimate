@@ -11,6 +11,7 @@ module CC
       autoload :PathIsFileValidation, "cc/analyzer/issue_validations/path_is_file_validation"
       autoload :PathPresenceValidation, "cc/analyzer/issue_validations/path_presence_validation"
       autoload :RelativePathValidation, "cc/analyzer/issue_validations/relative_path_validation"
+      autoload :SeverityValidation, "cc/analyzer/issue_validations/severity_validation"
       autoload :TypeValidation, "cc/analyzer/issue_validations/type_validation"
       autoload :Validation, "cc/analyzer/issue_validations/validation"
 
