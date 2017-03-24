@@ -43,7 +43,7 @@ bundler-audit:
     - Gemfile.lock
 checks:
   channels:
-    beta: codeclimate/checks:beta
+    beta: codeclimate/codeclimate-checks:beta
   description: Maintainability and reliability checks for PHP, Python, JS, and more.
   community: false
   default_ratings_paths:
