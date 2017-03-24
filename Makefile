@@ -7,7 +7,7 @@ image:
 	docker build -t codeclimate/codeclimate .
 
 test: image
-	docker run --rm \
+	docker run --rm -it \
 	  --entrypoint bundle \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
 	  codeclimate/codeclimate exec rake spec:all spec:benchmark
