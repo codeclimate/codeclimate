@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.57.0)
+    codeclimate (0.58.0)
       activesupport (>= 4.2.1, < 5.1)
       codeclimate-yaml (~> 0.12.0)
       highline (~> 1.7, >= 1.7.2)
@@ -71,7 +71,7 @@ GEM
     systemu (2.6.5)
     thread_safe (0.3.6)
     tty-spinner (0.1.0)
-    tzinfo (1.2.2)
+    tzinfo (1.2.3)
       thread_safe (~> 0.1)
     uuid (2.3.8)
       macaddr (~> 1.0)
