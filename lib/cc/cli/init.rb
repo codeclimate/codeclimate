@@ -79,7 +79,9 @@ module CC
             config_mapping = Hash.new { |_, k| [k] }.merge(engine.fetch("config_files", {}))
 
             config_paths.each do |config_path|
-              generate_config(config_path, config_mapping[File.basename(config_path)])
+              filename = File.basename(config_path)
+              possible_names = config_mapping[filename].concat([filename])
+              generate_config(config_path, possible_names)
             end
           end
         end

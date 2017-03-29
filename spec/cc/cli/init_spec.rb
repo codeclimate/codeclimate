@@ -125,6 +125,22 @@ module CC::CLI
               expect(filesystem.exist?('.rubocop.yml')).to eq(true)
               expect(content_after).to eq(content_before)
             end
+
+            it "skips engine config file generation when target file is present" do
+              File.write("bar.js", "{}")
+
+              filename = ".eslintrc.yml"
+              content = "test content"
+              File.write(filename, content)
+
+              stdout, _, _ = capture_io_and_exit_code do
+                Init.new.run
+              end
+
+              expect(stdout).to include("Skipping generating #{filename}, existing file(s) found: #{filename}")
+              expect(filesystem.exist?(filename)).to eq(true)
+              expect(content).to eq(File.read(filename))
+            end
           end
 
           describe "when an invalid engine is specified" do
