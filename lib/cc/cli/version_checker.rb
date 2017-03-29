@@ -100,6 +100,10 @@ module CC
       def global_cache
         @global_cache ||= GlobalCache.new
       end
+
+      def terminal
+        @terminal ||= HighLine.new(nil, $stderr)
+      end
     end
   end
 end

@@ -46,11 +46,11 @@ describe CC::CLI::VersionChecker do
   it "checks version against the API" do
     stub_version_request(latest: "0.1.2", outdated: true)
 
-    out, = capture_io do
+    _, stderr = capture_io do
       checker.check
     end
 
-    expect(out).to include "A new version (v0.1.2) is available"
+    expect(stderr).to include "A new version (v0.1.2) is available"
   end
 
   it "persistes config" do
@@ -72,11 +72,11 @@ describe CC::CLI::VersionChecker do
   it "prints nothing when up to date" do
     stub_version_request(latest: "0.1.2", outdated: false)
 
-    out, = capture_io do
+    _, stderr = capture_io do
       checker.check
     end
 
-    expect(out).to eq ""
+    expect(stderr).to eq ""
   end
 
   it "uses cached values when API is unavailable" do
@@ -87,11 +87,11 @@ describe CC::CLI::VersionChecker do
     cache.latest_version = "0.1.1"
     cache.outdated = true
 
-    out, = capture_io do
+    _, stderr = capture_io do
       checker.check
     end
 
-    expect(out).to include "A new version (v0.1.1) is available"
+    expect(stderr).to include "A new version (v0.1.1) is available"
   end
 
   it "uses cached values if checked recently" do
@@ -100,10 +100,10 @@ describe CC::CLI::VersionChecker do
     cache.latest_version = "0.1.1"
     cache.outdated = true
 
-    out, = capture_io do
+    _, stderr = capture_io do
       checker.check
     end
 
-    expect(out).to include "A new version (v0.1.1) is available"
+    expect(stderr).to include "A new version (v0.1.1) is available"
   end
 end
