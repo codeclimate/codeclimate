@@ -25,4 +25,5 @@ Gem::Specification.new do |s|
   s.add_dependency "rainbow", "~> 2.0", ">= 2.0.0"
   s.add_dependency "redcarpet", "~> 3.2"
   s.add_dependency "uuid", "~> 2.3"
+  s.add_dependency "safe_yaml", "~> 1.0"
 end
