@@ -69,7 +69,6 @@ complexity-ruby:
     beta: codeclimate/codeclimate-complexity-ruby:b47
   description: Code Climate Complexity Checks for Ruby
   community: false
-  code_climate_check: true
   default_ratings_paths:
     - "**.rb"
   default_config:
