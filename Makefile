@@ -10,8 +10,13 @@ test: image
 	docker run --rm -it \
 	  --entrypoint bundle \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
-	  codeclimate/codeclimate exec rake spec:all spec:benchmark
+	  codeclimate/codeclimate exec rspec $(RSPEC_ARGS)
 
+test_all: image
+	docker run --rm -it \
+	  --entrypoint bundle \
+	  --volume /var/run/docker.sock:/var/run/docker.sock \
+	  codeclimate/codeclimate exec rake spec:all spec:benchmark
 citest:
 	docker run \
 	  --entrypoint sh \
