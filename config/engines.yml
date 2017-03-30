@@ -336,6 +336,17 @@ phpmd:
     - "**.php"
     - "**.module"
     - "**.inc"
+proselint:
+  channels:
+    beta: codeclimate/codeclimate-proselint:beta
+  description: A linter for prose.
+  community: true
+  enable_regexps:
+    - \.markdown$
+    - \.md$
+  default_ratings_paths:
+    - "**.markdown"
+    - "**.md"
 pmd:
   channels:
     beta: codeclimate/codeclimate-pmd:beta
