@@ -241,6 +241,15 @@ haxe-checkstyle:
     - \.hx$
   default_ratings_paths:
     - "**.hx"
+haml-lint:
+  channels:
+    beta: codeclimate/codeclimate-haml-lint:beta
+  description: Tool for writing clean and consistent HAML.
+  community: true
+  enable_regexps:
+    - \.haml$
+  default_ratings_paths:
+    - "**.haml"
 hlint:
   channels:
     stable: codeclimate/codeclimate-hlint
