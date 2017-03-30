@@ -19,11 +19,9 @@ module CC
           create_default_engine_configs if engines_enabled?
         elsif upgrade? && engines_enabled?
           warn "Config file .codeclimate.yml already configured for the Platform.\nTry running 'validate-config' to check configuration."
-          create_codeclimate_checks
           create_default_engine_configs
         else
           generate_all_config
-          create_codeclimate_checks
         end
       end
 
@@ -56,20 +54,6 @@ module CC
 
         config.add_exclude_paths(config_generator.exclude_paths)
         filesystem.write_path(CODECLIMATE_YAML, config.to_yaml)
-      end
-
-      def create_codeclimate_checks
-        if ENV["RUN_CODECLIMATE_CHECKS"] == "true"
-          say "Generating codeclimate checks..."
-          plain_config_hash = JSON.parse(CC::Yaml::Serializer::Json.serialize(existing_cc_config))
-          config = CC::CLI::Config.new(plain_config_hash)
-
-          config_generator.codeclimate_checks.each do |(engine_name, engine_config)|
-            config.add_engine(engine_name, engine_config)
-          end
-
-          filesystem.write_path(CODECLIMATE_YAML, config.to_yaml)
-        end
       end
 
       def create_default_engine_configs

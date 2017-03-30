@@ -105,26 +105,6 @@ module CC::CLI
       end
     end
 
-    describe "#codecliamte_checks" do
-      it "returns codeclimate checks found in the registry" do
-        allow(ENV).to receive(:[]).with("RUN_CODECLIMATE_CHECKS").
-          and_return("true")
-
-        expect(generator.codeclimate_checks.keys).to eq %w(complexity-ruby)
-      end
-
-      it "returns an empty hash when the feature is disabled" do
-        allow(ENV).to receive(:[]).with("RUN_CODECLIMATE_CHECKS").
-          and_return("false")
-
-        expect(generator.codeclimate_checks.keys).to be_empty
-      end
-
-      it "returns an empty hash when the feature is disabled" do
-        expect(generator.codeclimate_checks.keys).to be_empty
-      end
-    end
-
     describe "#errors" do
       it "is empty array" do
         expect(generator.errors).to eq []
