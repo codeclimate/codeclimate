@@ -7,6 +7,28 @@ module CC::CLI
         allow_any_instance_of(CC::Analyzer::Engine).to receive(:run)
       end
 
+      it "exits with a return code of 0 when no issues are emitted" do
+        allow_any_instance_of(CC::Analyzer::Formatters::PlainTextFormatter).to receive(:empty?)
+          .and_return(true)
+
+        _, _, exit_code = capture_io_and_exit_code do
+          Analyze.new.run
+        end
+
+        expect(exit_code).to eq(0)
+      end
+
+      it "exits with a return code of 1 when issues are emitted" do
+        allow_any_instance_of(CC::Analyzer::Formatters::PlainTextFormatter).to receive(:empty?)
+          .and_return(false)
+
+      _, _, exit_code = capture_io_and_exit_code do
+          Analyze.new.run
+        end
+
+        expect(exit_code).to eq(1)
+      end
+
       describe "when no engines are specified" do
         it "exits and reports no engines are enabled" do
           within_temp_dir do

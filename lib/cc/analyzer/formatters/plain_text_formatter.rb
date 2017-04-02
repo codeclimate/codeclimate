@@ -42,11 +42,11 @@ module CC
           end
         end
 
-        def failed(output)
-          spinner.stop("Failed")
-          puts colorize("\nAnalysis failed with the following output:", :red)
+        def errored(output)
+          spinner.stop("Errored")
+          puts colorize("\nAnalysis errored with the following output:", :red)
           puts output
-          exit 1
+          exit 2
         end
 
         private

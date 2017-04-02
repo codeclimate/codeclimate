@@ -4,7 +4,7 @@ module CC
       class JSONFormatter < Formatter
         def initialize(filesystem)
           @filesystem = filesystem
-          @has_begun = false
+          @emitted = false
         end
 
         def started
@@ -19,18 +19,22 @@ module CC
           document = JSON.parse(data)
           document["engine_name"] = current_engine.name
 
-          if @has_begun
+          if @emitted
             print ",\n"
           end
 
           print document.to_json
-          @has_begun = true
+          @emitted = true
         end
 
-        def failed(output)
-          $stderr.puts "\nAnalysis failed with the following output:"
+        def errored(output)
+          $stderr.puts "\nAnalysis errored with the following output:"
           $stderr.puts output
           exit 1
+        end
+
+        def empty?
+          @emitted
         end
       end
     end

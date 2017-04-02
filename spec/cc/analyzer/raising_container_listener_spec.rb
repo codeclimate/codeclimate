@@ -13,22 +13,23 @@ module CC::Analyzer
       end
     end
 
-    describe "#failure" do
+    describe "#error" do
       it "does nothing on success" do
         listener = RaisingContainerListener.new("engine", nil, nil)
         listener.finished(double(status: double(success?: true), stderr: ""))
       end
 
-      it "raises the given failure exception on error" do
-        failure_ex = Class.new(StandardError)
-        listener = RaisingContainerListener.new("engine", failure_ex, nil)
+      it "raises the given error exception on error" do
+        error_ex = Class.new(StandardError)
+        listener = RaisingContainerListener.new("engine", error_ex, nil)
         data = double(
           status: double(success?: false, exitstatus: 1),
           stderr: "some error",
         )
 
         expect { listener.finished(data) }.to raise_error(
-          failure_ex, /engine failed.*status 1.*some error/m
+          error_ex, /engine errored.*status 1.*some error/m
+
         )
       end
     end

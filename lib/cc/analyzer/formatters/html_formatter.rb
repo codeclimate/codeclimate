@@ -392,8 +392,8 @@ module CC
           puts ReportTemplate.new(issues, @filesystem).render
         end
 
-        def failed(_)
-          exit 1
+        def errored(_)
+          exit 2
         end
 
         private
