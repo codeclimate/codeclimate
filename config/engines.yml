@@ -207,6 +207,13 @@ govet:
     - \.go$
   default_ratings_paths:
     - "**.go"
+grep:
+  channels:
+    beta: codeclimate/codeclimate-grep
+  description: Detects specified patterns in files
+  community: false
+  enable_regexps:
+  default_ratings_paths:
 fixme:
   channels:
     stable: codeclimate/codeclimate-fixme
