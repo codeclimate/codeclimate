@@ -30,9 +30,6 @@ module CC
           runner = EnginesRunner.new(registry, formatter, source_dir, config, path_options)
           runner.run
         end
-
-      rescue EnginesRunner::InvalidEngineName => ex
-        fatal(ex.message)
       rescue EnginesRunner::NoEnabledEngines
         fatal("No enabled engines. Add some to your .codeclimate.yml file!")
       end

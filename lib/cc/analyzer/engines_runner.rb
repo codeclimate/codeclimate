@@ -3,7 +3,6 @@ require "securerandom"
 module CC
   module Analyzer
     class EnginesRunner
-      InvalidEngineName = Class.new(StandardError)
       NoEnabledEngines = Class.new(StandardError)
 
       def initialize(registry, formatter, source_dir, config, requested_paths = [], container_label = nil)
