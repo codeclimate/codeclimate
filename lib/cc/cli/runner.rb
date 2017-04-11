@@ -11,6 +11,7 @@ module CC
         $stderr.puts("error: (#{ex.class}) #{ex.message}")
 
         CLI.debug("backtrace: #{ex.backtrace.join("\n\t")}")
+        exit 1
       end
 
       def initialize(args)
