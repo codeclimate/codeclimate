@@ -10,10 +10,9 @@ module CC
 
       DEFAULT_MEMORY_LIMIT = 512_000_000.freeze
 
-      def initialize(name, metadata, code_path, config, label)
+      def initialize(name, metadata, config, label)
         @name = name
         @metadata = metadata
-        @code_path = code_path
         @config = config
         @label = label.to_s
       end
@@ -52,11 +51,6 @@ module CC
         container.run(container_options).tap do |result|
           CLI.debug("#{qualified_name} engine stderr: #{result.stderr}")
         end
-      rescue Container::ImageRequired
-        # Provide a clearer message given the context we have
-        message = "Unable to find an image for #{qualified_name}."
-        message << " Available channels: #{@metadata["channels"].keys.inspect}."
-        raise Container::ImageRequired, message
       ensure
         delete_config_file
       end
@@ -75,7 +69,7 @@ module CC
           "--memory-swap", "-1",
           "--net", "none",
           "--rm",
-          "--volume", "#{@code_path}:/code:ro",
+          "--volume", "#{code.host_path}:/code:ro",
           "--volume", "#{config_file.host_path}:/config.json:ro",
           "--user", "9000:9000"
         ]
@@ -91,6 +85,10 @@ module CC
 
       def delete_config_file
         config_file.delete if config_file.file?
+      end
+
+      def code
+        @code ||= MountedPath.code
       end
 
       def config_file

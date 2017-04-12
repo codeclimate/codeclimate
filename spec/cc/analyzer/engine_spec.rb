@@ -17,7 +17,7 @@ module CC::Analyzer
         end.and_return(container)
 
         metadata = { "image" => "codeclimate/foo", "command" => "bar" }
-        engine = Engine.new("foo", metadata, "", {}, "")
+        engine = Engine.new("foo", metadata, {}, "")
         engine.run(StringIO.new, ContainerListener.new)
       end
 
@@ -32,12 +32,11 @@ module CC::Analyzer
           "--memory-swap", "-1",
           "--net", "none",
           "--rm",
-          "--volume", "/code:/code:ro",
           "--user", "9000:9000",
         )).and_return(Container::Result.new(0, false, 1, false, 10, ""))
 
         expect(Container).to receive(:new).and_return(container)
-        engine = Engine.new("", {}, "/code", {}, "a-label")
+        engine = Engine.new("", {}, {}, "a-label")
         engine.run(StringIO.new, ContainerListener.new)
       end
 
@@ -61,7 +60,7 @@ module CC::Analyzer
         expect(Container).to receive(:new).
           with(including(listener: container_listener)).and_return(container)
 
-        engine = Engine.new("", {}, "", {}, "")
+        engine = Engine.new("", {}, {}, "")
         engine.run(StringIO.new, given_listener)
       end
 
@@ -77,7 +76,7 @@ module CC::Analyzer
           expect(Container).to receive(:new).and_return(container)
 
           stdout = TestFormatter.new
-          engine = Engine.new("", {}, "", {}, "")
+          engine = Engine.new("", {}, {}, "")
           engine.run(stdout, ContainerListener.new)
 
           expected = "{\"type\":\"issue\",\"check_name\":\"foo\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"bdc0c2bb1201c4739118a51481a86fa1\",\"severity\":\"minor\"}{\"type\":\"issue\",\"check_name\":\"bar\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"cbd5b8962eb9e2950fbb02f0ddf6c404\",\"severity\":\"minor\"}{\"type\":\"issue\",\"check_name\":\"baz\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"fingerprint\":\"a08df13d51af2259c425551cb84c135f\",\"severity\":\"minor\"}"
@@ -99,7 +98,7 @@ module CC::Analyzer
 
           stdout = StringIO.new
           config = { "checks" => { "bar" => { "enabled" => false } } }
-          engine = Engine.new("", {}, "", config, "")
+          engine = Engine.new("", {}, config, "")
           engine.run(stdout, ContainerListener.new)
 
           expect(stdout.string).not_to include %{"check":"bar"}
