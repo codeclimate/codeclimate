@@ -4,12 +4,12 @@ module CC
       SHORT_HELP = "Display the CLI version.".freeze
 
       def run
-        say version
+        say self.class.latest
       end
 
-      def version
+      def self.latest
         path = File.expand_path("../../../../VERSION", __FILE__)
-        @version ||= File.read(path)
+        @version ||= File.read(path).chomp
       end
     end
   end

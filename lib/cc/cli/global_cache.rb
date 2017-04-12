@@ -31,17 +31,6 @@ module CC
         save
         value
       end
-
-      def outdated
-        data["outdated"] == true
-      end
-      alias outdated? outdated
-
-      def outdated=(value)
-        data["outdated"] = value == true
-        save
-        value
-      end
     end
   end
 end

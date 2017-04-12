@@ -31,6 +31,10 @@ describe CC::CLI::VersionChecker do
     allow(Net::HTTP).to receive(:start).and_return(resp)
   end
 
+  def stub_local_version(version)
+    expect(CC::CLI::Version).to receive(:latest).and_return(version)
+  end
+
   it "doesn't do anything when disabled in global config" do
     config = CC::CLI::GlobalConfig.new
     config.check_version = false
@@ -44,6 +48,7 @@ describe CC::CLI::VersionChecker do
   end
 
   it "checks version against the API" do
+    stub_local_version("0.1.1")
     stub_version_request(latest: "0.1.2", outdated: true)
 
     _, stderr = capture_io do
@@ -82,10 +87,10 @@ describe CC::CLI::VersionChecker do
   it "uses cached values when API is unavailable" do
     stub_resolv("versions.codeclimate.com", "255.255.255.255")
     allow(Net::HTTP).to receive(:start).and_return(Net::HTTPServerError.new(500, "Nope", "Nope Nope"))
+    stub_local_version("0.1.0")
 
     cache = CC::CLI::GlobalCache.new
     cache.latest_version = "0.1.1"
-    cache.outdated = true
 
     _, stderr = capture_io do
       checker.check
@@ -98,12 +103,26 @@ describe CC::CLI::VersionChecker do
     cache = CC::CLI::GlobalCache.new
     cache.last_version_check = Time.now
     cache.latest_version = "0.1.1"
-    cache.outdated = true
+    stub_local_version("0.1.0")
 
     _, stderr = capture_io do
       checker.check
     end
 
     expect(stderr).to include "A new version (v0.1.1) is available"
+  end
+
+  it "doesn't warn about being outdated right after you upgrade" do
+    cache = CC::CLI::GlobalCache.new
+    cache.last_version_check = Time.now
+    cache.latest_version = "0.1.1"
+
+    stub_local_version("0.1.1")
+
+    _, stderr = capture_io do
+      checker.check
+    end
+
+    expect(stderr).to eq ""
   end
 end
