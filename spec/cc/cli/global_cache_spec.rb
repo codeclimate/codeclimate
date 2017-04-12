@@ -58,30 +58,4 @@ describe CC::CLI::GlobalCache do
       expect(read_cache_file).to include "last-version-check: #{time.strftime "%F %T.%N %:z"}"
     end
   end
-
-  describe "outdated" do
-    it "returns false by default" do
-      expect(cache.outdated).to eq false
-    end
-
-    it "autosaves on assignment" do
-      cache.outdated = true
-      expect(read_cache_file).to include "outdated: true"
-    end
-
-    it "converts assigned value to boolean" do
-      cache.outdated = 42
-      expect(cache.outdated).to eq false
-    end
-
-    it "is aliased as outdated?" do
-      cache.outdated = true
-      expect(cache.outdated).to eq true
-      expect(cache.outdated?).to eq true
-
-      cache.outdated = false
-      expect(cache.outdated).to eq false
-      expect(cache.outdated?).to eq false
-    end
-  end
 end

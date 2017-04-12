@@ -26,11 +26,7 @@ module CC
       end
 
       def outdated?
-        if version_check_is_due?
-          api_response["outdated"] == true
-        else
-          global_cache.outdated?
-        end
+        Gem::Version.new(latest_version) > Gem::Version.new(version)
       end
 
       def latest_version
@@ -55,7 +51,6 @@ module CC
             # try again next time.
             {
               "latest" => global_cache.latest_version || version,
-              "outdated" => global_cache.outdated || false,
             }
           end
       end
@@ -84,13 +79,12 @@ module CC
 
       def cache!(data)
         global_cache.latest_version = data["latest"]
-        global_cache.outdated = data["outdated"] == true
         global_cache.last_version_check = Time.now
         data
       end
 
       def version
-        @version ||= Version.new.version
+        @version ||= Version.latest
       end
 
       def global_config
