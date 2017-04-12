@@ -2,6 +2,7 @@ require "yaml"
 
 module CC
   module Analyzer
+    autoload :Bridge, "cc/analyzer/bridge"
     autoload :CompositeContainerListener, "cc/analyzer/composite_container_listener"
     autoload :Config, "cc/analyzer/config"
     autoload :Container, "cc/analyzer/container"
