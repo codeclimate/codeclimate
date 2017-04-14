@@ -2,33 +2,58 @@ require "spec_helper"
 
 module CC::Analyzer
   describe RaisingContainerListener do
-    describe "#timed_out" do
-      it "raises the given timeout exception" do
-        timeout_ex = Class.new(StandardError)
-        listener = RaisingContainerListener.new("engine", nil, timeout_ex)
-
-        expect { listener.timed_out(double(duration: 900000)) }.to raise_error(
-          timeout_ex, /engine ran for 900 seconds/
-        )
-      end
-    end
+    let(:engine) { double(name: "engine") }
 
     describe "#failure" do
       it "does nothing on success" do
-        listener = RaisingContainerListener.new("engine", nil, nil)
-        listener.finished(double(status: double(success?: true), stderr: ""))
+        result = double(timed_out?: false, maximum_output_exceeded?: false, exit_status: 0)
+
+        listener = RaisingContainerListener.new(nil)
+        listener.finished(engine, nil, result)
       end
 
       it "raises the given failure exception on error" do
-        failure_ex = Class.new(StandardError)
-        listener = RaisingContainerListener.new("engine", failure_ex, nil)
-        data = double(
-          status: double(success?: false, exitstatus: 1),
+        result = double(
+          timed_out?: false,
+          maximum_output_exceeded?: false,
+          exit_status: 1,
           stderr: "some error",
         )
+        failure_ex = Class.new(StandardError)
 
-        expect { listener.finished(data) }.to raise_error(
+        listener = RaisingContainerListener.new(failure_ex)
+
+        expect { listener.finished(engine, nil, result) }.to raise_error(
           failure_ex, /engine failed.*status 1.*some error/m
+        )
+      end
+
+
+      it "raises the given timeout exception" do
+        result = double(
+          timed_out?: true,
+          duration: 900000,
+        )
+        timeout_ex = Class.new(StandardError)
+        listener = RaisingContainerListener.new(nil, timeout_ex)
+
+        expect { listener.finished(engine, nil, result) }.to raise_error(
+          timeout_ex, /engine ran for 900 seconds/
+        )
+      end
+
+      it "raises the given maximum output exception" do
+        result = double(
+          timed_out?: false,
+          maximum_output_exceeded?: true,
+          output_byte_count: 857,
+        )
+        maximum_output_ex = Class.new(StandardError)
+
+        listener = RaisingContainerListener.new(nil, nil, maximum_output_ex)
+
+        expect { listener.finished(engine, nil, result) }.to raise_error(
+          maximum_output_ex, /engine produced too much output.*857/
         )
       end
     end
