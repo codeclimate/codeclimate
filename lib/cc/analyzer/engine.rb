@@ -33,7 +33,7 @@ module CC
         )
 
         container.on_output("\0") do |raw_output|
-          CLI.debug("#{qualified_name} engine output: #{raw_output.strip}")
+          Analyzer.logger.debug("#{qualified_name} engine output: #{raw_output.strip}")
           output = EngineOutput.new(raw_output)
 
           unless output.valid?
@@ -46,11 +46,8 @@ module CC
           end
         end
 
-        write_config_file
-        CLI.debug("#{qualified_name} engine config: #{config_file.read}")
-        container.run(container_options).tap do |result|
-          CLI.debug("#{qualified_name} engine stderr: #{result.stderr}")
-        end
+        Analyzer.logger.debug("#{qualified_name} engine config: #{config_file.read}")
+          Analyzer.logger.debug("#{qualified_name} engine stderr: #{result.stderr}")
       ensure
         delete_config_file
       end
