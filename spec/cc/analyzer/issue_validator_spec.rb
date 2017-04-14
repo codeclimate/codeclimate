@@ -23,7 +23,7 @@ module CC::Analyzer
       end
 
       it "stores an error for invalid issues" do
-        CC::Analyzer.logger.stubs(:error) # quiet spec
+        allow(CC::Analyzer.logger).to receive(:error)
         validator = IssueValidator.new({})
         expect(validator).not_to be_valid
         expect(validator.error).to eq(
