@@ -5,16 +5,12 @@ module CC
         @listeners = listeners
       end
 
-      def started(data)
-        listeners.each { |listener| listener.started(data) }
+      def started(*args)
+        listeners.each { |listener| listener.started(*args) }
       end
 
-      def timed_out(data)
-        listeners.each { |listener| listener.timed_out(data) }
-      end
-
-      def finished(data)
-        listeners.each { |listener| listener.finished(data) }
+      def finished(*args)
+        listeners.each { |listener| listener.finished(*args) }
       end
 
       private
