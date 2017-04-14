@@ -33,7 +33,6 @@ module CC
 
         config.engines.each do |engine|
           formatter.engine_running(engine) do
-            # TODO: this will raise on unknown engines
             engine_details = registry.fetch_engine_details(
               engine, development: config.development?,
             )
@@ -44,6 +43,10 @@ module CC
         end
 
         formatter.finished
+      rescue CC::EngineRegistry::EngineDetailsNotFoundError => ex
+        # Build a fake result to preserve interface guarantees. This is lossy in
+        # that we don't know duration or output_byte_count.
+        Container::Result.new(99, false, 0, false, 0, "", ex.message, "")
       ensure
         formatter.close
       end
