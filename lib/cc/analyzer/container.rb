@@ -29,7 +29,9 @@ module CC
         :duration,
         :maximum_output_exceeded?,
         :output_byte_count,
+        :stdout, # empty if handled via #on_output
         :stderr,
+        :container_name,
       )
 
       DEFAULT_TIMEOUT = 15 * 60 # 15m
@@ -39,13 +41,16 @@ module CC
         @image = image
         @name = name
         @command = command
-        @output_delimeter = "\n"
-        @on_output = ->(*) {}
         @timed_out = false
         @maximum_output_exceeded = false
+        @stdout_io = StringIO.new
         @stderr_io = StringIO.new
         @output_byte_count = 0
         @counter_mutex = Mutex.new
+
+        # By default accumulate and include stdout in result
+        @output_delimeter = "\n"
+        @on_output = ->(output) { @stdout_io.puts(output) }
       end
 
       def on_output(delimeter = "\n", &block)
@@ -91,7 +96,9 @@ module CC
           duration,
           @maximum_output_exceeded,
           output_byte_count,
+          @stdout_io.string,
           @stderr_io.string,
+          @name,
         )
       ensure
         kill_reader_threads
