@@ -17,10 +17,6 @@ module CC
     # Output:
     #   - Container::Result
     #
-    # TODO: some things Builder still needs to inject
-    #
-    #   - docker_image_prefix
-    #
     class Engine
       Error = Class.new(StandardError)
 
