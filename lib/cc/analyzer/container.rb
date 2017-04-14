@@ -3,15 +3,26 @@ require "thread"
 
 module CC
   module Analyzer
+    #
+    # Running an abstract docker container
+    #
+    # Input:
+    #   - image
+    #   - name
+    #   - command (Optional)
+    #
+    # Output:
+    #   - Result
+    #     - exit_status
+    #     - timed_out?
+    #     - duration
+    #     - maximum_output_exceeded?
+    #     - output_byte_count
+    #     - stderr
+    #
+    # Never raises (unless broken)
+    #
     class Container
-      ContainerData = Struct.new(
-        :image, # image used to create the container
-        :name, # name given to the container when created
-        :duration, # duration, for a finished event
-        :status, # status, for a finished event
-        :stderr, # stderr, for a finished event
-      )
-
       Result = Struct.new(
         :exit_status,
         :timed_out?,
@@ -24,11 +35,10 @@ module CC
       DEFAULT_TIMEOUT = 15 * 60 # 15m
       DEFAULT_MAXIMUM_OUTPUT_BYTES = 500_000_000
 
-      def initialize(image:, name:, command: nil, listener: ContainerListener.new)
+      def initialize(image:, name:, command: nil)
         @image = image
         @name = name
         @command = command
-        @listener = listener
         @output_delimeter = "\n"
         @on_output = ->(*) {}
         @timed_out = false
@@ -45,7 +55,6 @@ module CC
 
       def run(options = [])
         started = Time.now
-        @listener.started(container_data)
 
         command = docker_run_command(options)
         Analyzer.logger.debug("docker run: #{command.inspect}")
@@ -69,13 +78,12 @@ module CC
         # will unblock with the correct value in @timed_out
         [@t_out, @t_err].each(&:join)
 
-        if @timed_out
-          duration = timeout * 1000
-          @listener.timed_out(container_data(duration: duration))
-        else
-          duration = ((Time.now - started) * 1000).round
-          @listener.finished(container_data(duration: duration, status: @status))
-        end
+        duration =
+          if @timed_out
+            timeout * 1000
+          else
+            ((Time.now - started) * 1000).round
+          end
 
         Result.new(
           @status && @status.exitstatus,
@@ -165,10 +173,6 @@ module CC
           @maximum_output_exceeded = true
           stop("maximum output exceeded")
         end
-      end
-
-      def container_data(duration: nil, status: nil)
-        ContainerData.new(@image, @name, duration, status, @stderr_io.string)
       end
 
       def kill_reader_threads

@@ -1,22 +1,21 @@
 module CC
   module Analyzer
     class LoggingContainerListener < ContainerListener
-      def initialize(engine_name, logger)
-        @engine_name = engine_name
+      def initialize(logger)
         @logger = logger
       end
 
-      def started(_data)
-        logger.info("starting engine #{engine_name}")
+      def started(engine, _details)
+        logger.info("starting engine #{engine.name}")
       end
 
-      def finished(_data)
-        logger.info("finished engine #{engine_name}")
+      def finished(engine, _details, _result)
+        logger.info("finished engine #{engine.name}")
       end
 
       private
 
-      attr_reader :engine_name, :logger
+      attr_reader :logger
     end
   end
 end
