@@ -1,13 +1,10 @@
 module CC
   module Analyzer
     class ContainerListener
-      def started(_data)
+      def started(_engine, _details)
       end
 
-      def timed_out(_data)
-      end
-
-      def finished(_data)
+      def finished(_engine, _details, _result)
       end
     end
   end
