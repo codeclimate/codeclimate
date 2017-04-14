@@ -54,35 +54,6 @@ module CC::Analyzer
         expect(collected_output).to eq %w[ foo bar ]
       end
 
-      it "logs a start event to the given container listener" do
-        stub_spawn
-        listener = TestContainerListener.new
-        container = Container.new(image: "codeclimate/foo", name: "name", listener: listener)
-
-        container.run
-
-        expect(listener.started_image).to eq "codeclimate/foo"
-        expect(listener.started_name).to eq "name"
-      end
-
-      it "logs a finished event with status and stderr" do
-        listener = TestContainerListener.new
-        container = Container.new(image: "codeclimate/foo", name: "name", listener: listener)
-
-        err = StringIO.new
-        err.puts("error one")
-        err.puts("error two")
-        err.rewind
-        status = double("Process::Status", exitstatus: 123)
-        stub_spawn(status: status, err: err)
-
-        container.run
-
-        expect(listener.finished_image).to eq "codeclimate/foo"
-        expect(listener.finished_name).to eq "name"
-        expect(listener.finished_stderr).to eq "error one\nerror two\n"
-      end
-
       it "returns a result object" do
         container = Container.new(image: "codeclimate/foo", name: "name")
         stub_spawn
@@ -103,13 +74,10 @@ module CC::Analyzer
         end
 
         it "can be stopped" do
-          listener = TestContainerListener.new
-          expect(listener).to receive(:timed_out).never
           container = Container.new(
             image: "alpine",
             command: %w[sleep 10],
             name: @name,
-            listener: listener,
           )
 
           run_container(container) do |c|
@@ -119,8 +87,6 @@ module CC::Analyzer
           end
 
           assert_container_stopped
-          expect(listener.finished_image).to eq "alpine"
-          expect(listener.finished_name).to eq @name
           expect(@container_result.timed_out?).to eq false
           expect(@container_result.exit_status).to be_present
           expect(@container_result.duration).to be_between(-1, 10_000)
@@ -128,22 +94,15 @@ module CC::Analyzer
 
         it "times out slow containers" do
           with_timeout(1) do
-            listener = TestContainerListener.new
-            expect(listener).to receive(:finished).never
             container = Container.new(
               image: "alpine",
               command: %w[sleep 10],
               name: @name,
-              listener: listener,
             )
 
             run_container(container)
 
             assert_container_stopped
-            expect(listener.timed_out?).to eq true
-            expect(listener.timed_out_image).to eq "alpine"
-            expect(listener.timed_out_name).to eq @name
-            expect(listener.timed_out_seconds).to eq 1
             expect(@container_result.timed_out?).to eq true
             expect(@container_result.exit_status).to be_present
             expect(@container_result.duration).to be_between(-1, 2_000)
@@ -152,13 +111,10 @@ module CC::Analyzer
 
         it "waits for IO parsing to finish" do
           stdout_lines = []
-          listener = TestContainerListener.new
-          expect(listener).to receive(:finished).once
           container = Container.new(
             image: "alpine",
             command: ["echo", "line1\nline2\nline3"],
             name: @name,
-            listener: listener,
           )
           container.on_output do |str|
             sleep 0.5
@@ -174,14 +130,11 @@ module CC::Analyzer
 
         it "does not wait for IO when timed out" do
           with_timeout(1) do
-            listener = TestContainerListener.new
-            expect(listener).to receive(:finished).never
             container = Container.new(
               image: "alpine",
               #command: %w[sleep 10],
               command: ["echo", "line1\nline2\nline3"],
               name: @name,
-              listener: listener,
             )
             container.on_output do |str|
               sleep 10 and raise "Reader thread was not killed"
@@ -190,19 +143,16 @@ module CC::Analyzer
             run_container(container)
 
             assert_container_stopped
-            expect(listener.timed_out?).to eq true
           end
         end
 
         it "stops containers that emit more than the configured maximum output bytes" do
           begin
             ENV["CONTAINER_MAXIMUM_OUTPUT_BYTES"] = "4"
-            listener = TestContainerListener.new
             container = Container.new(
               image: "alpine",
               command: ["echo", "hello"],
               name: @name,
-              listener: listener,
             )
 
             run_container(container)
@@ -224,12 +174,12 @@ module CC::Analyzer
               image: "alpine",
               command: %w[sleep 10],
               name: "cc-engines-rubocop-stable-abc-123",
-              listener: TestContainerListener.new,
             )
 
             allow(POSIX::Spawn::Child).to receive(:new).
               and_raise(POSIX::Spawn::TimeoutExceeded)
 
+            expect(CC::Analyzer.logger).to receive(:error)
             expect(CC::Analyzer.statsd).to receive(:increment).
               with("container.zombie")
             expect(CC::Analyzer.statsd).to receive(:increment).
@@ -280,14 +230,6 @@ module CC::Analyzer
         expect(result.timed_out?).to eq false
         expect(result.duration).to be_present
         expect(result.stderr).to eq "error one\nerror two\n"
-      end
-    end
-
-    describe "new with a blank image" do
-      it "raises an exception" do
-        expect { CC::Analyzer::Container.new(image: "", name: "name") }.to raise_error(
-          CC::Analyzer::Container::ImageRequired
-        )
       end
     end
 
