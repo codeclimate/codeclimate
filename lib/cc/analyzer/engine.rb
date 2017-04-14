@@ -2,13 +2,30 @@ require "securerandom"
 
 module CC
   module Analyzer
+    #
+    # Running specifically an Engine container
+    #
+    # Input:
+    #   - name
+    #   - metadata
+    #     - image
+    #     - command (optional)
+    #   - config (becomes /config.json)
+    #   - label
+    #   - io (to write filtered, validated output)
+    #
+    # Output:
+    #   - Container::Result
+    #
+    # TODO: some things Builder still needs to inject
+    #
+    #   - --log-driver=none
+    #   - docker_image_prefix
+    #
     class Engine
-      EngineFailure = Class.new(StandardError)
-      EngineTimeout = Class.new(StandardError)
+      Error = Class.new(StandardError)
 
-      attr_reader :name
-
-      DEFAULT_MEMORY_LIMIT = 512_000_000.freeze
+      DEFAULT_MEMORY_LIMIT = 512_000_000
 
       def initialize(name, metadata, config, label)
         @name = name
@@ -17,42 +34,47 @@ module CC
         @label = label.to_s
       end
 
-      def run(stdout_io, container_listener)
-        composite_listener = CompositeContainerListener.new(
-          container_listener,
-          LoggingContainerListener.new(qualified_name, Analyzer.logger),
-          StatsdContainerListener.new(qualified_name.tr(":", "."), Analyzer.statsd),
-          RaisingContainerListener.new(qualified_name, EngineFailure, EngineTimeout),
-        )
+      def run(io)
+        write_config_file
 
         container = Container.new(
           image: @metadata.fetch("image"),
           command: @metadata["command"],
           name: container_name,
-          listener: composite_listener,
         )
 
-        container.on_output("\0") do |raw_output|
-          Analyzer.logger.debug("#{qualified_name} engine output: #{raw_output.strip}")
-          output = EngineOutput.new(raw_output)
-
-          unless output.valid?
-            stdout_io.failed("#{qualified_name} produced invalid output: #{output.error[:message]}")
-            container.stop
-          end
-
-          unless output_filter.filter?(output)
-            stdout_io.write(output_overrider.apply(output).to_json) || container.stop
-          end
+        container.on_output("\0") do |output|
+          handle_output(container, io, output)
         end
 
-        Analyzer.logger.debug("#{qualified_name} engine config: #{config_file.read}")
-          Analyzer.logger.debug("#{qualified_name} engine stderr: #{result.stderr}")
+        container.run(container_options)
+      rescue Error => ex
+        # Build a fake result to preserve interface guarantees. This is lossy in
+        # that we don't know duration or output_byte_count.
+        Container::Result.new(99, false, 0, false, 0, ex.message)
       ensure
         delete_config_file
       end
 
       private
+
+      attr_reader :name
+
+      def handle_output(container, io, raw_output)
+        output = EngineOutput.new(raw_output)
+
+        return if output_filter.filter?(output)
+
+        unless output.valid?
+          container.stop("output invalid")
+          raise Error, "engine produced invalid output: #{raw_output.inspect}"
+        end
+
+        unless io.write(output_overrider.apply(output).to_json)
+          container.stop("output error")
+          raise Error, "#{io.class}#write returned false, indicating an error"
+        end
+      end
 
       def qualified_name
         "#{name}:#{@config.fetch("channel", "stable")}"
