@@ -1,6 +1,25 @@
 module CC
   module Analyzer
     # The shared interface, invoked by Builder or CLI::Analyze
+    #
+    # Input:
+    #   - config
+    #     - engines
+    #     - exclude_patterns
+    #     - development?
+    #     - analysis_paths
+    #   - formatter
+    #     - started
+    #     - engine_running
+    #     - finished
+    #     - close
+    #   - listener
+    #     - started(engine, details)
+    #     - finished(engine, details, result)
+    #   - registry
+    #
+    # Only raises if Listener raises
+    #
     class Bridge
       def initialize(config:, formatter:, listener:, registry:)
         @config = config
@@ -14,7 +33,13 @@ module CC
 
         config.engines.each do |engine|
           formatter.engine_running(engine) do
-            run_engine(engine)
+            # TODO: this will raise on unknown engines
+            engine_details = registry.fetch_engine_details(
+              engine, development: config.development?,
+            )
+            listener.started(engine, engine_details)
+            result = run_engine(engine, engine_details)
+            listener.finished(engine, engine_details, result)
           end
         end
 
@@ -27,12 +52,8 @@ module CC
 
       attr_reader :config, :formatter, :listener, :registry
 
-      def run_engine(engine)
-        engine_details = registry.fetch_engine_details(
-          engine, development: config.development?,
-        )
-
-        runnable_engine = Engine.new(
+      def run_engine(engine, engine_details)
+        Engine.new(
           engine.name,
           {
             "image" => engine_details.image,
@@ -42,9 +63,7 @@ module CC
             include_paths: workspace.paths,
           ),
           engine.container_label,
-        )
-
-        runnable_engine.run(formatter, listener)
+        ).run(formatter)
       end
 
       def workspace
