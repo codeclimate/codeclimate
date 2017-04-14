@@ -16,7 +16,7 @@ module CC
 
         global_config.save
       rescue => error
-        CLI.debug(error)
+        CLI.logger.debug(error)
       end
 
       private
@@ -50,7 +50,7 @@ module CC
           begin
             cache! JSON.parse(api_response_body)
           rescue JSON::ParserError => error
-            CLI.debug(error)
+            CLI.logger.debug(error)
             # We don't know so use cached values or pretend all is peachy. We'll
             # try again next time.
             {
@@ -67,7 +67,7 @@ module CC
           raise Net::HTTPFatalError.new("HTTP Error", http_response)
         end
       rescue Net::HTTPFatalError => error
-        CLI.debug(error)
+        CLI.logger.debug(error)
         ""
       end
 

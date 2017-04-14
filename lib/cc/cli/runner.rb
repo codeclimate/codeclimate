@@ -9,8 +9,7 @@ module CC
         new(argv).run
       rescue => ex
         $stderr.puts("error: (#{ex.class}) #{ex.message}")
-
-        CLI.debug("backtrace: #{ex.backtrace.join("\n\t")}")
+        CLI.logger.debug("backtrace: #{ex.backtrace.join("\n\t")}")
         exit 1
       end
 
