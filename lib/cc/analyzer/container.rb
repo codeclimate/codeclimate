@@ -11,7 +11,7 @@ module CC
         :status, # status, for a finished event
         :stderr, # stderr, for a finished event
       )
-      ImageRequired = Class.new(StandardError)
+
       Result = Struct.new(
         :exit_status,
         :timed_out?,
@@ -25,7 +25,6 @@ module CC
       DEFAULT_MAXIMUM_OUTPUT_BYTES = 500_000_000
 
       def initialize(image:, name:, command: nil, listener: ContainerListener.new)
-        raise ImageRequired if image.blank?
         @image = image
         @name = name
         @command = command
