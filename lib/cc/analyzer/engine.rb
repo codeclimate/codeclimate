@@ -26,7 +26,7 @@ module CC
         )
 
         container = Container.new(
-          image: @metadata["image"],
+          image: @metadata.fetch("image"),
           command: @metadata["command"],
           name: container_name,
           listener: composite_listener,
