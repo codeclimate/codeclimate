@@ -48,7 +48,7 @@ module CC
         @listener.started(container_data)
 
         command = docker_run_command(options)
-        CLI.debug("docker run: #{command.inspect}")
+        Analyzer.logger.debug("docker run: #{command.inspect}")
         pid, _, out, err = POSIX::Spawn.popen4(*command)
 
         @t_out = read_stdout(out)
@@ -116,6 +116,7 @@ module CC
             out.each_line(@output_delimeter) do |chunk|
               output = chunk.chomp(@output_delimeter)
 
+              Analyzer.logger.debug("engine stdout: #{output}")
               @on_output.call(output)
               check_output_bytes(output.bytesize)
             end
@@ -129,6 +130,7 @@ module CC
         Thread.new do
           begin
             err.each_line do |line|
+              Analyzer.logger.debug("engine stderr: #{line}")
               @stderr_io.write(line)
               check_output_bytes(line.bytesize)
             end
