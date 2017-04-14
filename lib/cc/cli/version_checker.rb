@@ -34,7 +34,7 @@ module CC
       end
 
       def print_new_version_message
-        warn "A new version (v#{latest_version}) is available. Upgrade installations are available at: https://github.com/codeclimate/codeclimate#packages"
+        warn "A new version (v#{latest_version}) is available. Upgrade instructions are available at: https://github.com/codeclimate/codeclimate#packages"
       end
 
       def api_response
