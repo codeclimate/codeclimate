@@ -79,7 +79,7 @@ describe CC::CLI::VersionChecker do
     expect(stderr).to eq ""
   end
 
-  it "uses cached values when API is unavailable" do
+  it "does nothing when API is unavailable" do
     stub_resolv("versions.codeclimate.com", "255.255.255.255")
     allow(Net::HTTP).to receive(:start).and_return(Net::HTTPServerError.new(500, "Nope", "Nope Nope"))
 
@@ -91,10 +91,10 @@ describe CC::CLI::VersionChecker do
       checker.check
     end
 
-    expect(stderr).to include "A new version (v0.1.1) is available"
+    expect(stderr).to eq ""
   end
 
-  it "uses cached values if checked recently" do
+  it "does nothing if checked recently" do
     cache = CC::CLI::GlobalCache.new
     cache.last_version_check = Time.now
     cache.latest_version = "0.1.1"
@@ -104,6 +104,6 @@ describe CC::CLI::VersionChecker do
       checker.check
     end
 
-    expect(stderr).to include "A new version (v0.1.1) is available"
+    expect(stderr).to eq ""
   end
 end
