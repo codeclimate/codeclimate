@@ -19,7 +19,6 @@ module CC
     #
     # TODO: some things Builder still needs to inject
     #
-    #   - --log-driver=none
     #   - docker_image_prefix
     #
     class Engine
@@ -84,6 +83,7 @@ module CC
         [
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=#{@label}",
+          "--log-driver", "none",
           "--memory", memory_limit,
           "--memory-swap", "-1",
           "--net", "none",
