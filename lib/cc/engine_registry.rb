@@ -8,8 +8,9 @@ module CC
     EngineDetails = Struct.new(:image, :command)
     EngineDetailsNotFoundError = Class.new(StandardError)
 
-    def initialize(path = DEFAULT_MANIFEST_PATH)
+    def initialize(path = DEFAULT_MANIFEST_PATH, prefix = "")
       @yaml = SafeYAML.load_file(path)
+      @prefix = prefix
     end
 
     def fetch_engine_details(engine, development: false)
@@ -20,7 +21,7 @@ module CC
         channels = metadata.fetch("channels")
 
         EngineDetails.new(
-          channels.fetch(engine.channel),
+          [prefix, channels.fetch(engine.channel)].join,
           metadata.fetch("command", DEFAULT_COMMAND),
         )
       end
@@ -30,7 +31,7 @@ module CC
 
     private
 
-    attr_reader :yaml
+    attr_reader :yaml, :prefix
 
     def not_found_message(ex, engine, available_channels)
       "Engine details not found" \
