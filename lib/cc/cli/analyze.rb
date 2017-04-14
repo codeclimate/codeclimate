@@ -18,7 +18,10 @@ module CC
         super
 
         @config = Config::Default.new
-        @listener = ContainerListener.new
+        @listener = CompositeContainerListener.new(
+          LoggingContainerListener.new(Analyzer.logger),
+          RaisingContainerListener.new(StandardError),
+        )
         @registry = EngineRegistry.new
 
         process_args
