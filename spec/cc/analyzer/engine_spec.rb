@@ -7,7 +7,7 @@ module CC::Analyzer
         container = double
         allow(container).to receive(:on_output).and_yield("")
         allow(container).to receive(:run).and_return(
-          Container::Result.new(0, false, 1, false, 10, ""),
+          Container::Result.new(0, false, 1, false, 10, "", "", ""),
         )
 
         expect(Container).to receive(:new) do |args|
@@ -33,7 +33,7 @@ module CC::Analyzer
           "--net", "none",
           "--rm",
           "--user", "9000:9000",
-        )).and_return(Container::Result.new(0, false, 1, false, 10, ""))
+        )).and_return(Container::Result.new(0, false, 1, false, 10, "", "", ""))
 
         expect(Container).to receive(:new).and_return(container)
         engine = Engine.new("", { "image" => "" }, {}, "a-label")
