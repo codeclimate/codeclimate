@@ -25,15 +25,16 @@ module CC
       ENV["CODECLIMATE_DEBUG"]
     end
 
-    def self.debug(message, values = {})
-      if debug?
-        if values.any?
-          message << " "
-          message << values.map { |k, v| "#{k}=#{v.inspect}" }.join(" ")
+    def self.logger
+      @logger ||= ::Logger.new(STDERR).tap do |logger|
+        if debug?
+          logger.level = ::Logger::DEBUG
+        else
+          logger.level = ::Logger::ERROR
         end
-
-        $stderr.puts("[DEBUG] #{message}")
       end
     end
   end
+
+  Analyzer.logger = CLI.logger
 end
