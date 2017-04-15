@@ -62,7 +62,7 @@ module CC
 
         unless output.valid?
           container.stop("output invalid")
-          raise Error, "engine produced invalid output: #{raw_output.inspect}"
+          raise Error, "engine produced invalid output: #{output.error}"
         end
 
         unless io.write(output.to_json)
