@@ -17,7 +17,7 @@ module CC::Analyzer
           "begin" => 2,
           "end" => 4
         }
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
         fingerprint = SourceFingerprint.new(issue)
 
         expect(fingerprint.compute).to eq("30f53a688723a198cd83d3e3377da7d0")
@@ -34,7 +34,7 @@ module CC::Analyzer
           },
         }
 
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
         fingerprint = SourceFingerprint.new(issue)
 
         expect(fingerprint.compute).to eq("a3429245fd5f37cfddc9f1a6c7fd31b3")
@@ -45,7 +45,7 @@ module CC::Analyzer
           "begin" => 5,
           "end" => 100
         }
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
         fingerprint = SourceFingerprint.new(issue)
 
         expect(fingerprint.compute).to eq("84fbb18391c45d63ddc6f8d528d18ae6")
@@ -56,7 +56,7 @@ module CC::Analyzer
           "begin" => 1000,
           "end" => 1000
         }
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
         fingerprint = SourceFingerprint.new(issue)
 
         expect(fingerprint.compute).to eq("eef541a28f83417a45808139d58b631d")
@@ -74,7 +74,7 @@ module CC::Analyzer
         allow(File).to receive(:file?).and_return(true)
         allow(File).to receive(:read).and_return("hi \255".force_encoding(Encoding::UTF_8))
 
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
         fingerprint = SourceFingerprint.new(issue)
 
         expect(fingerprint.compute).to eq("717ddedd698e51037903bad1d2b06c1b")
@@ -89,7 +89,7 @@ module CC::Analyzer
           "path" => "doesnotexist"
         }
 
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
         fingerprint = SourceFingerprint.new(issue)
 
         expect(fingerprint.compute).to eq("8b425ee5d6c63f873d62d9985676b2d9")

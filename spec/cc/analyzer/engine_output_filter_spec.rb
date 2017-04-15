@@ -5,7 +5,7 @@ module CC::Analyzer
     it "does not filter arbitrary json" do
       filter = EngineOutputFilter.new
 
-      expect(filter.filter?(EngineOutput.new(%{{"arbitrary":"json"}}))).to eq false
+      expect(filter.filter?(EngineOutput.new("", %{{"arbitrary":"json"}}))).to eq false
     end
 
     it "does not filter issues missing or enabled in the config" do
@@ -39,7 +39,7 @@ module CC::Analyzer
     end
 
     it "filters issues ignored in the config even if the type has the wrong case" do
-      issue = EngineOutput.new({
+      issue = EngineOutput.new("", {
         "type" => "Issue", "check_name" => "foo",
       }.to_json)
 
@@ -55,7 +55,7 @@ module CC::Analyzer
     end
 
     it "filters issues with a fingerprint that matches exclude_fingerprints" do
-      issue = EngineOutput.new({
+      issue = EngineOutput.new("", {
         "type" => "Issue",
         "check_name" => "foo",
         "fingerprint" => "05a33ac5659c1e90cad1ce32ff8a91c0",
@@ -76,7 +76,7 @@ module CC::Analyzer
     end
 
     def build_issue(check_name)
-      EngineOutput.new({
+      EngineOutput.new("", {
         "type" => EngineOutputFilter::ISSUE_TYPE,
         "check_name" => check_name,
         "location" => {
