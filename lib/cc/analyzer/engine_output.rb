@@ -4,7 +4,8 @@ module CC
       delegate :blank?, to: :raw_output
       delegate :to_json, to: :as_issue
 
-      def initialize(raw_output)
+      def initialize(name, raw_output)
+        @name = name
         @raw_output = raw_output
       end
 
@@ -15,7 +16,7 @@ module CC
       end
 
       def as_issue
-        Issue.new(raw_output)
+        Issue.new(name, raw_output)
       end
 
       def valid?
@@ -28,7 +29,7 @@ module CC
 
       private
 
-      attr_accessor :raw_output
+      attr_accessor :name, :raw_output
 
       def parsed_output
         @parsed_output ||= JSON.parse(raw_output)
