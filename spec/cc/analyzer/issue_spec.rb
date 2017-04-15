@@ -20,7 +20,7 @@ module CC::Analyzer
     end
 
     it "allows access to keys as methods" do
-      issue = Issue.new(output.to_json)
+      issue = Issue.new("", output.to_json)
 
       expect(issue.respond_to?("check_name")).to eq true
       expect(issue.check_name).to eq("Rubocop/Style/Documentation")
@@ -28,7 +28,7 @@ module CC::Analyzer
 
     describe "#fingerprint" do
       it "adds a fingerprint when it is missing" do
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
 
         expect(issue.fingerprint).to eq "433fae1189b03bcd9153dc8dce209fa5"
       end
@@ -55,13 +55,13 @@ module CC::Analyzer
       it "doesn't overwrite fingerprints within output" do
         output["fingerprint"] = "foo"
 
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
 
         expect(issue.fingerprint).to eq "foo"
       end
 
       it "uses the source fingerprint if env variable is present" do
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
 
         expect(issue.fingerprint).to eq "433fae1189b03bcd9153dc8dce209fa5"
       end
@@ -70,10 +70,11 @@ module CC::Analyzer
     describe "#as_json" do
       it "merges in defaulted attributes" do
         expected_additions = {
+          "engine_name" => "foo",
           "fingerprint" => "433fae1189b03bcd9153dc8dce209fa5",
           "severity" => Issue::DEFAULT_SEVERITY,
         }
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("foo", output.to_json)
 
         expect(issue.as_json).to eq(output.merge(expected_additions))
       end
@@ -90,13 +91,14 @@ module CC::Analyzer
 
       it "doesn't overwrite defaulted attrs when present" do
         optional_attrs = {
+          "engine_name" => "foo",
           "fingerprint" => "433fae1189b03bcd9153dc8dce209fa5",
           "severity" => "major",
         }
 
         unchanged = output.merge(optional_attrs)
 
-        issue = Issue.new(unchanged.to_json)
+        issue = Issue.new("", unchanged.to_json)
 
         expect(issue.as_json).to eq(unchanged)
       end
