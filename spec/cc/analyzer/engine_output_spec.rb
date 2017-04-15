@@ -6,7 +6,7 @@ module CC::Analyzer
       it "returns true if the output is an issue" do
         output = { type: "issue" }.to_json
 
-        expect(EngineOutput.new(output).issue?).to eq(true)
+        expect(EngineOutput.new("", output).issue?).to eq(true)
       end
     end
   end
