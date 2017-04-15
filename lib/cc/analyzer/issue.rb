@@ -14,12 +14,14 @@ module CC
         type
       ]
 
-      def initialize(output)
+      def initialize(engine_name, output)
+        @engine_name = engine_name
         @output = output
       end
 
       def as_json(*)
         parsed_output.reverse_merge!(
+          "engine_name" => engine_name,
           "fingerprint" => fingerprint,
           "severity" => severity,
         )
@@ -42,7 +44,7 @@ module CC
 
       private
 
-      attr_reader :output
+      attr_reader :engine_name, :output
 
       def default_fingerprint
         SourceFingerprint.new(self).compute
