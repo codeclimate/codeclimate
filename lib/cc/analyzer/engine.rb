@@ -56,7 +56,7 @@ module CC
       attr_reader :name
 
       def handle_output(container, io, raw_output)
-        output = EngineOutput.new(raw_output)
+        output = EngineOutput.new(name, raw_output)
 
         return if output_filter.filter?(output)
 
