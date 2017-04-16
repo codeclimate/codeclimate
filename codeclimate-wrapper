@@ -56,6 +56,7 @@ docker_run() {
   exec docker run \
     --interactive --rm \
     --env CODECLIMATE_CODE \
+    --env CODECLIMATE_CODE_PATH \
     --env CODECLIMATE_TMP \
     --env CODECLIMATE_DEBUG \
     --env CODECLIMATE_VERSIONS_URL \
