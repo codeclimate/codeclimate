@@ -6,9 +6,7 @@ module CC::Analyzer
       it "passes the correct options to Container" do
         container = double
         allow(container).to receive(:on_output).and_yield("")
-        allow(container).to receive(:run).and_return(
-          Container::Result.new(0, false, 1, false, 10, "", "", ""),
-        )
+        allow(container).to receive(:run).and_return(Container::Result.new)
 
         expect(Container).to receive(:new) do |args|
           expect(args[:image]).to eq "codeclimate/foo"
@@ -33,7 +31,7 @@ module CC::Analyzer
           "--net", "none",
           "--rm",
           "--user", "9000:9000",
-        )).and_return(Container::Result.new(0, false, 1, false, 10, "", "", ""))
+        )).and_return(Container::Result.new)
 
         expect(Container).to receive(:new).and_return(container)
         engine = Engine.new("", { "image" => "" }, {}, "a-label")
