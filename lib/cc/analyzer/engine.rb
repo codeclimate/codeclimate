@@ -93,6 +93,7 @@ module CC
       end
 
       def write_config_file
+        Analyzer.logger.debug "/config.json content: #{@config.inspect}"
         config_file.write(@config.to_json)
       end
 
