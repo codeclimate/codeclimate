@@ -10,7 +10,7 @@ module CC
       DEFAULT_VERSIONS_URL = "https://versions.codeclimate.com".freeze
 
       def check
-        return unless global_config.check_version?
+        return unless global_config.check_version? && version_check_is_due?
 
         print_new_version_message if outdated?
 
@@ -26,19 +26,11 @@ module CC
       end
 
       def outdated?
-        if version_check_is_due?
-          api_response["outdated"] == true
-        else
-          global_cache.outdated?
-        end
+        api_response["outdated"]
       end
 
       def latest_version
-        if version_check_is_due?
-          api_response["latest"]
-        else
-          global_cache.latest_version
-        end
+        api_response["latest"]
       end
 
       def print_new_version_message
@@ -51,11 +43,8 @@ module CC
             cache! JSON.parse(api_response_body)
           rescue JSON::ParserError => error
             CLI.debug(error)
-            # We don't know so use cached values or pretend all is peachy. We'll
-            # try again next time.
             {
-              "latest" => global_cache.latest_version || version,
-              "outdated" => global_cache.outdated || false,
+              "outdated" => false,
             }
           end
       end
@@ -99,6 +88,10 @@ module CC
 
       def global_cache
         @global_cache ||= GlobalCache.new
+      end
+
+      def terminal
+        @terminal ||= HighLine.new(nil, $stderr)
       end
     end
   end

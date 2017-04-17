@@ -37,14 +37,6 @@ module CC
         end
       end
 
-      def codeclimate_checks
-        @codeclimate_checks ||= engine_registry.list.each_with_object({}) do |(name, config), result|
-          if code_climate_check?(config)
-            result[name] = config
-          end
-        end
-      end
-
       def errors
         []
       end
@@ -72,10 +64,6 @@ module CC
           !engine["community"] &&
           engine["enable_regexps"].present? &&
           files_exist?(engine)
-      end
-
-      def code_climate_check?(engine)
-        engine["code_climate_check"] && ENV["RUN_CODECLIMATE_CHECKS"] == "true"
       end
 
       def files_exist?(engine)

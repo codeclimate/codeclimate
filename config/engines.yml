@@ -43,7 +43,7 @@ bundler-audit:
     - Gemfile.lock
 checks:
   channels:
-    beta: codeclimate/checks:beta
+    beta: codeclimate/codeclimate-checks:beta
   description: Maintainability and reliability checks for PHP, Python, JS, and more.
   community: false
   default_ratings_paths:
@@ -69,7 +69,6 @@ complexity-ruby:
     beta: codeclimate/codeclimate-complexity-ruby:b47
   description: Code Climate Complexity Checks for Ruby
   community: false
-  code_climate_check: true
   default_ratings_paths:
     - "**.rb"
   default_config:
@@ -208,6 +207,14 @@ govet:
     - \.go$
   default_ratings_paths:
     - "**.go"
+grep:
+  channels:
+    beta: codeclimate/codeclimate-grep
+    stable: codeclimate/codeclimate-grep
+  description: Detects specified patterns in files
+  community: false
+  enable_regexps:
+  default_ratings_paths:
 fixme:
   channels:
     stable: codeclimate/codeclimate-fixme
@@ -241,6 +248,15 @@ haxe-checkstyle:
     - \.hx$
   default_ratings_paths:
     - "**.hx"
+haml-lint:
+  channels:
+    beta: codeclimate/codeclimate-haml-lint:beta
+  description: Tool for writing clean and consistent HAML.
+  community: true
+  enable_regexps:
+    - \.haml$
+  default_ratings_paths:
+    - "**.haml"
 hlint:
   channels:
     stable: codeclimate/codeclimate-hlint
@@ -327,6 +343,17 @@ phpmd:
     - "**.php"
     - "**.module"
     - "**.inc"
+proselint:
+  channels:
+    beta: codeclimate/codeclimate-proselint:beta
+  description: A linter for prose.
+  community: true
+  enable_regexps:
+    - \.markdown$
+    - \.md$
+  default_ratings_paths:
+    - "**.markdown"
+    - "**.md"
 pmd:
   channels:
     beta: codeclimate/codeclimate-pmd:beta

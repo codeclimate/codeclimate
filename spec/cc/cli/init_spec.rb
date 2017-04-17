@@ -44,35 +44,6 @@ module CC::CLI
           expect(CC::Yaml.parse(new_content).errors).to be_empty
         end
 
-        describe "generating codeclimate checks" do
-          before do
-            @original_env = ENV["RUN_CODECLIMATE_CHECKS"]
-            ENV["RUN_CODECLIMATE_CHECKS"] = "true"
-          end
-
-          after do
-            ENV["RUN_CODECLIMATE_CHECKS"] = @original_env
-          end
-
-          it "adds codeclimate checks when the feature is enabled" do
-            expect(filesystem.exist?(".codeclimate.yml")).to eq(false)
-
-            init = Init.new
-
-            stdout, _, exit_code = capture_io_and_exit_code do
-              init.run
-            end
-
-            content_after = CC::Yaml.parse(File.read(".codeclimate.yml"))
-
-            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
-
-            engine_names = content_after.engines.keys
-            expect(engine_names).to include("complexity-ruby")
-            expect(exit_code).to eq 0
-          end
-        end
-
         it "runs when the directory is empty" do
           _, _, exit_code = capture_io_and_exit_code do
             init = Init.new
@@ -124,6 +95,22 @@ module CC::CLI
               expect(stdout).to include('Skipping generating .rubocop.yml, existing file(s) found: .rubocop.yml')
               expect(filesystem.exist?('.rubocop.yml')).to eq(true)
               expect(content_after).to eq(content_before)
+            end
+
+            it "skips engine config file generation when target file is present" do
+              File.write("bar.js", "{}")
+
+              filename = ".eslintrc.yml"
+              content = "test content"
+              File.write(filename, content)
+
+              stdout, _, _ = capture_io_and_exit_code do
+                Init.new.run
+              end
+
+              expect(stdout).to include("Skipping generating #{filename}, existing file(s) found: #{filename}")
+              expect(filesystem.exist?(filename)).to eq(true)
+              expect(content).to eq(File.read(filename))
             end
           end
 
@@ -264,42 +251,6 @@ module CC::CLI
 
           expect(stdout).to include("configured for the Platform")
           expect(exit_code).to eq 0
-        end
-
-        describe "generating codeclimate checks" do
-          before do
-            @original_env = ENV["RUN_CODECLIMATE_CHECKS"]
-            ENV["RUN_CODECLIMATE_CHECKS"] = "true"
-          end
-
-          after do
-            ENV["RUN_CODECLIMATE_CHECKS"] = @original_env
-          end
-
-          it "adds codeclimate checks when the feature is enabled" do
-            expect(filesystem.exist?(".codeclimate.yml")).to eq(false)
-
-            yaml_content_before = yaml_with_rubocop_enabled
-            File.write(".codeclimate.yml", yaml_content_before)
-
-            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
-
-            init = Init.new(["--upgrade"])
-
-            expect(init).to receive(:create_default_engine_configs)
-
-            stdout, _, exit_code = capture_io_and_exit_code do
-              init.run
-            end
-
-            content_after = CC::Yaml.parse(File.read(".codeclimate.yml"))
-
-            expect(filesystem.exist?(".codeclimate.yml")).to eq(true)
-
-            engine_names = content_after.engines.keys
-            expect(engine_names).to include("complexity-ruby")
-            expect(exit_code).to eq 0
-          end
         end
 
         it "behaves normally if no .codeclimate.yml present" do
