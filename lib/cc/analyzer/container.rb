@@ -1,6 +1,8 @@
 require "posix/spawn"
 require "thread"
 
+require "cc/analyzer/container/result"
+
 module CC
   module Analyzer
     #
@@ -23,17 +25,6 @@ module CC
     # Never raises (unless broken)
     #
     class Container
-      Result = Struct.new(
-        :exit_status,
-        :timed_out?,
-        :duration,
-        :maximum_output_exceeded?,
-        :output_byte_count,
-        :stdout, # empty if handled via #on_output
-        :stderr,
-        :container_name,
-      )
-
       DEFAULT_TIMEOUT = 15 * 60 # 15m
       DEFAULT_MAXIMUM_OUTPUT_BYTES = 500_000_000
 
@@ -91,14 +82,14 @@ module CC
           end
 
         Result.new(
-          @status && @status.exitstatus,
-          @timed_out,
-          duration,
-          @maximum_output_exceeded,
-          output_byte_count,
-          @stdout_io.string,
-          @stderr_io.string,
-          @name,
+          container_name: @name,
+          duration: duration,
+          exit_status: @status && @status.exitstatus,
+          maximum_output_exceeded: @maximum_output_exceeded,
+          output_byte_count: output_byte_count,
+          stderr: @stderr_io.string,
+          stdout: @stdout_io.string,
+          timed_out: @timed_out,
         )
       ensure
         kill_reader_threads
