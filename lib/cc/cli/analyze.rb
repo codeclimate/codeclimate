@@ -14,28 +14,26 @@ module CC
 
       include CC::Analyzer
 
-      def initialize(_args = [])
-        super
-
-        @config = Config::Default.new
-        @listener = CompositeContainerListener.new(
-          LoggingContainerListener.new(Analyzer.logger),
-          RaisingContainerListener.new(StandardError),
-        )
-        @registry = EngineRegistry.new
-
-        process_args
-      end
-
       def run
-        bridge = Bridge.new(
-          config: config,
-          formatter: formatter,
-          listener: listener,
-          registry: registry,
-        )
+        Dir.chdir(MountedPath.code.container_path) do
+          # Load config here so it sees ./.codeclimate.yml
+          @config = Config.load
 
-        Dir.chdir(MountedPath.code.container_path) { bridge.run }
+          # process args after, so it modifies loaded configuration
+          process_args
+
+          bridge = Bridge.new(
+            config: config,
+            formatter: formatter,
+            listener: CompositeContainerListener.new(
+              LoggingContainerListener.new(Analyzer.logger),
+              RaisingContainerListener.new(StandardError),
+            ),
+            registry: EngineRegistry.new
+          )
+
+          bridge.run
+        end
       end
 
       private
