@@ -44,9 +44,7 @@ module CC
 
         formatter.finished
       rescue CC::EngineRegistry::EngineDetailsNotFoundError => ex
-        # Build a fake result to preserve interface guarantees. This is lossy in
-        # that we don't know duration or output_byte_count.
-        Container::Result.new(99, false, 0, false, 0, "", ex.message, "")
+        Container::Result.from_exception(ex)
       ensure
         formatter.close
       end
