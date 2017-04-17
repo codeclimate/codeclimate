@@ -21,10 +21,14 @@ module CC
       end
 
       def to_config_json
-        {
-          "channel" => channel,
-          "config" => config,
-        }
+        if config.present?
+          {
+            "channel" => channel,
+            "config" => config,
+          }
+        else
+          { "channel" => channel }
+        end
       end
     end
   end
