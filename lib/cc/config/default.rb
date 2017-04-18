@@ -26,6 +26,10 @@ module CC
         self
       end
 
+      def prepare
+        Prepare::NoPrepareNeeded.new
+      end
+
       def analysis_paths
         @analysis_paths ||= []
       end
