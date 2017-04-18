@@ -15,5 +15,7 @@ RUN chmod +x /bin/docker
 
 COPY . /usr/src/app
 
+VOLUME /code
+WORKDIR /code
 ENV CODECLIMATE_DOCKER 1
 ENTRYPOINT ["/usr/src/app/bin/codeclimate"]
