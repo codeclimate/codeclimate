@@ -43,6 +43,10 @@ module CC
         )
       end
 
+      def prepare
+        Prepare.from_yaml(yaml["prepare"])
+      end
+
       private
 
       attr_reader :path, :default, :yaml
