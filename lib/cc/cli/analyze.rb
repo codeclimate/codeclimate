@@ -12,6 +12,8 @@ module CC
         "    --dev                            Run in development mode. Engines installed locally that are not in the manifest will be run.\n" \
         "    path                             Path to check. Can be specified multiple times.".freeze
 
+      EngineFailure = Class.new(StandardError)
+
       include CC::Analyzer
 
       def run
@@ -27,7 +29,7 @@ module CC
             formatter: formatter,
             listener: CompositeContainerListener.new(
               LoggingContainerListener.new(Analyzer.logger),
-              RaisingContainerListener.new(StandardError),
+              RaisingContainerListener.new(EngineFailure),
             ),
             registry: EngineRegistry.new
           )
@@ -45,8 +47,18 @@ module CC
           case arg
           when "-f"
             @formatter = Formatters.resolve(@args.shift).new(filesystem)
-          # when "-e", "--engine"
-          #   @engine_options << @args.shift
+          when "-e", "--engine"
+            # First time passed, clear any configured engines
+            unless @cleared
+              config.engines.clear
+              @cleared = true
+            end
+            name, channel = @args.shift.split(":", 2)
+            config.engines << Config::Engine.new(
+              name,
+              channel: channel,
+              enabled: true,
+            )
           when "--dev"
             config.development = true
           else

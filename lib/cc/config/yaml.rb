@@ -33,7 +33,7 @@ module CC
       end
 
       def engines
-        @engines ||= default.engines.concat(plugin_engines)
+        @engines ||= default.engines | Set.new(plugin_engines)
       end
 
       def exclude_patterns
@@ -48,9 +48,9 @@ module CC
       attr_reader :path, :default, :yaml
 
       def plugin_engines
-        yaml.fetch("plugins", []).
-          map { |name, data| plugin_engine(name, data) }.
-          select(&:enabled?)
+        yaml.fetch("plugins", []).map do |name, data|
+          plugin_engine(name, data)
+        end
       end
 
       def plugin_engine(name, data)
