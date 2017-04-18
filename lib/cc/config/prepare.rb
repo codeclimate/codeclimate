@@ -23,7 +23,7 @@ module CC
         @fetch = fetch
       end
 
-      class Fetch < SimpleDelegator
+      class Fetch
         def self.from_yaml(data)
           new(data.map { |d| Entry.from_yaml(d) })
         end
