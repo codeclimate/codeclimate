@@ -17,25 +17,23 @@ module CC
       include CC::Analyzer
 
       def run
-        Dir.chdir(MountedPath.code.container_path) do
-          # Load config here so it sees ./.codeclimate.yml
-          @config = Config.load
+        # Load config here so it sees ./.codeclimate.yml
+        @config = Config.load
 
-          # process args after, so it modifies loaded configuration
-          process_args
+        # process args after, so it modifies loaded configuration
+        process_args
 
-          bridge = Bridge.new(
-            config: config,
-            formatter: formatter,
-            listener: CompositeContainerListener.new(
-              LoggingContainerListener.new(Analyzer.logger),
-              RaisingContainerListener.new(EngineFailure),
-            ),
-            registry: EngineRegistry.new
-          )
+        bridge = Bridge.new(
+          config: config,
+          formatter: formatter,
+          listener: CompositeContainerListener.new(
+            LoggingContainerListener.new(Analyzer.logger),
+            RaisingContainerListener.new(EngineFailure),
+          ),
+          registry: EngineRegistry.new
+        )
 
-          bridge.run
-        end
+        bridge.run
       end
 
       private
