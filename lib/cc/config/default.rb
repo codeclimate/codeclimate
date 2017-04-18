@@ -38,7 +38,7 @@ module CC
 
       def load_defaults
         @development = false
-        @engines = [structure_engine, duplication_engine]
+        @engines = Set.new([structure_engine, duplication_engine])
         @exclude_patterns = EXCLUDE_PATTERNS
       end
 
