@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Releases the quality-model branch to the quality-model tag on DockerHub
+#
+###
+set -e
+
+git checkout quality-model
+git pull
+
+image=codeclimate/codeclimate:quality-model
+docker build --tag "$image" .
+docker push "$image"
