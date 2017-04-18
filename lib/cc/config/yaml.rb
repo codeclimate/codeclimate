@@ -14,10 +14,22 @@ module CC
         to: :default
 
       def initialize(path = DEFAULT_PATH)
+        @path = path
         @yaml = SafeYAML.load_file(path) || {}
         @default = Default.new
 
         upconvert_legacy_yaml!
+      end
+
+      def reload
+        # We don't expect or support the YAML itself to have changed on disk,
+        # otherwise users who are calling reload would have to also re-validate
+        # to avoid problems using the result. This just resets the state
+        # determined from the YAML.
+        default.reload
+        @engines = nil
+        @exclude_patterns = nil
+        self
       end
 
       def engines
@@ -33,7 +45,7 @@ module CC
 
       private
 
-      attr_reader :default, :yaml
+      attr_reader :path, :default, :yaml
 
       def plugin_engines
         yaml.fetch("plugins", []).
