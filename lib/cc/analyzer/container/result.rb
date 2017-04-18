@@ -32,7 +32,14 @@ module CC
 
         # N.B. This is lossy in that we don't know duration or output_byte_count.
         def self.from_exception(ex)
-          new(exit_status: 99, stderr: ex.message)
+          instance = new
+          instance.merge_from_exception(ex)
+        end
+
+        def merge_from_exception(ex)
+          self.exit_status = 99
+          self.stderr = ex.message
+          self
         end
 
         def timed_out?
@@ -49,6 +56,10 @@ module CC
             exit_status.nil? ||
             exit_status.nonzero?
         end
+
+        private
+
+        attr_writer :exit_status, :stderr
       end
     end
   end
