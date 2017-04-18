@@ -27,6 +27,7 @@ module CC
         @metadata = metadata
         @config = config
         @label = label.to_s
+        @error = nil
       end
 
       def run(io)
@@ -42,9 +43,9 @@ module CC
           handle_output(container, io, output)
         end
 
-        container.run(container_options)
-      rescue Error => ex
-        Container::Result.from_exception(ex)
+        container.run(container_options).tap do |result|
+          result.merge_from_exception(error) if error.present?
+        end
       ensure
         delete_config_file
       end
@@ -52,6 +53,7 @@ module CC
       private
 
       attr_reader :name
+      attr_accessor :error
 
       def handle_output(container, io, raw_output)
         output = EngineOutput.new(name, raw_output)
@@ -59,13 +61,13 @@ module CC
         return if output_filter.filter?(output)
 
         unless output.valid?
+          self.error = Error.new("engine produced invalid output: #{output.error}")
           container.stop("output invalid")
-          raise Error, "engine produced invalid output: #{output.error}"
         end
 
         unless io.write(output.to_json)
+          self.error = Error.new("#{io.class}#write returned false, indicating an error")
           container.stop("output error")
-          raise Error, "#{io.class}#write returned false, indicating an error"
         end
       end
 
