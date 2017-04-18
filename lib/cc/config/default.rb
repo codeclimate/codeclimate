@@ -18,9 +18,12 @@ module CC
       attr_writer :development
 
       def initialize
-        @development = false
-        @engines = [structure_engine, duplication_engine]
-        @exclude_patterns = EXCLUDE_PATTERNS
+        load_defaults
+      end
+
+      def reload
+        load_defaults
+        self
       end
 
       def analysis_paths
@@ -32,6 +35,12 @@ module CC
       end
 
       private
+
+      def load_defaults
+        @development = false
+        @engines = [structure_engine, duplication_engine]
+        @exclude_patterns = EXCLUDE_PATTERNS
+      end
 
       def structure_engine
         Engine.new(
