@@ -36,7 +36,7 @@ module CC
     def not_found_message(ex, engine, available_channels)
       "Engine details not found" \
         " for #{engine.name}:#{engine.channel}," \
-        " available channels: #{available_channels.inspect}"
+        " available channels: #{available_channels.keys.inspect}"
     end
   end
 end
