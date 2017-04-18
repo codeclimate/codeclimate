@@ -16,6 +16,23 @@ describe CC::Config::YAML do
     end
   end
 
+  describe "#reload" do
+    it "re-reads and resets" do
+      yaml = load_cc_yaml(<<-EOYAML)
+      plugins:
+        rubocop: true
+        eslint: true
+      EOYAML
+      expect(yaml.engines.length).to eq(4)
+
+      yaml.engines.pop(2)
+      expect(yaml.engines.length).to eq(2)
+
+      yaml.reload
+      expect(yaml.engines.length).to eq(4)
+    end
+  end
+
   describe "#engines" do
     it "includes default engines" do
       yaml = load_cc_yaml("")
