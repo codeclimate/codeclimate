@@ -10,12 +10,14 @@ test: image
 	docker run --rm -it \
 	  --entrypoint bundle \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
+	  --workdir /usr/src/app \
 	  codeclimate/codeclimate exec rspec $(RSPEC_ARGS)
 
 test_all: image
 	docker run --rm -it \
 	  --entrypoint bundle \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
+	  --workdir /usr/src/app \
 	  codeclimate/codeclimate exec rake spec:all spec:benchmark
 citest:
 	docker run \
@@ -28,6 +30,7 @@ citest:
 	  --volume $(PWD)/.git:/usr/src/app/.git:ro \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
 	  --volume $(CIRCLE_TEST_REPORTS):/usr/src/app/spec/reports \
+	  --workdir /usr/src/app \
 	  codeclimate/codeclimate -c "bundle exec rake spec:all && bundle exec codeclimate-test-reporter && bundle exec rake spec:benchmark"
 
 install:
@@ -48,4 +51,5 @@ Gemfile.lock: image
 	docker run --rm \
 	  --entrypoint sh \
 	  --volume $(PWD):/usr/src/app \
+	  --workdir /usr/src/app \
 	  codeclimate/codeclimate -c bundle
