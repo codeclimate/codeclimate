@@ -4,10 +4,14 @@ module CC
   module Analyzer
     module IssueValidations
       class RelativePathValidation < Validation
+        BUILDER_CODE_PATH = "/tmp/workspace/code".freeze
+
         def valid?
           path &&
-            !path.start_with?("/") &&
-            relative_to?(MountedPath.code.container_path)
+            !path.start_with?("/") && (
+              relative_to?(MountedPath.code.container_path) ||
+              relative_to?(BUILDER_CODE_PATH)
+            )
         end
 
         def message
