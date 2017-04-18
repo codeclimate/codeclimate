@@ -32,19 +32,27 @@ module CC
         formatter.started
 
         config.engines.each do |engine|
+          next unless engine.enabled?
+
           formatter.engine_running(engine) do
-            engine_details = registry.fetch_engine_details(
-              engine, development: config.development?,
-            )
-            listener.started(engine, engine_details)
-            result = run_engine(engine, engine_details)
+            result = nil
+            engine_details = nil
+
+            begin
+              engine_details = registry.fetch_engine_details(
+                engine, development: config.development?,
+              )
+              listener.started(engine, engine_details)
+              result = run_engine(engine, engine_details)
+            rescue CC::EngineRegistry::EngineDetailsNotFoundError => ex
+              result = Container::Result.from_exception(ex)
+            end
+
             listener.finished(engine, engine_details, result)
           end
         end
 
         formatter.finished
-      rescue CC::EngineRegistry::EngineDetailsNotFoundError => ex
-        Container::Result.from_exception(ex)
       ensure
         formatter.close
       end
