@@ -25,7 +25,7 @@ describe CC::Config::YAML do
       EOYAML
       expect(yaml.engines.length).to eq(4)
 
-      yaml.engines.pop(2)
+      yaml.engines.replace(yaml.engines.take(2))
       expect(yaml.engines.length).to eq(2)
 
       yaml.reload
@@ -52,10 +52,10 @@ describe CC::Config::YAML do
           enabled: false
       EOYAML
 
-      expect(yaml.engines.length).to eq(4)
-      expect(yaml.engines.map(&:name)).to include("rubocop")
-      expect(yaml.engines.map(&:name)).to include("eslint")
-      expect(yaml.engines.map(&:name)).not_to include("tslint")
+      expect(yaml.engines.length).to eq(5)
+      expect(yaml.engines.map(&:name).drop(2)).to eq(
+        %w[rubocop eslint tslint],
+      )
     end
 
     it "supports a plugin:true|false shorthand" do
@@ -65,9 +65,9 @@ describe CC::Config::YAML do
         eslint: false
       EOYAML
 
-      expect(yaml.engines.length).to eq(3)
-      expect(yaml.engines.map(&:name)).to include("rubocop")
-      expect(yaml.engines.map(&:name)).not_to include("eslint")
+      _, _, rubocop, eslint = yaml.engines.to_a
+      expect(rubocop).to be_enabled
+      expect(eslint).not_to be_enabled
     end
 
     it "respects channel, and config" do
