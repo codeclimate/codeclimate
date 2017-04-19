@@ -34,9 +34,15 @@ module CC
     attr_reader :yaml, :prefix
 
     def not_found_message(ex, engine, available_channels)
-      "Engine details not found" \
-        " for #{engine.name}:#{engine.channel}," \
-        " available channels: #{available_channels.keys.inspect}"
+      if available_channels
+        # Known engine, unknown channel
+        "Engine details not found" \
+          " for #{engine.name}:#{engine.channel}," \
+          " available channels: #{available_channels.keys.inspect}"
+      else
+        # Unknown engine
+        "Engine details not found for #{engine.name}"
+      end
     end
   end
 end
