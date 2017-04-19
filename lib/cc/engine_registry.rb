@@ -5,7 +5,7 @@ module CC
     DEFAULT_COMMAND = nil
     DEFAULT_MANIFEST_PATH = File.expand_path("../../../config/engines.yml", __FILE__)
 
-    EngineDetails = Struct.new(:image, :command)
+    EngineDetails = Struct.new(:image, :command, :auto_enable_paths)
     EngineDetailsNotFoundError = Class.new(StandardError)
 
     def initialize(path = DEFAULT_MANIFEST_PATH, prefix = "")
@@ -13,9 +13,22 @@ module CC
       @prefix = prefix
     end
 
+    def each_engine
+      yaml.each do |name, _metadata|
+        begin
+          engine = Config::Engine.new(name)
+          engine_details = fetch_engine_details(engine)
+
+          yield(engine, engine_details)
+        rescue EngineDetailsNotFoundError
+          # Ignore, means no stable key
+        end
+      end
+    end
+
     def fetch_engine_details(engine, development: false)
       if development
-        EngineDetails.new("codeclimate/codeclimate-#{engine.name}", nil)
+        EngineDetails.new("codeclimate/codeclimate-#{engine.name}", nil, [])
       else
         metadata = yaml.fetch(engine.name)
         channels = metadata.fetch("channels")
@@ -23,6 +36,7 @@ module CC
         EngineDetails.new(
           [prefix, channels.fetch(engine.channel)].join,
           metadata.fetch("command", DEFAULT_COMMAND),
+          metadata.fetch("auto_enable_paths", []),
         )
       end
     rescue KeyError => ex
