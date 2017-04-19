@@ -4,147 +4,56 @@
 # values in `channels` will be passed to `docker run` and so may be any value
 # appropriate for that (repo/name:tag, image id, etc).
 #
-# When a repo has files that match the `enable_regexps`, that engine will be
-# enabled by default in the codeclimate.yml file. That file will also have in it
-# the `default_ratings_paths` globs, which are used during analysis to determine
-# which files should be rated.
-#
 apexmetrics:
   channels:
     stable: codeclimate/codeclimate-apexmetrics
   description: ApexMetrics is a static code analysis tool for Salesforce.com Apex.
-  community: true
 brakeman:
   channels:
     stable: codeclimate/codeclimate-brakeman
   description: Static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
-  community: false
-  upgrade_languages:
-    - Ruby
-  enable_regexps:
-    - ^app\/.*\.rb
-  default_ratings_paths:
-    - "Gemfile.lock"
-    - "**.erb"
-    - "**.haml"
-    - "**.rb"
-    - "**.rhtml"
-    - "**.slim"
 bundler-audit:
   channels:
     stable: codeclimate/codeclimate-bundler-audit
   description: Patch-level verification for Bundler.
-  community: false
-  upgrade_languages:
-    - Ruby
-  enable_regexps:
-    - ^Gemfile\.lock$
-  default_ratings_paths:
-    - Gemfile.lock
 checks:
   channels:
     beta: codeclimate/codeclimate-checks:beta
   description: Maintainability and reliability checks for PHP, Python, JS, and more.
-  community: false
-  default_ratings_paths:
-    - "**.js"
-    - "**.py"
-    - "**.php"
-  default_config:
-    languages:
-      - javascript
-      - python
-      - php
 checkstyle:
   channels:
     beta: codeclimate/codeclimate-checkstyle:beta
   description: Helps programmers write Java that adheres to a coding standard.
-  community: false
-  enable_regexps:
-    - \.java$
-  default_ratings_paths:
-    - "**.java"
 complexity-ruby:
   channels:
     beta: codeclimate/codeclimate-complexity-ruby:b47
   description: Code Climate Complexity Checks for Ruby
-  community: false
-  default_ratings_paths:
-    - "**.rb"
-  default_config:
-    languages:
-      - ruby
 csslint:
   channels:
     stable: codeclimate/codeclimate-csslint
   description: Automated linting of Cascading Stylesheets.
-  community: false
-  enable_regexps:
-    - \.css$
-  default_ratings_paths:
-    - "**.css"
 coffeelint:
   channels:
     stable: codeclimate/codeclimate-coffeelint
   description: A style checker for CoffeeScript.
-  community: false
-  enable_regexps:
-    - \.coffee$
-  default_ratings_paths:
-    - "**.coffee"
 codescan:
   channels:
     beta: codeclimate/codeclimate-codescan:beta
   description: >
     A static analysis tool for Salesforce.com Apex, Visual Force, Aura and
     Lightning.
-  community: true
-  enable_regexps:
-    - \.cls$
-  default_ratings_paths:
-    - "**.cls"
 credo:
   channels:
     beta: codeclimate/codeclimate-credo:beta
   description: >
     A static code analysis tool for the Elixir language with a focus on code
     consistency and teaching.
-  community: true
-  enable_regexps:
-    - \.ex$
-    - \.exs$
-  default_ratings_paths:
-    - "**.ex"
-    - "**.exs"
 duplication:
   channels:
     beta: codeclimate/codeclimate-duplication:beta
     cronopio: codeclimate/codeclimate-duplication:cronopio
     stable: codeclimate/codeclimate-duplication
   description: Structural duplication detection for Ruby, Python, JavaScript, and PHP.
-  community: false
-  enable_regexps:
-    - \.inc$
-    - \.js$
-    - \.jsx$
-    - \.module$
-    - \.php$
-    - \.py$
-    - \.rb$
-  default_ratings_paths:
-    - "**.inc"
-    - "**.js"
-    - "**.jsx"
-    - "**.module"
-    - "**.php"
-    - "**.py"
-    - "**.rb"
-  default_config:
-    languages:
-      - ruby
-      - javascript
-      - python
-      - php
 eslint:
   channels:
     stable: codeclimate/codeclimate-eslint
@@ -152,346 +61,141 @@ eslint:
     eslint-2: codeclimate/codeclimate-eslint:eslint-2
     eslint-3: codeclimate/codeclimate-eslint:eslint-3
   description: A JavaScript/JSX linting utility.
-  community: false
-  upgrade_languages:
-    - JavaScript
-  enable_regexps:
-    - \.js$
-    - \.jsx$
-  default_ratings_paths:
-    - "**.js"
-    - "**.jsx"
-  config_files:
-    .eslintrc.yml:
-      - .eslintrc
-      - .eslintrc.js
-      - .eslintrc.json
-      - .eslintrc.yaml
 flog:
   channels:
     beta: codeclimate/codeclimate-flog:beta
     stable: codeclimate/codeclimate-flog
   description: Easy to read reporting of complexity/pain for Ruby code.
-  community: true
-  enable_regexps:
-    - \.rb$
-  default_ratings_paths:
-    - "**.rb"
-  default_config:
-    all: false
-    threshold: 0.6
 gofmt:
   channels:
     stable: codeclimate/codeclimate-gofmt
   description: Checks the formatting of Go programs.
-  community: true
-  enable_regexps:
-    - \.go$
-  default_ratings_paths:
-    - "**.go"
 golint:
   channels:
     stable: codeclimate/codeclimate-golint
   description: A linter for Go.
-  community: true
-  enable_regexps:
-    - \.go$
-  default_ratings_paths:
-    - "**.go"
 govet:
   channels:
     stable: codeclimate/codeclimate-govet
   description: Reports suspicious constructs in Go programs.
-  community: true
-  enable_regexps:
-    - \.go$
-  default_ratings_paths:
-    - "**.go"
 grep:
   channels:
     beta: codeclimate/codeclimate-grep
     stable: codeclimate/codeclimate-grep
   description: Detects specified patterns in files
-  community: false
-  enable_regexps:
-  default_ratings_paths:
 fixme:
   channels:
     stable: codeclimate/codeclimate-fixme
   description: Finds FIXME, TODO, HACK, etc. comments.
-  community: false
-  enable_regexps:
-    - .+
-  default_ratings_paths: []
 foodcritic:
   channels:
     stable: codeclimate/codeclimate-foodcritic
   description: Lint tool for Chef cookbooks.
-  community: true
-  enable_regexps:
-  default_ratings_paths:
 gnu-complexity:
   channels:
     stable: codeclimate/codeclimate-gnu-complexity
   description: Checks complexity of C code
-  community: true
-  enable_regexps:
-    - \.c$
-  default_ratings_paths:
-    - "**.c"
 haxe-checkstyle:
   channels:
     stable: codeclimate/codeclimate-haxe-checkstyle
   description: Checkstyle is a development library to help developers write Haxe code that adheres to a coding standard.
-  community: true
-  enable_regexps:
-    - \.hx$
-  default_ratings_paths:
-    - "**.hx"
 haml-lint:
   channels:
     beta: codeclimate/codeclimate-haml-lint:beta
   description: Tool for writing clean and consistent HAML.
-  community: true
-  enable_regexps:
-    - \.haml$
-  default_ratings_paths:
-    - "**.haml"
 hlint:
   channels:
     stable: codeclimate/codeclimate-hlint
   description: Linter for Haskell programs.
-  community: true
-  enable_regexps:
-    - \.hs$
-  default_ratings_paths:
-    - "**.hs"
 kibit:
   channels:
     stable: codeclimate/codeclimate-kibit
   description: Static code analyzer for Clojure, ClojureScript, cljx and other Clojure variants.
-  community: true
-  enable_regexps:
-    - \.clj$
-    - \.cljc$
-    - \.cljs$
-  default_ratings_paths:
-    - "**.clj"
-    - "**.cljc"
-    - "**.cljs"
 markdownlint:
   channels:
     stable: codeclimate/codeclimate-markdownlint
   description: Flags style issues within Markdown files.
-  community: true
-  enable_regexps:
-    - \.markdown$
-    - \.md$
-  default_ratings_paths:
-    - "**.markdown"
-    - "**.md"
 nodesecurity:
   channels:
     stable: codeclimate/codeclimate-nodesecurity
   description: Security tool for Node.js dependencies.
-  community: true
-  enable_regexps:
-  default_ratings_paths:
 pep8:
   channels:
     stable: codeclimate/codeclimate-pep8
   description: Static analysis tool to check Python code against the style conventions outlined in PEP-8.
-  community: false
-  enable_regexps:
-  default_ratings_paths:
-    - "**.py"
 phan:
   channels:
     stable: codeclimate/codeclimate-phan
   description: Phan is a static analyzer for PHP.
-  community: true
-  enable_regexps:
-    - \.php$
-    - \.module$
-    - \.inc$
-  default_ratings_paths:
-    - "**.php"
-    - "**.module"
-    - "**.inc"
 phpcodesniffer:
   channels:
     stable: codeclimate/codeclimate-phpcodesniffer
   description: Detects violations of a defined set of coding standards in PHP.
-  community: false
-  enable_regexps:
-  default_ratings_paths:
-    - "**.php"
-    - "**.module"
-    - "**.inc"
 phpmd:
   channels:
     stable: codeclimate/codeclimate-phpmd
   description: A PHP static analysis tool.
-  community: false
-  upgrade_languages:
-    - PHP
-  enable_regexps:
-    - \.php$
-    - \.module$
-    - \.inc$
-  default_ratings_paths:
-    - "**.php"
-    - "**.module"
-    - "**.inc"
 proselint:
   channels:
     beta: codeclimate/codeclimate-proselint:beta
   description: A linter for prose.
-  community: true
-  enable_regexps:
-    - \.markdown$
-    - \.md$
-  default_ratings_paths:
-    - "**.markdown"
-    - "**.md"
 pmd:
   channels:
     beta: codeclimate/codeclimate-pmd:beta
   description: Source code analyzer for Java.
-  community: false
-  enable_regexps:
-    - \.java$
-  default_ratings_paths:
-    - "**.java"
 radon:
   channels:
     stable: codeclimate/codeclimate-radon
   description: Python tool used to compute Cyclomatic Complexity.
-  community: false
-  upgrade_languages:
-    - Python
-  enable_regexps:
-    - \.py$
-  default_ratings_paths:
-    - "**.py"
 reek:
   channels:
     stable: codeclimate/codeclimate-reek
   description: "Reek examines Ruby classes, modules, and methods and reports any code smells it finds."
-  community: true
-  upgrade_languages:
-    - Ruby
-  enable_regexps:
-    - \.rb$
-  default_ratings_paths:
-    - "**.rb"
 requiresafe:
   channels:
     stable: codeclimate/codeclimate-nodesecurity
   description: Security tool for Node.js dependencies.
-  community: true
-  enable_regexps:
-  default_ratings_paths:
 rubocop:
   channels:
     stable: codeclimate/codeclimate-rubocop
     cache-support: codeclimate/codeclimate-rubocop:cache-support
-  description: A Ruby static code analyzer, based on the community Ruby style guide.
-  community: false
-  upgrade_languages:
-   - Ruby
-  enable_regexps:
-    - \.rb$
-  default_ratings_paths:
-    - "**.rb"
 rubocop-v35:
   channels:
     stable: codeclimate/codeclimate-rubocop:v35
-  description: A Ruby static code analyzer, based on the community Ruby style guide. Version 0.35.1 of RuboCop.
-  community: false
-  enable_regexps:
-  default_ratings_paths:
-    - "**.rb"
 rubymotion:
   channels:
     stable: codeclimate/codeclimate-rubymotion
   description: Rubymotion-specific rubocop checks.
-  community: true
-  enable_regexps:
-  default_ratings_paths:
-    - "**.rb"
 rustfmt:
   channels:
     beta: codeclimate/codeclimate-rustfmt:beta
   description: A tool for formatting Rust code according to style guidelines.
-  community: true
-  enable_regexps:
-    - \.rs$
-  default_ratings_paths:
-    - "**.rs"
 scss-lint:
   channels:
     stable: codeclimate/codeclimate-scss-lint
   description: Configurable tool for writing clean and consistent SCSS.
-  community: true
-  enable_regexps:
-  default_ratings_paths:
-    - "**.scss"
 shellcheck:
   channels:
     stable: codeclimate/codeclimate-shellcheck
   description: A static analysis tool for shell scripts.
-  community: true
-  enable_regexps:
-    - \.sh$
-  default_ratings_paths:
-    - "**.sh"
 stylelint:
   channels:
     beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
   description: A mighty, modern CSS linter
-  community: true
-  enable_regexps:
-    - \.less$
-    - \.scss$
-    - \.sss$
-  default_ratings_paths:
-    - "**.less"
-    - "**.scss"
-    - "**.sss"
 tailor:
   channels:
     stable: codeclimate/codeclimate-tailor
   description: Cross-platform static analyzer and linter for Swift.
-  community: true
-  enable_regexps:
-    - \.swift$
-  default_ratings_paths:
-    - "**.swift"
 tslint:
   channels:
     beta: codeclimate/codeclimate-tslint:beta
   description: An extensible linter for the TypeScript language
-  community: true
-  enable_regexps:
-    - \.ts$
-  default_ratings_paths:
-    - "**.ts"
 watson:
   channels:
     stable: codeclimate/codeclimate-watson
   description: A young Ember Doctor to help you fix your code.
-  community: true
-  enable_regexps:
-  default_ratings_paths:
-    - "app/**"
 vint:
   channels:
     stable: codeclimate/codeclimate-vint
   description: Fast and Highly Extensible Vim script Language Lint implemented by Python.
-  community: true
-  enable_regexps:
-    - \.vim$
-  default_ratings_paths:
-    - "**.vim"
