@@ -66,6 +66,8 @@ curl -L https://github.com/codeclimate/codeclimate/archive/master.tar.gz | tar x
 cd codeclimate-* && sudo make install
 ```
 
+To upgrade to a newer version, just run those steps again.
+
 ### Updating existing Code Climate configuration
 
 If you are already using Code Climate and have a .codeclimate.yml file
