@@ -61,13 +61,15 @@ module CC
         if [true, false].include?(data)
           Engine.new(name, enabled: data)
         else
-          config = convert_to_legacy_file_config(data.fetch("config", {}))
+          if data.key?("config")
+            data["config"] = convert_to_legacy_file_config(data["config"])
+          end
 
           Engine.new(
             name,
             enabled: data.fetch("enabled", true),
-            channel: data.fetch("channel", Engine::DEFAULT_CHANNEL),
-            config: config,
+            channel: data["channel"],
+            config: data
           )
         end
       end
