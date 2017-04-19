@@ -84,7 +84,7 @@ describe CC::Config::YAML do
       expect(rubocop).to be_present
       expect(rubocop).to be_enabled
       expect(rubocop.channel).to eq("beta")
-      expect(rubocop.config).to eq("yo" => "sup")
+      expect(rubocop.config["config"]).to eq("yo" => "sup")
     end
 
     it "re-writes as legacy file config values" do
@@ -98,7 +98,7 @@ describe CC::Config::YAML do
 
       rubocop = yaml.engines.detect { |e| e.name == "rubocop" }
       expect(rubocop).to be_present
-      expect(rubocop.config).to eq("foo.rb")
+      expect(rubocop.config["config"]).to eq("foo.rb")
     end
   end
 
