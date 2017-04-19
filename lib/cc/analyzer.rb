@@ -23,6 +23,7 @@ module CC
     autoload :LocationDescription, "cc/analyzer/location_description"
     autoload :LoggingContainerListener, "cc/analyzer/logging_container_listener"
     autoload :MountedPath, "cc/analyzer/mounted_path"
+    autoload :Plugins, "cc/analyzer/plugins"
     autoload :RaisingContainerListener, "cc/analyzer/raising_container_listener"
     autoload :SourceBuffer, "cc/analyzer/source_buffer"
     autoload :SourceExtractor, "cc/analyzer/source_extractor"
