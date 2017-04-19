@@ -33,7 +33,7 @@ module CC
         def nested_warnings
           cc_yaml.nested_warnings.
             map { |x| NestedWarning.new(x[0][0], x[1]) }.
-            reject { |x| x.field == "ratings" }
+            reject { |x| x.field.nil? || x.field == "ratings" }
         end
 
         private
