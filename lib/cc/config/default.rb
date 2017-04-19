@@ -60,7 +60,9 @@ module CC
           enabled: true,
           channel: "cronopio",
           config: {
-            languages: %w[ruby],
+            config: {
+              languages: %w[ruby],
+            }
           },
         )
       end

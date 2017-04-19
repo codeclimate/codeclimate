@@ -21,17 +21,6 @@ module CC
         @container_label ||= SecureRandom.uuid
       end
 
-      def to_config_json
-        if config.present?
-          {
-            "channel" => channel,
-            "config" => config,
-          }
-        else
-          { "channel" => channel }
-        end
-      end
-
       # Set interface methods. Assumes we never want to store the same engine by
       # name in the same list. This should be true except maybe if we want to
       # work with multiple channels at once, which is unlikely.

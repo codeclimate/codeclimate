@@ -62,14 +62,17 @@ module CC
       attr_reader :config, :formatter, :listener, :registry
 
       def run_engine(engine, engine_details)
+        # Analyzer::Engine doesn't have the best interface, but we're limiting
+        # our refactors for now.
         Engine.new(
           engine.name,
           {
             "image" => engine_details.image,
             "command" => engine_details.command,
           },
-          engine.to_config_json.merge(
-            include_paths: workspace.paths,
+          engine.config.merge(
+            "channel" => engine.channel,
+            "include_paths" => workspace.paths,
           ),
           engine.container_label,
         ).run(formatter)
