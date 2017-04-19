@@ -29,6 +29,9 @@ module CC
       end
 
       def run
+        plugins = Plugins.new
+        plugins.auto_enable_engines(config)
+
         formatter.started
 
         config.engines.each do |engine|
