@@ -56,4 +56,28 @@ describe CC::Config::Prepare do
       )
     end
   end
+
+  describe CC::Config::Prepare::Fetch::Entry do
+    it "prevents unsafe paths" do
+      expect { described_class.new("", nil) }.to raise_error(
+        ArgumentError, /blank/,
+      )
+
+      expect { described_class.new("", "") }.to raise_error(
+        ArgumentError, /blank/,
+      )
+
+      expect { described_class.new("", "/etc/password") }.to raise_error(
+        ArgumentError, /absolute/,
+      )
+
+      expect { described_class.new("", "./../etc/password") }.to raise_error(
+        ArgumentError, /outside/,
+      )
+
+      expect { described_class.new("http://google.com/.%2F..%2Fetc%2Fpassword") }.to raise_error(
+        ArgumentError, /outside/,
+      )
+    end
+  end
 end
