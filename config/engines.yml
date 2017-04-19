@@ -4,6 +4,9 @@
 # values in `channels` will be passed to `docker run` and so may be any value
 # appropriate for that (repo/name:tag, image id, etc).
 #
+# If engines have `auto_enable_paths`, the presence of any of these files will
+# automatically enable that plugin and run it with { config: { file: PATH } }.
+#
 apexmetrics:
   channels:
     stable: codeclimate/codeclimate-apexmetrics
@@ -26,10 +29,14 @@ complexity-ruby:
     beta: codeclimate/codeclimate-complexity-ruby:b47
   description: Code Climate Complexity Checks for Ruby
 csslint:
+  auto_enable_paths:
+  - .csslintrc
   channels:
     stable: codeclimate/codeclimate-csslint
   description: Automated linting of Cascading Stylesheets.
 coffeelint:
+  auto_enable_paths:
+  - coffeelint.json
   channels:
     stable: codeclimate/codeclimate-coffeelint
   description: A style checker for CoffeeScript.
@@ -52,6 +59,12 @@ duplication:
     stable: codeclimate/codeclimate-duplication
   description: Structural duplication detection for Ruby, Python, JavaScript, and PHP.
 eslint:
+  auto_enable_paths:
+  - .eslintrc
+  - .eslintrc.js
+  - .eslintrc.json
+  - .eslintrc.yaml
+  - .eslintrc.yml
   channels:
     stable: codeclimate/codeclimate-eslint
     eslint-1: codeclimate/codeclimate-eslint:eslint-1
@@ -158,6 +171,8 @@ requiresafe:
     stable: codeclimate/codeclimate-nodesecurity
   description: Security tool for Node.js dependencies.
 rubocop:
+  auto_enable_paths:
+  - .rubocop.yml
   channels:
     stable: codeclimate/codeclimate-rubocop
     cache-support: codeclimate/codeclimate-rubocop:cache-support
