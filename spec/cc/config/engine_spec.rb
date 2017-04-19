@@ -15,24 +15,16 @@ describe CC::Config::Engine do
       "duplication",
       enabled: true,
       channel: "beta",
-      config: { languages: %w[ruby] },
+      config: {
+        "config" => {
+          "languages" => %w[ruby]
+        },
+        "exclude_paths" => [""],
+      },
     )
 
     expect(engine).to be_enabled
     expect(engine.channel).to eq("beta")
-    expect(engine.config).to eq(languages: %w[ruby])
-  end
-
-  describe "#to_config_json" do
-    it "returns channel and configuration" do
-      engine = described_class.new(
-        "duplication",
-        channel: "beta",
-        config: { languages: %w[ruby] },
-      )
-
-      expect(engine.to_config_json.fetch("channel")).to eq("beta")
-      expect(engine.to_config_json.fetch("config")).to eq(languages: %w[ruby])
-    end
+    expect(engine.config["config"]["languages"]).to eq(%w[ruby])
   end
 end
