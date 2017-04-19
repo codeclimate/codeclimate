@@ -92,7 +92,7 @@ module CC::CLI
         engines:
           rubocop:
             enabled: true
-          duplication:
+          eslint:
             enabled: true
             channel: madeup
           madeup:
@@ -104,7 +104,7 @@ module CC::CLI
         end
 
         expect(stdout).to include("unknown engine or channel <madeup:stable>")
-        expect(stdout).to include("unknown engine or channel <duplication:madeup>")
+        expect(stdout).to include("unknown engine or channel <eslint:madeup>")
         expect(code).to be_zero
       end
     end
