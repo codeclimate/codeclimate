@@ -53,6 +53,8 @@ module CC
           def initialize(url, path = nil)
             @url = url
             @path = path || url.split("/").last
+
+            validate_path!
           end
 
           # Useful in specs
@@ -60,6 +62,26 @@ module CC
             other.is_a?(self.class) &&
               other.url == url &&
               other.path == path
+          end
+
+          private
+
+          # Duplicate a validation which has security implication. This should
+          # always be caught upstream, so raising loudly is fine.
+          def validate_path!
+            if path.blank?
+              raise ArgumentError, "path cannot be be blank"
+            end
+
+            pathname = Pathname.new(path)
+
+            if pathname.absolute?
+              raise ArgumentError, "path cannot be absolute: #{path}"
+            end
+
+            if pathname.cleanpath.to_s != pathname.to_s || path.include?("..")
+              raise ArgumentError, "path cannot point outside the current directory: #{path}"
+            end
           end
         end
       end
