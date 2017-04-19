@@ -1,6 +1,7 @@
 require "cc/config/default"
 require "cc/config/engine"
 require "cc/config/yaml"
+require "cc/config/yaml/validator"
 
 module CC
   module Config
