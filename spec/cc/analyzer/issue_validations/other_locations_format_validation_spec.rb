@@ -39,13 +39,6 @@ module CC::Analyzer::IssueValidations
           locations = [
             {
               "path" => "foo.rb",
-              "lines" => {
-                "begin" => 1,
-                "end" => 2,
-              }
-            },
-            {
-              "path" => "foo.rb",
               "test" => 100
             },
           ]
