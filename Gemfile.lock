@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.61.1)
+    codeclimate (0.62.0)
       activesupport (>= 4.2.1, < 5.1)
       codeclimate-yaml (~> 0.12.0)
       highline (~> 1.7, >= 1.7.2)
@@ -43,7 +43,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    rainbow (2.2.1)
+    rainbow (2.2.2)
+      rake
     rake (12.0.0)
     redcarpet (3.4.0)
     rspec (3.5.0)
