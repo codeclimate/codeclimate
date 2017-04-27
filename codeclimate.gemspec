@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.name = "codeclimate"
   s.version = VERSION
   s.summary = "Code Climate CLI"
-  s.license = "MIT"
+  s.license = "AGPL"
   s.authors = "Code Climate"
   s.email = "hello@codeclimate.com"
   s.homepage = "https://codeclimate.com"
