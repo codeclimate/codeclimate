@@ -118,6 +118,11 @@ The following is a brief explanation of each available command.
   `exclude_paths`. When you do provide an explicit path to analyze, your
   configured `exclude_paths` are ignored, and normally excluded files will be
   analyzed.
+
+  You can also pipe in source in combination with a path to analyze code that is
+  not yet written to disk. This is useful when you want to check if your source
+  code style matches the project's. This is also a good way to implement
+  integration with an editor to check style on the fly.
 * `console`
   start an interactive session providing access to the classes
   within the CLI. Useful for engine developers and maintainers.
