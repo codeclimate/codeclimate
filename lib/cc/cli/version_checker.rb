@@ -65,8 +65,12 @@ module CC
           begin
             uri = URI.parse(ENV.fetch("CODECLIMATE_VERSIONS_URL", DEFAULT_VERSIONS_URL))
             uri.query = { version: version, uid: global_config.uuid }.to_query
+
+            request = Net::HTTP::Get.new(uri)
+            request["User-Agent"] = user_agent
+
             Net::HTTP.start(uri.host, uri.port, open_timeout: 5, read_timeout: 5, ssl_timeout: 5, use_ssl: uri.scheme == "https") do |http|
-              http.request_get(uri)
+              http.request(request)
             end
           end
       end
@@ -80,6 +84,10 @@ module CC
 
       def version
         @version ||= Version.new.version
+      end
+
+      def user_agent
+        "Code Climate CLI #{version}"
       end
 
       def global_config
