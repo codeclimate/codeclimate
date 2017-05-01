@@ -471,7 +471,7 @@ tailor:
     - "**.swift"
 tslint:
   channels:
-    beta: codeclimate/codeclimate-tslint
+    beta: codeclimate/codeclimate-tslint:beta
   description: An extensible linter for the TypeScript language
   community: true
   enable_regexps:
