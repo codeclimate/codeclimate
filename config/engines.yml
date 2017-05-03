@@ -396,6 +396,7 @@ rubocop:
   channels:
     stable: codeclimate/codeclimate-rubocop
     cache-support: codeclimate/codeclimate-rubocop:cache-support
+    rubocop-0-42: codeclimate/codeclimate-rubocop:rubocop-0-42
   description: A Ruby static code analyzer, based on the community Ruby style guide.
   community: false
   upgrade_languages:
