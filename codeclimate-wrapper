@@ -34,7 +34,6 @@ analysis_file() {
   local analyze_mode=0;
   local skip=0;
   for arg; do
-    echo "! $arg" >&2
     if [ $skip -gt 0 ]; then
       skip=$(( $skip - 1 ))
     else
@@ -91,19 +90,19 @@ ln_dir() {
 
   if [ "$path_dir" = "." ]; then
     path_dir=""
-  else
-    path_dir="/$path_dir"
   fi
 
-  find "$source_base$path_dir" -depth 1 -type f -iname "*" | while read f; do
-    ln "$f" "$dest_base$path_dir/$(basename "$f")"
+  find "$source_base/$path_dir" -depth 1 -type f -iname "*" | while read f; do
+    if [ ! -e "$dest_base/$path_dir/$(basename "$f")" ]; then
+      ln "$f" "$dest_base/$path_dir/$(basename "$f")"
+    fi
   done
 
-  ln_dir "$(dirname "$path_dir")" "$source_base" "$dest_base"
+  ln_dir "$path_dir" "$source_base" "$dest_base"
 }
 
 docker_run() {
-  exec docker run \
+  docker run \
     --interactive --rm \
     --env CODECLIMATE_CODE \
     --env CODECLIMATE_TMP \
@@ -140,23 +139,27 @@ if [ -z "$CODECLIMATE_TMP" ]; then
 fi
 
 if [ ! -t 0 ]; then
-  tmp_source_dir=$(mktemp -d "$(dirname $CC_CACHE)/cc-code.XXXXXX")
-  trap "rm -rf '$tmp_source_dir'" EXIT
+  stdin_stash=$(mktemp "$(dirname "$CC_CACHE")/cc-stdin.XXXXXX")
+  cat <&0 >"$stdin_stash"
+  trap "rm '$stdin_stash'" EXIT
 
-  chmod a+rx "$tmp_source_dir"
+  if [ -n "$(cat "$stdin_stash")" ]; then
+    tmp_source_dir=$(mktemp -d "$(dirname $CC_CACHE)/cc-code.XXXXXX")
+    trap "rm -rf '$tmp_source_dir'" EXIT
 
-  focus_path=$(analysis_file "$@") || exit 1
-  source_file="$tmp_source_dir/$focus_path"
+    chmod a+rx "$tmp_source_dir"
 
-  mkdir -p "$(dirname "$source_file")"
-  cat <&0 >"$source_file"
+    focus_path=$(analysis_file "$@") || exit 1
+    source_file="$tmp_source_dir/$focus_path"
 
-  if [ -n "$(cat "$source_file")" ]; then
-    echo ln_dir "$focus_path" "$CODECLIMATE_CODE" "$tmp_source_dir"
+    mkdir -p "$(dirname "$source_file")"
+    mv "$stdin_stash" "$source_file"
+    chmod a+r "$source_file"
+
     ln_dir "$focus_path" "$CODECLIMATE_CODE" "$tmp_source_dir"
-  fi
 
-  export CODECLIMATE_CODE="$tmp_source_dir"
+    export CODECLIMATE_CODE="$tmp_source_dir"
+  fi
 fi
 
 if [ -n "$DOCKER_MACHINE_NAME" ] && command -v docker-machine > /dev/null 2>&1; then
