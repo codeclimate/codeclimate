@@ -112,6 +112,13 @@ module CC::CLI
 
           Analyze.new(%w[-f json])
         end
+
+        it "instantiates the correct formatter with a proper Filesystem argument (long form)" do
+          expect(CC::Analyzer::Formatters::JSONFormatter).to receive(:new).
+            with(kind_of(CC::Analyzer::Filesystem))
+
+          Analyze.new(%w[--format json])
+        end
       end
     end
 

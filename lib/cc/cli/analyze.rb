@@ -42,7 +42,7 @@ module CC
       def process_args
         while (arg = @args.shift)
           case arg
-          when "-f"
+          when "-f", "--format"
             @formatter = Formatters.resolve(@args.shift).new(filesystem)
           when "-e", "--engine"
             @engine_options << @args.shift
