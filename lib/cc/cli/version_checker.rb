@@ -66,8 +66,7 @@ module CC
             uri = URI.parse(ENV.fetch("CODECLIMATE_VERSIONS_URL", DEFAULT_VERSIONS_URL))
             uri.query = { version: version, uid: global_config.uuid }.to_query
 
-            request = Net::HTTP::Get.new(uri)
-            request["User-Agent"] = user_agent
+            request = Net::HTTP::Get.new(uri, "User-Agent" => user_agent)
 
             Net::HTTP.start(uri.host, uri.port, open_timeout: 5, read_timeout: 5, ssl_timeout: 5, use_ssl: uri.scheme == "https") do |http|
               http.request(request)
