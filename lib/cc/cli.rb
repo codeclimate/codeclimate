@@ -1,4 +1,5 @@
 require "active_support"
+require "active_support/core_ext/module/remove_method"
 require "active_support/core_ext"
 require "yaml"
 require "cc/analyzer"
