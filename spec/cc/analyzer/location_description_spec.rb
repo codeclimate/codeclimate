@@ -15,6 +15,12 @@ module CC::Analyzer
         expect(LocationDescription.new(Object.new, location).to_s).to eq("1-3")
       end
 
+      it "with only begin line" do
+        location = {"lines" => {"begin" => 1}}
+
+        LocationDescription.new(Object.new, location).to_s.must_equal("1")
+      end
+
       it "with linecols" do
         location = {
           "positions" => {
