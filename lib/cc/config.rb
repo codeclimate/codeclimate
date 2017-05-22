@@ -1,3 +1,4 @@
+require "cc/config/json"
 require "cc/config/default"
 require "cc/config/engine"
 require "cc/config/prepare"

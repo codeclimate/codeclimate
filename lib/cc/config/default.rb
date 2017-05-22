@@ -42,6 +42,11 @@ module CC
           "complexity-ruby",
           enabled: true,
           channel: "beta",
+          config: {
+            "config" => {
+              "checks" => json.checks,
+            },
+          },
         )
       end
 
@@ -53,9 +58,14 @@ module CC
           config: {
             "config" => {
               "languages" => %w[ruby],
-            }
+              "checks" => json.checks,
+            },
           },
         )
+      end
+
+      def json
+        @json ||= JSON.new
       end
     end
   end
