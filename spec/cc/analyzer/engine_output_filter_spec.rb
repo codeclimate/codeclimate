@@ -61,6 +61,10 @@ module CC::Analyzer
         "fingerprint" => "05a33ac5659c1e90cad1ce32ff8a91c0",
         "location" => {
           "path" => "spec/fixtures/source.rb",
+          "lines" => {
+            "begin" => 13,
+            "end" => 14,
+          },
         },
       }.to_json)
 
@@ -73,6 +77,54 @@ module CC::Analyzer
       )
 
       expect(filter.filter?(issue)).to eq true
+    end
+
+    it "filters issues with an inferred fingerprint that matches exclude_fingerprints" do
+      issue = EngineOutput.new({
+        "type" => "Issue",
+        "check_name" => "foo",
+        "location" => {
+          "path" => "spec/fixtures/source.rb",
+          "lines" => {
+            "begin" => 13,
+            "end" => 14,
+          },
+        },
+      }.to_json)
+
+      filter = EngineOutputFilter.new(
+        engine_config(
+          "exclude_fingerprints" => [
+            "295849af8407b3407bcfe21dfeb50ad8"
+          ]
+        )
+      )
+
+      expect(filter.filter?(issue)).to eq true
+    end
+
+    it "does not filter out issues with an inferred fingerprint that cannot be inferred" do
+      issue = EngineOutput.new({
+        "type" => "Issue",
+        "check_name" => "foo",
+        "location" => {
+          "path" => "spec/fixtures/source.rb",
+          "lines" => {
+            "begin" => 13,
+            "end" => nil,
+          },
+        },
+      }.to_json)
+
+      filter = EngineOutputFilter.new(
+        engine_config(
+          "exclude_fingerprints" => [
+            "295849af8407b3407bcfe21dfeb50ad8"
+          ]
+        )
+      )
+
+      expect(filter.filter?(issue)).to eq false
     end
 
     def build_issue(check_name)

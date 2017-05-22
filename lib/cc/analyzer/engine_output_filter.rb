@@ -23,6 +23,8 @@ module CC
 
       def ignore_fingerprint?(issue)
         @config.fetch("exclude_fingerprints", []).include?(issue.fingerprint)
+      rescue SourceExtractor::InvalidLocation
+        false
       end
 
       def check_config(check_name)
