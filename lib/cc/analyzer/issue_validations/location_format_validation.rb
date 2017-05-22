@@ -32,7 +32,7 @@ module CC
               (
                 [position["line"], position["column"]].all? { |value| value.is_a?(Integer) } ||
                 position["offset"].is_a?(Integer)
-            )
+              )
           end
 
           def valid_lines?(lines)

@@ -33,6 +33,25 @@ module CC::Analyzer
         expect(issue.fingerprint).to eq "433fae1189b03bcd9153dc8dce209fa5"
       end
 
+      it "raises a helpful error when the location is malformed" do
+        output["location"] = {
+          "path" =>  "foo.js",
+          "positions" => {
+            "begin" => {
+              "line" => 3,
+              "column" => nil,
+            },
+            "end" => {
+              "line" => 7,
+              "column" => 9,
+            },
+          },
+        }
+        issue = Issue.new(output.to_json)
+
+        expect { issue.fingerprint }.to raise_error SourceExtractor::InvalidLocation
+      end
+
       it "doesn't overwrite fingerprints within output" do
         output["fingerprint"] = "foo"
 

@@ -49,13 +49,14 @@ module CC
 
       def convert_to_offsets(positions)
         positions.each_with_object({}) do |(key, value), memo|
-          if value.key?("offset")
-            memo[key] = value
-          else
-            memo[key] = {
-              "offset" => to_offset(value["line"] - 1, value["column"] - 1),
-            }
-          end
+          memo[key] =
+            if value.key?("offset")
+              value
+            else
+              {
+                "offset" => to_offset(value["line"] - 1, value["column"] - 1),
+              }
+            end
         end
       end
 
