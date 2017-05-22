@@ -81,6 +81,10 @@ module CC::Analyzer
         "check_name" => check_name,
         "location" => {
           "path" => "spec/fixtures/source.rb",
+          "lines" => {
+            "begin" => 13,
+            "end" => 14,
+          },
         },
       }.to_json)
     end
