@@ -1,5 +1,5 @@
 module CC
-  module Config
+  class Config
     class Engine
       DEFAULT_CHANNEL = "stable".freeze
 
@@ -19,6 +19,14 @@ module CC
 
       def container_label
         @container_label ||= SecureRandom.uuid
+      end
+
+      def merge(other)
+        if eql?(other)
+          self.class.new(name, enabled: other.enabled?, channel: other.channel, config: config.deep_merge(other.config))
+        else
+          raise ArgumentError, "Engine names must match to merge"
+        end
       end
 
       # Set interface methods. Assumes we never want to store the same engine by
