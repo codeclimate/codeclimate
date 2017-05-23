@@ -32,13 +32,6 @@ checkstyle:
   channels:
     beta: codeclimate/codeclimate-checkstyle:beta
   description: Helps programmers write Java that adheres to a coding standard.
-complexity-ruby:
-  channels:
-    beta: codeclimate/codeclimate-complexity-ruby:b47
-  description: Code Climate Complexity Checks for Ruby
-  default_config:
-    languages:
-      - ruby
 csslint:
   auto_enable_paths:
   - .csslintrc
@@ -217,6 +210,13 @@ shellcheck:
   channels:
     stable: codeclimate/codeclimate-shellcheck
   description: A static analysis tool for shell scripts.
+structure:
+  channels:
+    stable: codeclimate/codeclimate-structure:b185
+  description: Performs structural checks on code.
+  default_config:
+    languages:
+      - ruby
 stylelint:
   channels:
     beta: codeclimate/codeclimate-stylelint:beta
