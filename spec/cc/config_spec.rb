@@ -30,16 +30,15 @@ describe CC::Config do
 
       config = CC::Config.load
 
-      p config.engines.map(&:name)
       expect(config.engines.count).to eq(3)
-      expect(config.engines).to include(CC::Config::Engine.new("complexity-ruby"))
+      expect(config.engines).to include(CC::Config::Engine.new("structure"))
       expect(config.engines).to include(CC::Config::Engine.new("duplication"))
       expect(config.engines).to include(CC::Config::Engine.new("rubocop"))
       expect(config.exclude_patterns).to include("**/*.rb")
       expect(config.exclude_patterns).to include("foo/")
       expect(config.prepare.fetch.each.to_a).to include(CC::Config::Prepare::Fetch::Entry.new("rubocop.yml"))
 
-      config.engines.find { |e| e.name == "complexity-ruby" }.tap do |engine|
+      config.engines.find { |e| e.name == "structure" }.tap do |engine|
         expect(engine.config["config"]["checks"]).to eq(
           "ruby-cyclomatic-complexity" => {
             "enabled" => true,
@@ -58,7 +57,7 @@ describe CC::Config do
       config = CC::Config.load
 
       expect(config.engines.count).to eq(2)
-      expect(config.engines).to include(CC::Config::Engine.new("complexity-ruby"))
+      expect(config.engines).to include(CC::Config::Engine.new("structure"))
       expect(config.engines).to include(CC::Config::Engine.new("duplication"))
     end
 

@@ -20,7 +20,7 @@ module CC
 
       def structure_engine
         Engine.new(
-          "complexity-ruby",
+          "structure",
           enabled: true,
           channel: "beta",
           config: {
