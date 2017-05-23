@@ -27,4 +27,11 @@ describe CC::Config::Engine do
     expect(engine.channel).to eq("beta")
     expect(engine.config["config"]["languages"]).to eq(%w[ruby])
   end
+
+  describe "#merge" do
+    it "raises ArgumentError if names don't match" do
+      engine1 = described_class.new("foo")
+      expect { engine1.merge(described_class.new("bar")) }.to raise_error(ArgumentError, /Engine names must match to merge/)
+    end
+  end
 end
