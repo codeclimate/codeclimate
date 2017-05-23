@@ -1,6 +1,6 @@
 module CC
-  module Config
-    class Default
+  class Config
+    class Default < Config
       EXCLUDE_PATTERNS = %w[
         config/
         db/
@@ -14,25 +14,11 @@ module CC
         vendor/
       ]
 
-      attr_reader :engines, :exclude_patterns
-      attr_writer :development
-
       def initialize
-        @development = false
-        @engines = Set.new([structure_engine, duplication_engine])
-        @exclude_patterns = EXCLUDE_PATTERNS
-      end
-
-      def prepare
-        Prepare::NoPrepareNeeded.new
-      end
-
-      def analysis_paths
-        @analysis_paths ||= []
-      end
-
-      def development?
-        @development
+        super(
+          engines: Set.new([structure_engine, duplication_engine]),
+          exclude_patterns: EXCLUDE_PATTERNS,
+        )
       end
 
       private
