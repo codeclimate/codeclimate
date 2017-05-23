@@ -4,6 +4,7 @@ require "cc/config/merge"
 require "cc/config/prepare"
 require "cc/config/yaml"
 require "cc/config/yaml/validator"
+require "cc/config/json"
 
 module CC
   class Config
@@ -19,6 +20,7 @@ module CC
     def self.load
       config = Default.new
       config = config.merge(YAML.new) if File.exist?(YAML::DEFAULT_PATH)
+      config = config.merge(JSON.new) if File.exist?(JSON::DEFAULT_PATH)
       config
     end
 

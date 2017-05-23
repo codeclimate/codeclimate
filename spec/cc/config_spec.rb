@@ -15,8 +15,22 @@ describe CC::Config do
       - foo/
       EOYAML
 
+      json = write_cc_json(<<-EOS)
+      {
+        "checks": {
+          "ruby-cyclomatic-complexity": {
+            "enabled": true,
+            "config": {
+              "threshold": 20
+            }
+          }
+        }
+      }
+      EOS
+
       config = CC::Config.load
 
+      p config.engines.map(&:name)
       expect(config.engines.count).to eq(3)
       expect(config.engines).to include(CC::Config::Engine.new("complexity-ruby"))
       expect(config.engines).to include(CC::Config::Engine.new("duplication"))
@@ -24,11 +38,22 @@ describe CC::Config do
       expect(config.exclude_patterns).to include("**/*.rb")
       expect(config.exclude_patterns).to include("foo/")
       expect(config.prepare.fetch.each.to_a).to include(CC::Config::Prepare::Fetch::Entry.new("rubocop.yml"))
+
+      config.engines.find { |e| e.name == "complexity-ruby" }.tap do |engine|
+        expect(engine.config["config"]["checks"]).to eq(
+          "ruby-cyclomatic-complexity" => {
+            "enabled" => true,
+            "config" => {
+              "threshold" => 20,
+            },
+          },
+        )
+      end
     end
 
     it "only uses default config if .codeclimate.yml doesn't exist" do
-      # .codeclimate.yml is in this codebase.
       stub_const("CC::Config::YAML::DEFAULT_PATH", "")
+      stub_const("CC::Config::JSON::DEFAULT_PATH", "")
 
       config = CC::Config.load
 
@@ -43,6 +68,15 @@ describe CC::Config do
         tmp.rewind
 
         stub_const("CC::Config::YAML::DEFAULT_PATH", tmp.path)
+      end
+    end
+
+    def write_cc_json(json)
+      Tempfile.open("") do |tmp|
+        tmp.puts(json)
+        tmp.rewind
+
+        stub_const("CC::Config::JSON::DEFAULT_PATH", tmp.path)
       end
     end
   end
