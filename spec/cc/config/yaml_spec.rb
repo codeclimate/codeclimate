@@ -17,13 +17,6 @@ describe CC::Config::YAML do
   end
 
   describe "#engines" do
-    it "includes default engines" do
-      yaml = load_cc_yaml("")
-
-      expect(yaml.engines.length).to eq(2)
-      expect(yaml.engines.map(&:name)).to match_array(%w[complexity-ruby duplication])
-    end
-
     it "includes enabled plugins" do
       yaml = load_cc_yaml(<<-EOYAML)
       plugins:
@@ -35,8 +28,8 @@ describe CC::Config::YAML do
           enabled: false
       EOYAML
 
-      expect(yaml.engines.length).to eq(5)
-      expect(yaml.engines.map(&:name).drop(2)).to eq(
+      expect(yaml.engines.length).to eq(3)
+      expect(yaml.engines.map(&:name)).to eq(
         %w[rubocop eslint tslint],
       )
     end
@@ -48,7 +41,7 @@ describe CC::Config::YAML do
         eslint: false
       EOYAML
 
-      _, _, rubocop, eslint = yaml.engines.to_a
+      rubocop, eslint = yaml.engines.to_a
       expect(rubocop).to be_enabled
       expect(eslint).not_to be_enabled
     end
@@ -94,12 +87,6 @@ describe CC::Config::YAML do
       EOYAML
 
       expect(yaml.exclude_patterns).to eq(%w[**/*.rb foo/])
-    end
-
-    it "uses defaults if not configured" do
-      yaml = load_cc_yaml("")
-
-      expect(yaml.exclude_patterns).to eq(CC::Config::Default::EXCLUDE_PATTERNS)
     end
   end
 

@@ -1,44 +1,26 @@
 require "safe_yaml/load"
 
 module CC
-  module Config
-    class YAML
+  class Config
+    class YAML < Config
       DEFAULT_PATH = ".codeclimate.yml".freeze
-
-      attr_reader :engines, :exclude_patterns
-
-      delegate \
-        :development?,
-        :development=,
-        :analysis_paths,
-        to: :default
 
       def initialize(path = DEFAULT_PATH)
         @path = path
         @yaml = SafeYAML.load_file(path) || {}
-        @default = Default.new
 
         upconvert_legacy_yaml!
-      end
 
-      def engines
-        @engines ||= default.engines | Set.new(plugin_engines)
-      end
-
-      def exclude_patterns
-        @exclude_patterns ||= yaml.fetch(
-          "exclude_patterns",
-          default.exclude_patterns,
+        super(
+          engines: Set.new(plugin_engines),
+          exclude_patterns: yaml.fetch("exclude_patterns", []),
+          prepare: Prepare.from_yaml(yaml["prepare"]),
         )
-      end
-
-      def prepare
-        Prepare.from_yaml(yaml["prepare"])
       end
 
       private
 
-      attr_reader :path, :default, :yaml
+      attr_reader :path, :yaml
 
       def plugin_engines
         yaml.fetch("plugins", []).map do |name, data|
