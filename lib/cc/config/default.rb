@@ -27,7 +27,6 @@ module CC
         Engine.new(
           "structure",
           enabled: true,
-          channel: "beta",
         )
       end
 
