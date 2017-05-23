@@ -1,12 +1,6 @@
 module CC
-  module Config
+  class Config
     class Prepare
-      class NoPrepareNeeded
-        def fetch
-          []
-        end
-      end
-
       attr_reader :fetch
 
       def self.from_yaml(data)
@@ -15,12 +9,16 @@ module CC
 
           new(fetch: fetch)
         else
-          NoPrepareNeeded.new
+          new()
         end
       end
 
-      def initialize(fetch:)
+      def initialize(fetch: Fetch.new)
         @fetch = fetch
+      end
+
+      def merge(other)
+        Prepare.new(fetch: fetch.merge(other.fetch))
       end
 
       class Fetch
@@ -28,12 +26,16 @@ module CC
           new(data.map { |d| Entry.from_yaml(d) })
         end
 
-        def initialize(entries)
-          @entries = entries
+        def initialize(entries = [])
+          @entries = Set.new(entries)
         end
 
         def each(&block)
           entries.each(&block)
+        end
+
+        def merge(other)
+          Fetch.new(each.to_a | other.each.to_a)
         end
 
         private
