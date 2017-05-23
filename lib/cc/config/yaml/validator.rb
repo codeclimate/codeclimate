@@ -5,7 +5,7 @@
 require "cc/yaml"
 
 module CC
-  module Config
+  class Config
     class YAML
       class Validator
         NestedWarning = Struct.new(:field, :message)
