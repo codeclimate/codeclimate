@@ -24,7 +24,7 @@ module CC
       def validate_location(location)
         validator = IssueValidations::LocationFormatValidation::Validator.new(location)
         unless validator.valid?
-          raise InvalidLocation
+          raise InvalidLocation, validator.message
         end
       end
 
