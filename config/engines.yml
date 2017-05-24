@@ -217,7 +217,7 @@ sonar-java:
       - java
 structure:
   channels:
-    stable: codeclimate/codeclimate-structure:b197
+    stable: codeclimate/codeclimate-structure:b200
   description: Performs structural checks on code.
   default_config:
     languages:
