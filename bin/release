@@ -15,6 +15,7 @@ git pull
 version=$(< VERSION)
 
 printf "RELEASE %s\n" "$version"
+bundle check || bundle install
 rake release
 
 docker build --rm -t codeclimate/codeclimate .
