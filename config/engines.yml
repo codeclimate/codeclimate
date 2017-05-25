@@ -205,7 +205,7 @@ shellcheck:
   description: A static analysis tool for shell scripts.
 structure:
   channels:
-    stable: codeclimate/codeclimate-structure:b200
+    stable: codeclimate/codeclimate-structure:b202
   description: Performs structural checks on code.
   default_config:
     languages:
