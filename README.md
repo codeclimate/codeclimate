@@ -173,7 +173,7 @@ The following is a brief explanation of each available command.
   (default is 512,000,000 bytes):
 
   ```
-  # 100,000,0000 bytes
+  # 1,000,000,000 bytes
   ENGINE_MEMORY_LIMIT_BYTES=1000000000 codeclimate analyze
   ```
 
