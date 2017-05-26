@@ -15,7 +15,7 @@ module CC
       end
 
       def glob?
-        pattern.include?("*")
+        !(pattern =~ /[*?]/).nil?
       end
 
       def negated?
