@@ -6,25 +6,19 @@ describe CC::Config::JSON do
       json = load_cc_json(<<-EOS)
         {
           "checks": {
-            "ruby-cyclomatic-complexity": {
-              "enabled": true,
-              "config": {
-                "threshold": 20
-              }
+            "cyclomatic-complexity": {
+              "enabled": true
             }
           }
         }
       EOS
 
-      expect(json.engines.count).to eq(1)
+      expect(json.engines.count).to eq(2)
 
       json.engines.first.tap do |engine|
         expect(engine.config["config"]["checks"]).to eq(
-          "ruby-cyclomatic-complexity" => {
+          "cyclomatic-complexity" => {
             "enabled" => true,
-            "config" => {
-              "threshold" => 20,
-            },
           },
         )
       end
