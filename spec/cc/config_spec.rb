@@ -18,11 +18,11 @@ describe CC::Config do
       json = write_cc_json(<<-EOS)
       {
         "checks": {
-          "ruby-cyclomatic-complexity": {
-            "enabled": true,
-            "config": {
-              "threshold": 20
-            }
+          "cyclomatic-complexity": {
+            "enabled": true
+          },
+          "similar-code": {
+            "enabled": false
           }
         }
       }
@@ -40,11 +40,22 @@ describe CC::Config do
 
       config.engines.find { |e| e.name == "structure" }.tap do |engine|
         expect(engine.config["config"]["checks"]).to eq(
-          "ruby-cyclomatic-complexity" => {
+          "cyclomatic-complexity" => {
             "enabled" => true,
-            "config" => {
-              "threshold" => 20,
-            },
+          },
+          "similar-code" => {
+            "enabled" => false,
+          },
+        )
+      end
+
+      config.engines.find { |e| e.name == "duplication" }.tap do |engine|
+        expect(engine.config["config"]["checks"]).to eq(
+          "cyclomatic-complexity" => {
+            "enabled" => true,
+          },
+          "similar-code" => {
+            "enabled" => false,
           },
         )
       end

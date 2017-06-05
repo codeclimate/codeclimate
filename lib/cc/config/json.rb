@@ -8,7 +8,7 @@ module CC
         @json = ::JSON.parse(File.open(path).read) || {}
 
         super(
-          engines: Set.new([structure_engine]),
+          engines: Set.new([duplication_engine, structure_engine]),
         )
       end
 
@@ -23,9 +23,22 @@ module CC
           "structure",
           enabled: true,
           config: {
-            "enabled": true,
             "config" => {
-              "checks" => json.fetch("checks", []),
+              "checks" => json.fetch("checks", {}),
+            },
+          },
+        )
+      end
+
+      def duplication_engine
+        Engine.new(
+          "duplication",
+          enabled: true,
+          channel: "cronopio",
+          config: {
+            "config" => {
+              "languages" => %w[ruby],
+              "checks" => json.fetch("checks", {}),
             },
           },
         )
