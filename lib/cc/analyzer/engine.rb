@@ -95,6 +95,7 @@ module CC
       end
 
       def write_config_file
+        @config["debug"] = ENV["CODECLIMATE_DEBUG"]
         Analyzer.logger.debug "/config.json content: #{@config.inspect}"
         config_file.write(@config.to_json)
       end
