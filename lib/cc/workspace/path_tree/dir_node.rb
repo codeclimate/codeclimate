@@ -9,12 +9,15 @@ module CC
           end
         end
 
-        def clone
-          self.class.new(root_path, children)
+        def initialize_copy(source)
+          @children = {}
+          source.children.each do |name, node|
+            @children[name] = node.clone
+          end
         end
 
         def all_paths
-          if populated?
+          if populated? || was_expanded?
             children.values.flat_map(&:all_paths)
           else
             [File.join(root_path, File::SEPARATOR)]
@@ -40,22 +43,32 @@ module CC
 
           if (entry = find_direct_child(head))
             children[entry.basename.to_s.dup.freeze] ||= PathTree.node_for_pathname(entry)
+            @was_expanded = true
             children[entry.basename.to_s.dup.freeze].add(*tail)
           else
             CLI.debug("Couldn't include because part of path doesn't exist.", path: File.join(root_path, head))
           end
         end
 
+        protected
+
+        attr_reader :children
+
         private
 
-        attr_reader :children, :root_path
+        attr_reader :root_path
+
+        def was_expanded?
+          @was_expanded
+        end
 
         def populate_direct_children
-          return if populated?
+          return if populated? || was_expanded?
 
           Pathname.new(root_path).each_child do |child_path|
             children[child_path.basename.to_s] = PathTree.node_for_pathname(child_path)
           end
+          @was_expanded = true
         end
 
         def find_direct_child(name)

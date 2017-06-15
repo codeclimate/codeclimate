@@ -66,6 +66,29 @@ class CC::Workspace
       end
     end
 
+    it "excludes directory after including its children" do
+      within_temp_dir do
+        make_fixture_tree
+
+        tree = PathTree.for_path(".")
+        tree.include_paths(["code/a/bar.rb"])
+        tree.exclude_paths(["code/a/"])
+        expect(tree.all_paths.sort).to eq []
+      end
+    end
+
+    it "doesn't repopulate nodes after removal" do
+      within_temp_dir do
+        make_fixture_tree
+
+        tree = PathTree.for_path(".")
+        tree.include_paths(["code/a/bar.rb"])
+        tree.exclude_paths(["code/"])
+        tree.exclude_paths([".git/"])
+        expect(tree.all_paths.sort).to eq []
+      end
+    end
+
     it "handles including nonexistent files" do
       within_temp_dir do
         make_fixture_tree

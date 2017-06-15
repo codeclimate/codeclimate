@@ -24,16 +24,17 @@ module CC
         :container_label,
       )
 
-      def initialize(registry:, config:, container_label:, source_dir:, requested_paths:)
+      def initialize(registry:, config:, container_label:, source_dir:, requested_paths:, partial:)
         @registry = RegistryAdapter.new(registry)
         @config = config
         @container_label = container_label
-        @requested_paths = requested_paths
+        @requested_paths = Array(requested_paths)
         @source_dir = source_dir
+        @partial = partial
       end
 
       def run
-        names_and_raw_engine_configs.map do |name, raw_engine_config|
+        enabled_engine_configs.map do |name, raw_engine_config|
           label = @container_label || SecureRandom.uuid
           engine_config = engine_config(raw_engine_config)
           engine_metadata = @registry.fetch(name, raw_engine_config.channel)
@@ -55,7 +56,7 @@ module CC
       end
 
       def engine_workspace(raw_engine_config)
-        if raw_engine_config.key?("exclude_paths") && !@requested_paths.present?
+        if apply_excludes? && raw_engine_config.key?("exclude_paths")
           base_workspace.clone.tap do |workspace|
             workspace.remove(raw_engine_config["exclude_paths"])
           end
@@ -64,24 +65,25 @@ module CC
         end
       end
 
-      def names_and_raw_engine_configs
-        {}.tap do |ret|
-          (@config.engines || {}).each do |name, raw_engine_config|
-            if raw_engine_config.enabled? && @registry.key?(name)
-              ret[name] = raw_engine_config
-            end
-          end
+      def enabled_engine_configs
+        Hash(@config.engines).select do |name, raw_engine_config|
+          raw_engine_config.enabled? && @registry.key?(name)
         end
       end
 
       def base_workspace
         @base_workspace ||= Workspace.new.tap do |workspace|
           workspace.add(@requested_paths)
-          unless @requested_paths.present?
+
+          if apply_excludes?
             workspace.remove([".git"])
             workspace.remove(@config.exclude_paths)
           end
         end
+      end
+
+      def apply_excludes?
+        @partial || @requested_paths.empty?
       end
 
       # The yaml gem turns a config file string into a hash, but engines expect
