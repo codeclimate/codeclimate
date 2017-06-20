@@ -1,7 +1,9 @@
 module CC
   module Analyzer
     class Issue
-      DEFAULT_SEVERITY = "minor".freeze
+      DEFAULT_SEVERITY = IssueValidations::SeverityValidation::MINOR
+      DEPRECATED_SEVERITY = IssueValidations::SeverityValidation::NORMAL
+
       SPEC_ISSUE_ATTRIBUTES = %w[
         categories
         check_name
@@ -21,8 +23,7 @@ module CC
       def as_json(*)
         parsed_output.reverse_merge!(
           "fingerprint" => fingerprint,
-          "severity" => severity,
-        )
+        ).merge!("severity" => severity)
       end
 
       def fingerprint
@@ -49,7 +50,13 @@ module CC
       end
 
       def severity
-        parsed_output.fetch("severity", DEFAULT_SEVERITY)
+        severity = parsed_output.fetch("severity", DEFAULT_SEVERITY)
+
+        if severity == DEPRECATED_SEVERITY
+          DEFAULT_SEVERITY
+        else
+          severity
+        end
       end
 
       def parsed_output

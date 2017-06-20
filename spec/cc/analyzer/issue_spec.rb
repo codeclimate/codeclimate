@@ -78,6 +78,16 @@ module CC::Analyzer
         expect(issue.as_json).to eq(output.merge(expected_additions))
       end
 
+      it "maps deprecated severity to default" do
+        expected_additions = {
+          "fingerprint" => "433fae1189b03bcd9153dc8dce209fa5",
+          "severity" => Issue::DEFAULT_SEVERITY,
+        }
+        issue = Issue.new(output.merge({ "severity" => Issue::DEPRECATED_SEVERITY }).to_json)
+
+        expect(issue.as_json).to eq(output.merge!(expected_additions))
+      end
+
       it "doesn't overwrite defaulted attrs when present" do
         optional_attrs = {
           "fingerprint" => "433fae1189b03bcd9153dc8dce209fa5",
