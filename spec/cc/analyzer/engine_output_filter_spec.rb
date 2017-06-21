@@ -80,7 +80,7 @@ module CC::Analyzer
     end
 
     it "filters issues with an inferred fingerprint that matches exclude_fingerprints" do
-      issue = EngineOutput.new({
+      issue = EngineOutput.new("", {
         "type" => "Issue",
         "check_name" => "foo",
         "location" => {
@@ -104,7 +104,7 @@ module CC::Analyzer
     end
 
     it "does not filter out issues with an inferred fingerprint that cannot be inferred" do
-      issue = EngineOutput.new({
+      issue = EngineOutput.new("", {
         "type" => "Issue",
         "check_name" => "foo",
         "location" => {
