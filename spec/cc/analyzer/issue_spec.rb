@@ -47,7 +47,7 @@ module CC::Analyzer
             },
           },
         }
-        issue = Issue.new(output.to_json)
+        issue = Issue.new("", output.to_json)
 
         expect { issue.fingerprint }.to raise_error SourceExtractor::InvalidLocation
       end
@@ -81,10 +81,11 @@ module CC::Analyzer
 
       it "maps deprecated severity to default" do
         expected_additions = {
+          "engine_name" => "",
           "fingerprint" => "433fae1189b03bcd9153dc8dce209fa5",
           "severity" => Issue::DEFAULT_SEVERITY,
         }
-        issue = Issue.new(output.merge({ "severity" => Issue::DEPRECATED_SEVERITY }).to_json)
+        issue = Issue.new("", output.merge({ "severity" => Issue::DEPRECATED_SEVERITY }).to_json)
 
         expect(issue.as_json).to eq(output.merge!(expected_additions))
       end
