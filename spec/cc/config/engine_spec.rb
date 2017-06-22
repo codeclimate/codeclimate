@@ -34,4 +34,17 @@ describe CC::Config::Engine do
       expect { engine1.merge(described_class.new("bar")) }.to raise_error(ArgumentError, /Engine names must match to merge/)
     end
   end
+
+  describe "#plugin?" do
+    it "returns true for plugin engines" do
+      expect(described_class.new("eslint")).to be_plugin
+      expect(described_class.new("rubocop")).to be_plugin
+      expect(described_class.new("whatever")).to be_plugin
+    end
+
+    it "returns false for our engines" do
+      expect(described_class.new("duplication")).not_to be_plugin
+      expect(described_class.new("structure")).not_to be_plugin
+    end
+  end
 end
