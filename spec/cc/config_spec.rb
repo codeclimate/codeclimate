@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe CC::Config do
-  describe "load" do
+  describe ".load" do
     it "loads default then yaml configurations" do
       yaml = write_cc_yaml(<<-EOYAML)
       prepare:
