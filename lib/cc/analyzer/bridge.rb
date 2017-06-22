@@ -29,8 +29,10 @@ module CC
       end
 
       def run
-        plugins = Plugins.new
-        plugins.auto_enable_engines(config)
+        if config.auto_enable_plugins?
+          plugins = Plugins.new
+          plugins.auto_enable_engines(config)
+        end
 
         formatter.started
 
