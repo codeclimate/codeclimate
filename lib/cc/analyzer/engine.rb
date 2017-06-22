@@ -43,7 +43,7 @@ module CC
           end
 
           unless output_filter.filter?(output)
-            stdout_io.write(output.to_json) || container.stop
+            stdout_io.write(output_overrider.apply(output).to_json) || container.stop
           end
         end
 
@@ -99,6 +99,10 @@ module CC
 
       def output_filter
         @output_filter ||= EngineOutputFilter.new(@config)
+      end
+
+      def output_overrider
+        @output_overrider ||= EngineOutputOverrider.new(@config)
       end
 
       # Memory limit for a running engine in bytes

@@ -105,6 +105,25 @@ module CC::Analyzer
           expect(stdout.string).not_to include %{"check":"bar"}
         end
       end
+
+      it "applies overrides" do
+        within_temp_dir do
+          make_file("foo.rb")
+
+          container = TestContainer.new([
+            %{{"type":"issue","check_name":"foo","location":{"path":"foo.rb","lines":{"begin":1,"end":1}},"description":"foo","categories":["Style"],"severity":"minor"}},
+          ])
+          expect(Container).to receive(:new).and_return(container)
+
+          stdout = StringIO.new
+          config = { "issue_override" => { "severity" => "info" } }
+          engine = Engine.new("", {}, "", config, "")
+          engine.run(stdout, ContainerListener.new)
+
+          expect(stdout.string).not_to include %{"severity":"minor"}
+          expect(stdout.string).to include %{"severity":"info"}
+        end
+      end
     end
   end
 end
