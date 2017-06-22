@@ -17,6 +17,10 @@ module CC
         @enabled
       end
 
+      def plugin?
+        !Default::ENGINE_NAMES.include?(name)
+      end
+
       def container_label
         @container_label ||= SecureRandom.uuid
       end
