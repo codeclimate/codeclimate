@@ -59,6 +59,8 @@ module CC
             )
           when "--dev"
             config.development = true
+          when "--no-plugins"
+            config.disable_plugins!
           else
             config.analysis_paths << arg
           end

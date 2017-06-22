@@ -90,4 +90,29 @@ describe CC::Config do
       end
     end
   end
+
+  describe "#disable_plugins!" do
+    it "deletes plugins from #engines" do
+      config = CC::Config.new(engines: Set.new(
+        [
+          double(name: "1", plugin?: false),
+          double(name: "2", plugin?: true),
+          double(name: "3", plugin?: false),
+        ]
+      ))
+
+      config.disable_plugins!
+
+      expect(config.engines.count).to eq(2)
+      expect(config.engines.map(&:name)).to eq(%w[1 3])
+    end
+
+    it "sets auto_enable_plugins? to false" do
+      config = CC::Config.new
+      expect(config).to be_auto_enable_plugins
+
+      config.disable_plugins!
+      expect(config).not_to be_auto_enable_plugins
+    end
+  end
 end
