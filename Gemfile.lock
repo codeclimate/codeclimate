@@ -3,7 +3,7 @@ PATH
   specs:
     codeclimate (0.64.0)
       activesupport (>= 4.2.1, < 5.1)
-      codeclimate-yaml (~> 0.12.0)
+      codeclimate-yaml (~> 0.13.0)
       highline (~> 1.7, >= 1.7.2)
       posix-spawn (~> 0.3, >= 0.3.11)
       pry (~> 0.10.1)
@@ -24,7 +24,7 @@ GEM
     builder (3.2.3)
     codeclimate-test-reporter (1.0.6)
       simplecov
-    codeclimate-yaml (0.12.0)
+    codeclimate-yaml (0.13.0)
       activesupport
       secure_string
     coderay (1.1.1)
@@ -89,3 +89,6 @@ DEPENDENCIES
   rspec
   rspec_junit_formatter
   simplecov
+
+BUNDLED WITH
+   1.14.3
