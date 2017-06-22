@@ -1,6 +1,7 @@
 module CC
   class Config
     class Default < Config
+      ENGINE_NAMES = %w[duplication structure]
       EXCLUDE_PATTERNS = %w[
         config/
         db/
