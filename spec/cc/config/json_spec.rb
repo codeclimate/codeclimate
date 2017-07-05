@@ -25,6 +25,29 @@ describe CC::Config::JSON do
     end
   end
 
+  describe "#exclude_paths" do
+    it "respects excludes from JSON" do
+      json = load_cc_json(<<-EOS)
+        {
+          "exclude_patterns": [
+            "tests/",
+            "**/vendor/"
+          ]
+        }
+      EOS
+
+      expect(json.exclude_patterns).to eq(%w[tests/ **/vendor/])
+    end
+
+    it "gives defaults when key not in JSON" do
+      json = load_cc_json(<<-EOS)
+        {}
+      EOS
+
+      expect(json.exclude_patterns).to eq(CC::Config::Default::EXCLUDE_PATTERNS)
+    end
+  end
+
   def load_cc_json(json)
     Tempfile.open("") do |tmp|
       tmp.puts(json)
