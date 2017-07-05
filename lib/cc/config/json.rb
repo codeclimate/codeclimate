@@ -9,6 +9,7 @@ module CC
 
         super(
           engines: Set.new([duplication_engine, structure_engine]),
+          exclude_patterns: json.fetch("exclude_patterns", Default::EXCLUDE_PATTERNS)
         )
       end
 
