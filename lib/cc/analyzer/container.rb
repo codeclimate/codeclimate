@@ -136,7 +136,7 @@ module CC
         Thread.new do
           begin
             err.each_line do |line|
-              Analyzer.logger.debug("engine stderr: #{line}")
+              Analyzer.logger.debug("engine stderr: #{line.chomp}")
               @stderr_io.write(line)
               check_output_bytes(line.bytesize)
             end
