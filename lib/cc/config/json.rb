@@ -38,7 +38,7 @@ module CC
           channel: "cronopio",
           config: {
             "config" => {
-              "languages" => %w[javascript ruby],
+              "languages" => Default::DUPLICATION_LANGUAGES,
               "checks" => json.fetch("checks", {}),
             },
           },
