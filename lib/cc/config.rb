@@ -19,8 +19,11 @@ module CC
 
     def self.load
       config = Default.new
-      config = config.merge(YAML.new) if File.exist?(YAML::DEFAULT_PATH)
-      config = config.merge(JSON.new) if File.exist?(JSON::DEFAULT_PATH)
+      if File.exist?(JSON::DEFAULT_PATH)
+        config = config.merge(JSON.new)
+      elsif File.exist?(YAML::DEFAULT_PATH)
+        config = config.merge(YAML.new)
+      end
       config
     end
 
