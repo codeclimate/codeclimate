@@ -20,7 +20,7 @@ module CC
         :json
 
       def structure_engine
-        base_engine = Engine.new(
+        Engine.new(
           "structure",
           enabled: true,
           channel: channel_overrides.fetch("structure", "stable"),
@@ -33,7 +33,7 @@ module CC
       end
 
       def duplication_engine
-        base_engine = Engine.new(
+        Engine.new(
           "duplication",
           enabled: true,
           channel: channel_overrides.fetch("duplication", "cronopio"),
