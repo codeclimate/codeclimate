@@ -50,19 +50,15 @@ describe CC::Config::JSON do
       })
     end
 
-    it "respects overrides of core engines" do
+    it "respects overrides of core engine channels" do
       json = load_cc_json(<<-EOS)
         {
+          "channels": {
+            "structure": "beta"
+          },
           "checks": {
             "cyclomatic-complexity": {
               "enabled": true
-            }
-          },
-          "plugins": {
-            "structure": {
-              "enabled": false,
-              "channel": "beta",
-              "config": { "something": "else" }
             }
           }
         }
@@ -72,7 +68,6 @@ describe CC::Config::JSON do
 
       engine = json.engines.detect { |engine| engine.name == "structure" }
       expect(engine).not_to be_nil
-      expect(engine.enabled?).to eq(false)
       expect(engine.channel).to eq("beta")
       expect(engine.config["config"]["checks"]).to eq(
         "cyclomatic-complexity" => {

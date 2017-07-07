@@ -23,26 +23,20 @@ module CC
         base_engine = Engine.new(
           "structure",
           enabled: true,
+          channel: channel_overrides.fetch("structure", "stable"),
           config: {
             "config" => {
               "checks" => json.fetch("checks", {}),
             },
           },
         )
-        override = all_configured_engines.detect { |engine| engine.name == "structure" }
-
-        if override
-          base_engine.merge(override)
-        else
-          base_engine
-        end
       end
 
       def duplication_engine
         base_engine = Engine.new(
           "duplication",
           enabled: true,
-          channel: "cronopio",
+          channel: channel_overrides.fetch("duplication", "cronopio"),
           config: {
             "config" => {
               "languages" => %w[javascript ruby],
@@ -50,21 +44,10 @@ module CC
             },
           },
         )
-        override = all_configured_engines.detect { |engine| engine.name == "duplication" }
-
-        if override
-          base_engine.merge(override)
-        else
-          base_engine
-        end
       end
 
       def plugin_engines
-        all_configured_engines.select(&:plugin?)
-      end
-
-      def all_configured_engines
-        @all_configured_engines ||= json.fetch("plugins", {}).map do |name, data|
+        json.fetch("plugins", {}).map do |name, data|
           plugin_engine(name, data)
         end
       end
@@ -76,6 +59,10 @@ module CC
           channel: data["channel"],
           config: data
         )
+      end
+
+      def channel_overrides
+        json.fetch("channels", {})
       end
     end
   end
