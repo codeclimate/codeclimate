@@ -1,7 +1,14 @@
 module CC
   class Config
     class Default < Config
+      DUPLICATION_LANGUAGES = %w[
+        javascript
+        php
+        ruby
+      ].freeze
+
       ENGINE_NAMES = %w[duplication structure]
+
       EXCLUDE_PATTERNS = %w[
         config/
         db/
@@ -38,7 +45,7 @@ module CC
           channel: "cronopio",
           config: {
             "config" => {
-              "languages" => %w[javascript ruby],
+              "languages" => DUPLICATION_LANGUAGES,
             }
           },
         )
