@@ -23,6 +23,63 @@ describe CC::Config::JSON do
         )
       end
     end
+
+    it "includes specified plugins" do
+      json = load_cc_json(<<-EOS)
+        {
+          "plugins": {
+            "rubocop": {
+              "enabled": false,
+              "channel": "beta",
+              "config": { "something": "else" }
+            }
+          }
+        }
+      EOS
+
+      expect(json.engines.count).to eq(3)
+
+      engine = json.engines.detect { |engine| engine.name == "rubocop" }
+      expect(engine).not_to be_nil
+      expect(engine.enabled?).to eq(false)
+      expect(engine.channel).to eq("beta")
+      expect(engine.config).to eq({
+        "enabled" => false,
+        "channel" => "beta",
+        "config" => { "something" => "else" },
+      })
+    end
+
+    it "respects overrides of core engines" do
+      json = load_cc_json(<<-EOS)
+        {
+          "checks": {
+            "cyclomatic-complexity": {
+              "enabled": true
+            }
+          },
+          "plugins": {
+            "structure": {
+              "enabled": false,
+              "channel": "beta",
+              "config": { "something": "else" }
+            }
+          }
+        }
+      EOS
+
+      expect(json.engines.count).to eq(2)
+
+      engine = json.engines.detect { |engine| engine.name == "structure" }
+      expect(engine).not_to be_nil
+      expect(engine.enabled?).to eq(false)
+      expect(engine.channel).to eq("beta")
+      expect(engine.config["config"]["checks"]).to eq(
+        "cyclomatic-complexity" => {
+          "enabled" => true,
+        },
+      )
+    end
   end
 
   describe "#exclude_paths" do
