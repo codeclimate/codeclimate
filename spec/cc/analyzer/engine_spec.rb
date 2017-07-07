@@ -91,8 +91,8 @@ module CC::Analyzer
 
           stdout = StringIO.new
           config = { "issue_override" => { "severity" => "info" } }
-          engine = Engine.new("", {}, "", config, "")
-          engine.run(stdout, ContainerListener.new)
+          engine = Engine.new("", { "image" => "" }, config, "")
+          engine.run(stdout)
 
           expect(stdout.string).not_to include %{"severity":"minor"}
           expect(stdout.string).to include %{"severity":"info"}
