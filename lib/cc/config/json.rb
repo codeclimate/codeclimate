@@ -20,49 +20,47 @@ module CC
         :json
 
       def structure_engine
+        base_engine = Engine.new(
+          "structure",
+          enabled: true,
+          config: {
+            "config" => {
+              "checks" => json.fetch("checks", {}),
+            },
+          },
+        )
         override = all_configured_engines.detect { |engine| engine.name == "structure" }
 
         if override
-          set_engine_checks(override, json.fetch("checks", {}))
-          override
+          base_engine.merge(override)
         else
-          Engine.new(
-            "structure",
-            enabled: true,
-            config: {
-              "config" => {
-                "checks" => json.fetch("checks", {}),
-              },
-            },
-          )
+          base_engine
         end
       end
 
       def duplication_engine
+        base_engine = Engine.new(
+          "duplication",
+          enabled: true,
+          channel: "cronopio",
+          config: {
+            "config" => {
+              "languages" => %w[javascript ruby],
+              "checks" => json.fetch("checks", {}),
+            },
+          },
+        )
         override = all_configured_engines.detect { |engine| engine.name == "duplication" }
 
         if override
-          set_engine_checks(override, json.fetch("checks", {}))
-          override
+          base_engine.merge(override)
         else
-          Engine.new(
-            "duplication",
-            enabled: true,
-            channel: "cronopio",
-            config: {
-              "config" => {
-                "languages" => %w[javascript ruby],
-                "checks" => json.fetch("checks", {}),
-              },
-            },
-          )
+          base_engine
         end
       end
 
       def plugin_engines
-        all_configured_engines.reject do |engine|
-          %w[structure duplication].include?(engine.name)
-        end
+        all_configured_engines.select(&:plugin?)
       end
 
       def all_configured_engines
@@ -78,11 +76,6 @@ module CC
           channel: data["channel"],
           config: data
         )
-      end
-
-      def set_engine_checks(engine, checks)
-        engine.config["config"] ||= {}
-        engine.config["config"]["checks"] ||= checks
       end
     end
   end
