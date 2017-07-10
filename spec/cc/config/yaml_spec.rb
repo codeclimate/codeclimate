@@ -63,18 +63,17 @@ describe CC::Config::YAML do
       expect(rubocop.config["config"]).to eq("yo" => "sup")
     end
 
-    it "re-writes as legacy file config values" do
+    it "re-writes legacy file config values as new format" do
       yaml = load_cc_yaml(<<-EOYAML)
       plugins:
         rubocop:
           enabled: true
-          config:
-            file: "foo.rb"
+          config: "foo.rb"
       EOYAML
 
       rubocop = yaml.engines.detect { |e| e.name == "rubocop" }
       expect(rubocop).to be_present
-      expect(rubocop.config["config"]).to eq("foo.rb")
+      expect(rubocop.config["config"]).to eq("file" => "foo.rb")
     end
   end
 
