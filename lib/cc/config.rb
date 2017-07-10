@@ -29,7 +29,6 @@ module CC
 
     def initialize(analysis_paths: [], development: false, engines: Set.new, exclude_patterns: [], prepare: Prepare.new)
       @analysis_paths = analysis_paths
-      @auto_enable_plugins = true
       @development = development
       @engines = engines
       @exclude_patterns = exclude_patterns
@@ -44,12 +43,7 @@ module CC
       @development
     end
 
-    def auto_enable_plugins?
-      @auto_enable_plugins
-    end
-
     def disable_plugins!
-      @auto_enable_plugins = false
       @engines.delete_if(&:plugin?)
     end
   end
