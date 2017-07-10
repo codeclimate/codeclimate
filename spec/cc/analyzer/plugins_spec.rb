@@ -23,7 +23,6 @@ describe CC::Analyzer::Plugins do
       expect(config.engines.length).to eq(1)
       expect(config.engines.first).to be_enabled
       expect(config.engines.first.name).to eq("rubocop")
-      expect(config.engines.first.config["config"]).to eq(".rubocop.yml")
     end
 
     it "does not auto-enable over an already-configured engine" do
@@ -52,7 +51,6 @@ describe CC::Analyzer::Plugins do
       expect(config.engines.length).to eq(1)
       expect(config.engines.first).to be_enabled
       expect(config.engines.first.name).to eq("eslint")
-      expect(config.engines.first.config["config"]).to eq(".eslintrc.json")
     end
   end
 end
