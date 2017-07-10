@@ -12,7 +12,6 @@ module CC
           engine_details.auto_enable_paths.each do |path|
             if File.exist?(path)
               engine.enabled = true
-              engine.config["config"] = path
               config.engines << engine
               break
             end
