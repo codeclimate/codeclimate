@@ -180,6 +180,26 @@ flog:
   default_config:
     all: false
     threshold: 0.6
+git-legal:
+  channels:
+    stable: codeclimate/codeclimate-git-legal
+  description: License compliance and compatibility analysis
+  community: true
+  enable_regexps:
+    - "^*.gemspec$"
+    - "^Gemfile*$"
+    - "^composer.*$"
+    - "^package.json$"
+    - "^requirements.txt$"
+    - "^yarn.lock$"
+  default_config:
+  default_ratings_paths:
+    - "*.gemspec"
+    - "Gemfile*"
+    - "composer.*"
+    - "package.json"
+    - "requirements.txt"
+    - "yarn.lock"
 gofmt:
   channels:
     stable: codeclimate/codeclimate-gofmt
