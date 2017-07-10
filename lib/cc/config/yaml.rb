@@ -33,7 +33,7 @@ module CC
           Engine.new(name, enabled: data)
         else
           if data.key?("config")
-            data["config"] = convert_to_legacy_file_config(data["config"])
+            data["config"] = upconvert_legacy_file_config(data["config"])
           end
 
           Engine.new(
@@ -45,18 +45,18 @@ module CC
         end
       end
 
-      # Many of our plugins still expect:
+      # We used to support
       #
       #   { config: PATH }
       #
-      # But we document, and hope to eventually move to:
+      # But we document, and have moved to:
       #
       #   { config: { file: PATH } }
       #
-      # We need to munge from the latter to the former when/if we encounter it
-      def convert_to_legacy_file_config(config)
-        if config.keys.size == 1 && config.key?("file")
-          config["file"]
+      # We need to munge from the former to the latter when we encounter it
+      def upconvert_legacy_file_config(config)
+        if config.is_a?(String)
+          { "file" => config }
         else
           config
         end
