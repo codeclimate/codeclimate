@@ -128,13 +128,5 @@ describe CC::Config do
       expect(config.engines.count).to eq(2)
       expect(config.engines.map(&:name)).to eq(%w[1 3])
     end
-
-    it "sets auto_enable_plugins? to false" do
-      config = CC::Config.new
-      expect(config).to be_auto_enable_plugins
-
-      config.disable_plugins!
-      expect(config).not_to be_auto_enable_plugins
-    end
   end
 end
