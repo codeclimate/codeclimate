@@ -47,7 +47,7 @@ describe CC::Config do
       end
 
       config.engines.find { |e| e.name == "duplication" }.tap do |engine|
-        expect(engine.config["config"]["languages"].length).to eq(3)
+        expect(engine.config["config"]["languages"].length).to eq(4)
         expect(engine.config["config"]["checks"]).to eq(
           "cyclomatic-complexity" => {
             "enabled" => true,
