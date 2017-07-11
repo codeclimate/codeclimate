@@ -4,6 +4,7 @@ module CC
       DUPLICATION_LANGUAGES = %w[
         javascript
         php
+        python
         ruby
       ].freeze
 
