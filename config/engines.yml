@@ -111,6 +111,10 @@ foodcritic:
   channels:
     stable: codeclimate/codeclimate-foodcritic
   description: Lint tool for Chef cookbooks.
+git-legal:
+  channels:
+    stable: codeclimate/codeclimate-git-legal
+  description: License compliance and compatibility analysis.
 gnu-complexity:
   channels:
     stable: codeclimate/codeclimate-gnu-complexity
