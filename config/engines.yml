@@ -183,7 +183,7 @@ flog:
 git-legal:
   channels:
     stable: codeclimate/codeclimate-git-legal
-  description: License compliance and compatibility analysis
+  description: License compliance and compatibility analysis.
   community: true
   enable_regexps:
     - "^*.gemspec$"
