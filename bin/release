@@ -9,10 +9,12 @@
 ###
 set -e
 
-git checkout master
-git pull
+./bin/validate-release
 
 version=$(< VERSION)
+
+git fetch origin master
+git reset --hard origin/master
 
 printf "RELEASE %s\n" "$version"
 bundle check || bundle install

@@ -12,24 +12,12 @@ if [ -z "$1" ]; then
   exit 64
 fi
 
-if ! [ "$(git symbolic-ref --short HEAD)" = "master" ]; then
-  echo "must be on master branch to run" >&2
-  exit 1
-fi
-
-if ! git diff-index --quiet HEAD --; then
-  echo "commit or stash your workspace changes" >&2
-  exit 1
-fi
+./bin/validate-release
 
 version="$1"
 old_version=$(< VERSION)
 branch="release-$version"
 
-if ! make test; then
-  echo "test suite failed. not releasing" >&2
-  exit 1
-fi
 
 printf "RELEASE %s => %s\n" "$old_version" "$version"
 git fetch origin master
