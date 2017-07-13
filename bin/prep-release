@@ -12,6 +12,16 @@ if [ -z "$1" ]; then
   exit 64
 fi
 
+if ! [ "$(git symbolic-ref --short HEAD)" = "master" ]; then
+  printf "must be on master branch to run\n" >&2
+  exit 1
+fi
+
+if ! git diff-index --quiet HEAD --; then
+  printf "commit or stash your workspace changes\n" >&2
+  exit 1
+fi
+
 version=$1
 old_version=$(< VERSION)
 branch="release-$version"
