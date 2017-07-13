@@ -16,8 +16,11 @@ engines:
     checks:
       MD002: # "First header should be a h1 header"
         enabled: false
+  shellcheck:
+    enabled: true
 ratings:
   paths:
+  - "bin/*"
   - "**.rb"
   - "**.md"
 exclude_paths:
