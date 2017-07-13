@@ -18,14 +18,16 @@ printf "RELEASE %s\n" "$version"
 bundle check || bundle install
 rake release
 
-docker build --rm -t codeclimate/codeclimate .
+docker build --rm --tag codeclimate/codeclimate .
 docker push codeclimate/codeclimate:latest
 docker tag codeclimate/codeclimate "codeclimate/codeclimate:$version"
 docker push "codeclimate/codeclimate:$version"
 
 (cd ../homebrew-formulae/ && bin/release "$version")
 
-echo "Be sure to update release notes:"
-echo ""
-echo "  https://github.com/codeclimate/codeclimate/releases/new?tag=v$version"
-echo ""
+cat <<EOM
+Be sure to update release notes:
+
+  https://github.com/codeclimate/codeclimate/releases/new?tag=v$version
+
+EOM
