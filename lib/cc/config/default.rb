@@ -15,12 +15,12 @@ module CC
         db/
         dist/
         features/
-        node_modules/
+        **/node_modules/
         script/
-        spec/
-        test/
-        tests/
-        vendor/
+        **/spec/
+        **/test/
+        **/tests/
+        **/vendor/
       ]
 
       def initialize
