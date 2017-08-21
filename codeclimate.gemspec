@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.bindir = "bin"
   s.executables = []
 
-  s.add_dependency "activesupport", ">= 4.2.1", "< 5.1"
+  s.add_dependency "activesupport", ">= 5.1.3", "< 5.2"
   s.add_dependency "tty-spinner", "~> 0.1.0"
   s.add_dependency "codeclimate-yaml", "~> 0.13.0"
   s.add_dependency "highline", "~> 1.7", ">= 1.7.2"
