@@ -2,6 +2,13 @@ require "spec_helper"
 
 module CC::Analyzer
   describe RaisingContainerListener do
+    class EngineError < StandardError
+      def initialize(message, engine_name)
+        @engine_name = engine_name
+        super message
+      end
+    end
+
     let(:engine) { double(name: "engine") }
 
     describe "#failure" do
@@ -19,7 +26,7 @@ module CC::Analyzer
           exit_status: 1,
           stderr: "some error",
         )
-        failure_ex = Class.new(StandardError)
+        failure_ex = Class.new(EngineError)
 
         listener = RaisingContainerListener.new(failure_ex)
 
@@ -34,7 +41,7 @@ module CC::Analyzer
           timed_out?: true,
           duration: 900000,
         )
-        timeout_ex = Class.new(StandardError)
+        timeout_ex = Class.new(EngineError)
         listener = RaisingContainerListener.new(nil, timeout_ex)
 
         expect { listener.finished(engine, nil, result) }.to raise_error(
@@ -43,12 +50,14 @@ module CC::Analyzer
       end
 
       it "raises the given maximum output exception" do
-        result = double(
+        result = instance_double("Result",
           timed_out?: false,
           maximum_output_exceeded?: true,
           output_byte_count: 857,
         )
-        maximum_output_ex = Class.new(StandardError)
+        message = "engine produced too much output. 857 bytes"
+        expection = instance_double("Expception")
+        maximum_output_ex = Class.new(EngineError)
 
         listener = RaisingContainerListener.new(nil, nil, maximum_output_ex)
 
