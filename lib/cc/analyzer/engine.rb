@@ -68,6 +68,8 @@ module CC
       end
 
       def container_options
+        mount = CLI.debug? ? "rw" : "ro"
+
         [
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=#{@label}",
@@ -75,7 +77,7 @@ module CC
           "--memory-swap", "-1",
           "--net", "none",
           "--rm",
-          "--volume", "#{@code_path}:/code:ro",
+          "--volume", "#{@code_path}:/code:#{mount}",
           "--volume", "#{config_file.host_path}:/config.json:ro",
           "--user", "9000:9000"
         ]
