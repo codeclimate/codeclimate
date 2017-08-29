@@ -12,7 +12,7 @@ module CC
         "    --dev                            Run in development mode. Engines installed locally that are not in the manifest will be run.\n" \
         "    path                             Path to check. Can be specified multiple times.".freeze
 
-      EngineFailure = Class.new(StandardError)
+      autoload :EngineFailure, "cc/cli/analyze/engine_failure"
 
       include CC::Analyzer
 
