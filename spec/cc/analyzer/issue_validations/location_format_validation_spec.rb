@@ -44,19 +44,23 @@ module CC::Analyzer::IssueValidations
       end
 
       it "returns false if the position is badly formed" do
-        expect(LocationFormatValidation.new("location" => {
+        validation = LocationFormatValidation.new("location" => {
           "path" => "foo.rb",
           "positions" => "everywhere",
-        })).not_to be_valid
+        })
+        expect(validation).not_to be_valid
+        expect(validation.message).to start_with("Location is not formatted correctly: location.positions is not valid")
       end
 
       it "returns false if the lines are badly formed" do
-        expect(LocationFormatValidation.new("location" => {
+        validation = LocationFormatValidation.new("location" => {
           "path" => "foo.rb",
           "positions" => {
             "lines" => "all of them"
           }
-        })).not_to be_valid
+        })
+        expect(validation).not_to be_valid
+        expect(validation.message).to start_with("Location is not formatted correctly: location.positions is not valid")
       end
 
       it "returns false if the location line values are not integers" do
@@ -70,6 +74,7 @@ module CC::Analyzer::IssueValidations
         validation = LocationFormatValidation.new("location" => location)
 
         expect(validation).not_to be_valid
+        expect(validation.message).to start_with("Location is not formatted correctly: location.lines is not valid")
       end
 
       it "returns false if the location position values are not integers" do
@@ -88,6 +93,7 @@ module CC::Analyzer::IssueValidations
         validation = LocationFormatValidation.new("location" => location)
 
         expect(validation).not_to be_valid
+        expect(validation.message).to start_with("Location is not formatted correctly: location.positions is not valid")
       end
     end
   end

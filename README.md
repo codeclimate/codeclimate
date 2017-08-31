@@ -16,7 +16,7 @@ analyses are also Docker images. To support this, you must have Docker installed
 and running locally. We also require that the Docker daemon supports connections
 on the default Unix socket `/var/run/docker.sock`.
 
-On OS X, we recommend using [Docker Machine](https://docs.docker.com/machine/).
+On macOS, we recommend using [Docker for Mac](https://docs.docker.com/docker-for-mac/).
 
 ## Installation
 
@@ -65,6 +65,8 @@ brew upgrade codeclimate
 curl -L https://github.com/codeclimate/codeclimate/archive/master.tar.gz | tar xvz
 cd codeclimate-* && sudo make install
 ```
+
+To upgrade to a newer version, just run those steps again.
 
 ### Updating existing Code Climate configuration
 
@@ -116,6 +118,11 @@ The following is a brief explanation of each available command.
   `exclude_paths`. When you do provide an explicit path to analyze, your
   configured `exclude_paths` are ignored, and normally excluded files will be
   analyzed.
+
+  You can also pipe in source in combination with a path to analyze code that is
+  not yet written to disk. This is useful when you want to check if your source
+  code style matches the project's. This is also a good way to implement
+  integration with an editor to check style on the fly.
 * `console`
   start an interactive session providing access to the classes
   within the CLI. Useful for engine developers and maintainers.
@@ -166,7 +173,7 @@ The following is a brief explanation of each available command.
   (default is 512,000,000 bytes):
 
   ```
-  # 100,000,0000 bytes
+  # 1,000,000,000 bytes
   ENGINE_MEMORY_LIMIT_BYTES=1000000000 codeclimate analyze
   ```
 

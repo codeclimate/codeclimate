@@ -12,28 +12,26 @@ if [ -z "$1" ]; then
   exit 64
 fi
 
-version=$1
+./bin/validate-release
+
+version="$1"
 old_version=$(< VERSION)
 branch="release-$version"
 
-if ! make test; then
-  echo "test failure, not releasing" >&2
-  exit 1
-fi
 
 printf "RELEASE %s => %s\n" "$old_version" "$version"
-git checkout master
-git pull
+git fetch origin master
+git reset --hard origin/master
 
 git checkout -b "$branch"
 
 printf "%s\n" "$version" > VERSION
 make Gemfile.lock
 git add VERSION Gemfile.lock
-git commit -m "Release v$version"
+git commit --message "Release v$version"
 git push origin "$branch"
 
-branch_head=$(git rev-parse --short $branch)
+branch_head=$(git rev-parse --short "$branch")
 if command -v hub > /dev/null 2>&1; then
   hub pull-request -F - <<EOF
 Release v$version

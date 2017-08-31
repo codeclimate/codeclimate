@@ -30,11 +30,12 @@ module CC::CLI
           end
         end
 
-        _, stderr = capture_io do
+        _, stderr, exit_code = capture_io_and_exit_code do
           Runner.run(["explode"])
         end
 
         expect(stderr).to match(/error: \(StandardError\) boom/)
+        expect(exit_code).to eq(1)
       end
 
       it "doesn't check for new version when --no-check-version is passed" do

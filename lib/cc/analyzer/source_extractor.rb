@@ -1,13 +1,15 @@
 module CC
   module Analyzer
     class SourceExtractor
-      InvalidLocationPositions = Class.new(StandardError)
+      InvalidLocation = Class.new(StandardError)
 
       def initialize(source)
         @source = source
       end
 
       def extract(location)
+        validate_location(location)
+
         if (lines = location["lines"])
           extract_from_lines(lines)
         elsif (positions = location["positions"])
@@ -17,7 +19,14 @@ module CC
 
       private
 
-      attr_reader :location, :source
+      attr_reader :source
+
+      def validate_location(location)
+        validator = IssueValidations::LocationFormatValidation::Validator.new(location)
+        unless validator.valid?
+          raise InvalidLocation, validator.message
+        end
+      end
 
       def extract_from_lines(lines)
         begin_index = lines.fetch("begin") - 1
@@ -40,23 +49,14 @@ module CC
 
       def convert_to_offsets(positions)
         positions.each_with_object({}) do |(key, value), memo|
-          if value.key?("offset")
-            memo[key] = value
-          else
-            validate_position_format!(value)
-
-            memo[key] = {
-              "offset" => to_offset(value["line"] - 1, value["column"] - 1),
-            }
-          end
-        end
-      end
-
-      def validate_position_format!(position)
-        unless position.key?("line") && position.key?("column")
-          message = "Location positions must have either line/column or offset form"
-
-          raise InvalidLocationPositions, message
+          memo[key] =
+            if value.key?("offset")
+              value
+            else
+              {
+                "offset" => to_offset(value["line"] - 1, value["column"] - 1),
+              }
+            end
         end
       end
 

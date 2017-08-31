@@ -9,6 +9,11 @@ module CC
           RelativePathValidation,
         ].freeze
 
+        def initialize(object)
+          super
+          @other_location_valid = {}
+        end
+
         def valid?
           if object["other_locations"]
             object["other_locations"].is_a?(Array) &&
@@ -25,7 +30,8 @@ module CC
         private
 
         def other_location_valid?(location)
-          CHECKS.all? do |klass|
+          path = location && location["path"]
+          @other_location_valid[path] ||= CHECKS.all? do |klass|
             klass.new("location" => location).valid?
           end
         end

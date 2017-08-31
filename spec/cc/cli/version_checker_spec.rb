@@ -46,11 +46,11 @@ describe CC::CLI::VersionChecker do
   it "checks version against the API" do
     stub_version_request(latest: "0.1.2", outdated: true)
 
-    out, = capture_io do
+    _, stderr = capture_io do
       checker.check
     end
 
-    expect(out).to include "A new version (v0.1.2) is available"
+    expect(stderr).to include "A new version (v0.1.2) is available"
   end
 
   it "persistes config" do
@@ -72,14 +72,14 @@ describe CC::CLI::VersionChecker do
   it "prints nothing when up to date" do
     stub_version_request(latest: "0.1.2", outdated: false)
 
-    out, = capture_io do
+    _, stderr = capture_io do
       checker.check
     end
 
-    expect(out).to eq ""
+    expect(stderr).to eq ""
   end
 
-  it "uses cached values when API is unavailable" do
+  it "does nothing when API is unavailable" do
     stub_resolv("versions.codeclimate.com", "255.255.255.255")
     allow(Net::HTTP).to receive(:start).and_return(Net::HTTPServerError.new(500, "Nope", "Nope Nope"))
 
@@ -87,23 +87,23 @@ describe CC::CLI::VersionChecker do
     cache.latest_version = "0.1.1"
     cache.outdated = true
 
-    out, = capture_io do
+    _, stderr = capture_io do
       checker.check
     end
 
-    expect(out).to include "A new version (v0.1.1) is available"
+    expect(stderr).to eq ""
   end
 
-  it "uses cached values if checked recently" do
+  it "does nothing if checked recently" do
     cache = CC::CLI::GlobalCache.new
     cache.last_version_check = Time.now
     cache.latest_version = "0.1.1"
     cache.outdated = true
 
-    out, = capture_io do
+    _, stderr = capture_io do
       checker.check
     end
 
-    expect(out).to include "A new version (v0.1.1) is available"
+    expect(stderr).to eq ""
   end
 end

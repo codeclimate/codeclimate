@@ -1,4 +1,5 @@
 require "active_support"
+require "active_support/core_ext/module/remove_method" # Temporary, see https://github.com/codeclimate/codeclimate/pull/658
 require "active_support/core_ext"
 require "yaml"
 require "cc/analyzer"
@@ -13,6 +14,7 @@ require "cc/cli/help"
 require "cc/cli/init"
 require "cc/cli/output"
 require "cc/cli/prepare"
+require "cc/cli/prepare/quality"
 require "cc/cli/runner"
 require "cc/cli/test"
 require "cc/cli/validate_config"

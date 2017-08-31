@@ -43,7 +43,7 @@ bundler-audit:
     - Gemfile.lock
 checks:
   channels:
-    beta: codeclimate/checks:beta
+    beta: codeclimate/codeclimate-checks:beta
   description: Maintainability and reliability checks for PHP, Python, JS, and more.
   community: false
   default_ratings_paths:
@@ -69,7 +69,6 @@ complexity-ruby:
     beta: codeclimate/codeclimate-complexity-ruby:b47
   description: Code Climate Complexity Checks for Ruby
   community: false
-  code_climate_check: true
   default_ratings_paths:
     - "**.rb"
   default_config:
@@ -152,6 +151,7 @@ eslint:
     eslint-1: codeclimate/codeclimate-eslint:eslint-1
     eslint-2: codeclimate/codeclimate-eslint:eslint-2
     eslint-3: codeclimate/codeclimate-eslint:eslint-3
+    eslint-4: codeclimate/codeclimate-eslint:eslint-4
   description: A JavaScript/JSX linting utility.
   community: false
   upgrade_languages:
@@ -181,6 +181,26 @@ flog:
   default_config:
     all: false
     threshold: 0.6
+git-legal:
+  channels:
+    stable: codeclimate/codeclimate-git-legal
+  description: License compliance and compatibility analysis.
+  community: true
+  enable_regexps:
+    - "^*.gemspec$"
+    - "^Gemfile*$"
+    - "^composer.*$"
+    - "^package.json$"
+    - "^requirements.txt$"
+    - "^yarn.lock$"
+  default_config:
+  default_ratings_paths:
+    - "*.gemspec"
+    - "Gemfile*"
+    - "composer.*"
+    - "package.json"
+    - "requirements.txt"
+    - "yarn.lock"
 gofmt:
   channels:
     stable: codeclimate/codeclimate-gofmt
@@ -208,6 +228,14 @@ govet:
     - \.go$
   default_ratings_paths:
     - "**.go"
+grep:
+  channels:
+    beta: codeclimate/codeclimate-grep
+    stable: codeclimate/codeclimate-grep
+  description: Detects specified patterns in files
+  community: false
+  enable_regexps:
+  default_ratings_paths:
 fixme:
   channels:
     stable: codeclimate/codeclimate-fixme
@@ -241,6 +269,15 @@ haxe-checkstyle:
     - \.hx$
   default_ratings_paths:
     - "**.hx"
+haml-lint:
+  channels:
+    beta: codeclimate/codeclimate-haml-lint:beta
+  description: Tool for writing clean and consistent HAML.
+  community: true
+  enable_regexps:
+    - \.haml$
+  default_ratings_paths:
+    - "**.haml"
 hlint:
   channels:
     stable: codeclimate/codeclimate-hlint
@@ -327,6 +364,17 @@ phpmd:
     - "**.php"
     - "**.module"
     - "**.inc"
+proselint:
+  channels:
+    beta: codeclimate/codeclimate-proselint:beta
+  description: A linter for prose.
+  community: true
+  enable_regexps:
+    - \.markdown$
+    - \.md$
+  default_ratings_paths:
+    - "**.markdown"
+    - "**.md"
 pmd:
   channels:
     beta: codeclimate/codeclimate-pmd:beta
@@ -369,6 +417,10 @@ rubocop:
   channels:
     stable: codeclimate/codeclimate-rubocop
     cache-support: codeclimate/codeclimate-rubocop:cache-support
+    rubocop-0-42: codeclimate/codeclimate-rubocop:rubocop-0-42
+    rubocop-0-46: codeclimate/codeclimate-rubocop:rubocop-0-46
+    rubocop-0-48: codeclimate/codeclimate-rubocop:rubocop-0-48
+    rubocop-0-49: codeclimate/codeclimate-rubocop:rubocop-0-49
   description: A Ruby static code analyzer, based on the community Ruby style guide.
   community: false
   upgrade_languages:
@@ -444,7 +496,7 @@ tailor:
     - "**.swift"
 tslint:
   channels:
-    beta: codeclimate/codeclimate-tslint
+    beta: codeclimate/codeclimate-tslint:beta
   description: An extensible linter for the TypeScript language
   community: true
   enable_regexps:

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+if ! [ "$(git symbolic-ref --short HEAD)" = "master" ]; then
+  printf "must be on master branch to run\n" >&2
+  exit 1
+fi
+
+if ! git diff-index --quiet HEAD --; then
+  printf "commit or stash your workspace changes\n" >&2
+  exit 1
+fi
+
+if ! make test; then
+  printf "test suite failed. not releasing\n" >&2
+  exit 1
+fi

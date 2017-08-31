@@ -48,7 +48,20 @@ module CC::Analyzer
         }
 
         expect{ extractor.extract(location) }.to raise_error(
-          SourceExtractor::InvalidLocationPositions
+          SourceExtractor::InvalidLocation
+        )
+      end
+
+      it "raises an exception if positions format is invalid in another way" do
+        location = {
+          "positions" => {
+            "begin" => { "line" => 2, "end" => 3 },
+            "end" => { "line" => 3, "end" => nil }
+          },
+        }
+
+        expect{ extractor.extract(location) }.to raise_error(
+          SourceExtractor::InvalidLocation
         )
       end
     end

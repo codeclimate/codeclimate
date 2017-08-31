@@ -28,32 +28,81 @@ invalid_docker_host() {
   invalid_setup "invalid DOCKER_HOST=$host, must be unset or unix:///var/run/docker.sock"
 }
 
-if [ -n "$DOCKER_MACHINE_NAME" ] && command -v docker-machine > /dev/null 2>&1; then
-  docker-machine ssh $DOCKER_MACHINE_NAME -- \
-    test -S /var/run/docker.sock > /dev/null 2>&1 || socket_missing
+analysis_file() {
+  local file_name="";
+  local help_mode=0;
+  local analyze_mode=0;
+  local skip=0;
+  for arg; do
+    if [ $skip -gt 0 ]; then
+      skip=$(( $skip - 1 ))
+    else
+      case "$arg" in
+        help)
+          help_mode=1
+          ;;
+        analyze)
+          if [ "$help_mode" -eq 0 ]; then
+            analyze_mode=1;
+          fi
+          ;;
+        -*)
+          if [ $analyze_mode -ne 0 ]; then
+            case $arg in
+              -e | -f | --format)
+                skip=1
+                ;;
+            esac
+          fi
+          ;; # We don't care about flags
+        *)
+          if [ $analyze_mode -ne 0 ]; then
+            if [ -n "$file_name" ]; then
+              printf "Please supply only one file for analysis\n" >&2
+              exit 1
+            else
+              file_name="$arg"
+            fi
+          fi
+          ;;
+      esac
+    fi
+  done
+  if [ -n "$file_name" ]; then
+    printf "%s" "$file_name"
+  else
+    printf "Please supply a file name for analysis\n" >&2
+    exit 1
+  fi
+}
 
-  docker-machine ssh $DOCKER_MACHINE_NAME -- \
-    'test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock"' > /dev/null 2>&1 \
-    && invalid_docker_host $(docker-machine ssh $DOCKER_MACHINE_NAME -- 'echo "$DOCKER_HOST"')
-else
-  test -S /var/run/docker.sock || socket_missing
-  test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock" \
-    && invalid_docker_host "$DOCKER_HOST"
-fi
+ln_dir() {
+  local path="$1"
+  if [ -z "$path" ] || [ "$path" = "." ] ; then
+    return
+  fi
 
-: ${XDG_CONFIG_HOME:=$HOME/.config/}
-CC_CONFIG="${CODECLIMATE_CONFIG:-$XDG_CONFIG_HOME/codeclimate/config.yml}"
+  local source_base="$2"
+  local dest_base="$3"
 
-: ${XDG_CACHE_HOME:=$HOME/.cache/}
-CC_CACHE="${CODECLIMATE_CACHE:-$XDG_CACHE_HOME/codeclimate/cache.yml}"
+  local path_dir=$(dirname "$path")
+  mkdir -p "$dest_base"/"$path_dir"
 
-for f in "$CC_CONFIG" "$CC_CACHE"; do
-  mkdir -p "$(dirname "$f")"
-  touch "$f"
-done
+  if [ "$path_dir" = "." ]; then
+    path_dir=""
+  fi
+
+  find "$source_base/$path_dir" -depth 1 -type f -iname "*" | while read f; do
+    if [ ! -e "$dest_base/$path_dir/$(basename "$f")" ]; then
+      ln "$f" "$dest_base/$path_dir/$(basename "$f")"
+    fi
+  done
+
+  ln_dir "$path_dir" "$source_base" "$dest_base"
+}
 
 docker_run() {
-  exec docker run \
+  docker run \
     --interactive --rm \
     --env CODECLIMATE_CODE \
     --env CODECLIMATE_TMP \
@@ -70,12 +119,60 @@ docker_run() {
     "$@"
 }
 
+: ${XDG_CONFIG_HOME:=$HOME/.config}
+CC_CONFIG="${CODECLIMATE_CONFIG:-$XDG_CONFIG_HOME/codeclimate/config.yml}"
+
+: ${XDG_CACHE_HOME:=$HOME/.cache}
+CC_CACHE="${CODECLIMATE_CACHE:-$XDG_CACHE_HOME/codeclimate/cache.yml}"
+
+for f in "$CC_CONFIG" "$CC_CACHE"; do
+  mkdir -p "$(dirname "$f")"
+  touch "$f"
+done
+
 if [ -z "$CODECLIMATE_CODE" ]; then
   export CODECLIMATE_CODE=$PWD
 fi
 
 if [ -z "$CODECLIMATE_TMP" ]; then
   export CODECLIMATE_TMP=/tmp/cc
+fi
+
+if [ ! -t 0 ]; then
+  stdin_stash=$(mktemp "$(dirname "$CC_CACHE")/cc-stdin.XXXXXX")
+  cat <&0 >"$stdin_stash"
+  trap "rm '$stdin_stash'" EXIT
+
+  if [ -n "$(cat "$stdin_stash")" ]; then
+    tmp_source_dir=$(mktemp -d "$(dirname $CC_CACHE)/cc-code.XXXXXX")
+    trap "rm -rf '$tmp_source_dir'" EXIT
+
+    chmod a+rx "$tmp_source_dir"
+
+    focus_path=$(analysis_file "$@") || exit 1
+    source_file="$tmp_source_dir/$focus_path"
+
+    mkdir -p "$(dirname "$source_file")"
+    mv "$stdin_stash" "$source_file"
+    chmod a+r "$source_file"
+
+    ln_dir "$focus_path" "$CODECLIMATE_CODE" "$tmp_source_dir"
+
+    export CODECLIMATE_CODE="$tmp_source_dir"
+  fi
+fi
+
+if [ -n "$DOCKER_MACHINE_NAME" ] && command -v docker-machine > /dev/null 2>&1; then
+  docker-machine ssh $DOCKER_MACHINE_NAME -- \
+    test -S /var/run/docker.sock > /dev/null 2>&1 || socket_missing
+
+  docker-machine ssh $DOCKER_MACHINE_NAME -- \
+    'test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock"' > /dev/null 2>&1 \
+    && invalid_docker_host $(docker-machine ssh $DOCKER_MACHINE_NAME -- 'echo "$DOCKER_HOST"')
+else
+  test -S /var/run/docker.sock || socket_missing
+  test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock" \
+    && invalid_docker_host "$DOCKER_HOST"
 fi
 
 if [ -t 0 ] && [ -t 1 ]; then
