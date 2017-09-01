@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    working_directory: /usr/src/app
+    environment:
+      CODECLIMATE_REPO_TOKEN: e70e48da820d9d23eeb2f1fd8c25f8691be05af308dd0ffce8d1ca7e48a5f799
+      CIRCLE_TEST_REPORTS: /usr/src/app/spec/reports
+    docker:
+      - image: docker:latest
+    steps:
+      - setup_remote_docker:
+          reusable: true
+      - run:
+          name: Install ssh, git, and make
+          command: set -x && apk update && apk add git openssh-client make
+      - run: docker pull alpine
+      - checkout
+      - run: make image
+      - run: make citest
+      - store_test_results:
+          path: spec/reports
+    notify:
+      webhooks:
+        - url: https://cc-slack-proxy.herokuapp.com/circle
