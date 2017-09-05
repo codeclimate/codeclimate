@@ -2,6 +2,8 @@ module CC
   class Config
     class Engine
       DEFAULT_CHANNEL = "stable".freeze
+      DUPLICATION_CHANNEL = "cronopio".freeze
+      DUPLICATION = "duplication".freeze
 
       attr_reader :name, :channel, :config
       attr_writer :enabled
@@ -9,7 +11,7 @@ module CC
       def initialize(name, enabled: false, channel: nil, config: nil)
         @name = name
         @enabled = enabled
-        @channel = channel || DEFAULT_CHANNEL
+        @channel = channel || default_channel
         @config = config || {}
       end
 
@@ -36,6 +38,14 @@ module CC
       # Set interface methods. Assumes we never want to store the same engine by
       # name in the same list. This should be true except maybe if we want to
       # work with multiple channels at once, which is unlikely.
+
+      def default_channel
+        if name == DUPLICATION
+          DUPLICATION_CHANNEL
+        else
+          DEFAULT_CHANNEL
+        end
+      end
 
       def eql?(other)
         other.is_a?(self.class) && name.eql?(other.name)

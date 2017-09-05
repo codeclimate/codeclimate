@@ -60,6 +60,30 @@ describe CC::Config::Merge do
           expect(engine.config).to eq(foo: "baz", meow: { "yo": "sup", "foo": "bar" })
         end
       end
+
+      it "defaults to cronopio channel for duplication" do
+        config1 = CC::Config.new(
+          engines: [
+            CC::Config::Engine.new("duplication", enabled: true, config: { languages: "java" }),
+          ].to_set,
+        )
+
+        config2 = CC::Config.new(
+          engines: [
+            CC::Config::Engine.new("duplication", enabled: true, config: { languages: "ruby" }),
+          ].to_set,
+        )
+
+        merged_config = described_class.new(config1, config2).run
+
+        expect(merged_config.engines.count).to eq(1)
+
+        merged_config.engines.to_a.first.tap do |engine|
+          expect(engine.name).to eq("duplication")
+          expect(engine.config).to eq(languages: "ruby")
+          expect(engine.channel).to eq(CC::Config::Engine::DUPLICATION_CHANNEL)
+        end
+      end
     end
   end
 
