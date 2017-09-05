@@ -39,20 +39,22 @@ module CC
       # name in the same list. This should be true except maybe if we want to
       # work with multiple channels at once, which is unlikely.
 
-      def default_channel
-        if name == DUPLICATION
-          DUPLICATION_CHANNEL
-        else
-          DEFAULT_CHANNEL
-        end
-      end
-
       def eql?(other)
         other.is_a?(self.class) && name.eql?(other.name)
       end
 
       def hash
         name.hash
+      end
+
+      private
+
+      def default_channel
+        if name == DUPLICATION
+          DUPLICATION_CHANNEL
+        else
+          DEFAULT_CHANNEL
+        end
       end
     end
   end
