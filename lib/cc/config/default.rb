@@ -2,6 +2,7 @@ module CC
   class Config
     class Default < Config
       DUPLICATION_LANGUAGES = %w[
+        java
         javascript
         php
         python
