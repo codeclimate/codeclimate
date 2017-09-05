@@ -67,7 +67,7 @@ module CC::CLI::Engines
 
             expect(stdout).to match("Engine added")
             config = CC::Analyzer::Config.new(content_after).engine_config("duplication")
-            expect(config["config"]).to eq("languages" => %w[ruby javascript python php])
+            expect(config["config"]).to eq("languages" => %w[ruby java javascript python php])
           end
         end
       end

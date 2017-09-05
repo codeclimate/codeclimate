@@ -52,10 +52,11 @@ duplication:
     beta: codeclimate/codeclimate-duplication:beta
     cronopio: codeclimate/codeclimate-duplication:cronopio
     stable: codeclimate/codeclimate-duplication
-  description: Structural duplication detection for Ruby, Python, JavaScript, and PHP.
+  description: Structural duplication detection for Ruby, Python, Java, JavaScript, and PHP.
   default_config:
     languages:
       - ruby
+      - java
       - javascript
       - python
       - php
