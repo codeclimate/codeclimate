@@ -76,6 +76,19 @@ describe CC::Config::YAML do
       expect(rubocop).to be_present
       expect(rubocop.config["config"]).to eq("foo.rb")
     end
+
+    it "respects legacy file config values" do
+      yaml = load_cc_yaml(<<-EOYAML)
+      plugins:
+        rubocop:
+          enabled: true
+          config: "foo.rb"
+      EOYAML
+
+      rubocop = yaml.engines.detect { |e| e.name == "rubocop" }
+      expect(rubocop).to be_present
+      expect(rubocop.config["config"]).to eq("foo.rb")
+    end
   end
 
   describe "#exclude_patterns" do

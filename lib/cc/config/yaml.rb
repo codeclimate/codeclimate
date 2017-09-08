@@ -55,7 +55,7 @@ module CC
       #
       # We need to munge from the latter to the former when/if we encounter it
       def convert_to_legacy_file_config(config)
-        if config.keys.size == 1 && config.key?("file")
+        if config.is_a?(Hash) && config.keys.size == 1 && config.key?("file")
           config["file"]
         else
           config
