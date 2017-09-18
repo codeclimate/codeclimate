@@ -1,6 +1,21 @@
 require "spec_helper"
 
 describe CC::Config do
+  context "CLI-required attributes" do
+    it "has #development and #analysis_paths support" do
+      config = described_class.new
+
+      expect(config).not_to be_development
+      expect(config.analysis_paths).to be_empty
+
+      config.development = true
+      config.analysis_paths << "a-path"
+
+      expect(config).to be_development
+      expect(config.analysis_paths).to eq(%w[a-path])
+    end
+  end
+
   describe ".load" do
     it "loads default then json, ignoring yaml" do
       yaml = write_cc_yaml(<<-EOYAML)
@@ -84,7 +99,7 @@ describe CC::Config do
     end
 
     it "only uses default config if .codeclimate.yml doesn't exist" do
-      stub_const("CC::Config::YAML::DEFAULT_PATH", "")
+      stub_const("CC::Config::YAMLAdapter::DEFAULT_PATH", "")
       stub_const("CC::Config::JSON::DEFAULT_PATH", "")
 
       config = CC::Config.load
@@ -99,7 +114,7 @@ describe CC::Config do
         tmp.puts(json)
         tmp.rewind
 
-        stub_const("CC::Config::YAML::DEFAULT_PATH", tmp.path)
+        stub_const("CC::Config::YAMLAdapter::DEFAULT_PATH", tmp.path)
       end
     end
 

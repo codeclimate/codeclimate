@@ -105,7 +105,7 @@ describe CC::Config::JSON do
       tmp.puts(json)
       tmp.rewind
 
-      described_class.new(tmp.path)
+      described_class.load(tmp.path)
     end
   end
 end
