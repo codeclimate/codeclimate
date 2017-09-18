@@ -3,20 +3,23 @@ module CC
     class JSON < Config
       DEFAULT_PATH = ".codeclimate.json".freeze
 
-      def initialize(path = DEFAULT_PATH)
-        @path = path
-        @json = ::JSON.parse(File.open(path).read) || {}
+      def self.load(path = DEFAULT_PATH)
+        new(::JSON.parse(File.open(path).read))
+      end
+
+      def initialize(json = {})
+        @json = json
 
         super(
           engines: Set.new([duplication_engine, structure_engine] + plugin_engines),
-          exclude_patterns: json.fetch("exclude_patterns", Default::EXCLUDE_PATTERNS)
+          exclude_patterns: json.fetch("exclude_patterns", Default::EXCLUDE_PATTERNS),
+          prepare: Prepare.from_yaml(json["prepare"]),
         )
       end
 
       private
 
       attr_reader \
-        :path,
         :json
 
       def structure_engine

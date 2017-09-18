@@ -48,10 +48,19 @@ module CC
 
         def invalid_engines
           return [] unless cc_yaml_processable?
-          config = CC::Config::YAML.new(path)
-          config.engines.reject do |engine|
-            engine_exists?(engine)
-          end
+          config = CC::Config::YAMLAdapter.load(path)
+          config.config["plugins"]
+            .map do |name, data|
+              Engine.new(
+                name,
+                enabled: data.fetch("enabled", true),
+                channel: data["channel"],
+                config: data["config"],
+              )
+            end.
+            reject do |engine|
+              engine_exists?(engine)
+            end
         end
 
         def engine_exists?(engine)

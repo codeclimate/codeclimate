@@ -2,7 +2,7 @@ require "cc/config/default"
 require "cc/config/engine"
 require "cc/config/merge"
 require "cc/config/prepare"
-require "cc/config/yaml"
+require "cc/config/yaml_adapter"
 require "cc/config/yaml/validator"
 require "cc/config/json"
 
@@ -20,9 +20,9 @@ module CC
     def self.load
       config = Default.new
       if File.exist?(JSON::DEFAULT_PATH)
-        config = config.merge(JSON.new)
-      elsif File.exist?(YAML::DEFAULT_PATH)
-        config = config.merge(YAML.new)
+        config = config.merge(JSON.load)
+      elsif File.exist?(YAMLAdapter::DEFAULT_PATH)
+        config = config.merge(JSON.new(YAMLAdapter.load.config))
       end
       config
     end
