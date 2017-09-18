@@ -37,7 +37,7 @@ module CC
         end
 
         @validator = Config::YAML::Validator.new(
-          Config::YAML::DEFAULT_PATH,
+          Config::YAMLAdapter::DEFAULT_PATH,
           EngineRegistry.new(registry_path, registry_prefix),
         )
       end
