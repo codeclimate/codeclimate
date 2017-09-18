@@ -1,22 +1,21 @@
 require "spec_helper"
 
-describe CC::Config::YAML do
-  context "CLI-required attributes" do
-    it "has #development and #analysis_paths support" do
-      yaml = load_cc_yaml("")
-
-      expect(yaml).not_to be_development
-      expect(yaml.analysis_paths).to be_empty
-
-      yaml.development = true
-      yaml.analysis_paths << "a-path"
-
-      expect(yaml).to be_development
-      expect(yaml.analysis_paths).to eq(%w[a-path])
-    end
-  end
-
+describe CC::Config::YAMLAdapter do
   describe "#engines" do
+    it "moves engines to plugins" do
+      yaml = load_cc_yaml(<<-EOYAML)
+      engines:
+        rubocop:
+          enabled: true
+      EOYAML
+
+      expect(yaml.config).to eq(
+        "plugins" => {
+          "rubocop" => { "enabled" => true }
+        }
+      )
+    end
+
     it "includes enabled plugins" do
       yaml = load_cc_yaml(<<-EOYAML)
       plugins:
@@ -28,8 +27,8 @@ describe CC::Config::YAML do
           enabled: false
       EOYAML
 
-      expect(yaml.engines.length).to eq(3)
-      expect(yaml.engines.map(&:name)).to eq(
+      expect(yaml.config["plugins"].length).to eq(3)
+      expect(yaml.config["plugins"].keys).to eq(
         %w[rubocop eslint tslint],
       )
     end
@@ -41,9 +40,9 @@ describe CC::Config::YAML do
         eslint: false
       EOYAML
 
-      rubocop, eslint = yaml.engines.to_a
-      expect(rubocop).to be_enabled
-      expect(eslint).not_to be_enabled
+      plugins = yaml.config["plugins"]
+      expect(plugins["rubocop"]).to eq("enabled" => true)
+      expect(plugins["eslint"]).to eq("enabled" => false)
     end
 
     it "respects channel, and config" do
@@ -56,11 +55,10 @@ describe CC::Config::YAML do
             yo: "sup"
       EOYAML
 
-      rubocop = yaml.engines.detect { |e| e.name == "rubocop" }
-      expect(rubocop).to be_present
-      expect(rubocop).to be_enabled
-      expect(rubocop.channel).to eq("beta")
-      expect(rubocop.config["config"]).to eq("yo" => "sup")
+      _, config = yaml.config["plugins"].detect { |name, _| name == "rubocop" }
+      expect(config).to eq(
+        "enabled" => true, "channel" => "beta", "config" => { "yo" => "sup" },
+      )
     end
 
     it "re-writes as legacy file config values" do
@@ -72,9 +70,10 @@ describe CC::Config::YAML do
             file: "foo.rb"
       EOYAML
 
-      rubocop = yaml.engines.detect { |e| e.name == "rubocop" }
-      expect(rubocop).to be_present
-      expect(rubocop.config["config"]).to eq("foo.rb")
+      _, config = yaml.config["plugins"].detect { |name, _| name == "rubocop" }
+      expect(config).to eq(
+        "enabled" => true, "config" => "foo.rb",
+      )
     end
 
     it "respects legacy file config values" do
@@ -85,9 +84,10 @@ describe CC::Config::YAML do
           config: "foo.rb"
       EOYAML
 
-      rubocop = yaml.engines.detect { |e| e.name == "rubocop" }
-      expect(rubocop).to be_present
-      expect(rubocop.config["config"]).to eq("foo.rb")
+      _, config = yaml.config["plugins"].detect { |name, _| name == "rubocop" }
+      expect(config).to eq(
+        "enabled" => true, "config" => "foo.rb",
+      )
     end
   end
 
@@ -99,7 +99,17 @@ describe CC::Config::YAML do
       - foo/
       EOYAML
 
-      expect(yaml.exclude_patterns).to eq(%w[**/*.rb foo/])
+      expect(yaml.config["exclude_patterns"]).to eq(%w[**/*.rb foo/])
+    end
+
+    it "converts legacy exclude_paths" do
+      yaml = load_cc_yaml(<<-EOYAML)
+      exclude_paths:
+      - "**/*.rb"
+      - foo/
+      EOYAML
+
+      expect(yaml.config["exclude_patterns"]).to eq(%w[**/*.rb foo/])
     end
   end
 
@@ -108,7 +118,7 @@ describe CC::Config::YAML do
       tmp.puts(yaml)
       tmp.rewind
 
-      described_class.new(tmp.path)
+      described_class.load(tmp.path)
     end
   end
 end
