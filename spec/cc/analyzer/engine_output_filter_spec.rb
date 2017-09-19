@@ -142,13 +142,7 @@ module CC::Analyzer
     end
 
     def engine_config(hash)
-      codeclimate_yaml = {
-        "engines" => {
-          "rubocop" => hash.merge("enabled" => true)
-        }
-      }.to_yaml
-
-      CC::Yaml.parse(codeclimate_yaml).engines["rubocop"]
+      hash.merge("enabled" => true)
     end
   end
 end
