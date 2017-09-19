@@ -17,7 +17,7 @@ describe CC::Config do
   end
 
   describe ".load" do
-    it "loads default then json, ignoring yaml" do
+    it "loads json & applies defaults, ignoring yaml" do
       yaml = write_cc_yaml(<<-EOYAML)
       prepare:
         fetch:
@@ -49,6 +49,7 @@ describe CC::Config do
       expect(config.engines).to include(CC::Config::Engine.new("structure"))
       expect(config.engines).to include(CC::Config::Engine.new("duplication"))
       expect(config.exclude_patterns).not_to include("**/*.rb")
+      expect(config.prepare.fetch.each.to_a).to be_empty
 
       config.engines.find { |e| e.name == "structure" }.tap do |engine|
         expect(engine.config["config"]["checks"]).to eq(
@@ -73,7 +74,7 @@ describe CC::Config do
       end
     end
 
-    it "loads default then yaml configurations" do
+    it "loads yaml & applies defaults" do
       yaml = write_cc_yaml(<<-EOYAML)
       prepare:
         fetch:
@@ -94,7 +95,38 @@ describe CC::Config do
       expect(config.engines).to include(CC::Config::Engine.new("rubocop"))
       expect(config.exclude_patterns).to include("**/*.rb")
       expect(config.exclude_patterns).to include("foo/")
-      expect(config.prepare.fetch.each.to_a).to include(CC::Config::Prepare::Fetch::Entry.new("rubocop.yml"))
+      expect(config.prepare.fetch.each.to_a).to eq([CC::Config::Prepare::Fetch::Entry.new("rubocop.yml")])
+    end
+
+    it "loads prepare from JSON" do
+      yaml = write_cc_json(<<-EOJSON)
+      {
+        "prepare": {
+          "fetch": [
+            "rubocop.yml"
+          ]
+        },
+        "plugins": {
+          "rubocop": {
+            "enabled": true
+          }
+        },
+        "exclude_patterns": [
+          "**/*.rb",
+          "foo/"
+        ]
+      }
+      EOJSON
+
+      config = CC::Config.load
+
+      expect(config.engines.count).to eq(3)
+      expect(config.engines).to include(CC::Config::Engine.new("structure"))
+      expect(config.engines).to include(CC::Config::Engine.new("duplication"))
+      expect(config.engines).to include(CC::Config::Engine.new("rubocop"))
+      expect(config.exclude_patterns).to include("**/*.rb")
+      expect(config.exclude_patterns).to include("foo/")
+      expect(config.prepare.fetch.each.to_a).to eq([CC::Config::Prepare::Fetch::Entry.new("rubocop.yml")])
     end
 
     it "only uses default config if .codeclimate.yml doesn't exist" do
