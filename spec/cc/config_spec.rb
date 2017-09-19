@@ -107,7 +107,10 @@ describe CC::Config do
 
       expect(config.engines.count).to eq(2)
       expect(config.engines).to include(CC::Config::Engine.new("structure"))
-      expect(config.engines).to include(CC::Config::Engine.new("duplication"))
+      structure = config.engines.detect { |e| e.name == "structure" }
+      expect(structure).to be_enabled
+      duplication = config.engines.detect { |e| e.name == "duplication" }
+      expect(duplication).to be_enabled
     end
 
     def write_cc_yaml(json)
