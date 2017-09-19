@@ -7,7 +7,28 @@ module CC::CLI
     end
 
     describe "#run" do
-      it "reports errors and exits nonzero" do
+      it "reports no errors if no file is committed" do
+        stdout, _stderr, code = capture_io_and_exit_code do
+          ValidateConfig.new.run
+        end
+
+        expect(stdout).to match("nothing to validate")
+        expect(code).to be_zero
+      end
+
+      it "reports errors if too many files are committed" do
+        write_cc_yaml("foo")
+        write_cc_json("bar")
+
+        stdout, _stderr, code = capture_io_and_exit_code do
+          ValidateConfig.new.run
+        end
+
+        expect(stdout).to match("only the JSON will be used")
+        expect(code).to be_nonzero
+      end
+
+      it "reports yaml errors and exits nonzero" do
         write_cc_yaml(<<-EOYAML)
         engkxhfgkxfhg: sdoufhsfogh: -
         0-
@@ -24,7 +45,7 @@ module CC::CLI
         expect(code).to be_nonzero
       end
 
-      it "reports warnings but does not exit nonzero" do
+      it "reports yaml warnings but does not exit nonzero" do
         write_cc_yaml(<<-EOYAML)
         engines:
           rubocop:
@@ -39,7 +60,7 @@ module CC::CLI
         expect(code).to be_zero
       end
 
-      it "reports errors and warnings together" do
+      it "reports yaml errors and warnings together" do
         write_cc_yaml(<<-EOYAML)
         engines:
           rubocop:
@@ -57,7 +78,7 @@ module CC::CLI
         expect(code).to be_nonzero
       end
 
-      it "reports copy looks great for valid configs" do
+      it "reports copy looks great for valid yaml" do
         write_cc_yaml(<<-EOYAML)
         plugins:
           rubocop:
@@ -72,7 +93,7 @@ module CC::CLI
         expect(code).to be_zero
       end
 
-      it "warns of invalid engines or channels" do
+      it "warns of invalid engines or channels in yaml" do
         write_cc_yaml(<<-EOYAML)
         engines:
           rubocop:
@@ -94,8 +115,26 @@ module CC::CLI
       end
     end
 
+    it "reports json errors and exits nonzero" do
+      write_cc_yaml(JSON.generate(
+        plugins: "foobar"
+      ))
+
+      stdout, _stderr, code = capture_io_and_exit_code do
+        ValidateConfig.new.run
+      end
+
+      expect(stdout).to match("ERROR")
+      expect(stdout).to match("'plugins' must be a hash")
+      expect(code).to be_nonzero
+    end
+
     def write_cc_yaml(content)
       File.write(".codeclimate.yml", content)
+    end
+
+    def write_cc_json(content)
+      File.write(".codeclimate.json", content)
     end
   end
 end
