@@ -3,9 +3,9 @@ module CC
     class Prepare
       attr_reader :fetch
 
-      def self.from_yaml(data)
+      def self.from_data(data)
         if data.present?
-          fetch = Fetch.from_yaml(data.fetch("fetch", []))
+          fetch = Fetch.from_data(data.fetch("fetch", []))
 
           new(fetch: fetch)
         else
@@ -22,8 +22,8 @@ module CC
       end
 
       class Fetch
-        def self.from_yaml(data)
-          new(data.map { |d| Entry.from_yaml(d) })
+        def self.from_data(data)
+          new(data.map { |d| Entry.from_data(d) })
         end
 
         def initialize(entries = [])
@@ -45,7 +45,7 @@ module CC
         class Entry
           attr_reader :url, :path
 
-          def self.from_yaml(data)
+          def self.from_data(data)
             case data
             when String then new(data)
             when Hash then new(data.fetch("url"), data["path"])
