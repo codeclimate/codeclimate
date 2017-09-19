@@ -143,9 +143,9 @@ describe CC::Config do
       expect(duplication).to be_enabled
     end
 
-    def write_cc_yaml(json)
+    def write_cc_yaml(yaml)
       Tempfile.open("") do |tmp|
-        tmp.puts(json)
+        tmp.puts(yaml)
         tmp.rewind
 
         stub_const("CC::Config::YAMLAdapter::DEFAULT_PATH", tmp.path)

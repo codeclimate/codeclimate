@@ -36,7 +36,7 @@ module CC
           end
         end
 
-        @validator = Config::YAML::Validator.new(
+        @validator = Config::Validation::YAML.new(
           Config::YAMLAdapter::DEFAULT_PATH,
           EngineRegistry.new(registry_path, registry_prefix),
         )
@@ -44,8 +44,7 @@ module CC
 
       def any_issues?
         validator.errors.any? ||
-          validator.warnings.any? ||
-          validator.nested_warnings.any?
+          validator.warnings.any?
       end
 
       def display_issues
@@ -55,10 +54,6 @@ module CC
 
         validator.warnings.each do |warning|
           puts "#{colorize("WARNING", :yellow)}: #{warning}"
-        end
-
-        validator.nested_warnings.each do |warning|
-          puts "#{colorize("WARNING in #{warning.field}", :yellow)}: #{warning.message}"
         end
       end
     end
