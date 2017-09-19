@@ -4,7 +4,7 @@ module CC
   module CLI
     class ValidateConfig < Command
       SHORT_HELP = "Validate your .codeclimate.yml or .codeclimate.json.".freeze
-      VALID_CONFIG_MESSAGE = "No errors or warnings found in .codeclimate.yml file.".freeze
+      VALID_CONFIG_MESSAGE = "No errors or warnings found in %s.".freeze
 
       def run
         require_codeclimate_yml
@@ -13,7 +13,7 @@ module CC
         if any_issues?
           display_issues
         else
-          puts VALID_CONFIG_MESSAGE
+          puts sprintf(VALID_CONFIG_MESSAGE, ".codeclimate.yml")
         end
 
         exit 1 unless validator.valid?
