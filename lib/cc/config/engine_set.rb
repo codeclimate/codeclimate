@@ -15,7 +15,7 @@ module CC
       attr_reader :data
 
       def build_set
-        Default::ENGINE_NAMES.each do |name|
+        DefaultAdapter::ENGINES.keys.each do |name|
           if (engine = extract_engine(name))
             engines << engine
           end
