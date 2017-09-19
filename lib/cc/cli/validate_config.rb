@@ -3,7 +3,7 @@ require "cc/yaml"
 module CC
   module CLI
     class ValidateConfig < Command
-      SHORT_HELP = "Validate your .codeclimate.yml.".freeze
+      SHORT_HELP = "Validate your .codeclimate.yml or .codeclimate.json.".freeze
       VALID_CONFIG_MESSAGE = "No errors or warnings found in .codeclimate.yml file.".freeze
 
       def run
