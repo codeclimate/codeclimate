@@ -1,17 +1,17 @@
 require "spec_helper"
 
 describe CC::Config::Prepare do
-  describe ".from_yaml" do
+  describe ".from_data" do
     it "returns a null object for no data" do
-      nil_prepare = described_class.from_yaml(nil)
-      empty_prepare = described_class.from_yaml({})
+      nil_prepare = described_class.from_data(nil)
+      empty_prepare = described_class.from_data({})
 
       expect(nil_prepare.fetch.each.to_a).to eq([])
       expect(empty_prepare.fetch.each.to_a).to eq([])
     end
 
     it "supports fetches declared as strings" do
-      prepare = described_class.from_yaml(
+      prepare = described_class.from_data(
         "fetch" => [
           "https://example-1.com/foo.rb",
           "https://example-2.com/foo/bar.rb",
@@ -31,7 +31,7 @@ describe CC::Config::Prepare do
     end
 
     it "supports fetches declared as objects" do
-      prepare = described_class.from_yaml(
+      prepare = described_class.from_data(
         "fetch" => [
           {
             "url" => "https://example-1.com/baz.rb",
