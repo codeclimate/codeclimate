@@ -4,7 +4,6 @@ SimpleCov.start do
 end
 
 require "cc/cli"
-require "cc/yaml"
 
 Dir.glob("spec/support/**/*.rb").each(&method(:load))
 

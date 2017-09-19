@@ -5,7 +5,6 @@ require "cc/analyzer"
 require "cc/config"
 require "cc/engine_registry"
 require "cc/workspace"
-require "cc/yaml"
 
 require "cc/cli/analyze"
 require "cc/cli/command"

@@ -1,6 +1,6 @@
 module CC
   module Analyzer
-    # TODO: replace each use of this with CC::Yaml and remove it
+    # TODO: replace each use of this with CC::Config and remove it
     class Config
       def initialize(config_body)
         @config = YAML.safe_load(config_body) || { "engines" => {} }
