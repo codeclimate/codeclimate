@@ -1,5 +1,3 @@
-require "cc/yaml"
-
 module CC
   module CLI
     class ValidateConfig < Command

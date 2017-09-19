@@ -1,4 +1,3 @@
-require "cc/yaml"
 require "tmpdir"
 
 module CC
