@@ -9,7 +9,8 @@ module CC
         ruby
       ].freeze
 
-      ENGINE_NAMES = %w[duplication structure]
+      # intentionally not sorted
+      ENGINE_NAMES = %w[structure duplication]
 
       EXCLUDE_PATTERNS = %w[
         config/
