@@ -51,7 +51,6 @@ describe CC::Config do
       expect(config.exclude_patterns).not_to include("**/*.rb")
 
       config.engines.find { |e| e.name == "structure" }.tap do |engine|
-        pending "temporarily broken by json adapter work"
         expect(engine.config["config"]["checks"]).to eq(
           "cyclomatic-complexity" => {
             "enabled" => true,
@@ -63,7 +62,6 @@ describe CC::Config do
       end
 
       config.engines.find { |e| e.name == "duplication" }.tap do |engine|
-        expect(engine.config["config"]["languages"].length).to eq(5)
         expect(engine.config["config"]["checks"]).to eq(
           "cyclomatic-complexity" => {
             "enabled" => true,
