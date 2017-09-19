@@ -1,3 +1,4 @@
+require "cc/config/checks_adapter"
 require "cc/config/default_adapter"
 require "cc/config/engine"
 require "cc/config/engine_set"
@@ -27,6 +28,7 @@ module CC
           {}
         end
       config = DefaultAdapter.new(config).config
+      config = ChecksAdapter.new(config).config
       build(config)
     end
 
