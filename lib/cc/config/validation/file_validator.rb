@@ -91,7 +91,7 @@ module CC
           end
         end
 
-        def validate_exclude_pattern_schema(key)
+        def validate_exclude_pattern(key)
           return unless validate_key_type(key, Array)
 
           data.fetch(key, []).each do |pattern|

@@ -20,11 +20,8 @@ module CC
 
           validate_checks
 
-          validate_key_type("exclude_patterns", Array)
-          validate_key_type("exclude_paths", Array)
-
-          validate_exclude_pattern_schema("exclude_patterns")
-          validate_exclude_pattern_schema("exclude_paths")
+          validate_exclude_pattern("exclude_patterns")
+          validate_exclude_pattern("exclude_paths")
 
           deprecated_key_warnings
         rescue Psych::SyntaxError => ex

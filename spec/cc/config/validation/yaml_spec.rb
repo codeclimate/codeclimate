@@ -34,6 +34,13 @@ describe CC::Config::Validation::YAML do
     expect(validator.errors).to include(/Unable to parse:/)
   end
 
+  it "handles parseable but non-hash yaml" do
+    validator = validate_yaml("- foo\n- bar\n")
+
+    expect(validator).not_to be_valid
+    expect(validator.errors).to include(/Config file should contain a hash/)
+  end
+
   it "reports error for hash fetch" do
     validator = validate_yaml(<<-EOYAML)
     prepare:
