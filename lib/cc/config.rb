@@ -1,10 +1,11 @@
 require "cc/config/default"
 require "cc/config/engine"
+require "cc/config/engine_set"
 require "cc/config/merge"
 require "cc/config/prepare"
 require "cc/config/yaml_adapter"
 require "cc/config/yaml/validator"
-require "cc/config/json"
+require "cc/config/json_adapter"
 
 module CC
   class Config
@@ -19,15 +20,23 @@ module CC
 
     def self.load
       config = Default.new
-      if File.exist?(JSON::DEFAULT_PATH)
-        config = config.merge(JSON.load)
+      if File.exist?(JSONAdapter::DEFAULT_PATH)
+        config = config.merge(build(JSONAdapter.load.config))
       elsif File.exist?(YAMLAdapter::DEFAULT_PATH)
-        config = config.merge(JSON.new(YAMLAdapter.load.config))
+        config = config.merge(build(YAMLAdapter.load.config))
       end
       config
     end
 
-    def initialize(analysis_paths: [], development: false, engines: Set.new, exclude_patterns: [], prepare: Prepare.new)
+    def self.build(data)
+      new(
+        engines: EngineSet.new(data.fetch("plugins", {})).engines,
+        exclude_patterns: data.fetch("exclude_patterns", Default::EXCLUDE_PATTERNS),
+        prepare: Prepare.from_yaml(data["prepare"]),
+      )
+    end
+
+    def initialize(analysis_paths: [], development: false, engines: [], exclude_patterns: [], prepare: Prepare.new)
       @analysis_paths = analysis_paths
       @development = development
       @engines = engines

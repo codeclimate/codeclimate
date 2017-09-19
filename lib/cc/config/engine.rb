@@ -6,6 +6,18 @@ module CC
       attr_reader :name, :channel, :config
       attr_writer :enabled
 
+      def self.list_from_data(data)
+        engines = data.map do |name, engine_data|
+          Engine.new(
+            name,
+            enabled: engine_data.fetch("enabled", true),
+            channel: engine_data["channel"],
+            config: engine_data
+          )
+        end
+        Set.new(engines)
+      end
+
       def initialize(name, enabled: false, channel: nil, config: nil)
         @name = name
         @enabled = enabled
