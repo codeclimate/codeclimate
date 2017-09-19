@@ -36,7 +36,7 @@ module CC
       new(
         engines: EngineSet.new(data.fetch("plugins", {})).engines,
         exclude_patterns: data.fetch("exclude_patterns", DefaultAdapter::EXCLUDE_PATTERNS),
-        prepare: Prepare.from_yaml(data["prepare"]),
+        prepare: Prepare.from_data(data["prepare"]),
       )
     end
 
