@@ -26,9 +26,9 @@ module CC::CLI
 
       it "reports warnings but does not exit nonzero" do
         write_cc_yaml(<<-EOYAML)
-        unknown_key:
-        - hey
-        - there
+        engines:
+          rubocop:
+            enabled: true
         EOYAML
 
         stdout, _stderr, code = capture_io_and_exit_code do
@@ -39,42 +39,27 @@ module CC::CLI
         expect(code).to be_zero
       end
 
-      it "reports warnings in nested keys" do
-        write_cc_yaml(<<-EOYAML)
-        engines:
-          rubocop:
-        EOYAML
-
-        stdout, _stderr, code = capture_io_and_exit_code do
-          ValidateConfig.new.run
-        end
-
-        expect(stdout).to match("invalid \"engines\" section: invalid \"rubocop\" section: missing key \"enabled\"")
-        expect(code).to be_nonzero
-      end
-
-      it "reports errors and nested warnings together" do
+      it "reports errors and warnings together" do
         write_cc_yaml(<<-EOYAML)
         engines:
           rubocop:
             enabled: true
           jshint:
             not_enabled
-        strange_key:
         EOYAML
 
         stdout, _stderr, code = capture_io_and_exit_code do
           ValidateConfig.new.run
         end
 
-        expect(stdout).to match("invalid \"engines\" section: invalid \"jshint\" section: unexpected scalar, missing key \"enabled\"")
-        expect(stdout).to match("unexpected key \"strange_key\", dropping")
+        expect(stdout).to match("engine jshint: section must be a boolean or a hash")
+        expect(stdout).to match("'engines' has been deprecated")
         expect(code).to be_nonzero
       end
 
       it "reports copy looks great for valid configs" do
         write_cc_yaml(<<-EOYAML)
-        engines:
+        plugins:
           rubocop:
             enabled: true
         EOYAML
