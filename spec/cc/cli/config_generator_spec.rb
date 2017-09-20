@@ -98,7 +98,6 @@ module CC::CLI
         engines = generator.eligible_engines.keys
         expect(engines).not_to include("codescan")
         expect(engines).not_to include("tslint")
-        expect(engines).not_to include("checkstyle")
         expect(engines).to include("duplication")
         expect(engines).to include("rubocop")
       end
