@@ -12,6 +12,8 @@ describe CC::Config::Validation::YAML do
       rubocop:
         enabled: true
         channel: beta
+        exclude_patterns:
+        - foo
         config:
           file: "foobar"
       eslint:
@@ -109,11 +111,13 @@ describe CC::Config::Validation::YAML do
       rubocop:
         enabled: foobar
         config: false
+        exclude_patterns: nope
     EOYAML
 
     expect(validator).not_to be_valid
     expect(validator.errors).to include("engine rubocop: 'enabled' must be a boolean")
     expect(validator.errors).to include("engine rubocop: 'config' must be one of string, hash")
+    expect(validator.errors).to include("engine rubocop: 'exclude_patterns' must be an array")
   end
 
   it "reports errors for array checks" do
