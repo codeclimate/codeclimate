@@ -39,6 +39,13 @@ module CC
             "'#{key}' must be one of #{type_names.join(", ")}"
           end
         end
+
+        def warn_unrecognized_keys(recognized_keys)
+          unknown_keys = data.keys.reject { |k| recognized_keys.include?(k) }
+          unknown_keys.each do |key|
+            warnings << "unrecognized key '#{key}'"
+          end
+        end
       end
     end
   end

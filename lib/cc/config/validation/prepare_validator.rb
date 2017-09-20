@@ -31,6 +31,8 @@ module CC
               warnings << msg
             end
           end
+
+          warn_unrecognized_keys(%w[fetch])
         end
       end
     end
