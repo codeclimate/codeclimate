@@ -377,6 +377,7 @@ proselint:
     - "**.md"
 pmd:
   channels:
+    stable: codeclimate/codeclimate-pmd
     beta: codeclimate/codeclimate-pmd:beta
   description: Source code analyzer for Java.
   community: false
