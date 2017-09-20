@@ -205,6 +205,20 @@ describe CC::Config::Validation::YAML do
     expect(validator.warnings).to include("'exclude_paths' has been deprecated, please use 'exclude_patterns' instead")
   end
 
+  it "reports warnings for unrecognized keys" do
+    validator = validate_yaml(<<-EOYAML)
+    engines:
+      rubocop:
+        enabbled: false
+    exclude_pattttttterns:
+    - foo
+    EOYAML
+
+    expect(validator).to be_valid
+    expect(validator.warnings).to include("engine rubocop: unrecognized key 'enabbled'")
+    expect(validator.warnings).to include("unrecognized key 'exclude_pattttttterns'")
+  end
+
   def validate_yaml(yaml, registry = nil)
     Tempfile.open("") do |tmp|
       tmp.puts(yaml)
