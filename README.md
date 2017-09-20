@@ -79,11 +79,8 @@ $ codeclimate help
 Available commands:
     analyze [-f format] [-e engine(:channel)] [--dev] [path]
     console
-    engines:disable <engine_name>
-    engines:enable <engine_name>
     engines:install
     engines:list
-    engines:remove
     help
     validate-config
     version
