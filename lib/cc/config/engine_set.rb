@@ -38,7 +38,8 @@ module CC
           name,
           enabled: data.fetch("enabled", true),
           channel: data["channel"],
-          config: data
+          config: data,
+          exclude_patterns: data.fetch("exclude_patterns", [])
         )
       end
     end
