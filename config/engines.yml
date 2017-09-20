@@ -54,13 +54,6 @@ duplication:
     cronopio: codeclimate/codeclimate-duplication:cronopio
     stable: codeclimate/codeclimate-duplication
   description: Structural duplication detection for Ruby, Python, Java, JavaScript, and PHP.
-  default_config:
-    languages:
-      - ruby
-      - java
-      - javascript
-      - python
-      - php
 eslint:
   auto_enable_paths:
   - .eslintrc
@@ -80,14 +73,10 @@ flog:
     beta: codeclimate/codeclimate-flog:beta
     stable: codeclimate/codeclimate-flog
   description: Easy to read reporting of complexity/pain for Ruby code.
-  default_config:
-    all: false
-    threshold: 0.6
 git-legal:
   channels:
     stable: codeclimate/codeclimate-git-legal
   description: License compliance and compatibility analysis.
-  default_config:
 gofmt:
   channels:
     stable: codeclimate/codeclimate-gofmt
@@ -225,9 +214,6 @@ structure:
     beta: codeclimate/codeclimate-structure:beta
     stable: codeclimate/codeclimate-structure
   description: Performs structural checks on code.
-  default_config:
-    languages:
-      - ruby
 stylelint:
   channels:
     beta: codeclimate/codeclimate-stylelint:beta
