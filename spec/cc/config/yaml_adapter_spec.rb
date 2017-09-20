@@ -89,6 +89,37 @@ describe CC::Config::YAMLAdapter do
         "enabled" => true, "config" => "foo.rb",
       )
     end
+
+    it "updates legacy engine excludes" do
+      yaml = load_cc_yaml(<<-EOYAML)
+      plugins:
+        rubocop:
+          exclude_paths:
+          - foo
+      EOYAML
+
+      _, config = yaml.config["plugins"].detect { |name, _| name == "rubocop" }
+      expect(config).to eq(
+        "exclude_patterns" => ["foo"],
+      )
+    end
+
+    it "does not overwrite engine excludes with legacy" do
+      yaml = load_cc_yaml(<<-EOYAML)
+      plugins:
+        rubocop:
+          exclude_paths:
+          - bar
+          exclude_patterns:
+          - foo
+      EOYAML
+
+      _, config = yaml.config["plugins"].detect { |name, _| name == "rubocop" }
+      expect(config).to eq(
+        "exclude_paths" => ["bar"],
+        "exclude_patterns" => ["foo"],
+      )
+    end
   end
 
   describe "#exclude_patterns" do
