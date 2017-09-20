@@ -14,6 +14,8 @@ module CC
           validate_engines("plugins")
           validate_checks
           validate_exclude_pattern("exclude_patterns")
+
+          warn_unrecognized_keys(%w[prepare plugins exclude_patterns version])
         rescue ::JSON::ParserError => ex
           errors << "Unable to parse: #{ex.message}"
         end

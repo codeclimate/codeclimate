@@ -202,6 +202,23 @@ describe CC::Config::Validation::JSON do
     expect(validator.errors).to include(/each exclude pattern should be a string/)
   end
 
+  it "reports warnings for unrecognized keys" do
+    validator = validate_json(<<-EOJSON)
+    {
+      "plugins": {
+        "rubocop": {
+          "enalbed": false
+        }
+      },
+      "exclude_pattttttterns": [ "foo" ]
+    }
+    EOJSON
+
+    expect(validator).to be_valid
+    expect(validator.warnings).to include("engine rubocop: unrecognized key 'enalbed'")
+    expect(validator.warnings).to include("unrecognized key 'exclude_pattttttterns'")
+  end
+
   def validate_json(json, registry = nil)
     Tempfile.open("") do |tmp|
       tmp.puts(json)
