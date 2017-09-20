@@ -3,14 +3,15 @@ module CC
     class Engine
       DEFAULT_CHANNEL = "stable".freeze
 
-      attr_reader :name, :channel, :config
+      attr_reader :name, :channel, :config, :exclude_patterns
       attr_writer :enabled
 
-      def initialize(name, enabled: false, channel: nil, config: nil)
+      def initialize(name, enabled: false, channel: nil, config: nil, exclude_patterns: [])
         @name = name
         @enabled = enabled
         @channel = channel || DEFAULT_CHANNEL
         @config = config || {}
+        @exclude_patterns = exclude_patterns
       end
 
       def enabled?

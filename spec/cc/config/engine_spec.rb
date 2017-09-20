@@ -8,6 +8,7 @@ describe CC::Config::Engine do
     expect(engine.name).to eq("rubocop")
     expect(engine.channel).to eq(described_class::DEFAULT_CHANNEL)
     expect(engine.config).to be_empty
+    expect(engine.exclude_patterns).to eq([])
   end
 
   it "can be enabled, for a non-default channel, and have config" do
