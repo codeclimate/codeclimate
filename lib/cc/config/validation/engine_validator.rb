@@ -30,8 +30,9 @@ module CC
           validate_key_type("enabled", [TrueClass, FalseClass])
           validate_key_type("channel", String)
           validate_key_type("config", [String, Hash])
+          validate_key_type("exclude_patterns", [Array])
 
-          warn_unrecognized_keys(%w[enabled channel config])
+          warn_unrecognized_keys(%w[enabled channel config exclude_patterns])
         end
 
         def validate_root
