@@ -26,5 +26,14 @@ describe CC::Config::EngineSet do
       expect(engines[2].channel).to eq(CC::Config::Engine::DEFAULT_CHANNEL)
       expect(engines[2].config).to eq("enabled" => true, "config" => "foobar")
     end
+
+    it "maps exclude_patterns to the engine" do
+      engines = described_class.new(
+        "rubocop" => { "enabled" => true, "exclude_patterns" => ["foo"] },
+      ).engines
+
+      expect(engines[0].name).to eq("rubocop")
+      expect(engines[0].exclude_patterns).to eq(["foo"])
+    end
   end
 end
