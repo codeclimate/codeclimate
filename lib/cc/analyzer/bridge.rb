@@ -72,10 +72,20 @@ module CC
           },
           engine.config.merge(
             "channel" => engine.channel,
-            "include_paths" => workspace.paths,
+            "include_paths" => engine_workspace(engine).paths,
           ),
           engine.container_label,
         ).run(formatter)
+      end
+
+      def engine_workspace(engine)
+        if engine.exclude_patterns.any?
+          workspace.clone.tap do |engine_workspace|
+            engine_workspace.remove(engine.exclude_patterns)
+          end
+        else
+          workspace
+        end
       end
 
       def workspace
