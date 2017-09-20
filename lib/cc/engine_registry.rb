@@ -1,5 +1,3 @@
-require "safe_yaml/load"
-
 module CC
   class EngineRegistry
     DEFAULT_COMMAND = nil
@@ -9,7 +7,7 @@ module CC
     EngineDetailsNotFoundError = Class.new(StandardError)
 
     def initialize(path = DEFAULT_MANIFEST_PATH, prefix = "")
-      @yaml = SafeYAML.load_file(path)
+      @yaml = YAML.safe_load(File.read(path))
       @prefix = prefix
     end
 
