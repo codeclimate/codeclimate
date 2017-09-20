@@ -56,6 +56,8 @@ module CC
 
           validate_path(data["path"])
           validate_url(data["url"])
+
+          warn_unrecognized_keys(%w[path url])
         end
 
         def validate_path(path)
