@@ -3,4 +3,19 @@ $LOAD_PATH.unshift(File.expand_path(File.join(File.dirname(__FILE__), "../lib"))
 
 require "cc/cli"
 
+if ENV["CODECLIMATE_PROFILE"]
+  require "stackprof"
+
+  StackProf.start mode: :wall, out: "profile.bin"
+end
+
 CC::CLI::Runner.run(ARGV)
+
+if ENV["CODECLIMATE_PROFILE"]
+  StackProf.stop
+  StackProf.results
+
+  system "stackprof profile.bin"
+  puts
+  system "stackprof --graphviz profile.bin"
+end
