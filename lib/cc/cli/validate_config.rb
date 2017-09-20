@@ -2,7 +2,7 @@ module CC
   module CLI
     class ValidateConfig < Command
       NO_CONFIG_MESSAGE = "No checked in config: nothing to validate.".freeze
-      TOO_MANY_CONFIG_MESSAGE = "Don't commit both .codeclimate.yml & .codeclimate.json: only the JSON will be used".freeze
+      TOO_MANY_CONFIG_MESSAGE = "Don't commit both .codeclimate.yml & .codeclimate.json: only the JSON will be used.".freeze
       SHORT_HELP = "Validate your .codeclimate.yml or .codeclimate.json.".freeze
       VALID_CONFIG_MESSAGE = "No errors or warnings found in %s.".freeze
 
@@ -57,21 +57,20 @@ module CC
           puts NO_CONFIG_MESSAGE
           exit 0
         elsif filesystem.exist?(Config::YAMLAdapter::DEFAULT_PATH) && filesystem.exist?(Config::JSONAdapter::DEFAULT_PATH)
-          puts "#{colorize("ERROR", :red)}: #{TOO_MANY_CONFIG_MESSAGE}"
-          exit 1
+          puts "#{colorize("WARNING", :yellow)}: #{TOO_MANY_CONFIG_MESSAGE}"
         end
       end
 
       def validator
         @validator =
-          if filesystem.exist?(Config::YAMLAdapter::DEFAULT_PATH)
-            Config::Validation::YAML.new(
-              Config::YAMLAdapter::DEFAULT_PATH,
-              engine_registry,
-            )
-          elsif filesystem.exist?(Config::JONAdapter::DEFAULT_PATH)
+          if filesystem.exist?(Config::JSONAdapter::DEFAULT_PATH)
             Config::Validation::JSON.new(
               Config::JSONAdapter::DEFAULT_PATH,
+              engine_registry,
+            )
+          elsif filesystem.exist?(Config::YAMLAdapter::DEFAULT_PATH)
+            Config::Validation::YAML.new(
+              Config::YAMLAdapter::DEFAULT_PATH,
               engine_registry,
             )
           end
