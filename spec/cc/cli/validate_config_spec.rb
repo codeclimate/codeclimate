@@ -16,16 +16,16 @@ module CC::CLI
         expect(code).to be_zero
       end
 
-      it "reports errors if too many files are committed" do
+      it "reports warning if too many files are committed" do
         write_cc_yaml("foo")
-        write_cc_json("bar")
+        write_cc_json("{}")
 
         stdout, _stderr, code = capture_io_and_exit_code do
           ValidateConfig.new.run
         end
 
         expect(stdout).to match("only the JSON will be used")
-        expect(code).to be_nonzero
+        expect(code).to be_zero
       end
 
       it "reports yaml errors and exits nonzero" do
