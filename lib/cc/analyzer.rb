@@ -10,8 +10,6 @@ module CC
     autoload :EngineOutput, "cc/analyzer/engine_output"
     autoload :EngineOutputFilter, "cc/analyzer/engine_output_filter"
     autoload :EngineOutputOverrider, "cc/analyzer/engine_output_overrider"
-    autoload :EnginesConfigBuilder, "cc/analyzer/engines_config_builder"
-    autoload :EnginesRunner, "cc/analyzer/engines_runner"
     autoload :Filesystem, "cc/analyzer/filesystem"
     autoload :Formatters, "cc/analyzer/formatters"
     autoload :Issue, "cc/analyzer/issue"
