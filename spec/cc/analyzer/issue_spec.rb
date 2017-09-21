@@ -3,20 +3,7 @@ require "spec_helper"
 module CC::Analyzer
   describe Issue do
     let(:output) do
-      {
-        "categories" => ["Style"],
-        "check_name" => "Rubocop/Style/Documentation",
-        "description" => "Missing top-level class documentation comment.",
-        "location"=> {
-          "lines" => {
-            "begin" => 32,
-            "end" => 40,
-          },
-          "path" => "lib/cc/analyzer/config.rb",
-        },
-        "remediation_points" => 10,
-        "type" => "issue",
-      }
+      sample_issue
     end
 
     it "allows access to keys as methods" do
@@ -30,7 +17,7 @@ module CC::Analyzer
       it "adds a fingerprint when it is missing" do
         issue = Issue.new("", output.to_json)
 
-        expect(issue.fingerprint).to eq "433fae1189b03bcd9153dc8dce209fa5"
+        expect(issue.fingerprint).to eq "6d6cd30cd53e7566fb681eb3239a3cf4"
       end
 
       it "raises a helpful error when the location is malformed" do
@@ -59,19 +46,13 @@ module CC::Analyzer
 
         expect(issue.fingerprint).to eq "foo"
       end
-
-      it "uses the source fingerprint if env variable is present" do
-        issue = Issue.new("", output.to_json)
-
-        expect(issue.fingerprint).to eq "433fae1189b03bcd9153dc8dce209fa5"
-      end
     end
 
     describe "#as_json" do
       it "merges in defaulted attributes" do
         expected_additions = {
           "engine_name" => "foo",
-          "fingerprint" => "433fae1189b03bcd9153dc8dce209fa5",
+          "fingerprint" => "6d6cd30cd53e7566fb681eb3239a3cf4",
           "severity" => Issue::DEFAULT_SEVERITY,
         }
         issue = Issue.new("foo", output.to_json)
@@ -82,7 +63,7 @@ module CC::Analyzer
       it "maps deprecated severity to default" do
         expected_additions = {
           "engine_name" => "",
-          "fingerprint" => "433fae1189b03bcd9153dc8dce209fa5",
+          "fingerprint" => "6d6cd30cd53e7566fb681eb3239a3cf4",
           "severity" => Issue::DEFAULT_SEVERITY,
         }
         issue = Issue.new("", output.merge({ "severity" => Issue::DEPRECATED_SEVERITY }).to_json)
