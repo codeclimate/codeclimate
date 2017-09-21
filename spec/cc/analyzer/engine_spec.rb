@@ -26,7 +26,7 @@ module CC::Analyzer
         expect(container).to receive(:run).with(including(
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=a-label",
-          "--memory", "512000000",
+          "--memory", "1024000000",
           "--memory-swap", "-1",
           "--net", "none",
           "--rm",
