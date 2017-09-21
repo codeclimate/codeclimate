@@ -3,6 +3,7 @@ require "spec_helper"
 describe CC::Config::Validation::YAML do
   it "is valid for a complete config" do
     validator = validate_yaml(<<-EOYAML)
+    version: "2"
     prepare:
       fetch:
       - http://test.test/rubocop.yml
@@ -221,6 +222,26 @@ describe CC::Config::Validation::YAML do
     expect(validator).to be_valid
     expect(validator.warnings).to include("engine rubocop: unrecognized key 'enabbled'")
     expect(validator.warnings).to include("unrecognized key 'exclude_pattttttterns'")
+  end
+
+  describe "version validation" do
+    it "does not warn about version for v1 schema" do
+      validator = validate_yaml(<<-EOYAML)
+      engines: {}
+      EOYAML
+
+      expect(validator).to be_valid
+      expect(validator.warnings).not_to include(%{missing 'version' key. Please add `version: "2"`})
+    end
+
+    it "does warn about version for v2 schema" do
+      validator = validate_yaml(<<-EOYAML)
+      plugins: {}
+      EOYAML
+
+      expect(validator).to be_valid
+      expect(validator.warnings).to include(%{missing 'version' key. Please add `version: "2"`})
+    end
   end
 
   def validate_yaml(yaml, registry = nil)
