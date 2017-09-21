@@ -10,6 +10,7 @@ module CC
 
           return unless validate_hash_data
 
+          validate_version
           validate_prepare
           validate_engines("plugins")
           validate_checks
@@ -18,6 +19,12 @@ module CC
           warn_unrecognized_keys(%w[prepare plugins exclude_patterns version])
         rescue ::JSON::ParserError => ex
           errors << "Unable to parse: #{ex.message}"
+        end
+
+        def validate_version
+          unless data.key?("version")
+            warnings << %{missing 'version' key. Please add `"version": "2"`}
+          end
         end
       end
     end

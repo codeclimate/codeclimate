@@ -4,6 +4,7 @@ describe CC::Config::Validation::JSON do
   it "is valid for a complete config" do
     validator = validate_json(<<-EOJSON)
     {
+      "version": "2",
       "prepare": {
         "fetch": [
           "http://test.test/rubocop.yml",
@@ -217,6 +218,17 @@ describe CC::Config::Validation::JSON do
     expect(validator).to be_valid
     expect(validator.warnings).to include("engine rubocop: unrecognized key 'enalbed'")
     expect(validator.warnings).to include("unrecognized key 'exclude_pattttttterns'")
+  end
+
+  describe "version validation" do
+    it "warns about missing version" do
+      validator = validate_json(<<-EOJSON)
+      { "plugins": {} }
+      EOJSON
+
+      expect(validator).to be_valid
+      expect(validator.warnings).to include(%{missing 'version' key. Please add `"version": "2"`})
+    end
   end
 
   def validate_json(json, registry = nil)
