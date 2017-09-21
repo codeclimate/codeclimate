@@ -6,9 +6,11 @@ module CC
 
         def run
           say "Available engines:"
-          engine_registry_list.sort_by { |name, _| name }.each do |name, attributes|
-            say "- #{name}: #{attributes["description"]}"
-          end
+          engine_registry.
+            sort_by { |engine, _| engine.name }.
+            each do |engine, metadata|
+              say "- #{engine.name}: #{metadata.description}"
+            end
         end
       end
     end
