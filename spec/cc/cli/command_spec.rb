@@ -65,18 +65,6 @@ module CC::CLI
       end
     end
 
-    describe "#require_codeclimate_yml" do
-      it "exits if the file doesn't exist" do
-        Dir.chdir(Dir.mktmpdir) do
-          _, stderr = capture_io do
-            expect { Command.new.require_codeclimate_yml }.to raise_error SystemExit
-          end
-
-          expect(stderr).to match("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.")
-        end
-      end
-    end
-
     describe ".synopsys" do
       it "returns just a command name when no argumes are defined" do
         class Test9 < Command; end

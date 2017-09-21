@@ -13,10 +13,6 @@ module CC
 
         private
 
-        def engine_registry
-          @engine_registry ||= EngineRegistry.new
-        end
-
         def config
           @config ||= CC::Config.load
         end
