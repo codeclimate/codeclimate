@@ -2,38 +2,36 @@ module CC
   module CLI
     module Engines
       class Install < EngineCommand
-        SHORT_HELP = "Pull the latest images for enabled engines in your codeclimate.yml.".freeze
+        SHORT_HELP = "Pull the latest images for enabled engines in your configuration".freeze
 
         ImagePullFailure = Class.new(StandardError)
 
         def run
-          require_codeclimate_yml
-
           say "Pulling docker images."
           pull_docker_images
         end
 
         private
 
+        def engine_registry
+          @engine_registry ||= EngineRegistry.new
+        end
+
+        def config
+          @config ||= CC::Config.load
+        end
+
         def pull_docker_images
-          engine_names.each do |name|
-            if engine_registry.exists?(name)
-              images = engine_registry[name]["channels"].values
-              images.each { |image| pull_engine_image(image) }
-            else
-              warn("unknown engine name: #{name}")
-            end
-          end
+          config.engines.each(&method(:pull_engine))
         end
 
-        def engine_names
-          @engine_names ||= parsed_yaml.engine_names
-        end
-
-        def pull_engine_image(engine_image)
-          unless system("docker pull #{engine_image}")
-            raise ImagePullFailure, "unable to pull image #{engine_image}"
+        def pull_engine(engine)
+          metadata = engine_registry.fetch_engine_details(engine)
+          unless system("docker pull #{metadata.image}")
+            raise ImagePullFailure, "unable to pull image #{metadata.image}"
           end
+        rescue EngineRegistry::EngineDetailsNotFoundError
+          warn("unknown engine <#{engine.name}:#{engine.channel}>")
         end
       end
     end
