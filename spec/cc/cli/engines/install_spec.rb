@@ -4,56 +4,80 @@ module CC::CLI::Engines
   describe Install do
     describe "#run" do
       it "pulls uninstalled images using docker" do
-        stub_config(engine_names: ["madeup"])
-        stub_engine_exists("madeup")
-        stub_engine_image("madeup")
+        write_cc_yaml(YAML.dump("plugins" => { "madeup" => true}))
+        stub_engine_registry(YAML.dump(
+          "structure" => { "channels" => { "stable" => "structure" } },
+          "duplication" => { "channels" => { "cronopio" => "duplication" } },
+          "madeup" => { "channels" => { "stable" => "madeup", "beta" => "madeup:beta" } },
+        ))
 
-        expect_system("docker pull madeup_img")
+        install = Install.new
 
-        capture_io { Install.new.run }
+        expect_system(install, "docker pull structure")
+        expect_system(install, "docker pull duplication")
+        expect_system(install, "docker pull madeup")
+
+        capture_io { install.run }
       end
 
       it "warns for invalid engine names" do
-        stub_config(engine_names: ["madeup"])
+        write_cc_yaml(YAML.dump("plugins" => { "madeup" => true}))
+        stub_engine_registry(YAML.dump(
+          "foo" => { "channels" => { "stable" => "foo" } },
+        ))
+
+        install = Install.new
+
+        expect(install).not_to receive(:system)
 
         stdout, _ = capture_io do
-          Install.new.run
+          install.run
         end
 
-        expect(stdout).to match(/unknown engine name: madeup/)
+        expect(stdout).to match(/unknown engine <madeup:stable>/)
       end
 
       it "errors if an image is unable to be pulled" do
-        stub_config(engine_names: ["madeup"])
-        stub_engine_exists("madeup")
-        stub_engine_image("madeup")
+        write_cc_yaml(YAML.dump("plugins" => { "madeup" => true}))
+        stub_engine_registry(YAML.dump(
+          "structure" => { "channels" => { "stable" => "structure" } },
+          "duplication" => { "channels" => { "cronopio" => "duplication" } },
+          "madeup" => { "channels" => { "stable" => "madeup" } },
+        ))
 
-        expect_system("docker pull madeup_img", false)
+        install = Install.new
+
+        expect_system(install, "docker pull structure")
+        expect_system(install, "docker pull duplication")
+        expect_system(install, "docker pull madeup", false)
 
         capture_io do
-          expect { Install.new.run }.to raise_error(Install::ImagePullFailure)
+          expect { install.run }.to raise_error(Install::ImagePullFailure)
         end
       end
     end
 
-    def expect_system(cmd, result = true)
-      allow_any_instance_of(Install).to receive(:system).
+    def expect_system(install, cmd, result = true)
+      expect(install).to receive(:system).
         with(cmd).and_return(result)
     end
 
-    def stub_config(stubs)
-      config = double(stubs)
-      allow(CC::Analyzer::Config).to receive(:new).and_return(config)
+    def write_cc_yaml(yaml)
+      Tempfile.open("") do |tmp|
+        tmp.puts(yaml)
+        tmp.rewind
+
+        stub_const("CC::Config::YAMLAdapter::DEFAULT_PATH", tmp.path)
+      end
     end
 
-    def stub_engine_exists(engine)
-      allow_any_instance_of(CC::Analyzer::EngineRegistry).to receive(:exists?).
-        with(engine).and_return(true)
-    end
+    def stub_engine_registry(yaml)
+      Tempfile.open("") do |tmp|
+        tmp.puts(yaml)
+        tmp.rewind
 
-    def stub_engine_image(engine)
-      allow_any_instance_of(CC::Analyzer::EngineRegistry).to receive(:[]).with(engine).
-        and_return("channels" => { "stable" => "#{engine}_img" })
+        stub_const("CC::EngineRegistry::DEFAULT_MANIFEST_PATH", tmp.path)
+      end
     end
   end
 end
