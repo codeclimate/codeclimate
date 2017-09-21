@@ -26,7 +26,7 @@ describe CC::Analyzer::Bridge do
         {
           "enabled" => true,
           "channel" => "stable",
-          "include_paths" => ["foo/", ".codeclimate.yml", "engines.yml"],
+          "include_paths" => match_array(["foo/", ".codeclimate.yml", "engines.yml"]),
         },
       )
       expect_engine_run(
@@ -35,7 +35,7 @@ describe CC::Analyzer::Bridge do
         {
           "enabled" => true,
           "channel" => "cronopio",
-          "include_paths" => ["foo/", ".codeclimate.yml", "engines.yml"],
+          "include_paths" => match_array(["foo/", ".codeclimate.yml", "engines.yml"]),
         },
       )
       expect_engine_run(
@@ -44,7 +44,7 @@ describe CC::Analyzer::Bridge do
         {
           "enabled" => true,
           "channel" => "stable",
-          "include_paths" => ["foo/", ".codeclimate.yml", "engines.yml"],
+          "include_paths" => match_array(["foo/", ".codeclimate.yml", "engines.yml"]),
         },
       )
 
@@ -77,7 +77,7 @@ describe CC::Analyzer::Bridge do
         {
           "enabled" => true,
           "channel" => "stable",
-          "include_paths" => ["foo/", ".codeclimate.yml", "engines.yml"],
+          "include_paths" => match_array(["foo/", ".codeclimate.yml", "engines.yml"]),
         },
       )
       expect_engine_run(
@@ -86,7 +86,7 @@ describe CC::Analyzer::Bridge do
         {
           "enabled" => true,
           "channel" => "cronopio",
-          "include_paths" => ["foo/", ".codeclimate.yml", "engines.yml"],
+          "include_paths" => match_array(["foo/", ".codeclimate.yml", "engines.yml"]),
         },
       )
       expect_engine_run(
@@ -95,7 +95,7 @@ describe CC::Analyzer::Bridge do
         {
           "exclude_patterns" => ["**/*r.rb"],
           "channel" => "stable",
-          "include_paths" => ["foo/thing.rb", ".codeclimate.yml", "engines.yml"],
+          "include_paths" => match_array(["foo/thing.rb", ".codeclimate.yml", "engines.yml"]),
         },
       )
       expect_engine_run(
@@ -104,7 +104,7 @@ describe CC::Analyzer::Bridge do
         {
           "enabled" => true,
           "channel" => "beta",
-          "include_paths" => ["foo/", ".codeclimate.yml", "engines.yml"],
+          "include_paths" => match_array(["foo/", ".codeclimate.yml", "engines.yml"]),
         },
       )
 
