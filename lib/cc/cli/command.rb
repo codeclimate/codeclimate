@@ -73,22 +73,12 @@ module CC
         run
       end
 
-      def require_codeclimate_yml
-        unless filesystem.exist?(CODECLIMATE_YAML)
-          fatal("No '.codeclimate.yml' file found. Run 'codeclimate init' to generate a config file.")
-        end
-      end
-
       private
 
       def filesystem
         @filesystem ||= CC::Analyzer::Filesystem.new(
           CC::Analyzer::MountedPath.code.container_path,
         )
-      end
-
-      def engine_registry
-        @engine_registry ||= CC::Analyzer::EngineRegistry.new
       end
     end
   end
