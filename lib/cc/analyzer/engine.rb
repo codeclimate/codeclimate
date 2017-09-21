@@ -20,7 +20,7 @@ module CC
     class Engine
       Error = Class.new(StandardError)
 
-      DEFAULT_MEMORY_LIMIT = 512_000_000
+      DEFAULT_MEMORY_LIMIT = 1_024_000_000
 
       def initialize(name, metadata, config, label)
         @name = name
