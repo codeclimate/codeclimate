@@ -80,6 +80,7 @@ module CC::CLI
 
       it "reports copy looks great for valid yaml" do
         write_cc_yaml(<<-EOYAML)
+        version: "2"
         plugins:
           rubocop:
             enabled: true

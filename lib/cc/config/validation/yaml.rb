@@ -10,6 +10,7 @@ module CC
 
           return unless validate_hash_data
 
+          validate_version
           validate_prepare
 
           validate_one_of(%w[engines plugins])
@@ -27,6 +28,12 @@ module CC
           warn_unrecognized_keys(%w[prepare engines plugins ratings languages exclude_paths exclude_patterns version])
         rescue Psych::SyntaxError => ex
           errors << "Unable to parse: #{ex.message}"
+        end
+
+        def validate_version
+          if !data.key?("version") && (data.key?("plugins") || data.key?("exclude_patterns"))
+            warnings << %{missing 'version' key. Please add `version: "2"`}
+          end
         end
 
         def validate_one_of(keys)
