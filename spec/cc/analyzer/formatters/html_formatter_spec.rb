@@ -4,8 +4,6 @@ module CC
   module Analyzer
     module Formatters
       RSpec.describe HTMLFormatter do # rubocop: disable Metrics/BlockLength
-        include Factory
-
         let(:formatter) do
           HTMLFormatter.new(
             CC::Analyzer::Filesystem.new(
@@ -28,7 +26,7 @@ module CC
               formatter.finished
             end
 
-            expect(stdout).to include("lib/cc/analyzer/config.rb")
+            expect(stdout).to include("spec/fixtures/source2.rb")
             expect(stdout).to include("<h3>Sample Issue</h3>")
             expect(stdout).to include("cool_engine")
           end
