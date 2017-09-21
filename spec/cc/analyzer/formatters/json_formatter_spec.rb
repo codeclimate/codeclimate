@@ -2,8 +2,6 @@ require 'spec_helper'
 
 module CC::Analyzer::Formatters
   describe JSONFormatter do
-    include Factory
-
     let(:formatter) do
       filesystem ||= CC::Analyzer::Filesystem.new(
         CC::Analyzer::MountedPath.code.container_path
@@ -26,7 +24,7 @@ module CC::Analyzer::Formatters
         end
 
         parsed_json = JSON.parse(stdout)
-        expect(parsed_json).to eq([{"type"=>"issue", "check"=>"Rubocop/Style/Documentation", "description"=>"Missing top-level class documentation comment.", "categories"=>["Style"], "remediation_points"=>10, "location"=>{"path"=>"lib/cc/analyzer/config.rb", "lines"=>{"begin"=>32, "end"=>40}}, "engine_name"=>"cool_engine"}, {"type"=>"issue", "check"=>"Rubocop/Style/Documentation", "description"=>"Missing top-level class documentation comment.", "categories"=>["Style"], "remediation_points"=>10, "location"=>{"path"=>"lib/cc/analyzer/config.rb", "lines"=>{"begin"=>32, "end"=>40}}, "engine_name"=>"cool_engine"}])
+        expect(parsed_json).to eq([{"type"=>"issue", "check_name"=>"Rubocop/Style/Documentation", "description"=>"Missing top-level class documentation comment.", "categories"=>["Style"], "remediation_points"=>10, "location"=>{"path"=>"spec/fixtures/source2.rb", "lines"=>{"begin"=>2, "end"=>9}}, "engine_name"=>"cool_engine"}, {"type"=>"issue", "check_name"=>"Rubocop/Style/Documentation", "description"=>"Missing top-level class documentation comment.", "categories"=>["Style"], "remediation_points"=>10, "location"=>{"path"=>"spec/fixtures/source2.rb", "lines"=>{"begin"=>2, "end"=>9}}, "engine_name"=>"cool_engine"}])
       end
 
       it "prints a correctly formatted array of comma separated JSON issues" do
@@ -47,7 +45,7 @@ module CC::Analyzer::Formatters
         expect(stdout.first).to match("[")
         expect(last_two_characters).to match("]\n")
 
-        expect(stdout).to eq("[{\"type\":\"issue\",\"check\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"lib/cc/analyzer/config.rb\",\"lines\":{\"begin\":32,\"end\":40}},\"engine_name\":\"cool_engine\"},\n{\"type\":\"issue\",\"check\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"lib/cc/analyzer/config.rb\",\"lines\":{\"begin\":32,\"end\":40}},\"engine_name\":\"cool_engine\"}]\n")
+        expect(stdout).to eq("[{\"type\":\"issue\",\"check_name\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"spec/fixtures/source2.rb\",\"lines\":{\"begin\":2,\"end\":9}},\"engine_name\":\"cool_engine\"},\n{\"type\":\"issue\",\"check_name\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"spec/fixtures/source2.rb\",\"lines\":{\"begin\":2,\"end\":9}},\"engine_name\":\"cool_engine\"}]\n")
       end
     end
 

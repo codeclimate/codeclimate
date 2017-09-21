@@ -2,8 +2,6 @@ require 'spec_helper'
 
 module CC::Analyzer::Formatters
   describe PlainTextFormatter do
-    include Factory
-
     let(:formatter) do
       filesystem ||= CC::Analyzer::Filesystem.new(
         CC::Analyzer::MountedPath.code.container_path
@@ -34,7 +32,7 @@ module CC::Analyzer::Formatters
           formatter.finished
         end
 
-        expect(stdout).to include("config.rb (1 issue)")
+        expect(stdout).to include("source2.rb (1 issue)")
         expect(stdout).to include("Missing top-level class documentation comment")
         expect(stdout).to include("[cool_engine]")
       end
