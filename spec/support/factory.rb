@@ -42,16 +42,16 @@ module Factory
   def sample_issue(options = {})
     {
       "type" => "issue",
-      "check" => "Rubocop/Style/Documentation",
+      "check_name" => "Rubocop/Style/Documentation",
       "description" => "Missing top-level class documentation comment.",
       "categories" => ["Style"],
       "remediation_points" => 10,
       "location"=> {
-        "path" => "lib/cc/analyzer/config.rb",
+        "path" => "spec/fixtures/source2.rb",
         "lines" => {
-          "begin" => 32,
-          "end" => 40
-        }
+          "begin" => 2,
+          "end" => 9,
+        },
       }
     }.merge(options)
   end
