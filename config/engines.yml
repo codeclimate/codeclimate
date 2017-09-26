@@ -17,6 +17,7 @@ bundler-audit:
   description: Patch-level verification for Bundler.
 checkstyle:
   channels:
+    stable: codeclimate/codeclimate-checkstyle
     beta: codeclimate/codeclimate-checkstyle:beta
   description: Helps programmers write Java that adheres to a coding standard.
 csslint:
