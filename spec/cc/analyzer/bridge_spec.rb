@@ -115,6 +115,32 @@ describe CC::Analyzer::Bridge do
         registry: engine_registry,
       ).run
     end
+
+    it "skips invalid engines" do
+      write_cc_yaml(YAML.dump(
+        "plugins" => {
+          "structure" => false,
+          "duplication" => false,
+          "notreal" => true,
+        },
+        "exclude_patterns" => ["bar/"]
+      ))
+
+      listener = double(:listener)
+      expect(listener).not_to receive(:started)
+      expect(listener).to receive(:finished) do |engine, _details, result|
+        expect(engine).to eq(CC::Config::Engine.new("notreal"))
+        expect(result.exit_status).to be_zero
+        expect(result).to be_skipped
+      end
+
+      described_class.new(
+        config: CC::Config.load,
+        formatter: stub_formatter,
+        listener: listener,
+        registry: engine_registry,
+      ).run
+    end
   end
 
   def write_cc_yaml(yaml)

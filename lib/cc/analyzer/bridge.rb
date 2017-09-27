@@ -45,10 +45,11 @@ module CC
               listener.started(engine, engine_details)
               result = run_engine(engine, engine_details)
             rescue CC::EngineRegistry::EngineDetailsNotFoundError => ex
-              result = Container::Result.from_exception(ex)
+              result = Container::Result.skipped(ex)
             end
 
             listener.finished(engine, engine_details, result)
+            result
           end
         end
 

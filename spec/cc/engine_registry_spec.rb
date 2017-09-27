@@ -46,7 +46,7 @@ describe CC::EngineRegistry do
       engine = double(name: "nope", channel: "beta")
       expect { registry.fetch_engine_details(engine) }.to raise_error(
         described_class::EngineDetailsNotFoundError,
-        /details not found for nope/,
+        /No engine named nope found/,
       )
     end
 
@@ -61,7 +61,7 @@ describe CC::EngineRegistry do
       engine = double(name: "rubocop", channel: "nope")
       expect { registry.fetch_engine_details(engine) }.to raise_error(
         described_class::EngineDetailsNotFoundError,
-        /details not found for rubocop:nope,.*\["stable", "example"\]/,
+        /Channel nope not found for rubocop,.*\["stable", "example"\]/,
       )
     end
 
