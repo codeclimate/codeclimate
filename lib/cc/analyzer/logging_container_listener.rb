@@ -9,8 +9,11 @@ module CC
         logger.info("starting engine #{engine.name}")
       end
 
-      def finished(engine, _details, _result)
+      def finished(engine, _details, result)
         logger.info("finished engine #{engine.name}")
+        if result.skipped?
+          logger.warn("skipped engine #{engine.name}: #{result.stderr}")
+        end
       end
 
       private

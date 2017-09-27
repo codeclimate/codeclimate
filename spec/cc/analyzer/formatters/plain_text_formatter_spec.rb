@@ -15,11 +15,23 @@ module CC::Analyzer::Formatters
 
         expect do
           capture_io do
-            write_from_engine(formatter, engine, "type" => "thing")
+            write_from_engine(formatter, engine, { "type" => "thing" }, double(:result))
           end
         end.to raise_error(
           RuntimeError, "Invalid type found: thing"
         )
+      end
+    end
+
+    describe "#engine_running" do
+      it "prints a message when an engine is skipped" do
+        engine = double(name: "cool_engine")
+
+        stdout, _ = capture_io do
+          write_from_engine(formatter, engine, sample_issue, double(:result, skipped?: true, stderr: "foo"))
+        end
+
+        expect(stdout).to include("Skipped cool_engine: foo")
       end
     end
 
@@ -28,7 +40,7 @@ module CC::Analyzer::Formatters
         engine = double(name: "cool_engine")
 
         stdout, _ = capture_io do
-          write_from_engine(formatter, engine, sample_issue)
+          write_from_engine(formatter, engine, sample_issue, double(:result, skipped?: false))
           formatter.finished
         end
 
@@ -38,9 +50,10 @@ module CC::Analyzer::Formatters
       end
     end
 
-    def write_from_engine(formatter, engine, issue)
+    def write_from_engine(formatter, engine, issue, result)
       formatter.engine_running(engine) do
         formatter.write(issue.to_json)
+        result
       end
     end
   end

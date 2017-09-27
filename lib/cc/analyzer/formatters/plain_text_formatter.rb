@@ -38,7 +38,10 @@ module CC
 
         def engine_running(engine, &block)
           super(engine) do
-            with_spinner("Running #{current_engine.name}: ", &block)
+            result = with_spinner("Running #{current_engine.name}: ", &block)
+            if result.skipped?
+              puts(colorize("Skipped #{current_engine.name}: #{result.stderr}", :yellow))
+            end
           end
         end
 

@@ -22,7 +22,17 @@ module CC::Analyzer
 
         expect(logger).to receive(:info).with(/finished engine engine/)
 
-        listener.finished(engine, nil, nil)
+        listener.finished(engine, nil, double(:result, skipped?: false))
+      end
+
+      it "warns about skip" do
+        logger = double
+        listener = LoggingContainerListener.new(logger)
+
+        expect(logger).to receive(:info).with(/finished engine engine/)
+        expect(logger).to receive(:warn).with(/skipped engine engine/)
+
+        listener.finished(engine, nil, double(:result, skipped?: true, stderr: "foo"))
       end
     end
   end

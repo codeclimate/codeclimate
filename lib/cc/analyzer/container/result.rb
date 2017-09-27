@@ -16,6 +16,7 @@ module CC
           exit_status: 0,
           maximum_output_exceeded: false,
           output_byte_count: 0,
+          skipped: false,
           stderr: "",
           stdout: "",
           timed_out: false
@@ -25,15 +26,18 @@ module CC
           @exit_status = exit_status
           @maximum_output_exceeded = maximum_output_exceeded
           @output_byte_count = output_byte_count
+          @skipped = skipped
           @stderr = stderr
           @stdout = stdout
           @timed_out = timed_out
         end
 
-        # N.B. This is lossy in that we don't know duration or output_byte_count.
-        def self.from_exception(ex)
-          instance = new
-          instance.merge_from_exception(ex)
+        def self.skipped(ex)
+          new(
+            exit_status: 0,
+            skipped: true,
+            stderr: ex.message,
+          )
         end
 
         def merge_from_exception(ex)
@@ -55,6 +59,10 @@ module CC
             maximum_output_exceeded? ||
             exit_status.nil? ||
             exit_status.nonzero?
+        end
+
+        def skipped?
+          @skipped
         end
 
         private
