@@ -3,7 +3,8 @@ module CC
     class Engine
       DEFAULT_CHANNEL = "stable".freeze
 
-      attr_reader :name, :channel, :config, :exclude_patterns
+      attr_accessor :channel
+      attr_reader :name, :config, :exclude_patterns
       attr_writer :enabled
 
       def initialize(name, enabled: false, channel: nil, config: nil, exclude_patterns: [])
@@ -24,6 +25,10 @@ module CC
 
       def container_label
         @container_label ||= SecureRandom.uuid
+      end
+
+      def hash
+        name.hash
       end
 
       def eql?(other)
