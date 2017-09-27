@@ -2,6 +2,12 @@ require "spec_helper"
 
 module CC::CLI::Engines
   describe Install do
+    include FileSystemHelpers
+
+    around do |test|
+      within_temp_dir { test.call }
+    end
+
     describe "#run" do
       it "pulls uninstalled images using docker" do
         write_cc_yaml(YAML.dump("plugins" => { "madeup" => true}))
@@ -63,21 +69,15 @@ module CC::CLI::Engines
     end
 
     def write_cc_yaml(yaml)
-      Tempfile.open("") do |tmp|
-        tmp.puts(yaml)
-        tmp.rewind
-
-        stub_const("CC::Config::YAMLAdapter::DEFAULT_PATH", tmp.path)
-      end
+      make_file(CC::Config::YAMLAdapter::DEFAULT_PATH, yaml)
     end
 
     def stub_engine_registry(yaml)
-      Tempfile.open("") do |tmp|
-        tmp.puts(yaml)
-        tmp.rewind
-
-        stub_const("CC::EngineRegistry::DEFAULT_MANIFEST_PATH", tmp.path)
-      end
+      fh = Tempfile.new("engines.yml", Dir.pwd)
+      path = fh.path
+      fh.close; fh.unlink
+      make_file(path, yaml)
+      stub_const("CC::EngineRegistry::DEFAULT_MANIFEST_PATH", path)
     end
   end
 end
