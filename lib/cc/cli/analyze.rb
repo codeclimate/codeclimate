@@ -38,7 +38,7 @@ module CC
 
       private
 
-      attr_reader :config, :listener, :registry
+      attr_reader :config, :engines_disabled, :listener, :registry
 
       def process_args
         while (arg = @args.shift)
@@ -46,17 +46,9 @@ module CC
           when "-f", "--format"
             @formatter = Formatters.resolve(@args.shift).new(filesystem)
           when "-e", "--engine"
-            # First time passed, clear any configured engines
-            unless @cleared
-              config.engines.clear
-              @cleared = true
-            end
+            disable_all_engines!
             name, channel = @args.shift.split(":", 2)
-            config.engines << Config::Engine.new(
-              name,
-              channel: channel,
-              enabled: true,
-            )
+            enable_engine(name, channel)
           when "--dev"
             config.development = true
           when "--no-plugins"
@@ -71,6 +63,27 @@ module CC
 
       def formatter
         @formatter ||= Formatters::PlainTextFormatter.new(filesystem)
+      end
+
+      def disable_all_engines!
+        unless engines_disabled
+          config.engines.each { |e| e.enabled = false }
+          @engines_disabled = true
+        end
+      end
+
+      def enable_engine(name, channel)
+        existing_engine = config.engines.detect { |e| e.name == name }
+        if existing_engine.present?
+          existing_engine.enabled = true
+          existing_engine.channel = channel if channel.present?
+        else
+          config.engines << Config::Engine.new(
+            name,
+            channel: channel,
+            enabled: true,
+          )
+        end
       end
     end
   end
