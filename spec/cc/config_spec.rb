@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe CC::Config do
+  include FileSystemHelpers
+
   context "CLI-required attributes" do
     it "has #development and #analysis_paths support" do
       config = described_class.new
@@ -17,6 +19,10 @@ describe CC::Config do
   end
 
   describe ".load" do
+    around do |test|
+      within_temp_dir { test.call }
+    end
+
     it "loads json & applies defaults, ignoring yaml" do
       yaml = write_cc_yaml(<<-EOYAML)
       prepare:
@@ -144,21 +150,11 @@ describe CC::Config do
     end
 
     def write_cc_yaml(yaml)
-      Tempfile.open("") do |tmp|
-        tmp.puts(yaml)
-        tmp.rewind
-
-        stub_const("CC::Config::YAMLAdapter::DEFAULT_PATH", tmp.path)
-      end
+      make_file(CC::Config::YAMLAdapter::DEFAULT_PATH, yaml)
     end
 
     def write_cc_json(json)
-      Tempfile.open("") do |tmp|
-        tmp.puts(json)
-        tmp.rewind
-
-        stub_const("CC::Config::JSONAdapter::DEFAULT_PATH", tmp.path)
-      end
+      make_file(CC::Config::JSONAdapter::DEFAULT_PATH, json)
     end
   end
 
