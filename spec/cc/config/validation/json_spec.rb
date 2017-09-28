@@ -264,6 +264,39 @@ describe CC::Config::Validation::JSON do
     end
   end
 
+  describe "exclude_fingerprints" do
+    it "warns for valid usage" do
+      validator = validate_json(<<-EOJSON)
+      {
+        "plugins": {
+          "rubocop": {
+            "exclude_fingerprints": [ "foo" ]
+          }
+        }
+      }
+      EOJSON
+
+      expect(validator).to be_valid
+      expect(validator.warnings).to include(/'exclude_fingerprints' is deprecated/)
+    end
+
+    it "errors for the wrong type" do
+      validator = validate_json(<<-EOJSON)
+      {
+        "plugins": {
+          "rubocop": {
+            "exclude_fingerprints": "foo"
+          }
+        }
+      }
+      EOJSON
+
+      expect(validator).not_to be_valid
+      expect(validator.errors).to include("engine rubocop: 'exclude_fingerprints' must be an array")
+    end
+  end
+
+
   def validate_json(json, registry = nil)
     Tempfile.open("") do |tmp|
       tmp.puts(json)
