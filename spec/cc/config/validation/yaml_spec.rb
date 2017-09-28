@@ -244,6 +244,32 @@ describe CC::Config::Validation::YAML do
     end
   end
 
+  describe "engine checks" do
+    it "is valid for valid usage" do
+      validator = validate_yaml(<<-EOYAML)
+      plugins:
+        rubocop:
+          checks:
+            Foo:
+              enabled: false
+      EOYAML
+
+      expect(validator).to be_valid
+    end
+
+    it "errors for the wrong type" do
+      validator = validate_yaml(<<-EOYAML)
+      plugins:
+        rubocop:
+          checks:
+            - Foo
+      EOYAML
+
+      expect(validator).not_to be_valid
+      expect(validator.errors).to include("engine rubocop: 'checks' must be a hash")
+    end
+  end
+
   def validate_yaml(yaml, registry = nil)
     Tempfile.open("") do |tmp|
       tmp.puts(yaml)
