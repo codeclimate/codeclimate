@@ -270,6 +270,31 @@ describe CC::Config::Validation::YAML do
     end
   end
 
+  describe "exclude_fingerprints" do
+    it "warns for valid usage" do
+      validator = validate_yaml(<<-EOYAML)
+      plugins:
+        rubocop:
+          exclude_fingerprints:
+            - foo
+      EOYAML
+
+      expect(validator).to be_valid
+      expect(validator.warnings).to include(/'exclude_fingerprints' is deprecated/)
+    end
+
+    it "errors for the wrong type" do
+      validator = validate_yaml(<<-EOYAML)
+      plugins:
+        rubocop:
+          exclude_fingerprints: Foo
+      EOYAML
+
+      expect(validator).not_to be_valid
+      expect(validator.errors).to include("engine rubocop: 'exclude_fingerprints' must be an array")
+    end
+  end
+
   def validate_yaml(yaml, registry = nil)
     Tempfile.open("") do |tmp|
       tmp.puts(yaml)

@@ -33,8 +33,9 @@ module CC
           validate_key_type("exclude_patterns", [Array])
 
           validate_checks
+          validate_exclude_fingerprints
 
-          warn_unrecognized_keys(%w[enabled channel checks config exclude_patterns])
+          warn_unrecognized_keys(%w[enabled channel checks config exclude_fingerprints exclude_patterns])
         end
 
         def validate_root
@@ -52,6 +53,13 @@ module CC
             validator = CheckValidator.new(check_data)
             errors.push(*validator.errors)
             warnings.push(*validator.warnings)
+          end
+        end
+
+        def validate_exclude_fingerprints
+          validate_key_type("exclude_fingerprints", Array)
+          if data.key?("exclude_fingerprints")
+            warnings << "'exclude_fingerprints' is deprecated, and support may be removed in the future"
           end
         end
       end
