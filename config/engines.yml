@@ -41,20 +41,6 @@ bundler-audit:
     - ^Gemfile\.lock$
   default_ratings_paths:
     - Gemfile.lock
-checks:
-  channels:
-    beta: codeclimate/codeclimate-checks:beta
-  description: Maintainability and reliability checks for PHP, Python, JS, and more.
-  community: false
-  default_ratings_paths:
-    - "**.js"
-    - "**.py"
-    - "**.php"
-  default_config:
-    languages:
-      - javascript
-      - python
-      - php
 checkstyle:
   channels:
     stable: codeclimate/codeclimate-checkstyle
@@ -474,6 +460,16 @@ shellcheck:
     - \.sh$
   default_ratings_paths:
     - "**.sh"
+sonar-java:
+  channels:
+    beta: codeclimate/codeclimate-sonar-java:beta
+  description: SonarLint for Java.
+  community: false
+  default_ratings_paths:
+    - "**.java"
+  default_config:
+    languages:
+      - java
 stylelint:
   channels:
     beta: codeclimate/codeclimate-stylelint:beta
