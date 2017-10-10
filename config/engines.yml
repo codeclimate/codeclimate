@@ -180,6 +180,16 @@ shellcheck:
   channels:
     stable: codeclimate/codeclimate-shellcheck
   description: A static analysis tool for shell scripts.
+sonar-java:
+  channels:
+    beta: codeclimate/codeclimate-sonar-java:beta
+  description: SonarLint for Java.
+  community: false
+  default_ratings_paths:
+    - "**.java"
+  default_config:
+    languages:
+      - java
 structure:
   channels:
     beta: codeclimate/codeclimate-structure:beta
