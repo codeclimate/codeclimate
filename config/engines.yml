@@ -217,7 +217,6 @@ govet:
     - "**.go"
 grep:
   channels:
-    beta: codeclimate/codeclimate-grep
     stable: codeclimate/codeclimate-grep
   description: Detects specified patterns in files
   community: false
