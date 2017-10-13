@@ -8,7 +8,7 @@ module CC
         host_prefix ||= ENV["CODE_PATH"] # deprecated
 
         if ENV["CODECLIMATE_DOCKER"]
-          new(host_prefix, "/code")
+          new(host_prefix, "/code", ENV["CODECLIMATE_CODE_PATH"])
         else
           host_prefix ||= Dir.pwd
 
@@ -30,7 +30,11 @@ module CC
       def initialize(host_prefix, container_prefix, path = nil)
         @host_prefix = host_prefix
         @container_prefix = container_prefix
-        @path = path
+        # Prevent empty strings from making it into @path:
+        unless path.nil?
+          path = path.strip
+          @path = path unless path == ""
+        end
       end
 
       def host_path
