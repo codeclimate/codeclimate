@@ -461,6 +461,7 @@ shellcheck:
     - "**.sh"
 sonar-java:
   channels:
+    stable: codeclimate/codeclimate-sonar-java
     beta: codeclimate/codeclimate-sonar-java:beta
   description: SonarLint for Java.
   community: false
