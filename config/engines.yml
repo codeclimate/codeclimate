@@ -182,6 +182,7 @@ shellcheck:
   description: A static analysis tool for shell scripts.
 sonar-java:
   channels:
+    stable: codeclimate/codeclimate-sonar-java
     beta: codeclimate/codeclimate-sonar-java:beta
   description: SonarLint for Java.
 structure:
