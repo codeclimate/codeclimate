@@ -141,6 +141,38 @@ describe CC::Analyzer::Bridge do
         registry: engine_registry,
       ).run
     end
+
+    it "defines engine minimum required memory" do
+      write_cc_yaml(YAML.dump(
+        "plugins" => {
+          "structure" => false,
+          "duplication" => false,
+          "memoryhungry" => true,
+        },
+        "exclude_patterns" => ["bar/"]
+      ))
+
+      expect_engine_run(
+        "memoryhungry",
+        {
+          "image" => "memoryhungry-stable",
+          "command" => nil,
+          "memory" => 2_048_000_000,
+        },
+        {
+          "enabled" => true,
+          "channel" => "stable",
+          "include_paths" => [".codeclimate.yml", "engines.yml"]
+        },
+      )
+
+      described_class.new(
+        config: CC::Config.load,
+        formatter: stub_formatter,
+        listener: stub_listener,
+        registry: engine_registry,
+      ).run
+    end
   end
 
   def write_cc_yaml(yaml)
@@ -163,6 +195,10 @@ describe CC::Analyzer::Bridge do
       channels:
         stable: bar-stable
         beta: "bar:beta"
+    memoryhungry:
+      channels:
+        stable: memoryhungry-stable
+      memory: 2_048_000_000
     EOYAML
     CC::EngineRegistry.new("engines.yml")
   end
@@ -171,7 +207,7 @@ describe CC::Analyzer::Bridge do
     engine_double = double("engine_#{name}")
     expect(CC::Analyzer::Engine).to receive(:new).with(
       name,
-      metadata,
+      { "memory" => nil }.merge(metadata),
       config,
       instance_of(String),
     ).and_return(engine_double)

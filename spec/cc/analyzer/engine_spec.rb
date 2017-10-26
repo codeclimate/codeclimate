@@ -38,6 +38,19 @@ module CC::Analyzer
         engine.run(StringIO.new)
       end
 
+      it "runs a Container with engine memory overrides" do
+        container = double
+        allow(container).to receive(:on_output).and_yield("")
+
+        expect(container).to receive(:run).with(including(
+          "--memory", "2048000000",
+        )).and_return(Container::Result.new)
+
+        expect(Container).to receive(:new).and_return(container)
+        engine = Engine.new("", { "image" => "", "memory" => 2048000000 }, {}, "a-label")
+        engine.run(StringIO.new)
+      end
+
       it "parses stdout for null-delimited issues" do
         within_temp_dir do
           make_file("foo.rb")
