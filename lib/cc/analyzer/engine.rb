@@ -122,7 +122,11 @@ module CC
 
       # Memory limit for a running engine in bytes
       def memory_limit
-        [@metadata["memory"].to_i, (ENV["ENGINE_MEMORY_LIMIT_BYTES"] || DEFAULT_MEMORY_LIMIT).to_i].max.to_s
+        [@metadata["memory"].to_i, default_memory_limit.to_i].max.to_s
+      end
+
+      def default_memory_limit
+        ENV["ENGINE_MEMORY_LIMIT_BYTES"] || DEFAULT_MEMORY_LIMIT
       end
     end
   end
