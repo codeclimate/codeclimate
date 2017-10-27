@@ -2,6 +2,8 @@ require "spec_helper"
 
 module CC::Analyzer
   describe Engine do
+    let(:metadata) { { "image" => "codeclimate/foo", "command" => "bar", "memory" => 1024000000 } }
+
     describe "#run" do
       it "passes the correct options to Container" do
         container = double
@@ -14,7 +16,6 @@ module CC::Analyzer
           expect(args[:name]).to match(/^cc-engines-foo/)
         end.and_return(container)
 
-        metadata = { "image" => "codeclimate/foo", "command" => "bar" }
         engine = Engine.new("foo", metadata, {}, "")
         engine.run(StringIO.new)
       end
@@ -34,7 +35,7 @@ module CC::Analyzer
         )).and_return(Container::Result.new)
 
         expect(Container).to receive(:new).and_return(container)
-        engine = Engine.new("", { "image" => "" }, {}, "a-label")
+        engine = Engine.new("", metadata, {}, "a-label")
         engine.run(StringIO.new)
       end
 
@@ -63,7 +64,7 @@ module CC::Analyzer
           expect(Container).to receive(:new).and_return(container)
 
           stdout = TestFormatter.new
-          engine = Engine.new("bar", { "image" => "" }, {}, "")
+          engine = Engine.new("bar", metadata, {}, "")
           engine.run(stdout)
 
           expected = "{\"type\":\"issue\",\"check_name\":\"foo\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"engine_name\":\"bar\",\"fingerprint\":\"bdc0c2bb1201c4739118a51481a86fa1\",\"severity\":\"minor\"}{\"type\":\"issue\",\"check_name\":\"bar\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"engine_name\":\"bar\",\"fingerprint\":\"cbd5b8962eb9e2950fbb02f0ddf6c404\",\"severity\":\"minor\"}{\"type\":\"issue\",\"check_name\":\"baz\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"engine_name\":\"bar\",\"fingerprint\":\"a08df13d51af2259c425551cb84c135f\",\"severity\":\"minor\"}"
@@ -85,7 +86,7 @@ module CC::Analyzer
 
           stdout = StringIO.new
           config = { "checks" => { "bar" => { "enabled" => false } } }
-          engine = Engine.new("", { "image" => "" }, config, "")
+          engine = Engine.new("", metadata, config, "")
           engine.run(stdout)
 
           expect(stdout.string).not_to include %{"check":"bar"}
@@ -103,7 +104,7 @@ module CC::Analyzer
 
           stdout = StringIO.new
           config = { "issue_override" => { "severity" => "info" } }
-          engine = Engine.new("", { "image" => "" }, config, "")
+          engine = Engine.new("", metadata, config, "")
           engine.run(stdout)
 
           expect(stdout.string).not_to include %{"severity":"minor"}

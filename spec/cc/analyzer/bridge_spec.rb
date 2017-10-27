@@ -147,10 +147,25 @@ describe CC::Analyzer::Bridge do
         "plugins" => {
           "structure" => false,
           "duplication" => false,
+          "bar" => true,
           "memoryhungry" => true,
         },
         "exclude_patterns" => ["bar/"]
       ))
+
+      expect_engine_run(
+        "bar",
+        {
+          "image" => "bar-stable",
+          "command" => nil,
+          "memory" => 1_024_000_000,
+        },
+        {
+          "enabled" => true,
+          "channel" => "stable",
+          "include_paths" => [".codeclimate.yml", "engines.yml"]
+        },
+      )
 
       expect_engine_run(
         "memoryhungry",
@@ -207,7 +222,7 @@ describe CC::Analyzer::Bridge do
     engine_double = double("engine_#{name}")
     expect(CC::Analyzer::Engine).to receive(:new).with(
       name,
-      { "memory" => nil }.merge(metadata),
+      { "memory" => 1024000000 }.merge(metadata),
       config,
       instance_of(String),
     ).and_return(engine_double)

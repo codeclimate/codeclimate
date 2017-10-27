@@ -20,8 +20,6 @@ module CC
     class Engine
       Error = Class.new(StandardError)
 
-      DEFAULT_MEMORY_LIMIT = 1_024_000_000
-
       def initialize(name, metadata, config, label)
         @name = name
         @metadata = metadata
@@ -34,8 +32,8 @@ module CC
         write_config_file
 
         container = Container.new(
-          image: @metadata.fetch("image"),
-          command: @metadata["command"],
+          image: metadata.fetch("image"),
+          command: metadata["command"],
           name: container_name,
         )
 
@@ -52,7 +50,7 @@ module CC
 
       private
 
-      attr_reader :name
+      attr_reader :name, :metadata
       attr_accessor :error
 
       def handle_output(container, io, raw_output)
@@ -80,7 +78,7 @@ module CC
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=#{@label}",
           "--log-driver", "none",
-          "--memory", memory_limit,
+          "--memory", metadata["memory"].to_s,
           "--memory-swap", "-1",
           "--net", "none",
           "--rm",
@@ -118,15 +116,6 @@ module CC
 
       def output_overrider
         @output_overrider ||= EngineOutputOverrider.new(@config)
-      end
-
-      # Memory limit for a running engine in bytes
-      def memory_limit
-        [@metadata["memory"].to_i, default_memory_limit.to_i].max.to_s
-      end
-
-      def default_memory_limit
-        ENV["ENGINE_MEMORY_LIMIT_BYTES"] || DEFAULT_MEMORY_LIMIT
       end
     end
   end

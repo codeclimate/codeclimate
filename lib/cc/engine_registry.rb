@@ -2,6 +2,7 @@ module CC
   class EngineRegistry
     include Enumerable
 
+    DEFAULT_MEMORY_LIMIT = 1_024_000_000
     DEFAULT_COMMAND = nil
     DEFAULT_MANIFEST_PATH = File.expand_path("../../../config/engines.yml", __FILE__)
 
@@ -36,7 +37,7 @@ module CC
           [prefix, channels.fetch(engine.channel)].join,
           metadata.fetch("command", DEFAULT_COMMAND),
           metadata.fetch("description", "(No description available)"),
-          metadata.fetch("memory", nil),
+          memory_limit(metadata["memory"])
         )
       end
     rescue KeyError => ex
@@ -46,6 +47,17 @@ module CC
     private
 
     attr_reader :yaml, :prefix
+
+    def memory_limit(required_memory)
+      [
+        required_memory.to_i,
+        default_memory_limit.to_i,
+      ].max
+    end
+
+    def default_memory_limit
+      ENV["ENGINE_MEMORY_LIMIT_BYTES"] || DEFAULT_MEMORY_LIMIT
+    end
 
     def not_found_message(ex, engine, available_channels)
       if available_channels

@@ -78,6 +78,32 @@ describe CC::EngineRegistry do
 
       expect(engine_details.image).to eq "codeclimate/codeclimate-madeup"
     end
+
+    describe "memory limits" do
+      let(:registry) {
+        registry_from_yaml(<<-EOYAML)
+          sonar-java:
+            channels:
+              stable: foo
+            memory: 2_048_000_000
+        EOYAML
+      }
+      let(:engine) { double(name: "sonar-java", channel: "stable") }
+
+      it "uses at least the minimum set by the engine" do
+        ENV["ENGINE_MEMORY_LIMIT_BYTES"] = "1_500_000_000"
+        engine_details = registry.fetch_engine_details(engine)
+
+        expect(engine_details.memory).to eq 2_048_000_000
+      end
+
+      it "uses ENGINE_MEMORY_LIMIT_BYTES" do
+        ENV["ENGINE_MEMORY_LIMIT_BYTES"] = "4_000_000_000"
+        engine_details = registry.fetch_engine_details(engine)
+
+        expect(engine_details.memory).to eq 4_000_000_000
+      end
+    end
   end
 
   def registry_from_yaml(yaml)
