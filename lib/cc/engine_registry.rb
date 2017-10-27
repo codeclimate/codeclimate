@@ -37,7 +37,7 @@ module CC
           [prefix, channels.fetch(engine.channel)].join,
           metadata.fetch("command", DEFAULT_COMMAND),
           metadata.fetch("description", "(No description available)"),
-          memory_limit(metadata["required_memory"])
+          memory_limit(metadata["minimum_memory_limit"])
         )
       end
     rescue KeyError => ex
@@ -48,9 +48,9 @@ module CC
 
     attr_reader :yaml, :prefix
 
-    def memory_limit(required_memory)
+    def memory_limit(minimum_memory_limit)
       [
-        required_memory.to_i,
+        minimum_memory_limit.to_i,
         default_memory_limit.to_i,
       ].max
     end

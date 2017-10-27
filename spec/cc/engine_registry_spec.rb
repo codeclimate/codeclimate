@@ -85,7 +85,7 @@ describe CC::EngineRegistry do
           sonar-java:
             channels:
               stable: foo
-            required_memory: 2_048_000_000
+            minimum_memory_limit: 2_048_000_000
         EOYAML
       }
       let(:engine) { double(name: "sonar-java", channel: "stable") }

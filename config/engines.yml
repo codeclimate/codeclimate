@@ -185,7 +185,7 @@ sonar-java:
     stable: codeclimate/codeclimate-sonar-java
     beta: codeclimate/codeclimate-sonar-java:beta
   description: SonarLint for Java.
-  required_memory: 2_048_000_000
+  minimum_memory_limit: 2_048_000_000
 structure:
   channels:
     beta: codeclimate/codeclimate-structure:beta
