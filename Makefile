@@ -22,11 +22,12 @@ test_all: image
 citest:
 	docker run \
 	  --entrypoint sh \
-	  --env CIRCLECI=$(CIRCLECI) \
-	  --env CIRCLE_BUILD_NUM=$(CIRCLE_BUILD_NUM) \
-	  --env CIRCLE_BRANCH=$(CIRCLE_BRANCH) \
-	  --env CIRCLE_SHA1=$(CIRCLE_SHA1) \
-	  --env CODECLIMATE_REPO_TOKEN=$(CODECLIMATE_REPO_TOKEN) \
+	  --env CI \
+	  --env CIRCLECI \
+	  --env CIRCLE_BUILD_NUM \
+	  --env CIRCLE_BRANCH \
+	  --env CIRCLE_SHA1 \
+	  --env CODECLIMATE_REPO_TOKEN \
 	  --volume $(PWD)/.git:/usr/src/app/.git:ro \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
 	  --volume $(CIRCLE_TEST_REPORTS):/usr/src/app/spec/reports \
