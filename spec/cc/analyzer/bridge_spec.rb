@@ -213,7 +213,7 @@ describe CC::Analyzer::Bridge do
     memoryhungry:
       channels:
         stable: memoryhungry-stable
-      memory: 2_048_000_000
+      required_memory: 2_048_000_000
     EOYAML
     CC::EngineRegistry.new("engines.yml")
   end

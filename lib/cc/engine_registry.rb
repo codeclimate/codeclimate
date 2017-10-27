@@ -37,7 +37,7 @@ module CC
           [prefix, channels.fetch(engine.channel)].join,
           metadata.fetch("command", DEFAULT_COMMAND),
           metadata.fetch("description", "(No description available)"),
-          memory_limit(metadata["memory"])
+          memory_limit(metadata["required_memory"])
         )
       end
     rescue KeyError => ex
