@@ -27,7 +27,7 @@ module CC
 
     def fetch_engine_details(engine, development: false)
       if development
-        EngineDetails.new("codeclimate/codeclimate-#{engine.name}", nil, "", nil)
+        EngineDetails.new("codeclimate/codeclimate-#{engine.name}", nil, "")
       else
         metadata = yaml.fetch(engine.name)
         channels = metadata.fetch("channels")
