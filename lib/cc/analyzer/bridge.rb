@@ -70,6 +70,7 @@ module CC
           {
             "image" => engine_details.image,
             "command" => engine_details.command,
+            "memory" => engine_details.memory,
           },
           engine.config.merge(
             "channel" => engine.channel,
