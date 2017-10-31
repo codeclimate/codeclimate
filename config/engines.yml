@@ -409,6 +409,7 @@ rubocop:
     rubocop-0-48: codeclimate/codeclimate-rubocop:rubocop-0-48
     rubocop-0-49: codeclimate/codeclimate-rubocop:rubocop-0-49
     rubocop-0-50: codeclimate/codeclimate-rubocop:rubocop-0-50
+    rubocop-0-51: codeclimate/codeclimate-rubocop:rubocop-0-51
   description: A Ruby static code analyzer, based on the community Ruby style guide.
   community: false
   upgrade_languages:
