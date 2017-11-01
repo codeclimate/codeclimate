@@ -18,7 +18,8 @@ module CC
         **/test/
         **/tests/
         **/vendor/
-      ]
+        **/*.d.ts
+      ].freeze
 
       attr_reader :config
 
