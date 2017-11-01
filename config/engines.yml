@@ -188,6 +188,11 @@ sonar-java:
     beta: codeclimate/codeclimate-sonar-java:beta
   description: SonarLint for Java.
   minimum_memory_limit: 2_048_000_000
+sonar-php:
+  channels:
+    stable: codeclimate/codeclimate-sonar-php
+  description: SonarLint for PHP.
+  minimum_memory_limit: 2_048_000_000
 structure:
   channels:
     beta: codeclimate/codeclimate-structure:beta
