@@ -191,6 +191,11 @@ sonar-php:
     stable: codeclimate/codeclimate-sonar-php
   description: SonarLint for PHP.
   minimum_memory_limit: 2_048_000_000
+sonar-python:
+  channels:
+    stable: codeclimate/codeclimate-sonar-python
+  description: SonarLint for Python.
+  minimum_memory_limit: 2_048_000_000
 structure:
   channels:
     beta: codeclimate/codeclimate-structure:beta
