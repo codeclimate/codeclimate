@@ -2,7 +2,7 @@ require "spec_helper"
 
 module CC::Analyzer
   describe StatsdContainerListener do
-    let(:engine) { double(name: "engine") }
+    let(:engine) { double(name: "engine", channel: "stable") }
 
     describe "#started" do
       it "increments a metric in statsd" do
