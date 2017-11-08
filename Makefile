@@ -6,6 +6,7 @@ SKIP_ENGINES ?= 0
 image:
 	docker build -t codeclimate/codeclimate .
 
+test: RSPEC_ARGS ?= --tag ~slow
 test: image
 	docker run --rm -it \
 	  --entrypoint bundle \
