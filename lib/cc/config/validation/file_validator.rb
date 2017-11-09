@@ -44,11 +44,11 @@ module CC
           denormalize_subvalidator(validator, "prepare section")
         end
 
-        def validate_engines(key)
+        def validate_engines(key, legacy: false)
           return unless validate_key_type(key, Hash)
 
           data.fetch(key, {}).each do |engine_name, engine_data|
-            engine_validator = EngineValidator.new(engine_data)
+            engine_validator = EngineValidator.new(engine_data, legacy: legacy)
             denormalize_subvalidator(engine_validator, "engine #{engine_name}")
 
             if engine_validator.valid?
@@ -91,10 +91,16 @@ module CC
           end
         end
 
-        def validate_exclude_pattern(key)
-          return unless validate_key_type(key, Array)
+        def validate_exclude_pattern(key, legacy: false)
+          types =
+            if legacy
+              [Array, String]
+            else
+              Array
+            end
+          return unless validate_key_type(key, types)
 
-          data.fetch(key, []).each do |pattern|
+          Array(data.fetch(key, [])).each do |pattern|
             unless pattern.is_a?(String)
               errors << "each exclude pattern should be a string, but '#{pattern.inspect}' is a #{pattern.class.to_s.downcase}"
             end
