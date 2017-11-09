@@ -30,6 +30,36 @@ describe CC::Config::Validation::YAML do
     expect(validator.warnings.length).to eq(0)
   end
 
+  it "handles legacy config with engine excludes" do
+    validator = validate_yaml(<<-EOYAML)
+    engines:
+      rubocop:
+        exclude_paths:
+        - foo
+    exclude_paths:
+    - bar
+    EOYAML
+
+    expect(validator).to be_valid
+    expect(validator.warnings).not_to include(a_string_matching(/unrecognized key/))
+  end
+
+  it "handles legacy config with engine excludes as a string" do
+    validator = validate_yaml(<<-EOYAML)
+    engines:
+      rubocop:
+        exclude_paths:
+          foo
+    exclude_paths:
+      bar
+    EOYAML
+
+    validator.valid?
+
+    expect(validator).to be_valid
+    expect(validator.warnings).not_to include(a_string_matching(/unrecognized key/))
+  end
+
   it "handles unparseable yaml" do
     validator = validate_yaml("yargle: poskgp;aerwet ;rgr:  ")
 
