@@ -45,29 +45,27 @@ module CC
       end
 
       def upconvert_legacy_yaml!
-        unless config["schema_version"]
-          config.delete("ratings")
+        config.delete("ratings")
 
-          if config.key?("engines")
-            config["plugins"] ||= config.delete("engines")
-          end
+        if config.key?("engines")
+          config["plugins"] ||= config.delete("engines")
+        end
 
-          plugins = config.fetch("plugins", {})
-          plugins.each do |engine, data|
-            plugins[engine] = coerce_engine(data)
-            if plugins.fetch(engine)["exclude_paths"]
-              plugins.fetch(engine)["exclude_patterns"] ||= plugins.fetch(engine).delete("exclude_paths")
-            end
-            if plugins.fetch(engine)["config"]
-              plugins.fetch(engine)["config"] = convert_to_legacy_file_config(
-                plugins.fetch(engine).fetch("config")
-              )
-            end
+        plugins = config.fetch("plugins", {})
+        plugins.each do |engine, data|
+          plugins[engine] = coerce_engine(data)
+          if plugins.fetch(engine)["exclude_paths"]
+            plugins.fetch(engine)["exclude_patterns"] ||= plugins.fetch(engine).delete("exclude_paths")
           end
+          if plugins.fetch(engine)["config"]
+            plugins.fetch(engine)["config"] = convert_to_legacy_file_config(
+              plugins.fetch(engine).fetch("config")
+            )
+          end
+        end
 
-          if config.key?("exclude_paths")
-            config["exclude_patterns"] ||= config.delete("exclude_paths")
-          end
+        if config.key?("exclude_paths")
+          config["exclude_patterns"] ||= config.delete("exclude_paths")
         end
       end
     end
