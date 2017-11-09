@@ -4,10 +4,20 @@ module CC
       class EngineValidator
         include HashValidations
 
+        RECOGNIZED_KEYS = %w[
+          enabled
+          channel
+          checks
+          config
+          exclude_fingerprints
+          exclude_patterns
+        ].freeze
+
         attr_reader :errors, :warnings
 
-        def initialize(data)
+        def initialize(data, legacy: false)
           @data = data
+          @legacy = legacy
 
           @errors = []
           @warnings = []
@@ -23,6 +33,10 @@ module CC
 
         attr_reader :data
 
+        def legacy?
+          @legacy
+        end
+
         def validate
           validate_root
           return unless data.is_a?(Hash)
@@ -30,12 +44,19 @@ module CC
           validate_key_type("enabled", [TrueClass, FalseClass])
           validate_key_type("channel", String)
           validate_key_type("config", [String, Hash])
-          validate_key_type("exclude_patterns", [Array])
+          validate_key_type("exclude_patterns", Array)
+          if legacy?
+            validate_key_type("exclude_paths", [Array, String])
+          end
 
           validate_checks
           validate_exclude_fingerprints
 
-          warn_unrecognized_keys(%w[enabled channel checks config exclude_fingerprints exclude_patterns])
+          if legacy?
+            warn_unrecognized_keys(RECOGNIZED_KEYS + %w[exclude_paths])
+          else
+            warn_unrecognized_keys(RECOGNIZED_KEYS)
+          end
         end
 
         def validate_root

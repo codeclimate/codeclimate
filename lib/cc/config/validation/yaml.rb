@@ -16,13 +16,13 @@ module CC
           validate_one_of(%w[engines plugins])
           validate_one_of(%w[exclude_paths exclude_patterns])
 
-          validate_engines("engines")
+          validate_engines("engines", legacy: true)
           validate_engines("plugins")
 
           validate_checks
 
           validate_exclude_pattern("exclude_patterns")
-          validate_exclude_pattern("exclude_paths")
+          validate_exclude_pattern("exclude_paths", legacy: true)
 
           deprecated_key_warnings
           warn_unrecognized_keys(%w[prepare engines plugins ratings languages exclude_paths exclude_patterns version])
