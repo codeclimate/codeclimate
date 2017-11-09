@@ -142,6 +142,29 @@ describe CC::Config::YAMLAdapter do
 
       expect(yaml.config["exclude_patterns"]).to eq(%w[**/*.rb foo/])
     end
+
+    it "converts legacy engine exclude_paths from a string" do
+      yaml = load_cc_yaml(<<-EOYAML)
+      engines:
+        foo:
+          exclude_paths:
+            - "**/*.rb"
+            - foo/
+      EOYAML
+
+      expect(yaml.config["plugins"]["foo"]["exclude_patterns"]).to eq(%w[**/*.rb foo/])
+    end
+
+    it "converts legacy engine exclude_paths" do
+      yaml = load_cc_yaml(<<-EOYAML)
+      engines:
+        foo:
+          exclude_paths:
+            foo/
+      EOYAML
+
+      expect(yaml.config["plugins"]["foo"]["exclude_patterns"]).to eq(%w[foo/])
+    end
   end
 
   def load_cc_yaml(yaml)
