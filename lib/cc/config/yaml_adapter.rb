@@ -55,7 +55,7 @@ module CC
         plugins.each do |engine, data|
           plugins[engine] = coerce_engine(data)
           if plugins.fetch(engine)["exclude_paths"]
-            plugins.fetch(engine)["exclude_patterns"] ||= plugins.fetch(engine).delete("exclude_paths")
+            plugins.fetch(engine)["exclude_patterns"] ||= Array(plugins.fetch(engine).delete("exclude_paths"))
           end
           if plugins.fetch(engine)["config"]
             plugins.fetch(engine)["config"] = convert_to_legacy_file_config(
@@ -65,7 +65,7 @@ module CC
         end
 
         if config.key?("exclude_paths")
-          config["exclude_patterns"] ||= config.delete("exclude_paths")
+          config["exclude_patterns"] ||= Array(config.delete("exclude_paths"))
         end
       end
     end
