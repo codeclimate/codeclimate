@@ -20,16 +20,24 @@ module CC
       end
 
       def valid?
-        validator.valid?
+        valid_json? && validator.valid?
       end
 
       def error
-        validator.error
+        if valid_json?
+          validator.error
+        else
+          { message: "Invalid JSON: #{raw_output}" }
+        end
       end
 
       private
 
       attr_accessor :name, :raw_output
+
+      def valid_json?
+        parsed_output.present?
+      end
 
       def parsed_output
         @parsed_output ||= JSON.parse(raw_output)
