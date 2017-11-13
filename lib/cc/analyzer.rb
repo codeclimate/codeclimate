@@ -18,6 +18,7 @@ module CC
     autoload :IssueValidator, "cc/analyzer/issue_validator"
     autoload :LocationDescription, "cc/analyzer/location_description"
     autoload :LoggingContainerListener, "cc/analyzer/logging_container_listener"
+    autoload :Measurement, "cc/analyzer/measurement"
     autoload :MeasurementValidations, "cc/analyzer/measurement_validations"
     autoload :MeasurementValidator, "cc/analyzer/measurement_validator"
     autoload :MountedPath, "cc/analyzer/mounted_path"
