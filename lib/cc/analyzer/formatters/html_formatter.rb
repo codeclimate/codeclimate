@@ -405,6 +405,10 @@ module CC
         def warnings
           @warnings ||= []
         end
+
+        def measurements
+          @measurements ||= []
+        end
       end
     end
   end
