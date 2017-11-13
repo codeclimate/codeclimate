@@ -18,12 +18,15 @@ module CC
     autoload :IssueValidator, "cc/analyzer/issue_validator"
     autoload :LocationDescription, "cc/analyzer/location_description"
     autoload :LoggingContainerListener, "cc/analyzer/logging_container_listener"
+    autoload :MeasurementValidations, "cc/analyzer/measurement_validations"
+    autoload :MeasurementValidator, "cc/analyzer/measurement_validator"
     autoload :MountedPath, "cc/analyzer/mounted_path"
     autoload :RaisingContainerListener, "cc/analyzer/raising_container_listener"
     autoload :SourceBuffer, "cc/analyzer/source_buffer"
     autoload :SourceExtractor, "cc/analyzer/source_extractor"
     autoload :SourceFingerprint, "cc/analyzer/source_fingerprint"
     autoload :StatsdContainerListener, "cc/analyzer/statsd_container_listener"
+    autoload :Validator, "cc/analyzer/validator"
 
     class DummyStatsd
       def method_missing(*)
