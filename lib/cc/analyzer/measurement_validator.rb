@@ -1,10 +1,10 @@
 module CC
   module Analyzer
-    class IssueValidator
+    class MeasurementValidator
       include Validator
 
       def self.validations
-        IssueValidations.validations
+        MeasurementValidations.validations
       end
     end
   end
