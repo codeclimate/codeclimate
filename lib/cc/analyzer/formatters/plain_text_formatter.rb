@@ -88,6 +88,10 @@ module CC
           @warnings ||= []
         end
 
+        def measurements
+          @measurements ||= []
+        end
+
         def pluralize(number, noun)
           "#{ActiveSupport::NumberHelper.number_to_delimited(number)} #{noun.pluralize(number)}"
         end
