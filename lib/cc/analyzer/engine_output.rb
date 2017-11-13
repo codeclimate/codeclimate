@@ -2,7 +2,6 @@ module CC
   module Analyzer
     class EngineOutput
       delegate :blank?, to: :raw_output
-      delegate :to_json, to: :as_issue
 
       def initialize(name, raw_output)
         @name = name
@@ -10,24 +9,31 @@ module CC
       end
 
       def issue?
-        parsed_output &&
-          parsed_output["type"].present? &&
-          parsed_output["type"].downcase == "issue"
+        valid_with_type?("issue")
       end
 
-      def as_issue
-        Issue.new(name, raw_output)
+      def measurement?
+        valid_with_type?("issue")
+      end
+
+      def to_json
+        if issue?
+          Issue.new(name, raw_output).to_json
+        elsif valid_with_type?("measurement")
+        end
       end
 
       def valid?
-        valid_json? && validator.valid?
+        valid_json? && validator && validator.valid?
       end
 
       def error
-        if valid_json?
-          validator.error
+        if !valid_json?
+          { message: "Invalid JSON", output: raw_output }
+        elsif !validator.present?
+          { message: "Unsupported document type", output: raw_output }
         else
-          { message: "Invalid JSON: #{raw_output}" }
+          validator.error
         end
       end
 
@@ -39,6 +45,12 @@ module CC
         parsed_output.present?
       end
 
+      def valid_with_type?(type)
+        parsed_output &&
+          parsed_output["type"].present? &&
+          parsed_output["type"].downcase == type
+      end
+
       def parsed_output
         @parsed_output ||= JSON.parse(raw_output)
       rescue JSON::ParserError
@@ -46,7 +58,9 @@ module CC
       end
 
       def validator
-        IssueValidator.new(parsed_output)
+        if issue?
+          IssueValidator.new(parsed_output)
+        end
       end
     end
   end
