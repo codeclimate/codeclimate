@@ -49,6 +49,27 @@ module CC::Analyzer::Formatters
       end
     end
 
+    it "does not print metrics" do
+        issue = sample_issue
+        measurement = { type: "measurement", name: "foo", value: 42 }
+
+        stdout, stderr = capture_io do
+          formatter.started
+          formatter.engine_running(engine_double("cool_engine")) do
+            formatter.write(issue.to_json)
+            formatter.write(measurement.to_json)
+          end
+          formatter.finished
+        end
+
+        last_two_characters = stdout[stdout.length-2..stdout.length-1]
+
+        expect(stdout.first).to match("[")
+        expect(last_two_characters).to match("]\n")
+
+        expect(stdout).to eq("[{\"type\":\"issue\",\"check_name\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"spec/fixtures/source2.rb\",\"lines\":{\"begin\":2,\"end\":9}},\"engine_name\":\"cool_engine\"}]\n")
+    end
+
     def engine_double(name)
       double(name: name)
     end
