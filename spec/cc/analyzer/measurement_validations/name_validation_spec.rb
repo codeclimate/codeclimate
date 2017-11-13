@@ -7,6 +7,14 @@ module CC::Analyzer::MeasurementValidations
         expect(described_class.new("name" => "foo")).to be_valid
       end
 
+      it "returns true for name with periods" do
+        expect(described_class.new("name" => "foo.bar")).to be_valid
+      end
+
+      it "returns true for name with hyphens" do
+        expect(described_class.new("name" => "foo-bar")).to be_valid
+      end
+
       it "returns false for missing key" do
         expect(described_class.new({})).not_to be_valid
       end
