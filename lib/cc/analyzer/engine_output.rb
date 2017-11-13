@@ -24,7 +24,7 @@ module CC
         if issue?
           as_issue.to_json
         elsif measurement?
-          raw_output
+          Measurement.new(name, raw_output).to_json
         end
       end
 
