@@ -13,13 +13,18 @@ module CC
       end
 
       def measurement?
-        valid_with_type?("issue")
+        valid_with_type?("measurement")
+      end
+
+      def as_issue
+        Issue.new(name, raw_output)
       end
 
       def to_json
         if issue?
-          Issue.new(name, raw_output).to_json
-        elsif valid_with_type?("measurement")
+          as_issue.to_json
+        elsif measurement?
+          raw_output
         end
       end
 
@@ -60,6 +65,8 @@ module CC
       def validator
         if issue?
           IssueValidator.new(parsed_output)
+        elsif measurement?
+          MeasurementValidator.new(parsed_output)
         end
       end
     end
