@@ -68,11 +68,11 @@ module CC::Analyzer
         expect(output.to_json).to eq(Issue.new("engine", str).to_json)
       end
 
-      it "is unmodified JSON for a measurement" do
+      it "is JSON for a measurement" do
         str = { type: "measurement", name: "foo", value: 42 }.to_json
         output = EngineOutput.new("engine", str)
 
-        expect(output.to_json).to eq(str)
+        expect(output.to_json).to eq(Measurement.new("engine", str).to_json)
       end
     end
   end
