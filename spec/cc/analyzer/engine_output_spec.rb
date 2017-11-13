@@ -16,8 +16,18 @@ module CC::Analyzer
         expect(EngineOutput.new("engine", output)).to be_valid
       end
 
+      it "is true for a valid meaure" do
+        output = { type: "measurement", name: "foo", value: 42 }.to_json
+        expect(EngineOutput.new("engine", output)).to be_valid
+      end
+
       it "is false for an invalid issue" do
         output = { type: "issue", categories: ["Foo"] }.to_json
+        expect(EngineOutput.new("engine", output)).not_to be_valid
+      end
+
+      it "is false for an invalid measurement" do
+        output = { type: "measurement", value: "Foo" }.to_json
         expect(EngineOutput.new("engine", output)).not_to be_valid
       end
 
@@ -32,6 +42,13 @@ module CC::Analyzer
         output = { type: "issue", categories: ["Foo"] }.to_json
         expect(EngineOutput.new("engine", output).error[:message]).to match(
           "Category must be at least one of"
+        )
+      end
+
+      it "gets MeasureValidator errors for invalid measures" do
+        output = { type: "measurement", value: "Foo" }.to_json
+        expect(EngineOutput.new("engine", output).error[:message]).to match(
+          "Value must be present and numeric"
         )
       end
 
@@ -51,8 +68,11 @@ module CC::Analyzer
         expect(output.to_json).to eq(Issue.new("engine", str).to_json)
       end
 
-      it "is JSON for a measurement" do
-        pending
+      it "is unmodified JSON for a measurement" do
+        str = { type: "measurement", name: "foo", value: 42 }.to_json
+        output = EngineOutput.new("engine", str)
+
+        expect(output.to_json).to eq(str)
       end
     end
   end
