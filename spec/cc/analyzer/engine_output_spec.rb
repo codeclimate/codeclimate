@@ -42,5 +42,18 @@ module CC::Analyzer
         )
       end
     end
+
+    describe "#to_json" do
+      it "is JSON for an issue" do
+        str = sample_issue.to_json
+        output = EngineOutput.new("engine", str)
+
+        expect(output.to_json).to eq(Issue.new("engine", str).to_json)
+      end
+
+      it "is JSON for a measurement" do
+        pending
+      end
+    end
   end
 end
