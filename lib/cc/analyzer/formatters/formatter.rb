@@ -16,6 +16,8 @@ module CC
             issues << json
           when "warning"
             warnings << json
+          when "measurement"
+            measurements << json
           else
             raise "Invalid type found: #{json["type"]}"
           end

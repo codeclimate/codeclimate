@@ -17,6 +17,7 @@ module CC
 
         def write(data)
           document = JSON.parse(data)
+          return unless document["type"] == "issue"
           document["engine_name"] = current_engine.name
 
           if @has_begun
