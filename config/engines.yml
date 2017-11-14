@@ -496,7 +496,6 @@ tailor:
     - "**.swift"
 tslint:
   channels:
-    beta: codeclimate/codeclimate-tslint:beta
     stable: codeclimate/codeclimate-tslint
   description: An extensible linter for the TypeScript language
   community: true
