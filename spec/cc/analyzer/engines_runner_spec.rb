@@ -29,6 +29,39 @@ module CC::Analyzer
       expect { runner.run }.to raise_error(EnginesRunner::NoEnabledEngines)
     end
 
+    describe "partial flag" do
+      let(:config) { config_with_engine("steam") }
+      let(:registry) { registry_with_engine("steam") }
+      let(:whatever) { [anything] * 6 }
+      let(:engine_config) do
+        double(
+          name: "Steam",
+          registry_entry: {},
+          code_path: "/code",
+          config: {},
+          container_label: nil
+        )
+      end
+
+      [true, false].each do |flag|
+        it "passes partial flag to engine config builder: #{flag.inspect}" do
+          allow(Engine).to receive(:new).and_return(double name: "Steam", run: nil)
+          allow(EnginesConfigBuilder).to receive(:new).and_return(double run: [engine_config])
+
+          EnginesRunner.new(registry, null_formatter, "/code", config, [], nil, flag).run
+
+          expect(EnginesConfigBuilder).to have_received(:new).with(
+            registry: anything,
+            config: anything,
+            container_label: anything,
+            source_dir: anything,
+            requested_paths: anything,
+            partial: flag,
+          )
+        end
+      end
+    end
+
     describe "when the formatter does not respond to #close" do
       let(:config) { config_with_engine("an_engine") }
       let(:formatter) do

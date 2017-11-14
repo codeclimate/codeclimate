@@ -98,7 +98,75 @@ module CC::CLI
             analyze = Analyze.new(args)
             engines_runner = double(run: "peace")
 
-            expect(CC::Analyzer::EnginesRunner).to receive(:new).with(anything, anything, anything, anything, paths).and_return(engines_runner)
+            expect(CC::Analyzer::EnginesRunner).to receive(:new).with(anything, anything, anything, anything, paths, anything, anything).and_return(engines_runner)
+
+            analyze.run
+          end
+        end
+      end
+
+      describe "partial scan flag" do
+        it "is off by default" do
+          within_temp_dir do
+            create_yaml(<<-EOYAML)
+              engines:
+                rubocop:
+                  enabled: true
+                eslint:
+                  enabled: true
+            EOYAML
+
+            args = []
+
+            analyze = Analyze.new(args)
+            engines_runner = double(run: "peace")
+            other_args = [anything] * 6
+
+            expect(CC::Analyzer::EnginesRunner).to receive(:new).with(*other_args, false).and_return(engines_runner)
+
+            analyze.run
+          end
+        end
+
+        it "passes the flag provided" do
+          within_temp_dir do
+            create_yaml(<<-EOYAML)
+              engines:
+                rubocop:
+                  enabled: true
+                eslint:
+                  enabled: true
+            EOYAML
+
+            args = ["-p", "foo.rb"]
+
+            analyze = Analyze.new(args)
+            engines_runner = double(run: "peace")
+            other_args = [anything] * 6
+
+            expect(CC::Analyzer::EnginesRunner).to receive(:new).with(*other_args, true).and_return(engines_runner)
+
+            analyze.run
+          end
+        end
+
+        it "passes the flag provided (long form)" do
+          within_temp_dir do
+            create_yaml(<<-EOYAML)
+              engines:
+                rubocop:
+                  enabled: true
+                eslint:
+                  enabled: true
+            EOYAML
+
+            args = ["--partial", "foo.rb"]
+
+            analyze = Analyze.new(args)
+            engines_runner = double(run: "peace")
+            other_args = [anything] * 6
+
+            expect(CC::Analyzer::EnginesRunner).to receive(:new).with(*other_args, true).and_return(engines_runner)
 
             analyze.run
           end

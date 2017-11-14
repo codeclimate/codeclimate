@@ -11,12 +11,14 @@ module CC::Analyzer
         config: config,
         container_label: container_label,
         source_dir: source_dir,
-        requested_paths: requested_paths
+        requested_paths: requested_paths,
+        partial: partial,
       )
     end
     let(:container_label) { nil }
     let(:requested_paths) { [] }
     let(:source_dir) { "/code" }
+    let(:partial) { false }
 
     around do |test|
       within_temp_dir { test.call }
@@ -79,7 +81,7 @@ module CC::Analyzer
           "enabled" => true,
           "channel" => "stable",
           "config" => "rubocop.yml",
-          :include_paths => ["./"]
+          :include_paths => []
         }
         result = engines_config_builder.run
         expect(result.size).to eq(1)
@@ -189,6 +191,24 @@ module CC::Analyzer
             expect(result.first.config[:include_paths].sort).to eq %w[doc/ foo.rb]
           end
         end
+
+        describe "partial scan" do
+          let(:partial) { true }
+
+          it "applies excludes on top of requested paths" do
+            within_temp_dir do
+              make_tree <<-EOM
+                app/thing.rb
+                doc/README
+                foo.rb
+              EOM
+
+              result = engines_config_builder.run
+              expect(result.size).to eq(1)
+              expect(result.first.config[:include_paths].sort).to eq %w[foo.rb]
+            end
+          end
+        end
       end
     end
 
@@ -199,6 +219,7 @@ module CC::Analyzer
         container_label: nil,
         source_dir: "/code",
         requested_paths: [],
+        partial: false,
       )
 
       builder.run

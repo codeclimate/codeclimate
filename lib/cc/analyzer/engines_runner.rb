@@ -5,13 +5,14 @@ module CC
     class EnginesRunner
       NoEnabledEngines = Class.new(StandardError)
 
-      def initialize(registry, formatter, source_dir, config, requested_paths = [], container_label = nil)
+      def initialize(registry, formatter, source_dir, config, requested_paths = [], container_label = nil, partial = false)
         @registry = registry
         @formatter = formatter
         @source_dir = source_dir
         @config = config
         @requested_paths = requested_paths
         @container_label = container_label
+        @partial = partial
       end
 
       def run(container_listener = ContainerListener.new)
@@ -28,7 +29,7 @@ module CC
 
       private
 
-      attr_reader :requested_paths
+      attr_reader :partial, :requested_paths
 
       def build_engine(built_config)
         Engine.new(
@@ -47,6 +48,7 @@ module CC
           container_label: @container_label,
           source_dir: @source_dir,
           requested_paths: requested_paths,
+          partial: partial,
         ).run
       end
 

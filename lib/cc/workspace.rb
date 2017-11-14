@@ -16,9 +16,7 @@ module CC
     end
 
     def add(paths)
-      if paths.present?
-        path_tree.include_paths(paths)
-      end
+      path_tree.include_paths(Array(paths))
     end
 
     def remove(patterns)

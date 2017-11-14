@@ -7,6 +7,7 @@ module CC
       SHORT_HELP = "Run analysis with the given arguments".freeze
       HELP = "#{SHORT_HELP}\n" \
         "\n" \
+        "    -p, --partial                    Perform partial analysis." \
         "    -f <format>, --format <format>   Format of output. Possible values: #{CC::Analyzer::Formatters::FORMATTERS.keys.join ", "}\n" \
         "    -e <engine[:channel]>            Engine to run. Can be specified multiple times.\n" \
         "    --dev                            Run in development mode. Engines installed locally that are not in the manifest will be run.\n" \
@@ -18,6 +19,7 @@ module CC
         super
         @engine_options = []
         @path_options = []
+        @partial = false
 
         process_args
         apply_config_options
@@ -27,7 +29,7 @@ module CC
         require_codeclimate_yml
 
         Dir.chdir(MountedPath.code.container_path) do
-          runner = EnginesRunner.new(registry, formatter, source_dir, config, path_options)
+          runner = EnginesRunner.new(registry, formatter, source_dir, config, path_options, nil, partial)
           runner.run
         end
       rescue EnginesRunner::NoEnabledEngines
@@ -37,7 +39,7 @@ module CC
       private
 
       attr_accessor :config
-      attr_reader :engine_options, :path_options
+      attr_reader :engine_options, :path_options, :partial
 
       def process_args
         while (arg = @args.shift)
@@ -48,6 +50,8 @@ module CC
             @engine_options << @args.shift
           when "--dev"
             @dev_mode = true
+          when "-p", "--partial"
+            @partial = true
           else
             @path_options << arg
           end
