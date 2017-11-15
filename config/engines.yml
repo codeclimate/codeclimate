@@ -10,7 +10,7 @@ apexmetrics:
 brakeman:
   channels:
     stable: codeclimate/codeclimate-brakeman
-  description: Static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
+  description: A static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
 bundler-audit:
   channels:
     stable: codeclimate/codeclimate-bundler-audit
@@ -78,7 +78,7 @@ grep:
   channels:
     beta: codeclimate/codeclimate-grep
     stable: codeclimate/codeclimate-grep
-  description: Detects specified patterns in files
+  description: Detects specified patterns in files.
 fixme:
   channels:
     stable: codeclimate/codeclimate-fixme
@@ -94,7 +94,7 @@ git-legal:
 gnu-complexity:
   channels:
     stable: codeclimate/codeclimate-gnu-complexity
-  description: Checks complexity of C code
+  description: Checks complexity of C code.
 haxe-checkstyle:
   channels:
     stable: codeclimate/codeclimate-haxe-checkstyle
@@ -102,11 +102,11 @@ haxe-checkstyle:
 haml-lint:
   channels:
     beta: codeclimate/codeclimate-haml-lint:beta
-  description: Tool for writing clean and consistent HAML.
+  description: A tool for writing clean and consistent HAML.
 hlint:
   channels:
     stable: codeclimate/codeclimate-hlint
-  description: Linter for Haskell programs.
+  description: A linter for Haskell programs.
 kibit:
   channels:
     stable: codeclimate/codeclimate-kibit
@@ -142,7 +142,7 @@ proselint:
 pmd:
   channels:
     beta: codeclimate/codeclimate-pmd:beta
-  description: Source code analyzer for Java.
+  description: A source code analyzer for Java.
 radon:
   channels:
     stable: codeclimate/codeclimate-radon
@@ -175,7 +175,7 @@ rustfmt:
 scss-lint:
   channels:
     stable: codeclimate/codeclimate-scss-lint
-  description: Configurable tool for writing clean and consistent SCSS.
+  description: A configurable tool for writing clean and consistent SCSS.
 shellcheck:
   channels:
     stable: codeclimate/codeclimate-shellcheck
@@ -184,7 +184,7 @@ sonar-java:
   channels:
     stable: codeclimate/codeclimate-sonar-java
     beta: codeclimate/codeclimate-sonar-java:beta
-  description: SonarLint for Java.
+  description: Over 400 checks for bugs, vulnerabilities, and code smells in Java code.
   minimum_memory_limit: 2_048_000_000
 sonar-php:
   channels:
@@ -205,7 +205,7 @@ stylelint:
   channels:
     beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
-  description: A mighty, modern CSS linter
+  description: A mighty, modern CSS linter.
 tailor:
   channels:
     stable: codeclimate/codeclimate-tailor
@@ -213,7 +213,7 @@ tailor:
 tslint:
   channels:
     beta: codeclimate/codeclimate-tslint:beta
-  description: An extensible linter for the TypeScript language
+  description: An extensible linter for the TypeScript language.
 watson:
   channels:
     stable: codeclimate/codeclimate-watson
