@@ -17,7 +17,7 @@ apexmetrics:
 brakeman:
   channels:
     stable: codeclimate/codeclimate-brakeman
-  description: Static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
+  description: A static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
   community: false
   upgrade_languages:
     - Ruby
@@ -54,7 +54,7 @@ checkstyle:
 complexity-ruby:
   channels:
     beta: codeclimate/codeclimate-complexity-ruby:b47
-  description: Code Climate Complexity Checks for Ruby
+  description: Code Climate Complexity Checks for Ruby.
   community: false
   default_ratings_paths:
     - "**.rb"
@@ -218,7 +218,7 @@ govet:
 grep:
   channels:
     stable: codeclimate/codeclimate-grep
-  description: Detects specified patterns in files
+  description: Detects specified patterns in files.
   community: false
   enable_regexps:
   default_ratings_paths:
@@ -240,7 +240,7 @@ foodcritic:
 gnu-complexity:
   channels:
     stable: codeclimate/codeclimate-gnu-complexity
-  description: Checks complexity of C code
+  description: Checks complexity of C code.
   community: true
   enable_regexps:
     - \.c$
@@ -267,7 +267,7 @@ haml-lint:
 hlint:
   channels:
     stable: codeclimate/codeclimate-hlint
-  description: Linter for Haskell programs.
+  description: A linter for Haskell programs.
   community: true
   enable_regexps:
     - \.hs$
@@ -365,7 +365,7 @@ pmd:
   channels:
     stable: codeclimate/codeclimate-pmd
     beta: codeclimate/codeclimate-pmd:beta
-  description: Source code analyzer for Java.
+  description: A source code analyzer for Java.
   community: false
   enable_regexps:
     - \.java$
@@ -446,7 +446,7 @@ rustfmt:
 scss-lint:
   channels:
     stable: codeclimate/codeclimate-scss-lint
-  description: Configurable tool for writing clean and consistent SCSS.
+  description: A configurable tool for writing clean and consistent SCSS.
   community: true
   enable_regexps:
   default_ratings_paths:
@@ -464,7 +464,7 @@ sonar-java:
   channels:
     stable: codeclimate/codeclimate-sonar-java
     beta: codeclimate/codeclimate-sonar-java:beta
-  description: SonarLint for Java.
+  description: Over 400 checks for bugs, vulnerabilities, and code smells in Java code.
   community: false
   default_ratings_paths:
     - "**.java"
@@ -475,7 +475,7 @@ stylelint:
   channels:
     beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
-  description: A mighty, modern CSS linter
+  description: A mighty, modern CSS linter.
   community: true
   enable_regexps:
     - \.less$
@@ -497,7 +497,7 @@ tailor:
 tslint:
   channels:
     stable: codeclimate/codeclimate-tslint
-  description: An extensible linter for the TypeScript language
+  description: An extensible linter for the TypeScript language.
   community: true
   enable_regexps:
     - \.ts$
