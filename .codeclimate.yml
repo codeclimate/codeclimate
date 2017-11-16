@@ -1,12 +1,12 @@
 ---
-engines:
+version: "2"
+prepare:
+  fetch:
+    - url: https://raw.githubusercontent.com/codeclimate/styleguide/master/ruby/rubocop.yml
+      path: base_rubocop.yml
+plugins:
   rubocop:
     enabled: true
-  duplication:
-    enabled: true
-    config:
-      languages:
-      - "ruby"
   fixme:
     enabled: true
     exclude_paths:
@@ -18,12 +18,7 @@ engines:
         enabled: false
   shellcheck:
     enabled: true
-ratings:
-  paths:
-  - "bin/*"
-  - "**.rb"
-  - "**.md"
-exclude_paths:
+exclude_patterns:
   - .bundle/
   - spec/**/*
   - benchmarks/**/*
