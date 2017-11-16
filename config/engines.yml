@@ -163,9 +163,14 @@ rubocop:
     rubocop-0-42: codeclimate/codeclimate-rubocop:rubocop-0-42
     rubocop-0-46: codeclimate/codeclimate-rubocop:rubocop-0-46
     rubocop-0-48: codeclimate/codeclimate-rubocop:rubocop-0-48
+    rubocop-0-49: codeclimate/codeclimate-rubocop:rubocop-0-49
+    rubocop-0-50: codeclimate/codeclimate-rubocop:rubocop-0-50
+    rubocop-0-51: codeclimate/codeclimate-rubocop:rubocop-0-51
+  description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubocop-v35:
   channels:
     stable: codeclimate/codeclimate-rubocop:v35
+  description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
     stable: codeclimate/codeclimate-rubymotion
