@@ -109,13 +109,6 @@ The following is a brief explanation of each available command.
 * `console`
   start an interactive session providing access to the classes
   within the CLI. Useful for engine developers and maintainers.
-* `engines:disable engine_name`
-  Changes the engine's `enabled:` node to be `false` in your `.codeclimate.yml`
-  file. This engine will not be run the next time your project is analyzed.
-* `engines:enable engine_name`
-  Installs the specified engine (`engine_name`). Also changes the engine's
-  `enabled:` node to be `true` in your `.codeclimate.yml` file. This engine
-  will be run the next time your project is analyzed.
 * `engines:install`
   Compares the list of engines in your `.codeclimate.yml` file to those that
   are currently installed, then installs any missing engines.
@@ -123,8 +116,6 @@ The following is a brief explanation of each available command.
   Lists all available engines in the
   [Code Climate Docker Hub](https://hub.docker.com/u/codeclimate/)
   .
-* `engines:remove engine_name`
-  Removes an engine from your `.codeclimate.yml` file.
 * `help`
   Displays a list of commands that can be passed to the Code Climate CLI.
 * `validate-config`
