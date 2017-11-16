@@ -14,7 +14,7 @@ module CC
           if types.is_a?(Class)
             return validate_key_type(key, [types])
           elsif data.key?(key)
-            if !types.include?(data[key].class)
+            unless types.include?(data[key].class)
               errors << key_type_error_message(key, types)
               return false
             end
@@ -50,4 +50,3 @@ module CC
     end
   end
 end
-

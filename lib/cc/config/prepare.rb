@@ -9,7 +9,7 @@ module CC
 
           new(fetch: fetch)
         else
-          new()
+          new
         end
       end
 

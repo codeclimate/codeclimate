@@ -37,11 +37,11 @@ module CC
           [prefix, channels.fetch(engine.channel)].join,
           metadata.fetch("command", DEFAULT_COMMAND),
           metadata.fetch("description", "(No description available)"),
-          memory_limit(metadata["minimum_memory_limit"])
+          memory_limit(metadata["minimum_memory_limit"]),
         )
       end
-    rescue KeyError => ex
-      raise EngineDetailsNotFoundError, not_found_message(ex, engine, channels)
+    rescue KeyError
+      raise EngineDetailsNotFoundError, not_found_message(engine, channels)
     end
 
     private
@@ -59,7 +59,7 @@ module CC
       ENV["ENGINE_MEMORY_LIMIT_BYTES"] || DEFAULT_MEMORY_LIMIT
     end
 
-    def not_found_message(ex, engine, available_channels)
+    def not_found_message(engine, available_channels)
       if available_channels
         # Known engine, unknown channel
         "Channel #{engine.channel} not found" \

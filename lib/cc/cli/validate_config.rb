@@ -13,7 +13,7 @@ module CC
         if any_issues?
           display_issues
         else
-          puts sprintf(VALID_CONFIG_MESSAGE, validator.path)
+          puts format(VALID_CONFIG_MESSAGE, validator.path)
         end
 
         exit 1 unless validator.valid?

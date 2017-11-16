@@ -26,11 +26,12 @@ module CC
 
     def self.logger
       @logger ||= ::Logger.new(STDERR).tap do |logger|
-        if debug?
-          logger.level = ::Logger::DEBUG
-        else
-          logger.level = ::Logger::ERROR
-        end
+        logger.level =
+          if debug?
+            ::Logger::DEBUG
+          else
+            ::Logger::ERROR
+          end
       end
     end
   end

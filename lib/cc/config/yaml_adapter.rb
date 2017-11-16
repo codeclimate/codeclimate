@@ -59,7 +59,7 @@ module CC
           end
           if plugins.fetch(engine)["config"]
             plugins.fetch(engine)["config"] = convert_to_legacy_file_config(
-              plugins.fetch(engine).fetch("config")
+              plugins.fetch(engine).fetch("config"),
             )
           end
         end

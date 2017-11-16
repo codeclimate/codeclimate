@@ -30,7 +30,6 @@ module CC
           else
             errors << "fetch section should be a string or a hash"
           end
-
         end
 
         def validate_url(url)

@@ -2,7 +2,6 @@ module CC
   class Config
     module Validation
       class YAML < FileValidator
-
         private
 
         def validate
@@ -32,7 +31,7 @@ module CC
 
         def validate_version
           if !data.key?("version") && (data.key?("plugins") || data.key?("exclude_patterns"))
-            warnings << %{missing 'version' key. Please add `version: "2"`}
+            warnings << %(missing 'version' key. Please add `version: "2"`)
           end
         end
 
@@ -53,11 +52,12 @@ module CC
 
         def deprecate_key(key, new_key = nil)
           if data.key?(key)
-            if new_key.nil?
-              warnings << "'#{key}' has been deprecated, and will not be used"
-            else
-              warnings << "'#{key}' has been deprecated, please use '#{new_key}' instead"
-            end
+            warnings <<
+              if new_key.nil?
+                "'#{key}' has been deprecated, and will not be used"
+              else
+                "'#{key}' has been deprecated, please use '#{new_key}' instead"
+              end
           end
         end
       end

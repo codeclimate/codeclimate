@@ -25,7 +25,7 @@ module CC
         if engine["config"].is_a?(String)
           engine["config"] = {
             "file" => engine["config"],
-            "checks" => checks
+            "checks" => checks,
           }
         elsif engine["config"].is_a?(Hash)
           engine["config"]["checks"] = checks
