@@ -1,4 +1,4 @@
-.PHONY: install uninstall image test citest
+.PHONY: install uninstall image test citest bundle
 
 PREFIX ?= /usr/local
 SKIP_ENGINES ?= 0
@@ -49,9 +49,9 @@ uninstall:
 	$(RM) $(DESTDIR)$(PREFIX)/bin/codeclimate
 	docker rmi codeclimate/codeclimate:latest
 
-Gemfile.lock: image
+bundle:
 	docker run --rm \
-	  --entrypoint sh \
+	  --entrypoint bundle \
 	  --volume $(PWD):/usr/src/app \
 	  --workdir /usr/src/app \
-	  codeclimate/codeclimate -c bundle
+	  codeclimate/codeclimate $(BUNDLE_ARGS)
