@@ -2,7 +2,6 @@ module CC
   class Config
     module Validation
       class JSON < FileValidator
-
         private
 
         def validate
@@ -23,7 +22,7 @@ module CC
 
         def validate_version
           unless data.key?("version")
-            warnings << %{missing 'version' key. Please add `"version": "2"`}
+            warnings << %(missing 'version' key. Please add `"version": "2"`)
           end
         end
       end

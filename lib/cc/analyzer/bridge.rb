@@ -40,7 +40,8 @@ module CC
 
             begin
               engine_details = registry.fetch_engine_details(
-                engine, development: config.development?,
+                engine,
+                development: config.development?,
               )
               listener.started(engine, engine_details)
               result = run_engine(engine, engine_details)

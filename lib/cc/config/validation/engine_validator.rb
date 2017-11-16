@@ -70,7 +70,7 @@ module CC
         def validate_checks
           return unless validate_key_type("checks", Hash)
 
-          data.fetch("checks", {}).each do |check_name, check_data|
+          data.fetch("checks", {}).each do |_check_name, check_data|
             validator = CheckValidator.new(check_data)
             errors.push(*validator.errors)
             warnings.push(*validator.warnings)

@@ -30,7 +30,7 @@ module CC
             LoggingContainerListener.new(Analyzer.logger),
             RaisingContainerListener.new(EngineFailure),
           ),
-          registry: EngineRegistry.new
+          registry: EngineRegistry.new,
         )
 
         bridge.run
@@ -58,7 +58,7 @@ module CC
           end
         end
       rescue Formatters::Formatter::InvalidFormatterError => ex
-        fatal(e.message)
+        fatal(ex.message)
       end
 
       def formatter

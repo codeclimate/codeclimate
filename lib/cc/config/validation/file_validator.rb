@@ -77,7 +77,7 @@ module CC
         end
 
         def engine_exists?(engine)
-          !!registry.fetch_engine_details(engine)
+          !registry.fetch_engine_details(engine).nil?
         rescue CC::EngineRegistry::EngineDetailsNotFoundError
           false
         end
