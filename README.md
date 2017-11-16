@@ -142,11 +142,11 @@ The following is a brief explanation of each available command.
   ```
 
 * You can also configure the default alotted memory with which each engine runs
-  (default is 512,000,000 bytes):
+  (default is 1,024,000,000 bytes):
 
   ```
-  # 1,000,000,000 bytes
-  ENGINE_MEMORY_LIMIT_BYTES=1000000000 codeclimate analyze
+  # 2,000,000,000 bytes
+  ENGINE_MEMORY_LIMIT_BYTES=2000000000 codeclimate analyze
   ```
 
 ## Copyright
