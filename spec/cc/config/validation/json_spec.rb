@@ -14,6 +14,11 @@ describe CC::Config::Validation::JSON do
           }
         ]
       },
+      "checks": {
+        "method-complexity": {
+          "enabled": false
+        }
+      },
       "plugins": {
         "rubocop": {
           "enabled": true,

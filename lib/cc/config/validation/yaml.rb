@@ -24,7 +24,7 @@ module CC
           validate_exclude_pattern("exclude_paths", legacy: true)
 
           deprecated_key_warnings
-          warn_unrecognized_keys(%w[prepare engines plugins ratings languages exclude_paths exclude_patterns version])
+          warn_unrecognized_keys(%w[checks prepare engines plugins ratings languages exclude_paths exclude_patterns version])
         rescue Psych::SyntaxError => ex
           errors << "Unable to parse: #{ex.message}"
         end

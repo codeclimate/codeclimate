@@ -9,6 +9,9 @@ describe CC::Config::Validation::YAML do
       - http://test.test/rubocop.yml
       - url: http://test.test/myeslint.json
         path: eslint.json
+    checks:
+      method-complexity:
+        enabled: false
     plugins:
       rubocop:
         enabled: true
