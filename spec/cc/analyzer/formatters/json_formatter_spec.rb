@@ -49,7 +49,7 @@ module CC::Analyzer::Formatters
       end
     end
 
-    it "does not print metrics" do
+    it "prints metrics" do
         issue = sample_issue
         measurement = { type: "measurement", name: "foo", value: 42 }
 
@@ -67,7 +67,7 @@ module CC::Analyzer::Formatters
         expect(stdout.first).to match("[")
         expect(last_two_characters).to match("]\n")
 
-        expect(stdout).to eq("[{\"type\":\"issue\",\"check_name\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"spec/fixtures/source2.rb\",\"lines\":{\"begin\":2,\"end\":9}},\"engine_name\":\"cool_engine\"}]\n")
+        expect(stdout).to eq("[{\"type\":\"issue\",\"check_name\":\"Rubocop/Style/Documentation\",\"description\":\"Missing top-level class documentation comment.\",\"categories\":[\"Style\"],\"remediation_points\":10,\"location\":{\"path\":\"spec/fixtures/source2.rb\",\"lines\":{\"begin\":2,\"end\":9}},\"engine_name\":\"cool_engine\"},\n{\"type\":\"measurement\",\"name\":\"foo\",\"value\":42,\"engine_name\":\"cool_engine\"}]\n")
     end
 
     def engine_double(name)
