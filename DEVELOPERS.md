@@ -19,6 +19,12 @@ Otherwise, invoke the `docker run` command found in the README.
 
 ## Releasing a new version
 
+### Prerequisites
+
+1. Be an owner of the [codeclimate gem](https://rubygems.org/gems/codeclimate)
+   and authenticate with `gem push`
+1. Clone [homebrew-formulae](https://github.com/codeclimate/homebrew-formulae)
+
 Prep and open a PR bumping the version:
 
 ```console
