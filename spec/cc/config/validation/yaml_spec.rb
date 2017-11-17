@@ -45,6 +45,9 @@ describe CC::Config::Validation::YAML do
 
     expect(validator).to be_valid
     expect(validator.warnings).not_to include(a_string_matching(/unrecognized key/))
+    expect(validator.warnings).to include(a_string_starting_with(
+      "engine rubocop: 'exclude_paths' has been deprecated"
+    ))
   end
 
   it "handles legacy config with engine excludes as a string" do
