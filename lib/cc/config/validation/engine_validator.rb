@@ -46,7 +46,7 @@ module CC
           validate_key_type("config", [String, Hash])
           validate_key_type("exclude_patterns", Array)
           if legacy?
-            validate_key_type("exclude_paths", [Array, String])
+            validate_exclude_paths
           end
 
           validate_checks
@@ -74,6 +74,13 @@ module CC
             validator = CheckValidator.new(check_data)
             errors.push(*validator.errors)
             warnings.push(*validator.warnings)
+          end
+        end
+
+        def validate_exclude_paths
+          validate_key_type("exclude_paths", [Array, String])
+          if data.key?("exclude_paths")
+            warnings << "'exclude_paths' has been deprecated, please use 'exclude_patterns' instead"
           end
         end
 
