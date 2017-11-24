@@ -49,6 +49,10 @@ for the above invocation:
 
 ```console
 brew tap codeclimate/formulae
+# Make sure your docker daemon is running first
+# before executing the next command.
+# Don't have docker installed? Go here to install it:
+# https://docs.docker.com/engine/installation
 brew install codeclimate
 ```
 
