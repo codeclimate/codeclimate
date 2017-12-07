@@ -28,12 +28,12 @@ citest:
 	  --env CIRCLE_BUILD_NUM \
 	  --env CIRCLE_BRANCH \
 	  --env CIRCLE_SHA1 \
-	  --env CODECLIMATE_REPO_TOKEN \
+	  --env CC_TEST_REPORTER_ID \
 	  --volume $(PWD)/.git:/usr/src/app/.git:ro \
 	  --volume /var/run/docker.sock:/var/run/docker.sock \
 	  --volume $(CIRCLE_TEST_REPORTS):/usr/src/app/spec/reports \
 	  --workdir /usr/src/app \
-	  codeclimate/codeclimate -c "bundle exec rake spec:all && bundle exec codeclimate-test-reporter && bundle exec rake spec:benchmark"
+	  codeclimate/codeclimate -c "bundle exec rake spec:all && ./cc-test-reporter after-build && bundle exec rake spec:benchmark"
 
 install:
 	bin/check
