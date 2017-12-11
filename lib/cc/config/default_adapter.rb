@@ -18,6 +18,7 @@ module CC
         **/test/
         **/tests/
         **/vendor/
+        **/*_test.go
         **/*.d.ts
       ].freeze
 
