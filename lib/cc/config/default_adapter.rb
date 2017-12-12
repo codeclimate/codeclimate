@@ -4,7 +4,7 @@ module CC
       # intentionally not sorted: we want them in a particular order
       ENGINES = {
         "structure".freeze => "stable".freeze,
-        "duplication".freeze => "cronopio".freeze,
+        "duplication".freeze => "stable".freeze,
       }.freeze
 
       EXCLUDE_PATTERNS = %w[

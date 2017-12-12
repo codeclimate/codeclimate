@@ -31,10 +31,10 @@ describe CC::Analyzer::Bridge do
       )
       expect_engine_run(
         "duplication",
-        { "image" => "duplication:cronopio", "command" => nil },
+        { "image" => "duplication-stable", "command" => nil },
         {
           "enabled" => true,
-          "channel" => "cronopio",
+          "channel" => "stable",
           "include_paths" => match_array(["foo/", ".codeclimate.yml", "engines.yml"]),
         },
       )
@@ -82,10 +82,10 @@ describe CC::Analyzer::Bridge do
       )
       expect_engine_run(
         "duplication",
-        { "image" => "duplication:cronopio", "command" => nil },
+        { "image" => "duplication-stable", "command" => nil },
         {
           "enabled" => true,
-          "channel" => "cronopio",
+          "channel" => "stable",
           "include_paths" => match_array(["foo/", ".codeclimate.yml", "engines.yml"]),
         },
       )
@@ -202,7 +202,6 @@ describe CC::Analyzer::Bridge do
     duplication:
       channels:
         stable: duplication-stable
-        cronopio: "duplication:cronopio"
     foo:
       channels:
         stable: foo-stable
