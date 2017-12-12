@@ -163,7 +163,7 @@ describe CC::Analyzer::Bridge do
         {
           "enabled" => true,
           "channel" => "stable",
-          "include_paths" => [".codeclimate.yml", "engines.yml"]
+          "include_paths" => match_array([".codeclimate.yml", "engines.yml"])
         },
       )
 
@@ -177,7 +177,7 @@ describe CC::Analyzer::Bridge do
         {
           "enabled" => true,
           "channel" => "stable",
-          "include_paths" => [".codeclimate.yml", "engines.yml"]
+          "include_paths" => match_array([".codeclimate.yml", "engines.yml"])
         },
       )
 
