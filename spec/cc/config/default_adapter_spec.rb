@@ -7,7 +7,7 @@ describe CC::Config::DefaultAdapter do
     expect(config).to eq(
       "plugins" => {
         "structure" => { "enabled" => true, "channel" => "stable" },
-        "duplication" => { "enabled" => true, "channel" => "cronopio" },
+        "duplication" => { "enabled" => true, "channel" => "stable" },
       },
       "exclude_patterns" => described_class::EXCLUDE_PATTERNS,
     )
@@ -25,7 +25,7 @@ describe CC::Config::DefaultAdapter do
     expect(config).to eq(
       "plugins" => {
         "structure" => { "enabled" => true, "channel" => "beta" },
-        "duplication" => { "enabled" => false, "channel" => "cronopio" },
+        "duplication" => { "enabled" => false, "channel" => "stable" },
         "rubocop" => { "enabled" => true },
       },
       "exclude_patterns" => described_class::EXCLUDE_PATTERNS,
@@ -43,7 +43,7 @@ describe CC::Config::DefaultAdapter do
     expect(config).to eq(
       "plugins" => {
         "structure" => { "enabled" => true, "channel" => "stable" },
-        "duplication" => { "enabled" => true, "channel" => "cronopio" },
+        "duplication" => { "enabled" => true, "channel" => "stable" },
         "rubocop" => { "enabled" => true },
       },
       "exclude_patterns" => ["foo/", "bar/"],

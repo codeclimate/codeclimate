@@ -17,7 +17,7 @@ module CC::CLI
         expect_bridge(
           config: match_engines([
             CC::Config::Engine.new("structure", enabled: true, config: { "enabled" => true, "channel" => "stable" }),
-            CC::Config::Engine.new("duplication", enabled: true, channel: "cronopio", config: { "enabled" => true, "channel" => "cronopio" }),
+            CC::Config::Engine.new("duplication", enabled: true, channel: "stable", config: { "enabled" => true, "channel" => "stable" }),
           ])
         )
 
@@ -35,7 +35,7 @@ module CC::CLI
         expect_bridge(
           config: match_engines([
             CC::Config::Engine.new("structure", enabled: false, config: { "enabled" => true, "channel" => "stable" }),
-            CC::Config::Engine.new("duplication", enabled: false, channel: "cronopio", config: { "enabled" => true, "channel" => "cronopio" }),
+            CC::Config::Engine.new("duplication", enabled: false, channel: "stable", config: { "enabled" => true, "channel" => "stable" }),
             CC::Config::Engine.new("rubocop", enabled: false, channel: "stable", config: { "enabled" => true }),
             CC::Config::Engine.new("eslint", enabled: true, channel: "stable"),
           ])
@@ -57,7 +57,7 @@ module CC::CLI
         expect_bridge(
           config: match_engines([
             CC::Config::Engine.new("structure", enabled: false, config: { "enabled" => true, "channel" => "stable" }),
-            CC::Config::Engine.new("duplication", enabled: false, channel: "cronopio", config: { "enabled" => true, "channel" => "cronopio" }),
+            CC::Config::Engine.new("duplication", enabled: false, channel: "stable", config: { "enabled" => true, "channel" => "stable" }),
             CC::Config::Engine.new("rubocop", enabled: true, channel: "stable", config: { "enabled" => true, "config" => "myconfig.yml" }),
           ])
         )
@@ -78,7 +78,7 @@ module CC::CLI
         expect_bridge(
           config: match_engines([
             CC::Config::Engine.new("structure", enabled: false, config: { "enabled" => true, "channel" => "stable" }),
-            CC::Config::Engine.new("duplication", enabled: false, channel: "cronopio", config: { "enabled" => true, "channel" => "cronopio" }),
+            CC::Config::Engine.new("duplication", enabled: false, channel: "stable", config: { "enabled" => true, "channel" => "stable" }),
             CC::Config::Engine.new("rubocop", enabled: true, channel: "stable", exclude_patterns: ["foo"], config: { "enabled" => true, "exclude_patterns" => ["foo"] }),
             CC::Config::Engine.new("eslint", enabled: true, channel: "stable"),
           ])
@@ -100,7 +100,7 @@ module CC::CLI
         expect_bridge(
           config: match_engines([
             CC::Config::Engine.new("structure", enabled: false, config: { "enabled" => true, "channel" => "stable" }),
-            CC::Config::Engine.new("duplication", enabled: true, channel: "cronopio", config: { "enabled" => true, "channel" => "cronopio" }),
+            CC::Config::Engine.new("duplication", enabled: true, channel: "stable", config: { "enabled" => true, "channel" => "stable" }),
             CC::Config::Engine.new("rubocop", enabled: true, channel: "foo", exclude_patterns: ["foo"], config: { "enabled" => true, "exclude_patterns" => ["foo"] }),
             CC::Config::Engine.new("eslint", enabled: true, channel: "bar"),
           ])

@@ -43,7 +43,6 @@ credo:
 duplication:
   channels:
     beta: codeclimate/codeclimate-duplication:beta
-    cronopio: codeclimate/codeclimate-duplication:cronopio
     stable: codeclimate/codeclimate-duplication
   description: Structural duplication detection for Ruby, Python, Java, JavaScript, and PHP.
 eslint:

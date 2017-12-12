@@ -13,7 +13,7 @@ module CC::CLI::Engines
         write_cc_yaml(YAML.dump("plugins" => { "madeup" => true}))
         stub_engine_registry(YAML.dump(
           "structure" => { "channels" => { "stable" => "structure" } },
-          "duplication" => { "channels" => { "cronopio" => "duplication" } },
+          "duplication" => { "channels" => { "stable" => "duplication" } },
           "madeup" => { "channels" => { "stable" => "madeup", "beta" => "madeup:beta" } },
         ))
 
@@ -47,7 +47,7 @@ module CC::CLI::Engines
         write_cc_yaml(YAML.dump("plugins" => { "madeup" => true}))
         stub_engine_registry(YAML.dump(
           "structure" => { "channels" => { "stable" => "structure" } },
-          "duplication" => { "channels" => { "cronopio" => "duplication" } },
+          "duplication" => { "channels" => { "stable" => "duplication" } },
           "madeup" => { "channels" => { "stable" => "madeup" } },
         ))
 
