@@ -15,6 +15,7 @@ module CC::Analyzer
           IssueValidations::PathIsFileValidation,
           IssueValidations::PathPresenceValidation,
           IssueValidations::RelativePathValidation,
+          IssueValidations::RemediationPointsValidation,
           IssueValidations::SeverityValidation,
           IssueValidations::TypeValidation,
         ]
