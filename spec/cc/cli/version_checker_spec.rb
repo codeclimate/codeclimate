@@ -21,15 +21,16 @@ describe CC::CLI::VersionChecker do
     end
   end
 
-  let(:checker) { described_class.new }
+  before do
+    allow(UUID).to receive(:new).
+      and_return(instance_double("UUID", generate: uuid))
 
-  def stub_version_request(versions_resp)
-    stub_resolv("versions.codeclimate.com", "255.255.255.255")
-
-    resp = Net::HTTPOK.new("1.1", 200, "OK")
-    allow(resp).to receive(:body).and_return(versions_resp.to_json)
-    allow(Net::HTTP).to receive(:start).and_return(resp)
+    allow_any_instance_of(CC::CLI::Version).to receive(:version).and_return(current_version)
   end
+
+  let(:uuid) { "definitely-a-uuid" }
+  let(:current_version) { "1.2.3" }
+  let(:checker) { described_class.new }
 
   it "doesn't do anything when disabled in global config" do
     config = CC::CLI::GlobalConfig.new
@@ -53,10 +54,8 @@ describe CC::CLI::VersionChecker do
     expect(stderr).to include "A new version (v0.1.2) is available"
   end
 
-  it "persistes config" do
+  it "persists config" do
     stub_version_request(latest: "0.1.2", outdated: true)
-    allow(UUID).to receive(:new).
-      and_return(instance_double("UUID", generate: "definitely-a-uuid"))
 
     config = File.read CC::CLI::GlobalCache::FILE_NAME
     expect(config).to eq "---"
@@ -105,5 +104,24 @@ describe CC::CLI::VersionChecker do
     end
 
     expect(stderr).to eq ""
+  end
+
+  def stub_version_request(versions_resp)
+    uri = URI("https://versions.codeclimate.com")
+    uri.query = { version: current_version, uid: uuid }.to_query
+
+    stub_resolv(uri.host, "255.255.255.255")
+
+    resp = Net::HTTPOK.new("1.1", 200, "OK")
+    allow(resp).to receive(:body).and_return(versions_resp.to_json)
+
+    http = instance_double(Net::HTTP)
+    allow(http).to receive(:open_timeout=).with(5)
+    allow(http).to receive(:read_timeout=).with(5)
+    allow(http).to receive(:ssl_timeout=).with(5)
+    allow(http).to receive(:use_ssl=).with(true)
+    allow(http).to receive(:get).with(uri, "User-Agent" => /Code Climate CLI/).and_return(resp)
+
+    allow(Net::HTTP).to receive(:new).with(uri.host, uri.port).and_return(http)
   end
 end

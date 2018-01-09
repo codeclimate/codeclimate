@@ -21,7 +21,7 @@ YAML
         File.write(Command::CODECLIMATE_YAML, FIXTURE_CONFIG)
         resp = double(code: "200", body: "content")
 
-        stub_resp("example.com", "255.255.255.255", resp)
+        stub_resp("http://example.com/foo.json", "255.255.255.255", resp)
         stdout, stderr = capture_io do
           Prepare.new.run
         end
@@ -35,7 +35,7 @@ YAML
         File.write(Command::CODECLIMATE_YAML, FIXTURE_CONFIG)
         resp = double(code: "200", body: "content")
 
-        stub_resp("example.com", "127.0.0.1", resp)
+        stub_resp("http://example.com/foo.json", "127.0.0.1", resp)
         stdout, stderr, _ = capture_io_and_exit_code do
           Prepare.new.run
         end
@@ -48,7 +48,7 @@ YAML
         File.write(Command::CODECLIMATE_YAML, FIXTURE_CONFIG)
         resp = double(code: "200", body: "content")
 
-        stub_resp("example.com", "127.0.0.1", resp)
+        stub_resp("http://example.com/foo.json", "127.0.0.1", resp)
         stdout, stderr = capture_io do
           Prepare.new(["--allow-internal-ips"]).run
         end
@@ -62,7 +62,7 @@ YAML
         File.write(Command::CODECLIMATE_YAML, FIXTURE_CONFIG)
         resp = double(code: "404", body: "Not Found")
 
-        stub_resp("example.com", "255.255.255.255", resp)
+        stub_resp("http://example.com/foo.json", "255.255.255.255", resp)
         stdout, stderr, _ = capture_io_and_exit_code do
           Prepare.new.run
         end
@@ -70,6 +70,17 @@ YAML
 
         expect(File.exist?("bar.json")).to eq(false)
       end
+    end
+
+    def stub_resp(url, addr, resp)
+      uri = URI(url)
+
+      stub_resolv(uri.host, addr)
+
+      http = instance_double(Net::HTTP)
+      allow(Net::HTTP).to receive(:new).with(uri.host, uri.port).and_return(http)
+      allow(http).to receive(:get).with(uri).and_return(resp)
+      allow(http).to receive(:use_ssl=).with(false)
     end
   end
 end

@@ -5,7 +5,7 @@ module CC::CLI
     before do
       versions_resp = { version: "0.4.1" }
       resp = double(code: "200", body: versions_resp.to_json)
-      stub_resp("versions.codeclimate.com", "255.255.255.255", resp)
+      stub_resp("https://versions.codeclimate.com", "255.255.255.255", resp)
     end
 
     describe ".run" do
@@ -92,6 +92,21 @@ module CC::CLI
           end
         end
       end
+    end
+
+    def stub_resp(url, addr, resp)
+      uri = URI(url)
+
+      stub_resolv(uri.host, addr)
+
+      http = instance_double(Net::HTTP)
+      allow(http).to receive(:open_timeout=)
+      allow(http).to receive(:read_timeout=)
+      allow(http).to receive(:ssl_timeout=)
+      allow(http).to receive(:use_ssl=)
+      allow(http).to receive(:get).and_return(resp)
+
+      allow(Net::HTTP).to receive(:new).and_return(http)
     end
   end
 end
