@@ -58,7 +58,9 @@ module CC
         ensure_external!(url) unless allow_internal_ips?
 
         uri = URI.parse(url)
-        resp = Net::HTTP.get_response(uri)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = uri.scheme == "https"
+        resp = http.get(uri)
         if resp.code == "200"
           write_file(target_path, resp.body)
           say("Wrote #{url} to #{target_path}")
