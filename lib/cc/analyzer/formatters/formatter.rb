@@ -37,6 +37,9 @@ module CC
         end
 
         def close
+          unless issues.blank?
+            exit 1
+          end
         end
 
         def failed(_output)
