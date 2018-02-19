@@ -17,6 +17,7 @@ module CC
         **/spec/
         **/test/
         **/tests/
+        Tests/
         **/vendor/
         **/*_test.go
         **/*.d.ts
