@@ -14,7 +14,6 @@ require "cc/cli/help"
 require "cc/cli/output"
 require "cc/cli/prepare"
 require "cc/cli/runner"
-require "cc/cli/test"
 require "cc/cli/validate_config"
 require "cc/cli/version"
 
