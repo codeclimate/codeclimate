@@ -209,6 +209,10 @@ stylelint:
     beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
   description: A mighty, modern CSS linter.
+swiftlint:
+  channels:
+    stable: codeclimate/codeclimate-swiftlint
+  description: A tool to enforce Swift style and conventions.
 tailor:
   channels:
     stable: codeclimate/codeclimate-tailor
