@@ -101,6 +101,7 @@ haxe-checkstyle:
 haml-lint:
   channels:
     beta: codeclimate/codeclimate-haml-lint:beta
+    stable: codeclimate/codeclimate-haml-lint
   description: A tool for writing clean and consistent HAML.
 hlint:
   channels:
