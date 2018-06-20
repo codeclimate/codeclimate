@@ -1,4 +1,5 @@
 require "simplecov"
+require "tempfile"
 SimpleCov.start do
   add_filter "/spec/"
 end

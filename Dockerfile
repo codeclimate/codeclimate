@@ -1,4 +1,4 @@
-FROM codeclimate/alpine-ruby:b36
+FROM ruby:2.2.10-alpine
 
 WORKDIR /usr/src/app
 COPY Gemfile /usr/src/app/
@@ -10,8 +10,12 @@ RUN apk --update add git openssh-client wget build-base && \
     bundle install -j 4 && \
     apk del build-base && rm -fr /usr/share/ri
 
-RUN wget -O /bin/docker https://get.docker.com/builds/Linux/x86_64/docker-1.6.0
-RUN chmod +x /bin/docker
+RUN wget -q -O /tmp/docker.tgz \
+    https://download.docker.com/linux/static/stable/x86_64/docker-17.12.1-ce.tgz && \
+    tar -C /tmp -xzvf /tmp/docker.tgz && \
+    mv /tmp/docker/docker /bin/docker && \
+    chmod +x /bin/docker && \
+    rm -rf /tmp/docker*
 
 COPY . /usr/src/app
 
