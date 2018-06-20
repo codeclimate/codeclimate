@@ -101,6 +101,7 @@ haxe-checkstyle:
 haml-lint:
   channels:
     beta: codeclimate/codeclimate-haml-lint:beta
+    stable: codeclimate/codeclimate-haml-lint
   description: A tool for writing clean and consistent HAML.
 hlint:
   channels:
@@ -166,6 +167,7 @@ rubocop:
     rubocop-0-50: codeclimate/codeclimate-rubocop:rubocop-0-50
     rubocop-0-51: codeclimate/codeclimate-rubocop:rubocop-0-51
     rubocop-0-52: codeclimate/codeclimate-rubocop:rubocop-0-52
+    rubocop-0-54: codeclimate/codeclimate-rubocop:rubocop-0-54
   description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
@@ -209,6 +211,10 @@ stylelint:
     beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
   description: A mighty, modern CSS linter.
+swiftlint:
+  channels:
+    stable: codeclimate/codeclimate-swiftlint
+  description: A tool to enforce Swift style and conventions.
 tailor:
   channels:
     stable: codeclimate/codeclimate-tailor
