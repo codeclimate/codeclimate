@@ -74,11 +74,10 @@ module CC
       end
 
       def container_options
-        [
+        options = [
           "--cap-drop", "all",
           "--label", "com.codeclimate.label=#{@label}",
           "--log-driver", "none",
-          "--memory", metadata["memory"].to_s,
           "--memory-swap", "-1",
           "--net", "none",
           "--rm",
@@ -86,6 +85,13 @@ module CC
           "--volume", "#{config_file.host_path}:/config.json:ro",
           "--user", "9000:9000"
         ]
+        if metadata["memory"]
+          memory = metadata["memory"].to_s
+          unless memory.empty?
+            options.concat ["--memory", memory]
+          end
+        end
+        options
       end
 
       def container_name
