@@ -21,10 +21,7 @@ RUN apk --no-cache upgrade && \
       wget && \
       bundle install -j 4 && \
       apk del build-base && \
-      rm -fr /usr/share/ri && \
-      printf 'export PATH=$PATH:/usr/lib/ruby/gems/2.4.0/bin' \
-      >> /etc/profile.d/rubygems.sh && \
-      chmod +x /etc/profile.d/rubygems.sh
+      rm -fr /usr/share/ri
 
 RUN wget -q -O /tmp/docker.tgz \
     https://download.docker.com/linux/static/stable/x86_64/docker-17.12.1-ce.tgz && \
