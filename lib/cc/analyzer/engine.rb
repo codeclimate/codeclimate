@@ -85,11 +85,8 @@ module CC
           "--volume", "#{config_file.host_path}:/config.json:ro",
           "--user", "9000:9000"
         ]
-        if metadata["memory"]
-          memory = metadata["memory"].to_s
-          unless memory.empty?
-            options.concat ["--memory", memory]
-          end
+        if (memory = metadata["memory"]).present?
+          options.concat(["--memory", memory.to_s])
         end
         options
       end
