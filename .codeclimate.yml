@@ -7,9 +7,10 @@ prepare:
 plugins:
   rubocop:
     enabled: true
+    channel: rubocop-0-57
   fixme:
     enabled: true
-    exclude_paths:
+    exclude_patterns:
       - config/engines.yml
   markdownlint:
     enabled: true
