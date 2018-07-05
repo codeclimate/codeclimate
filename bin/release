@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Release a new version of this repository.
 #
