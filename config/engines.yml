@@ -144,6 +144,10 @@ pmd:
     stable: codeclimate/codeclimate-pmd
     beta: codeclimate/codeclimate-pmd:beta
   description: A source code analyzer for Java.
+pylint:
+  channels:
+    beta: codeclimate/codeclimate-pylint:beta
+  description: A linter for Python.
 radon:
   channels:
     stable: codeclimate/codeclimate-radon
