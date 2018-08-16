@@ -77,11 +77,13 @@ A list of available commands is accessible by running `codeclimate` or
 $ codeclimate help
 
 Available commands:
-    analyze [-f format] [-e engine(:channel)] [--dev] [path]
+    analyze [-f format] [-e engine[:channel]] [path]
     console
     engines:install
     engines:list
-    help
+    help [command]
+    prepare [--allow-internal-ips]
+    test <engine_name>
     validate-config
     version
 ```
