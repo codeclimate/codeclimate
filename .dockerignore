@@ -1,10 +1,10 @@
 .git
 .bundle
+.circleci
 *.md
 Makefile
 bin/prep-release
 bin/release
-circle.yml
 pkg
 tags
 *.sw*

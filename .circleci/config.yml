@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build_test:
+    environment:
+      CC_TEST_REPORTER_ID: e70e48da820d9d23eeb2f1fd8c25f8691be05af308dd0ffce8d1ca7e48a5f799
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Install test reporter
+          command: |
+            curl -L -o "cc-test-reporter" "https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64"
+            sudo chmod +x ./cc-test-reporter
+      - run: make image
+      - run: make citest
+
+workflows:
+  version: 2
+  build_test:
+    jobs:
+      - build_test
+
+notify:
+  webhooks:
+    - url: https://cc-slack-proxy.herokuapp.com/circle
