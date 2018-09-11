@@ -28,6 +28,12 @@ coffeelint:
   channels:
     stable: codeclimate/codeclimate-coffeelint
   description: A style checker for CoffeeScript.
+codenarc:
+  channels:
+    stable: codeclimate/codeclimate-codenarc
+  description: >
+    CodeNarc analyzes Groovy code for defects, bad practices, inconsistencies,
+    style issues, and more.
 codescan:
   channels:
     beta: codeclimate/codeclimate-codescan:beta
@@ -185,6 +191,16 @@ rustfmt:
   channels:
     beta: codeclimate/codeclimate-rustfmt:beta
   description: A tool for formatting Rust code according to style guidelines.
+sass-lint:
+  channels:
+    stable: codeclimate/codeclimate-sass-lint
+  description: >
+    A Node-only Sass linter for both sass and scss syntax!
+scalastyle:
+  channels:
+    stable: codeclimate/codeclimate-scalastyle
+  description: >
+    A tool which examines your Scala code and indicates potential problems.
 scss-lint:
   channels:
     stable: codeclimate/codeclimate-scss-lint
