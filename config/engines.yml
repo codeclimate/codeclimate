@@ -18,7 +18,6 @@ bundler-audit:
 checkstyle:
   channels:
     stable: codeclimate/codeclimate-checkstyle
-    beta: codeclimate/codeclimate-checkstyle:beta
   description: Helps programmers write Java that adheres to a coding standard.
 csslint:
   channels:
@@ -34,23 +33,31 @@ codenarc:
   description: >
     CodeNarc analyzes Groovy code for defects, bad practices, inconsistencies,
     style issues, and more.
-codescan:
+cppcheck:
   channels:
-    beta: codeclimate/codeclimate-codescan:beta
+    stable: codeclimate/codeclimate-cppcheck
   description: >
-    A static analysis tool for Salesforce.com Apex, Visual Force, Aura and
-    Lightning.
+    Cppcheck is a static analysis tool for C/C++ code.
 credo:
   channels:
-    beta: codeclimate/codeclimate-credo:beta
+    stable: codeclimate/codeclimate-credo
   description: >
     A static code analysis tool for the Elixir language with a focus on code
     consistency and teaching.
 duplication:
   channels:
-    beta: codeclimate/codeclimate-duplication:beta
     stable: codeclimate/codeclimate-duplication
   description: Structural duplication detection for Ruby, Python, Java, JavaScript, and PHP.
+editorconfig:
+  channels:
+    stable: codeclimate/codeclimate-editorconfig
+  description: >
+    EditorConfig helps developers define and maintain consistent coding styles
+    between different editors and IDEs.
+ember-template-lint:
+  channels:
+    stable: codeclimate/codeclimate-ember-template-lint
+  description: Linter for Ember or Handlebars templates.
 eslint:
   channels:
     stable: codeclimate/codeclimate-eslint
@@ -61,7 +68,6 @@ eslint:
   description: A JavaScript/JSX linting utility.
 flog:
   channels:
-    beta: codeclimate/codeclimate-flog:beta
     stable: codeclimate/codeclimate-flog
   description: Easy to read reporting of complexity/pain for Ruby code.
 git-legal:
@@ -106,7 +112,6 @@ haxe-checkstyle:
   description: Checkstyle is a development library to help developers write Haxe code that adheres to a coding standard.
 haml-lint:
   channels:
-    beta: codeclimate/codeclimate-haml-lint:beta
     stable: codeclimate/codeclimate-haml-lint
   description: A tool for writing clean and consistent HAML.
 hlint:
@@ -117,6 +122,11 @@ kibit:
   channels:
     stable: codeclimate/codeclimate-kibit
   description: Static code analyzer for Clojure, ClojureScript, cljx and other Clojure variants.
+luacheck:
+  channels:
+    stable: codeclimate/codeclimate-luacheck
+  description: >
+    A tool for linting and static analysis of Lua code.
 markdownlint:
   channels:
     stable: codeclimate/codeclimate-markdownlint
@@ -141,19 +151,10 @@ phpmd:
   channels:
     stable: codeclimate/codeclimate-phpmd
   description: A PHP static analysis tool.
-proselint:
-  channels:
-    beta: codeclimate/codeclimate-proselint:beta
-  description: A linter for prose.
 pmd:
   channels:
     stable: codeclimate/codeclimate-pmd
-    beta: codeclimate/codeclimate-pmd:beta
   description: A source code analyzer for Java.
-pylint:
-  channels:
-    beta: codeclimate/codeclimate-pylint:beta
-  description: A linter for Python.
 radon:
   channels:
     stable: codeclimate/codeclimate-radon
@@ -161,7 +162,9 @@ radon:
 reek:
   channels:
     stable: codeclimate/codeclimate-reek
-  description: "Reek examines Ruby classes, modules, and methods and reports any code smells it finds."
+  description: >
+    Reek examines Ruby classes, modules, and methods and reports any code
+    smells it finds.
 requiresafe:
   channels:
     stable: codeclimate/codeclimate-nodesecurity
@@ -187,10 +190,6 @@ rubymotion:
   channels:
     stable: codeclimate/codeclimate-rubymotion
   description: Rubymotion-specific rubocop checks.
-rustfmt:
-  channels:
-    beta: codeclimate/codeclimate-rustfmt:beta
-  description: A tool for formatting Rust code according to style guidelines.
 sass-lint:
   channels:
     stable: codeclimate/codeclimate-sass-lint
@@ -212,7 +211,6 @@ shellcheck:
 sonar-java:
   channels:
     stable: codeclimate/codeclimate-sonar-java
-    beta: codeclimate/codeclimate-sonar-java:beta
   description: Over 400 checks for bugs, vulnerabilities, and code smells in Java code.
   minimum_memory_limit: 2_048_000_000
 sonar-php:
@@ -227,12 +225,10 @@ sonar-python:
   minimum_memory_limit: 2_048_000_000
 structure:
   channels:
-    beta: codeclimate/codeclimate-structure:beta
     stable: codeclimate/codeclimate-structure
   description: Performs structural checks on code.
 stylelint:
   channels:
-    beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
   description: A mighty, modern CSS linter.
 swiftlint:
