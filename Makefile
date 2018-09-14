@@ -4,6 +4,7 @@ PREFIX ?= /usr/local
 SKIP_ENGINES ?= 0
 
 image:
+	docker pull "$(shell grep FROM Dockerfile | sed 's/FROM //')"
 	docker build -t codeclimate/codeclimate .
 
 test: RSPEC_ARGS ?= --tag ~slow
