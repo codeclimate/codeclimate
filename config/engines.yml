@@ -7,6 +7,10 @@ apexmetrics:
   channels:
     stable: codeclimate/codeclimate-apexmetrics
   description: ApexMetrics is a static code analysis tool for Salesforce.com Apex.
+bandit:
+  channels:
+    stable: codeclimate/codeclimate-bandit
+  description: A tool designed to find common security issues in Python code.
 brakeman:
   channels:
     stable: codeclimate/codeclimate-brakeman
