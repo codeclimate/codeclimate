@@ -7,6 +7,10 @@ apexmetrics:
   channels:
     stable: codeclimate/codeclimate-apexmetrics
   description: ApexMetrics is a static code analysis tool for Salesforce.com Apex.
+bandit:
+  channels:
+    stable: codeclimate/codeclimate-bandit
+  description: A tool designed to find common security issues in Python code.
 brakeman:
   channels:
     stable: codeclimate/codeclimate-brakeman
@@ -65,6 +69,7 @@ eslint:
     eslint-2: codeclimate/codeclimate-eslint:eslint-2
     eslint-3: codeclimate/codeclimate-eslint:eslint-3
     eslint-4: codeclimate/codeclimate-eslint:eslint-4
+    eslint-5: codeclimate/codeclimate-eslint:eslint-5
   description: A JavaScript/JSX linting utility.
 flog:
   channels:
@@ -185,6 +190,7 @@ rubocop:
     rubocop-0-56: codeclimate/codeclimate-rubocop:rubocop-0-56
     rubocop-0-57: codeclimate/codeclimate-rubocop:rubocop-0-57
     rubocop-0-58: codeclimate/codeclimate-rubocop:rubocop-0-58
+    rubocop-0-59: codeclimate/codeclimate-rubocop:rubocop-0-59
   description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
