@@ -599,7 +599,7 @@
                 <details>
                   <summary>Other instances</summary>
                   <%- issue.other_locations.each do |source, location| -%>
-                    <h4><%= source.path %></h3>
+                    <h4><%= source.path %></h4>
                     <div class="code">
                       <pre class="line-numbers <%= source.syntaxes.map { |l| "language-#{l}" }.join ' ' %>"
                            data-line="<%= source.location location %>"
