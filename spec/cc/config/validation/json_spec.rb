@@ -270,7 +270,7 @@ describe CC::Config::Validation::JSON do
   end
 
   describe "exclude_fingerprints" do
-    it "warns for valid usage" do
+    it "allows valid usage" do
       validator = validate_json(<<-EOJSON)
       {
         "plugins": {
@@ -282,7 +282,6 @@ describe CC::Config::Validation::JSON do
       EOJSON
 
       expect(validator).to be_valid
-      expect(validator.warnings).to include(/'exclude_fingerprints' is deprecated/)
     end
 
     it "errors for the wrong type" do
