@@ -86,9 +86,6 @@ module CC
 
         def validate_exclude_fingerprints
           validate_key_type("exclude_fingerprints", Array)
-          if data.key?("exclude_fingerprints")
-            warnings << "'exclude_fingerprints' is deprecated, and support may be removed in the future"
-          end
         end
       end
     end
