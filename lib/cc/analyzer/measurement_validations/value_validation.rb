@@ -3,7 +3,7 @@ module CC
     module MeasurementValidations
       class ValueValidation < Validation
         def valid?
-          value && value.is_a?(Numeric)
+          value&.is_a?(Numeric)
         end
 
         def message

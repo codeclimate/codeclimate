@@ -5,7 +5,7 @@ module CC
         REGEX = /^[A-Za-z0-9_\.\-]+$/
 
         def valid?
-          name && name.is_a?(String) && REGEX.match?(name)
+          name&.is_a?(String) && REGEX.match?(name)
         end
 
         def message
