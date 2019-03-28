@@ -30,7 +30,7 @@ module CC
           end
 
           print(colorize("Analysis complete! Found #{pluralize(issues.size, "issue")}", :green))
-          if warnings.size > 0
+          unless warnings.empty?
             print(colorize(" and #{pluralize(warnings.size, "warning")}", :green))
           end
           puts(colorize(".", :green))
