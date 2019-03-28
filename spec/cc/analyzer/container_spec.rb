@@ -204,7 +204,7 @@ module CC::Analyzer
             container
           end
         ensure
-          thread.join if thread
+          thread&.join
         end
 
         def assert_container_stopped
