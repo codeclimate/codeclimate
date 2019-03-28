@@ -118,31 +118,27 @@ module CC
 
       def read_stdout(out)
         Thread.new do
-          begin
-            out.each_line(@output_delimeter) do |chunk|
-              output = chunk.chomp(@output_delimeter)
+          out.each_line(@output_delimeter) do |chunk|
+            output = chunk.chomp(@output_delimeter)
 
-              Analyzer.logger.debug("engine stdout: #{output}")
-              @on_output.call(output)
-              check_output_bytes(output.bytesize)
-            end
-          ensure
-            out.close
+            Analyzer.logger.debug("engine stdout: #{output}")
+            @on_output.call(output)
+            check_output_bytes(output.bytesize)
           end
+        ensure
+          out.close
         end
       end
 
       def read_stderr(err)
         Thread.new do
-          begin
-            err.each_line do |line|
-              Analyzer.logger.debug("engine stderr: #{line.chomp}")
-              @stderr_io.write(line)
-              check_output_bytes(line.bytesize)
-            end
-          ensure
-            err.close
+          err.each_line do |line|
+            Analyzer.logger.debug("engine stderr: #{line.chomp}")
+            @stderr_io.write(line)
+            check_output_bytes(line.bytesize)
           end
+        ensure
+          err.close
         end
       end
 
