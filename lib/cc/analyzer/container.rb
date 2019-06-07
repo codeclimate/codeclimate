@@ -84,7 +84,7 @@ module CC
         Result.new(
           container_name: @name,
           duration: duration,
-          exit_status: @status && @status.exitstatus,
+          exit_status: @status&.exitstatus,
           maximum_output_exceeded: @maximum_output_exceeded,
           output_byte_count: output_byte_count,
           stderr: @stderr_io.string,
@@ -93,7 +93,7 @@ module CC
         )
       ensure
         kill_reader_threads
-        t_timeout.kill if t_timeout
+        t_timeout&.kill
       end
 
       def stop(message = nil)
@@ -118,31 +118,27 @@ module CC
 
       def read_stdout(out)
         Thread.new do
-          begin
-            out.each_line(@output_delimeter) do |chunk|
-              output = chunk.chomp(@output_delimeter)
+          out.each_line(@output_delimeter) do |chunk|
+            output = chunk.chomp(@output_delimeter)
 
-              Analyzer.logger.debug("engine stdout: #{output}")
-              @on_output.call(output)
-              check_output_bytes(output.bytesize)
-            end
-          ensure
-            out.close
+            Analyzer.logger.debug("engine stdout: #{output}")
+            @on_output.call(output)
+            check_output_bytes(output.bytesize)
           end
+        ensure
+          out.close
         end
       end
 
       def read_stderr(err)
         Thread.new do
-          begin
-            err.each_line do |line|
-              Analyzer.logger.debug("engine stderr: #{line.chomp}")
-              @stderr_io.write(line)
-              check_output_bytes(line.bytesize)
-            end
-          ensure
-            err.close
+          err.each_line do |line|
+            Analyzer.logger.debug("engine stderr: #{line.chomp}")
+            @stderr_io.write(line)
+            check_output_bytes(line.bytesize)
           end
+        ensure
+          err.close
         end
       end
 
@@ -174,12 +170,12 @@ module CC
       end
 
       def kill_reader_threads
-        @t_out.kill if @t_out
-        @t_err.kill if @t_err
+        @t_out&.kill
+        @t_err&.kill
       end
 
       def kill_wait_thread
-        @t_wait.kill if @t_wait
+        @t_wait&.kill
       end
 
       def reap_running_container(message)

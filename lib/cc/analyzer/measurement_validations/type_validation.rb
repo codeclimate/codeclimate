@@ -3,7 +3,7 @@ module CC
     module MeasurementValidations
       class TypeValidation < Validation
         def valid?
-          type && type.casecmp("measurement").zero?
+          type&.casecmp("measurement")&.zero?
         end
 
         def message

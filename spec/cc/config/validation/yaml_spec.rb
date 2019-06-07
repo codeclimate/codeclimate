@@ -307,7 +307,7 @@ describe CC::Config::Validation::YAML do
   end
 
   describe "exclude_fingerprints" do
-    it "warns for valid usage" do
+    it "allows valid usage" do
       validator = validate_yaml(<<-EOYAML)
       plugins:
         rubocop:
@@ -316,7 +316,6 @@ describe CC::Config::Validation::YAML do
       EOYAML
 
       expect(validator).to be_valid
-      expect(validator.warnings).to include(/'exclude_fingerprints' is deprecated/)
     end
 
     it "errors for the wrong type" do
