@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.85.4)
+    codeclimate (0.85.5)
       activesupport (>= 5.1.3, < 5.2)
       highline (~> 1.7, >= 1.7.2)
       posix-spawn (~> 0.3, >= 0.3.11)
@@ -40,7 +40,7 @@ GEM
     rainbow (2.2.2)
       rake
     rake (12.0.0)
-    redcarpet (3.4.0)
+    redcarpet (3.5.0)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
