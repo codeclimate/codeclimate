@@ -81,14 +81,24 @@ module CC
           "--memory-swap", "-1",
           "--net", "none",
           "--rm",
-          "--volume", "#{code.host_path}:/code:ro",
+          "--user", "9000:9000",
           "--volume", "#{config_file.host_path}:/config.json:ro",
-          "--user", "9000:9000"
         ]
+
+        if orchestrator_id && orchestrator_id != ""
+          options.concat(["--volumes-from", "#{orchestrator_id}:ro"])
+        else
+          options.concat(["--volume", "#{code.host_path}:/code:ro"])
+        end
+
         if (memory = metadata["memory"]).present?
           options.concat(["--memory", memory.to_s])
         end
         options
+      end
+
+      def orchestrator_id
+        ENV["CODECLIMATE_ORCHESTRATOR"]
       end
 
       def container_name
