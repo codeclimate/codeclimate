@@ -82,7 +82,7 @@ module CC
           "--net", "none",
           "--rm",
           "--user", "9000:9000",
-          "--volume", "#{config_file.host_path}:/config.json:ro",
+          "--volume", "#{config_file.host_path}:/config.json:ro"
         ]
 
         if orchestrator_id && orchestrator_id != ""
