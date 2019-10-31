@@ -21,32 +21,7 @@ On macOS, we recommend using [Docker for Mac](https://docs.docker.com/docker-for
 
 ## Installation
 
-```console
-docker pull codeclimate/codeclimate
-```
-
-## Usage
-
-```console
-docker run \
-  --interactive --tty --rm \
-  --env CODECLIMATE_CODE="$PWD" \
-  --volume "$PWD":/code \
-  --volume /var/run/docker.sock:/var/run/docker.sock \
-  --volume /tmp/cc:/tmp/cc \
-  codeclimate/codeclimate help
-```
-
-## Packages
-
-The above is very transparent. It's clear what's happening, and any changes
-required to work with your specific Docker setup can be discovered easily. That
-said, it can be unwieldy to invoke such a command on a regular basis.
-
-For this reason, we also provide packages that include a small wrapper script
-for the above invocation:
-
-### OS X
+### macOS
 
 ```console
 brew tap codeclimate/formulae
@@ -68,6 +43,58 @@ cd codeclimate-* && sudo make install
 ```
 
 To upgrade to a newer version, just run those steps again.
+
+### Manual Docker invocation
+
+The above packages pull the docker image and install a shell script wrapper.
+In some cases you may want to run the docker image directly.
+
+To pull the docker image:
+
+```console
+docker pull codeclimate/codeclimate
+```
+
+To invoke the CLI via Docker:
+
+```console
+docker run \
+  --interactive --tty --rm \
+  --env CODECLIMATE_CODE="$PWD" \
+  --volume "$PWD":/code \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
+  --volume /tmp/cc:/tmp/cc \
+  codeclimate/codeclimate help
+```
+
+## Project setup
+
+### Configuration
+
+No explicit configuration is needed: by default `codeclimate analyze` will
+evaluate supported source files in your repository using our
+[maintainability checks][docs_maintainability]. To change default configuration
+to customize how the maintainability checks are evaluated, or to turn on open
+source plugins, see our [documentation on advanced
+configuration][docs_advanced_config].
+
+[docs_maintainability]: https://docs.codeclimate.com/docs/maintainability
+[docs_advanced_config]: https://docs.codeclimate.com/docs/configuring-your-analysis#section-configuration-file-structure-and-content
+
+### Plugin installation
+
+Plugins, or "engines", are the docker images that run analysis tools. We support
+many different plugins, and will only install the ones necessary to run
+analysis. As part of setting up your project, we recommend running `codeclimate
+engines:install` from within your repository before running `codeclimate
+analyze`, and after adding any new plugins to your configuration file.
+
+
+### Running analysis
+
+Once you've installed plugins and made any necessary changes to your
+configuration, run `codeclimate analyze` to run analysis and see a report on any
+issues in your repository.
 
 ## Commands
 
