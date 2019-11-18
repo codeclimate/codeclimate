@@ -207,6 +207,8 @@ rubocop:
     rubocop-0-72: codeclimate/codeclimate-rubocop:rubocop-0-72
     rubocop-0-73: codeclimate/codeclimate-rubocop:rubocop-0-73
     rubocop-0-74: codeclimate/codeclimate-rubocop:rubocop-0-74
+    rubocop-0-75: codeclimate/codeclimate-rubocop:rubocop-0-75
+    rubocop-0-76: codeclimate/codeclimate-rubocop:rubocop-0-76
   description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
