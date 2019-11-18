@@ -70,6 +70,7 @@ eslint:
     eslint-3: codeclimate/codeclimate-eslint:eslint-3
     eslint-4: codeclimate/codeclimate-eslint:eslint-4
     eslint-5: codeclimate/codeclimate-eslint:eslint-5
+    eslint-6: codeclimate/codeclimate-eslint:eslint-6
   description: A JavaScript/JSX linting utility.
 flog:
   channels:
