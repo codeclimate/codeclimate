@@ -18,7 +18,9 @@ module CC
         end
 
         def pull_docker_images
-          config.engines.each(&method(:pull_engine))
+          config.engines.
+            select { |engine| engine.enabled? }.
+            each(&method(:pull_engine))
         end
 
         def pull_engine(engine)
