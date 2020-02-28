@@ -18,6 +18,9 @@ git reset --hard origin/master
 
 printf "RELEASE %s\n" "$version"
 bundle check || bundle install
+
+printf "The stdout will eventually hang with no message."
+printf "It is waiting for TFA code input, type it in and hit enter!"
 rake release
 
 docker build --rm --tag codeclimate/codeclimate .
