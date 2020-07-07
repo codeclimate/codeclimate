@@ -173,6 +173,7 @@ radon:
 reek:
   channels:
     stable: codeclimate/codeclimate-reek
+    beta: codeclimate/codeclimate-reek:beta
   description: >
     Reek examines Ruby classes, modules, and methods and reports any code
     smells it finds.
