@@ -17,7 +17,6 @@ jobs:
 workflows:
   version: 2
   build_test:
-    - context: Quality
     jobs:
       - build_test
 
