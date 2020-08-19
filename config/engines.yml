@@ -71,6 +71,7 @@ eslint:
     eslint-4: codeclimate/codeclimate-eslint:eslint-4
     eslint-5: codeclimate/codeclimate-eslint:eslint-5
     eslint-6: codeclimate/codeclimate-eslint:eslint-6
+    eslint-7: codeclimate/codeclimate-eslint:eslint-7
   description: A JavaScript/JSX linting utility.
 flog:
   channels:
@@ -173,6 +174,7 @@ radon:
 reek:
   channels:
     stable: codeclimate/codeclimate-reek
+    beta: codeclimate/codeclimate-reek:beta
   description: >
     Reek examines Ruby classes, modules, and methods and reports any code
     smells it finds.
@@ -221,6 +223,12 @@ rubocop:
     rubocop-0-81: codeclimate/codeclimate-rubocop:rubocop-0-81
     rubocop-0-82: codeclimate/codeclimate-rubocop:rubocop-0-82
     rubocop-0-83: codeclimate/codeclimate-rubocop:rubocop-0-83
+    rubocop-0-84: codeclimate/codeclimate-rubocop:rubocop-0-84
+    rubocop-0-85: codeclimate/codeclimate-rubocop:rubocop-0-85
+    rubocop-0-86: codeclimate/codeclimate-rubocop:rubocop-0-86
+    rubocop-0-87: codeclimate/codeclimate-rubocop:rubocop-0-87
+    rubocop-0-88: codeclimate/codeclimate-rubocop:rubocop-0-88
+    rubocop-0-89: codeclimate/codeclimate-rubocop:rubocop-0-89
   description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
