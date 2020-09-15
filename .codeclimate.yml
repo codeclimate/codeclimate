@@ -23,3 +23,5 @@ exclude_patterns:
   - .bundle/
   - spec/**/*
   - benchmarks/**/*
+  
+  
