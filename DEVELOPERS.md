@@ -36,3 +36,9 @@ Once merged, release it:
 ```console
 bin/release
 ```
+
+Once merged, release it:
+
+```console
+bin/release
+```
