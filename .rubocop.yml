@@ -12,3 +12,7 @@ Style/SpecialGlobalVars:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
