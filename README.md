@@ -140,7 +140,7 @@ The following is a brief explanation of each available command.
   within the CLI. Useful for engine developers and maintainers.
 * `engines:install`
   Compares the list of engines in your `.codeclimate.yml` file to those that
-  are currently installed, then installs any missing engines.
+  are currently installed, then installs any missing engines and checks for new images available for existing engines.
 * `engines:list`
   Lists all available engines in the
   [Code Climate Docker Hub](https://hub.docker.com/u/codeclimate/)
