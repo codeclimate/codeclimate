@@ -149,6 +149,7 @@ pep8:
 phan:
   channels:
     stable: codeclimate/codeclimate-phan
+    beta: codeclimate/codeclimate-phan:beta
   description: Phan is a static analyzer for PHP.
 phpcodesniffer:
   channels:
