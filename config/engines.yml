@@ -154,6 +154,7 @@ phan:
 phpcodesniffer:
   channels:
     stable: codeclimate/codeclimate-phpcodesniffer
+    beta: codeclimate/codeclimate-phpcodesniffer:beta
   description: Detects violations of a defined set of coding standards in PHP.
 phpmd:
   channels:
