@@ -273,6 +273,11 @@ sonar-python:
     stable: codeclimate/codeclimate-sonar-python
   description: SonarLint for Python.
   minimum_memory_limit: 2_048_000_000
+standard:
+  channels:
+    stable: codeclimate/codeclimate-standard
+    beta: codeclimate/codeclimate-standard
+  description: Standard static analysis tool.
 structure:
   channels:
     stable: codeclimate/codeclimate-structure
