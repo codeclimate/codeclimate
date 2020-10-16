@@ -5,8 +5,8 @@ module CC
     class DefaultAdapter
       # intentionally not sorted: we want them in a particular order
       ENGINES = {
-        "structure".freeze => "stable".freeze,
-        "duplication".freeze => "stable".freeze,
+        "structure" => "stable",
+        "duplication" => "stable",
       }.freeze
 
       EXCLUDE_PATTERNS = %w[

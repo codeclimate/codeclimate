@@ -13,7 +13,7 @@ module CC
         string = [
           issue.path,
           issue.check_name.to_s,
-          relevant_source&.gsub(/\s+/, "")
+          relevant_source&.gsub(/\s+/, ""),
         ].join
 
         Digest::MD5.hexdigest(string)

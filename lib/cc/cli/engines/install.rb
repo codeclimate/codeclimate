@@ -4,7 +4,7 @@ module CC
   module CLI
     module Engines
       class Install < EngineCommand
-        SHORT_HELP = "Pull the latest images for enabled engines in your configuration".freeze
+        SHORT_HELP = "Pull the latest images for enabled engines in your configuration"
 
         ImagePullFailure = Class.new(StandardError)
 

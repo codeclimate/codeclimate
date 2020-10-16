@@ -3,7 +3,7 @@
 module CC
   module Analyzer
     class MountedPath
-      DEFAULT_CODECLIMATE_TMP = "/tmp/cc".freeze
+      DEFAULT_CODECLIMATE_TMP = "/tmp/cc"
 
       def self.code
         host_prefix = ENV["CODECLIMATE_CODE"]

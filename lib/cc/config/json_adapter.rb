@@ -3,7 +3,7 @@
 module CC
   class Config
     class JSONAdapter < Config
-      DEFAULT_PATH = ".codeclimate.json".freeze
+      DEFAULT_PATH = ".codeclimate.json"
 
       attr_reader :config
 

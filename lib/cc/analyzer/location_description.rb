@@ -12,7 +12,7 @@ module CC
       def to_s
         [
           lines,
-          lines.blank? ? '' : suffix
+          lines.blank? ? "" : suffix,
         ].join
       end
 

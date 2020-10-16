@@ -3,7 +3,7 @@
 module CC
   class Config
     class YAMLAdapter
-      DEFAULT_PATH = ".codeclimate.yml".freeze
+      DEFAULT_PATH = ".codeclimate.yml"
 
       attr_reader :config
 

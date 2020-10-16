@@ -5,12 +5,12 @@ require "rainbow"
 module CC
   module CLI
     class Help < Command
-      ARGUMENT_LIST = "[command]".freeze
-      SHORT_HELP = "Display help information.".freeze
+      ARGUMENT_LIST = "[command]"
+      SHORT_HELP = "Display help information."
       HELP = "#{SHORT_HELP}\n" \
         "\n" \
         "    no arguments   Show help summary for all commands.\n" \
-        "    [command]      Show help for specific commands. Can be specified multiple times.".freeze
+        "    [command]      Show help for specific commands. Can be specified multiple times."
 
       def run
         if @args.any?

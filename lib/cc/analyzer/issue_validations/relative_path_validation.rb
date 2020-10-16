@@ -6,7 +6,7 @@ module CC
   module Analyzer
     module IssueValidations
       class RelativePathValidation < Validation
-        BUILDER_CODE_PATH = "/tmp/workspace/code".freeze
+        BUILDER_CODE_PATH = "/tmp/workspace/code"
 
         def valid?
           path &&

@@ -11,8 +11,8 @@ module CC
     class Command
       include CC::CLI::Output
 
-      CODECLIMATE_YAML = ".codeclimate.yml".freeze
-      NAMESPACE = name.split("::")[0..-2].join("::").freeze
+      CODECLIMATE_YAML = ".codeclimate.yml"
+      NAMESPACE = name.split("::")[0..-2].join("::")
 
       def self.abstract!
         @abstract = true

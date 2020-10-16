@@ -9,7 +9,7 @@ module CC
       include CC::CLI::Output
 
       VERSION_CHECK_TIMEOUT = 60 * 60 # 1 Hour in seconds
-      DEFAULT_VERSIONS_URL = "https://versions.codeclimate.com".freeze
+      DEFAULT_VERSIONS_URL = "https://versions.codeclimate.com"
 
       def check
         return unless global_config.check_version? && version_check_is_due?

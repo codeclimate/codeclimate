@@ -3,7 +3,7 @@
 module CC
   class Config
     class Engine
-      DEFAULT_CHANNEL = "stable".freeze
+      DEFAULT_CHANNEL = "stable"
 
       attr_accessor :channel
       attr_reader :name, :config, :exclude_patterns

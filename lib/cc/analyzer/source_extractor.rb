@@ -35,9 +35,9 @@ module CC
         end_index = lines.fetch("end") - 1
         range = (begin_index..end_index)
 
-        source.each_line.with_object([]).with_index do |(source_line, memo), index|
+        source.each_line.with_object([]).with_index { |(source_line, memo), index|
           memo << source_line if range.include?(index)
-        end.join
+        }.join
       end
 
       def extract_from_positions(positions)

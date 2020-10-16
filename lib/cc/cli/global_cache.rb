@@ -5,7 +5,7 @@ require "cc/cli/file_store"
 module CC
   module CLI
     class GlobalCache < FileStore
-      FILE_NAME = "/cache.yml".freeze
+      FILE_NAME = "/cache.yml"
 
       # Cache entries
 

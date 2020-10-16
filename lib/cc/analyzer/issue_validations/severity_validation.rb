@@ -4,14 +4,14 @@ module CC
   module Analyzer
     module IssueValidations
       class SeverityValidation < Validation
-        INFO = "info".freeze
-        MINOR = "minor".freeze
-        MAJOR = "major".freeze
-        CRITICAL = "critical".freeze
-        BLOCKER = "blocker".freeze
+        INFO = "info"
+        MINOR = "minor"
+        MAJOR = "major"
+        CRITICAL = "critical"
+        BLOCKER = "blocker"
 
         DEPRECATED_SEVERITIES = [
-          NORMAL = "normal".freeze,
+          NORMAL = "normal",
         ].freeze
 
         VALID_SEVERITIES = ([

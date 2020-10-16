@@ -5,14 +5,14 @@ module CC
     module IssueValidations
       class CategoryValidation < Validation
         CATEGORIES = [
-          "Bug Risk".freeze,
-          "Clarity".freeze,
-          "Compatibility".freeze,
-          "Complexity".freeze,
-          "Duplication".freeze,
-          "Performance".freeze,
-          "Security".freeze,
-          "Style".freeze,
+          "Bug Risk",
+          "Clarity",
+          "Compatibility",
+          "Complexity",
+          "Duplication",
+          "Performance",
+          "Security",
+          "Style",
         ].freeze
 
         def valid?

@@ -5,14 +5,14 @@ require "cc/cli/command"
 module CC
   module CLI
     class Analyze < Command
-      ARGUMENT_LIST = "[-f format] [-e engine[:channel]] [path]".freeze
-      SHORT_HELP = "Run analysis with the given arguments".freeze
+      ARGUMENT_LIST = "[-f format] [-e engine[:channel]] [path]"
+      SHORT_HELP = "Run analysis with the given arguments"
       HELP = "#{SHORT_HELP}\n" \
         "\n" \
         "    -f <format>, --format <format>   Format of output. Possible values: #{CC::Analyzer::Formatters::FORMATTERS.keys.join ", "}\n" \
         "    -e <engine[:channel]>            Engine to run. Can be specified multiple times.\n" \
         "    --dev                            Run in development mode. Engines installed locally that are not in the manifest will be run.\n" \
-        "    path                             Path to check. Can be specified multiple times.".freeze
+        "    path                             Path to check. Can be specified multiple times."
 
       autoload :EngineFailure, "cc/cli/analyze/engine_failure"
 

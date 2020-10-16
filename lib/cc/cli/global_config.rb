@@ -6,7 +6,7 @@ require "uuid"
 module CC
   module CLI
     class GlobalConfig < FileStore
-      FILE_NAME = "/config.yml".freeze
+      FILE_NAME = "/config.yml"
 
       DEFAULT_CONFIG = {
         "check-version" => true,

@@ -3,7 +3,7 @@
 module CC
   module Analyzer
     class EngineOutputFilter
-      ISSUE_TYPE = "issue".freeze
+      ISSUE_TYPE = "issue"
 
       def initialize(config = {})
         @config = config
