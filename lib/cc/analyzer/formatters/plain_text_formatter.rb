@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rainbow"
 require "tty/spinner"
 require "active_support/number_helper"

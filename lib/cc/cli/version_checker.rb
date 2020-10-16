@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "cc/cli/global_config"
 require "cc/cli/global_cache"
 

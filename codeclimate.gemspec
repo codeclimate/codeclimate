@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 $LOAD_PATH.unshift(File.join(__FILE__, "../lib"))
 VERSION = File.read(File.expand_path("../VERSION", __FILE__))
 

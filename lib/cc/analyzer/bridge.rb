@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CC
   module Analyzer
     # The shared interface, invoked by Builder or CLI::Analyze

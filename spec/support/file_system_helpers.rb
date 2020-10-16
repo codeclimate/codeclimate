@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module FileSystemHelpers
   def within_temp_dir(&block)
     Dir.chdir(Dir.mktmpdir, &block)

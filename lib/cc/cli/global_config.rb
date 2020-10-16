@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "cc/cli/file_store"
 require "uuid"
 

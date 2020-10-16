@@ -8,11 +8,13 @@ module CC
       end
 
       def compute
-        md5 = Digest::MD5.new
-        md5 << issue.path
-        md5 << issue.check_name.to_s
-        md5 << relevant_source.gsub(/\s+/, "") if relevant_source
-        md5.hexdigest
+        string = [
+          issue.path,
+          issue.check_name.to_s,
+          relevant_source&.gsub(/\s+/, "")
+        ].join
+
+        Digest::MD5.hexdigest(string)
       end
 
       private

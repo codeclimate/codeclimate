@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # expect(config).to match_engines([
 #  Engine.new("duplication", enabled: true)
 #  Engine.new("rubocop", enabled: true, config: foo),
