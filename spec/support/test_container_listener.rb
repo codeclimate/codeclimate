@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TestContainerListener < CC::Analyzer::ContainerListener
   attr_reader \
     :started_image,

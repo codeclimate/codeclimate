@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module CC
   class Workspace
     autoload :Exclusion, "cc/workspace/exclusion"

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ResolvHelpers
   def stub_resolv(name, address)
     dns = double(:dns)

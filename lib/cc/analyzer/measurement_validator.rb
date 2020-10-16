@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module CC
   module Analyzer
     class MeasurementValidator

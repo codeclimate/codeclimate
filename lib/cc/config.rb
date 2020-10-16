@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "cc/config/checks_adapter"
 require "cc/config/default_adapter"
 require "cc/config/engine"

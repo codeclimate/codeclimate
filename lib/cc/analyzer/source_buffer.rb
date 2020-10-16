@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Adapted from https://github.com/whitequark/parser/blob/master/lib/parser/source/buffer.rb
 module CC
   module Analyzer
