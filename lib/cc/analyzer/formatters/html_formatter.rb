@@ -368,7 +368,7 @@ module CC
 
           def render
             template = File.read(TEMPLATE_PATH)
-            ERB.new(template, nil, "-").result(binding)
+            ERB.new(template, trim_mode: "-").result(binding)
           end
 
           def project_name
