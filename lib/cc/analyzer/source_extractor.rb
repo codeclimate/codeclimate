@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CC
   module Analyzer
     class SourceExtractor
@@ -33,9 +34,9 @@ module CC
         end_index = lines.fetch("end") - 1
         range = (begin_index..end_index)
 
-        source.each_line.with_object("").with_index do |(source_line, memo), index|
+        source.each_line.with_object([]).with_index do |(source_line, memo), index|
           memo << source_line if range.include?(index)
-        end
+        end.join
       end
 
       def extract_from_positions(positions)

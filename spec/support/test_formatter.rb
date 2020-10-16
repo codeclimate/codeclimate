@@ -1,12 +1,15 @@
+# frozen_string_literal: true
 class TestFormatter
-  attr_accessor :string
-
   def initialize
-    @string = ""
+    @strings = [""]
   end
 
   def write(data)
-    string << data
+    @strings << data
+  end
+
+  def string
+    @strings.join
   end
 
   def failed(output)

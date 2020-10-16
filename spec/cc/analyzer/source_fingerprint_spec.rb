@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "spec_helper"
 
 module CC::Analyzer
@@ -72,7 +73,7 @@ module CC::Analyzer
         }
 
         allow(File).to receive(:file?).and_return(true)
-        allow(File).to receive(:read).and_return("hi \255".force_encoding(Encoding::UTF_8))
+        allow(File).to receive(:read).and_return("hi \255")
 
         issue = Issue.new("", output.to_json)
         fingerprint = SourceFingerprint.new(issue)

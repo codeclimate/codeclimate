@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CC
   module Analyzer
     class LocationDescription
@@ -8,22 +9,29 @@ module CC
       end
 
       def to_s
-        if location["lines"]
-          begin_line = location["lines"]["begin"]
-          end_line = location["lines"]["end"]
-        elsif location["positions"]
-          begin_line = position_to_line(location["positions"]["begin"])
-          end_line = position_to_line(location["positions"]["end"])
-        end
-
-        str = render_lines(begin_line, end_line)
-        str << suffix unless str.blank?
-        str
+        [
+          lines,
+          lines.blank? ? '' : suffix
+        ].join
       end
 
       private
 
       attr_reader :location, :suffix
+
+      def lines
+        @lines ||= begin
+          if location["lines"]
+            begin_line = location["lines"]["begin"]
+            end_line = location["lines"]["end"]
+          elsif location["positions"]
+            begin_line = position_to_line(location["positions"]["begin"])
+            end_line = position_to_line(location["positions"]["end"])
+          end
+
+          render_lines(begin_line, end_line)
+        end
+      end
 
       def render_lines(begin_line, end_line)
         if end_line == begin_line

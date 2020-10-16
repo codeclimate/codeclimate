@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CC
   module Analyzer
     class RaisingContainerListener < ContainerListener
@@ -9,17 +10,17 @@ module CC
 
       def finished(engine, _details, result)
         if result.timed_out?
-          message = "engine #{engine.name} ran for #{result.duration / 1000}"
-          message << " seconds and was killed"
+          message = "engine #{engine.name} ran for #{result.duration / 1000}" \
+                    " seconds and was killed"
           raise timeout_ex.new(message, engine.name)
         elsif result.maximum_output_exceeded?
-          message = "engine #{engine.name} produced too much output"
-          message << " (#{result.output_byte_count} bytes)"
+          message = "engine #{engine.name} produced too much output" \
+                    " (#{result.output_byte_count} bytes)"
           raise maximum_output_ex.new(message, engine.name)
         elsif result.exit_status.nonzero?
-          message = "engine #{engine.name} failed"
-          message << " with status #{result.exit_status}"
-          message << " and stderr \n#{result.stderr}"
+          message = "engine #{engine.name} failed" \
+                    " with status #{result.exit_status}" \
+                    " and stderr \n#{result.stderr}"
           raise failure_ex.new(message, engine.name)
         end
       end
