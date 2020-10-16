@@ -1,7 +1,7 @@
 inherit_from: base_rubocop.yml
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
 
 Lint/Debugger:
   Exclude:

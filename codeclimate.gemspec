@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.bindir = "bin"
   s.executables = []
 
-  s.required_ruby_version = "~> 2.5"
+  s.required_ruby_version = "~> 2.6"
 
   s.add_dependency "activesupport", ">= 5.1.3", "< 5.2"
   s.add_dependency "tty-spinner", "~> 0.1.0"
