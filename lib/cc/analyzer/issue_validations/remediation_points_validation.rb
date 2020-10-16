@@ -16,8 +16,8 @@ module CC
           @remediation_points ||= object["remediation_points"]
         end
 
-        def positive_integer?(x)
-          x.is_a?(Integer) && x >= 0
+        def positive_integer?(points)
+          points.is_a?(Integer) && points >= 0
         end
       end
     end

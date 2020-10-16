@@ -1,6 +1,4 @@
 require "posix/spawn"
-require "thread"
-
 require "cc/analyzer/container/result"
 
 module CC

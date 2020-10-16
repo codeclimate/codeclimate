@@ -39,11 +39,11 @@ module CC
         end
       end
 
-      def timing(engine, metric, ms)
-        statsd.timing("engines.#{metric}", ms)
-        statsd.timing("engines.names.#{engine.name}.#{metric}", ms)
+      def timing(engine, metric, millis)
+        statsd.timing("engines.#{metric}", millis)
+        statsd.timing("engines.names.#{engine.name}.#{metric}", millis)
         if engine.respond_to?(:channel) && engine.channel
-          statsd.timing("engines.names.#{engine.name}.#{engine.channel}.#{metric}", ms)
+          statsd.timing("engines.names.#{engine.name}.#{engine.channel}.#{metric}", millis)
         end
       end
     end

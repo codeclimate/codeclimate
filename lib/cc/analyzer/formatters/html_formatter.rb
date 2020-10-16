@@ -209,11 +209,7 @@ module CC
           end
 
           def position_to_line(position)
-            if position["line"]
-              position["line"]
-            else
-              @source_buffer.decompose_position(position["offset"]).first
-            end
+            position["line"] || @source_buffer.decompose_position(position["offset"]).first
           end
         end
 
