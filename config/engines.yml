@@ -149,10 +149,12 @@ pep8:
 phan:
   channels:
     stable: codeclimate/codeclimate-phan
+    beta: codeclimate/codeclimate-phan:beta
   description: Phan is a static analyzer for PHP.
 phpcodesniffer:
   channels:
     stable: codeclimate/codeclimate-phpcodesniffer
+    beta: codeclimate/codeclimate-phpcodesniffer:beta
   description: Detects violations of a defined set of coding standards in PHP.
 phpmd:
   channels:
@@ -229,6 +231,8 @@ rubocop:
     rubocop-0-87: codeclimate/codeclimate-rubocop:rubocop-0-87
     rubocop-0-88: codeclimate/codeclimate-rubocop:rubocop-0-88
     rubocop-0-89: codeclimate/codeclimate-rubocop:rubocop-0-89
+    rubocop-0-90: codeclimate/codeclimate-rubocop:rubocop-0-90
+    rubocop-0-92: codeclimate/codeclimate-rubocop:rubocop-0-92
   description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
@@ -269,6 +273,11 @@ sonar-python:
     stable: codeclimate/codeclimate-sonar-python
   description: SonarLint for Python.
   minimum_memory_limit: 2_048_000_000
+standard:
+  channels:
+    stable: codeclimate/codeclimate-standard
+    beta: codeclimate/codeclimate-standard
+  description: Standard static analysis tool.
 structure:
   channels:
     stable: codeclimate/codeclimate-structure
