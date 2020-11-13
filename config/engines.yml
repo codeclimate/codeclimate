@@ -218,6 +218,7 @@ rubocop:
     rubocop-0-74: codeclimate/codeclimate-rubocop:rubocop-0-74
     rubocop-0-75: codeclimate/codeclimate-rubocop:rubocop-0-75
     rubocop-0-76: codeclimate/codeclimate-rubocop:rubocop-0-76
+    rubocop-0-76-airbnb: codeclimate/codeclimate-rubocop:rubocop-0-76-airbnb
     rubocop-0-77: codeclimate/codeclimate-rubocop:rubocop-0-77
     rubocop-0-78: codeclimate/codeclimate-rubocop:rubocop-0-78
     rubocop-0-79: codeclimate/codeclimate-rubocop:rubocop-0-79
