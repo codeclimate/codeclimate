@@ -48,6 +48,11 @@ credo:
   description: >
     A static code analysis tool for the Elixir language with a focus on code
     consistency and teaching.
+dart:
+  channels:
+    stable: codeclimate/codeclimate-dart
+  description: >
+    A static analysis tool that helps improve code quality for the Dart language.
 duplication:
   channels:
     stable: codeclimate/codeclimate-duplication
