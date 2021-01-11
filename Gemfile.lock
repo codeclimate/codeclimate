@@ -40,7 +40,7 @@ GEM
     rainbow (2.2.2)
       rake
     rake (12.0.0)
-    redcarpet (3.5.0)
+    redcarpet (3.5.1)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
