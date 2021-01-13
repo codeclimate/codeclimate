@@ -258,6 +258,10 @@ scss-lint:
   channels:
     stable: codeclimate/codeclimate-scss-lint
   description: A configurable tool for writing clean and consistent SCSS.
+semgrep:
+  channels:
+    stable: codeclimate/codeclimate-semgrep
+  description: A configurable tool that allows for custom static analysis on multiple languages.
 shellcheck:
   channels:
     stable: codeclimate/codeclimate-shellcheck
