@@ -168,6 +168,7 @@ phpmd:
 pmd:
   channels:
     stable: codeclimate/codeclimate-pmd
+    beta: codeclimate/codeclimate-pmd:beta
   description: A source code analyzer for Java.
 pylint:
   channels:
