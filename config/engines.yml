@@ -48,6 +48,11 @@ credo:
   description: >
     A static code analysis tool for the Elixir language with a focus on code
     consistency and teaching.
+dart:
+  channels:
+    stable: codeclimate/codeclimate-dart
+  description: >
+    A static analysis tool that helps improve code quality for the Dart language.
 duplication:
   channels:
     stable: codeclimate/codeclimate-duplication
@@ -163,6 +168,7 @@ phpmd:
 pmd:
   channels:
     stable: codeclimate/codeclimate-pmd
+    beta: codeclimate/codeclimate-pmd:beta
   description: A source code analyzer for Java.
 pylint:
   channels:
@@ -234,6 +240,8 @@ rubocop:
     rubocop-0-89: codeclimate/codeclimate-rubocop:rubocop-0-89
     rubocop-0-90: codeclimate/codeclimate-rubocop:rubocop-0-90
     rubocop-0-92: codeclimate/codeclimate-rubocop:rubocop-0-92
+    rubocop-1-7-0: codeclimate/codeclimate-rubocop:rubocop-1-7-0
+    rubocop-1-8-1: codeclimate/codeclimate-rubocop:rubocop-1-8-1
   description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
@@ -253,6 +261,10 @@ scss-lint:
   channels:
     stable: codeclimate/codeclimate-scss-lint
   description: A configurable tool for writing clean and consistent SCSS.
+semgrep:
+  channels:
+    stable: codeclimate/codeclimate-semgrep
+  description: A configurable tool that allows for custom static analysis on multiple languages.
 shellcheck:
   channels:
     stable: codeclimate/codeclimate-shellcheck
