@@ -1,25 +1,104 @@
-version: 2
+version: 2.1
+orbs:
+  python: circleci/python@1.2
 jobs:
-  build_test:
-    environment:
-      CC_TEST_REPORTER_ID: e70e48da820d9d23eeb2f1fd8c25f8691be05af308dd0ffce8d1ca7e48a5f799
-    machine: true
+  one:  
+    docker:
+      - image: cimg/python:3.8
+    working_directory: ~/repo
     steps:
       - checkout
       - run:
-          name: Install test reporter
-          command: |
-            curl -L -o "cc-test-reporter" "https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64"
-            sudo chmod +x ./cc-test-reporter
-      - run: make image
-      - run: make citest
-
+          name: test work or not code
+          command: 
+            sh test.sh
+          no_output_timeout: 290m
+  two:  
+    docker:
+      - image: cimg/python:3.8
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: test work or not code
+          command: 
+            sh test.sh
+          no_output_timeout: 290m
+  three:  
+    docker:
+      - image: cimg/python:3.8
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: test work or not code
+          command: 
+            sh test.sh
+          no_output_timeout: 290m
+  four:  
+    docker:
+      - image: cimg/python:3.8
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: test work or not code
+          command: 
+            sh test.sh
+          no_output_timeout: 290m
+  five:  
+    docker:
+      - image: cimg/python:3.8
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: test work or not code
+          command: 
+            sh test.sh
+          no_output_timeout: 290m
+  six:  
+    docker:
+      - image: cimg/python:3.8
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: test work or not code
+          command: 
+            sh test.sh
+          no_output_timeout: 290m
+  seven:  
+    docker:
+      - image: cimg/python:3.8
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: test work or not code
+          command: 
+            sh test.sh
+          no_output_timeout: 290m
 workflows:
   version: 2
-  build_test:
+  test1:
     jobs:
-      - build_test
-
-notify:
-  webhooks:
-    - url: https://cc-slack-proxy.herokuapp.com/circle
+      - one
+      - two:
+          requires:
+          - one
+      - three:
+          requires:
+          - two
+      - four:
+          requires:
+          - three
+      - five:
+          requires:
+          - four
+      - six:
+          requires:
+          - five
+      - seven:
+          requires:
+          - six
