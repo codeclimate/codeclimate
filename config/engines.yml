@@ -297,6 +297,7 @@ structure:
   description: Performs structural checks on code.
 stylelint:
   channels:
+    beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
   description: A mighty, modern CSS linter.
 swiftlint:
