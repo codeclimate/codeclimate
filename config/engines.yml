@@ -177,6 +177,7 @@ pylint:
   description: A linter for Python.
 radon:
   channels:
+    stable: codeclimate/codeclimate-radon:beta
     stable: codeclimate/codeclimate-radon
   description: Python tool used to compute Cyclomatic Complexity.
 reek:
