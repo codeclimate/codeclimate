@@ -168,6 +168,7 @@ phpmd:
 pmd:
   channels:
     stable: codeclimate/codeclimate-pmd
+    beta: codeclimate/codeclimate-pmd:beta
   description: A source code analyzer for Java.
 pylint:
   channels:
@@ -239,6 +240,8 @@ rubocop:
     rubocop-0-89: codeclimate/codeclimate-rubocop:rubocop-0-89
     rubocop-0-90: codeclimate/codeclimate-rubocop:rubocop-0-90
     rubocop-0-92: codeclimate/codeclimate-rubocop:rubocop-0-92
+    rubocop-1-7-0: codeclimate/codeclimate-rubocop:rubocop-1-7-0
+    rubocop-1-8-1: codeclimate/codeclimate-rubocop:rubocop-1-8-1
   description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
@@ -294,6 +297,7 @@ structure:
   description: Performs structural checks on code.
 stylelint:
   channels:
+    beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
   description: A mighty, modern CSS linter.
 swiftlint:
