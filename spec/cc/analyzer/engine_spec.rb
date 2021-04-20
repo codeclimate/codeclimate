@@ -67,8 +67,7 @@ module CC::Analyzer
           engine = Engine.new("bar", metadata, {}, "")
           engine.run(stdout)
 
-          expected = "{\"type\":\"issue\",\"check_name\":\"foo\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"engine_name\":\"bar\",\"fingerprint\":\"bdc0c2bb1201c4739118a51481a86fa1\",\"severity\":\"minor\"}{\"type\":\"issue\",\"check_name\":\"bar\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"engine_name\":\"bar\",\"fingerprint\":\"cbd5b8962eb9e2950fbb02f0ddf6c404\",\"severity\":\"minor\"}{\"type\":\"issue\",\"check_name\":\"baz\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"engine_name\":\"bar\",\"fingerprint\":\"a08df13d51af2259c425551cb84c135f\",\"severity\":\"minor\"}"
-
+          expected = "{\"engine_name\":\"bar\",\"fingerprint\":\"bdc0c2bb1201c4739118a51481a86fa1\",\"type\":\"issue\",\"check_name\":\"foo\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"severity\":\"minor\"}{\"engine_name\":\"bar\",\"fingerprint\":\"cbd5b8962eb9e2950fbb02f0ddf6c404\",\"type\":\"issue\",\"check_name\":\"bar\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"severity\":\"minor\"}{\"engine_name\":\"bar\",\"fingerprint\":\"a08df13d51af2259c425551cb84c135f\",\"type\":\"issue\",\"check_name\":\"baz\",\"location\":{\"path\":\"foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},\"description\":\"foo\",\"categories\":[\"Style\"],\"severity\":\"minor\"}"
           expect(stdout.string).to eq expected
         end
       end
