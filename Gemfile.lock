@@ -39,7 +39,7 @@ GEM
       slop (~> 3.4)
     rainbow (2.2.2)
       rake
-    rake (12.0.0)
+    rake (12.3.3)
     redcarpet (3.5.1)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
