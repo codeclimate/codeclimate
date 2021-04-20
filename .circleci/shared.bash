@@ -2,7 +2,7 @@
 
 set -exuo pipefail
 
-VERSION=`cat VERSION`
+VERSION=$(cat VERSION)
 
 function install_hub() {
     sudo apt update && sudo apt install -y git wget
@@ -17,16 +17,16 @@ function login_to_dockerhub() {
 }
 
 function login_to_rubygems() {
-  mkdir -p $HOME/.gem
-  touch $HOME/.gem/credentials
-  chmod 0600 $HOME/.gem/credentials
-  printf -- "---\n:rubygems_api_key: ${GEM_HOST_API_KEY}\n" > $HOME/.gem/credentials
+  mkdir -p "$HOME/.gem"
+  touch "$HOME/.gem/credentials"
+  chmod 0600 "$HOME/.gem/credentials"
+  printf -- "---\n:rubygems_api_key: %s\n" "$GEM_HOST_API_KEY" > "$HOME/.gem/credentials"
 }
 
 function tag_version() {
   ARTIFACTS_OUTPUT=binaries.tar.gz
-  tar -c -f ${ARTIFACTS_OUTPUT} *.gem
-  GITHUB_TOKEN=${GITHUB_TOKEN} hub release create -a ${ARTIFACTS_OUTPUT} -m "v${VERSION}" ${VERSION}
+  tar -c -f "${ARTIFACTS_OUTPUT}" ./*.gem
+  GITHUB_TOKEN="${GITHUB_TOKEN}" hub release create -a "${ARTIFACTS_OUTPUT}" -m "v${VERSION}" "${VERSION}"
 }
 
 function upload_docker_images() {
@@ -39,8 +39,8 @@ function upload_docker_images() {
 function publish_new_version() {
   set +x
   # Build and push gem
-  gem build *.gemspec
-  gem push *.gem
+  gem build ./*.gemspec
+  gem push ./*.gem
 
   # Create gh tag
   tag_version

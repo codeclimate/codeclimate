@@ -5,7 +5,6 @@ init: &init
     name: init
     command: |
       echo '. .circleci/shared.bash' >> "$BASH_ENV"
-      . .circleci/shared.bash
 
 jobs:
   build_test:

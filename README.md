@@ -180,18 +180,25 @@ The following is a brief explanation of each available command.
 
 ## Releasing a new version
 
-CLI's new versions are released automatically when updating [VERSION](https://github.com/codeclimate/codeclimate/blob/master/VERSION) on `master`. The releasing process includes;
+CLI's new versions are released automatically when updating
+[VERSION](https://github.com/codeclimate/codeclimate/blob/master/VERSION) on `master`.
+
+The releasing process includes;
 
 1. Push new version to rubygems.
-2. Create a new release on Github and an associated tag.
-3. Update docker images:
-  1. Push new `latest` image.
-  2. Push new image with latest version as tag.
+1. Create a new release on Github and an associated tag.
+1. Update docker images:
+  * Push new `latest` image.
+  * Push new image with latest version as tag.
 
-Ideally someone will open a pull request against master updating only [VERSION](https://github.com/codeclimate/codeclimate/blob/master/VERSION). There is script in place, which assumes [hub]() is installed, to facilitate that. Just run;
+Ideally someone will open a pull request against master updating only
+[VERSION](https://github.com/codeclimate/codeclimate/blob/master/VERSION).
+
+There is script in place, which assumes [hub](https://hub.github.com/) is installed,
+to facilitate that. Check the current VERSION (`cat VERSION`) and upgrade accordingly running:
 
 ```sh
-./bin/prep-release VERSION
+./bin/prep-release <VERSION>
 ```
 
 ## Copyright
