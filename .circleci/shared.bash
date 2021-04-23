@@ -39,7 +39,7 @@ function upload_docker_images() {
 function trigger_hombrew_release() {
   curl -X POST\
   -u username:$GITHUB_TOKEN \
-  https://api.github.com/repos/codeclimate/homebrew-formulae/actions/workflows/manual.yml/dispatches \
+  https://api.github.com/repos/codeclimate/homebrew-formulae/actions/workflows/release.yml/dispatches \
   -d "{\"ref\":\"master\",\"inputs\":{\"version\":\"$VERSION\"}}"
 }
 
