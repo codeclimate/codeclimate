@@ -26,7 +26,7 @@ function login_to_rubygems() {
 function tag_version() {
   ARTIFACTS_OUTPUT=binaries.tar.gz
   tar -c -f "${ARTIFACTS_OUTPUT}" ./*.gem
-  GITHUB_TOKEN="${GITHUB_TOKEN}" hub release create -a "${ARTIFACTS_OUTPUT}" -m "v${VERSION}" "${VERSION}"
+  GITHUB_TOKEN="${GITHUB_TOKEN}" hub release create -a "${ARTIFACTS_OUTPUT}" -m "v${VERSION}" "v${VERSION}"
 }
 
 function upload_docker_images() {
@@ -34,6 +34,13 @@ function upload_docker_images() {
   docker push codeclimate/codeclimate:latest
   docker tag codeclimate/codeclimate "codeclimate/codeclimate:$VERSION"
   docker push "codeclimate/codeclimate:$VERSION"
+}
+
+function trigger_hombrew_release() {
+  curl -X POST\
+  -u username:$GITHUB_TOKEN \
+  https://api.github.com/repos/codeclimate/homebrew-formulae/actions/workflows/manual.yml/dispatches \
+  -d "{\"ref\":\"master\",\"inputs\":{\"version\":\"$VERSION\"}}"
 }
 
 function publish_new_version() {
@@ -44,6 +51,9 @@ function publish_new_version() {
 
   # Create gh tag
   tag_version
+
+  # Trigger hombrew release
+  trigger_hombrew_release
 
   # Push docker images
   upload_docker_images
