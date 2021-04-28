@@ -44,7 +44,7 @@ jobs:
 
 workflows:
   version: 2
-  build_publish:
+  build_test:
     jobs:
       - build_test
       - publish:
