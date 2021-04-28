@@ -1,4 +1,11 @@
 version: 2
+
+init: &init
+  run:
+    name: init
+    command: |
+      echo '. .circleci/shared.bash' >> "$BASH_ENV"
+
 jobs:
   build_test:
     environment:
@@ -14,11 +21,39 @@ jobs:
       - run: make image
       - run: make citest
 
+  publish:
+    machine: true
+    steps:
+      - checkout
+      - *init
+      - run:
+          name: Install Hub dependency
+          command: install_hub
+      - run:
+          name: Login on Dockerhub
+          command: login_to_dockerhub
+      - run:
+          name: Login on RubyGems
+          command: login_to_rubygems
+      - run:
+          name: Publish new version
+          command: |
+            if [ `git diff --quiet HEAD~ VERSION; echo $?` -eq 1 ]; then
+              publish_new_version
+            fi
+
 workflows:
   version: 2
-  build_test:
+  build_publish:
     jobs:
       - build_test
+      - publish:
+          requires:
+            - build_test
+          filters:
+            branches:
+              only:
+                - master
 
 notify:
   webhooks:
