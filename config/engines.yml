@@ -183,6 +183,7 @@ reek:
   channels:
     stable: codeclimate/codeclimate-reek
     beta: codeclimate/codeclimate-reek:beta
+    reek-6-0-4: codeclimate/codeclimate-reek:reek-6-0-4
   description: >
     Reek examines Ruby classes, modules, and methods and reports any code
     smells it finds.
