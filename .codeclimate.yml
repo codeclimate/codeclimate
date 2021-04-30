@@ -5,6 +5,8 @@ prepare:
     - url: https://raw.githubusercontent.com/codeclimate/styleguide/master/ruby/rubocop.yml
       path: base_rubocop.yml
 plugins:
+  bundler-audit:
+    enabled: true
   rubocop:
     enabled: true
     channel: rubocop-0-67
