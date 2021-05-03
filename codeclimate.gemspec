@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*.rb"] + Dir["bin/*"] + Dir.glob("config/**/*", File::FNM_DOTMATCH)
   s.require_paths = ["lib"]
   s.bindir = "bin"
-  s.executables = []
+  s.executables = ["codeclimate"]
 
   s.required_ruby_version = "~> 2.5"
 
