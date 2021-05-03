@@ -11,6 +11,10 @@ bandit:
   channels:
     stable: codeclimate/codeclimate-bandit
   description: A tool designed to find common security issues in Python code.
+black:
+  channels:
+    stable: codeclimate/codeclimate-black
+  description: black is a tool to check your Python code is formatted in accordance with black style guide.
 brakeman:
   channels:
     stable: codeclimate/codeclimate-brakeman
