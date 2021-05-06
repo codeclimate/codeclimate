@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.11.6
 
 WORKDIR /usr/src/app
 COPY Gemfile /usr/src/app/

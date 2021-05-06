@@ -209,11 +209,7 @@ module CC
           end
 
           def position_to_line(position)
-            if position["line"]
-              position["line"]
-            else
-              @source_buffer.decompose_position(position["offset"]).first
-            end
+            position["line"] || @source_buffer.decompose_position(position["offset"]).first
           end
         end
 
@@ -368,7 +364,7 @@ module CC
 
           def render
             template = File.read(TEMPLATE_PATH)
-            ERB.new(template, nil, "-").result(binding)
+            ERB.new(template, trim_mode: "-").result(binding)
           end
 
           def project_name

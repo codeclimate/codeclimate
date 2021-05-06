@@ -9,7 +9,7 @@ plugins:
     enabled: true
   rubocop:
     enabled: true
-    channel: rubocop-0-67
+    channel: rubocop-0-92
   fixme:
     enabled: true
     exclude_patterns:
