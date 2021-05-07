@@ -39,6 +39,19 @@ module CC::Analyzer
         engine.run(StringIO.new)
       end
 
+      it "runs a Container mounting volumes from an orchestrator" do
+        container = double
+        allow(container).to receive(:on_output).and_yield("")
+        expect(container).to receive(:run).with(including(
+          "--volumes-from", "codeclimate_orchestrator:ro"
+        )).and_return(Container::Result.new)
+
+        expect(Container).to receive(:new).and_return(container)
+        engine = Engine.new("", metadata, {}, "a-label")
+        allow(engine).to receive(:orchestrator_id).and_return("codeclimate_orchestrator")
+        engine.run(StringIO.new)
+      end
+
       it "runs a Container with engine memory overrides" do
         container = double
         allow(container).to receive(:on_output).and_yield("")
