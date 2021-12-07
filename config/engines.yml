@@ -197,6 +197,7 @@ requiresafe:
 rubocop:
   channels:
     stable: codeclimate/codeclimate-rubocop
+    beta: codeclimate/codeclimate-rubocop:beta
     cache-support: codeclimate/codeclimate-rubocop:cache-support
     rubocop-0-42: codeclimate/codeclimate-rubocop:rubocop-0-42
     rubocop-0-46: codeclimate/codeclimate-rubocop:rubocop-0-46
