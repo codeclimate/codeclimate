@@ -5,6 +5,7 @@ SKIP_ENGINES ?= 0
 
 image:
 	docker pull "$(shell grep FROM Dockerfile | sed 's/FROM //')"
+	docker buildx create --name multi_arch_builder --use
 	docker buildx build --platform=linux/amd64,linux/arm64/v8 -t codeclimate/codeclimate .
 
 test: RSPEC_ARGS ?= --tag ~slow
