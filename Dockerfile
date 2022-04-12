@@ -1,5 +1,7 @@
 FROM alpine:3.11.6
 
+ARG TARGETARCH
+
 WORKDIR /usr/src/app
 COPY Gemfile /usr/src/app/
 COPY Gemfile.lock /usr/src/app/
@@ -23,8 +25,11 @@ RUN apk --no-cache upgrade && \
       apk del build-base && \
       rm -fr /usr/share/ri
 
-RUN wget -q -O /tmp/docker.tgz \
-    https://download.docker.com/linux/static/stable/x86_64/docker-17.12.1-ce.tgz && \
+RUN ARCH="$TARGETARCH"; \
+    if [ "$ARCH" = "arm64" ]; then ARCH=aarch64; \
+    elif [ "$ARCH" = "amd64" ]; then ARCH=x86_64; fi; \
+    wget -q -O /tmp/docker.tgz \
+    https://download.docker.com/linux/static/stable/$ARCH/docker-17.12.1-ce.tgz && \
     tar -C /tmp -xzvf /tmp/docker.tgz && \
     mv /tmp/docker/docker /bin/docker && \
     chmod +x /bin/docker && \
