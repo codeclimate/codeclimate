@@ -7,7 +7,7 @@ BUILDX_PLATFORMS ?= linux/amd64,linux/arm64
 image:
 	docker pull "$(shell grep FROM Dockerfile | sed 's/FROM //')"
 	docker buildx create --name multi_arch_builder --use
-	docker buildx build --platform=$(BUILDX_PLATFORMS) -t codeclimate/codeclimate .
+	docker buildx build --platform=linux/amd64,linux/arm64 -t codeclimate/codeclimate .
 
 test: RSPEC_ARGS ?= --tag ~slow
 test: image
