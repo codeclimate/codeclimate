@@ -10,10 +10,27 @@ jobs:
   build_test:
     environment:
       CC_TEST_REPORTER_ID: e70e48da820d9d23eeb2f1fd8c25f8691be05af308dd0ffce8d1ca7e48a5f799
-    machine:
-      image: ubuntu-2004:202111-02
+      DOCKER_BUILDKIT: 1
+      BUILDX_PLATFORMS: linux/amd64,linux/arm64/v8
+    machine: true
     steps:
       - run: docker -v
+      - run:
+          name: Install buildx
+          command: |
+            BUILDX_BINARY_URL="https://github.com/docker/buildx/releases/download/v0.8.2/buildx-v0.8.2.linux-amd64"
+
+            curl --output docker-buildx \
+              --silent --show-error --location --fail --retry 3 \
+              "$BUILDX_BINARY_URL"
+
+            mkdir -p ~/.docker/cli-plugins
+
+            mv docker-buildx ~/.docker/cli-plugins/
+            chmod a+x ~/.docker/cli-plugins/docker-buildx
+
+            docker buildx install
+            docker run --rm --privileged tonistiigi/binfmt:latest --install "$BUILDX_PLATFORMS"
       - checkout
       - run:
           name: Install test reporter
