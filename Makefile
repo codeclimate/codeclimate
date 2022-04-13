@@ -2,7 +2,7 @@
 
 PREFIX ?= /usr/local
 SKIP_ENGINES ?= 0
-BUILDX_PLATFORMS ?= linux/amd64,linux/arm64/v8
+BUILDX_PLATFORMS ?= linux/amd64,linux/arm64
 
 image:
 	docker pull "$(shell grep FROM Dockerfile | sed 's/FROM //')"
