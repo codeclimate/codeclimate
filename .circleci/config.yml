@@ -14,6 +14,11 @@ jobs:
       image: ubuntu-2004:202111-02
     steps:
       - run: docker system info
+      - run: docker buildx ls
+      - run:
+          name: Install buildx emulators
+          command: docker run -it --rm --privileged tonistiigi/binfmt --install all
+      - run: docker buildx ls
       - checkout
       - run:
           name: Install test reporter
