@@ -15,6 +15,7 @@ jobs:
     steps:
       - run: docker system info
       - run: docker buildx ls
+      - run: echo hola
       - run:
           name: Install buildx emulators
           command: docker run -it --rm --privileged tonistiigi/binfmt --install all
