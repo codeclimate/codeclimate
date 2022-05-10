@@ -65,7 +65,7 @@ module CC
           write_file(target_path, resp.body)
           say("Wrote #{url} to #{target_path}")
         else
-          raise FetchError, "Failed fetching #{url}: code=#{resp.code} body=#{resp.body}"
+          raise FetchError, "Failed fetching #{url}: code=#{resp.code}"
         end
       end
 

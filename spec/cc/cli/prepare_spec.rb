@@ -67,6 +67,7 @@ YAML
           Prepare.new.run
         end
         expect(stderr).to match("Failed fetching")
+        expect(stderr).not_to match(resp.body)
 
         expect(File.exist?("bar.json")).to eq(false)
       end
