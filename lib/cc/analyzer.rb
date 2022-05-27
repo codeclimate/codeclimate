@@ -46,5 +46,18 @@ module CC
     self.logger = DummyLogger.new
 
     UnreadableFileError = Class.new(StandardError)
+    
+    class EmilyDummyLogger
+      def method_missing(*)
+        yield if block_given?
+      end
+    end
+    
+    class EmilyDummyLogger
+      def method_missing(*)
+        yield if block_given?
+      end
+    end
+    
   end
 end
