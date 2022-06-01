@@ -11,6 +11,7 @@ module CC
   module CLI
     class Prepare < Command
       ARGUMENT_LIST = "[--allow-internal-ips]".freeze
+      FETCHED_PATHS_FILE_PATH = "fetched_paths".freeze
       SHORT_HELP = "Run the commands in your prepare step.".freeze
       HELP = "#{SHORT_HELP}\n" \
         "\n" \
@@ -30,6 +31,7 @@ module CC
 
       def run
         ::CC::Resolv.with_fixed_dns { fetch_all }
+        write_fetched_paths_file unless fetched_paths.empty?
       rescue FetchError, InternalHostError => ex
         fatal(ex.message)
       end
@@ -48,6 +50,10 @@ module CC
         @config ||= CC::Config.load
       end
 
+      def fetched_paths
+        @fetched_paths ||= []
+      end
+
       def fetch_all
         fetches.each do |entry|
           fetch(entry.url, entry.path)
@@ -63,7 +69,7 @@ module CC
         resp = http.get(uri)
         if resp.code == "200"
           write_file(target_path, resp.body)
-          say("Wrote #{url} to #{target_path}")
+          say("Wroteee #{url} to #{target_path}")
         else
           raise FetchError, "Failed fetching #{url}: code=#{resp.code}"
         end
@@ -71,7 +77,16 @@ module CC
 
       def write_file(target_path, content)
         FileUtils.mkdir_p(Pathname.new(target_path).parent.to_s)
+        fetched_paths << target_path
         File.write(target_path, content)
+      end
+
+      def write_fetched_paths_file
+        say("Writing fetched paths file")
+        say(FETCHED_PATHS_FILE_PATH)
+        say(fetched_paths)
+        result = File.write(FETCHED_PATHS_FILE_PATH, fetched_paths.join("\n"))
+        say(result)
       end
 
       def ensure_external!(url)
