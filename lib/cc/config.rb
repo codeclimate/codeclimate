@@ -23,8 +23,7 @@ module CC
       :prepare
 
     attr_writer \
-      :development,
-      :exclude_patterns
+      :development
 
     def self.load
       config =
