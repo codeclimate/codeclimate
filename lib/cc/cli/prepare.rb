@@ -11,7 +11,6 @@ module CC
   module CLI
     class Prepare < Command
       ARGUMENT_LIST = "[--allow-internal-ips]".freeze
-      FETCHED_PATHS_FILE_PATH = "fetched_paths".freeze
       SHORT_HELP = "Run the commands in your prepare step.".freeze
       HELP = "#{SHORT_HELP}\n" \
         "\n" \
@@ -31,7 +30,6 @@ module CC
 
       def run
         ::CC::Resolv.with_fixed_dns { fetch_all }
-        write_fetched_paths_file unless fetched_paths.empty?
       rescue FetchError, InternalHostError => ex
         fatal(ex.message)
       end
