@@ -94,6 +94,7 @@ module CC
       def workspace
         @workspace ||= Workspace.new.tap do |workspace|
           workspace.add(config.analysis_paths)
+          workspace.remove(config.prepare.fetch.paths)
 
           unless config.analysis_paths.any?
             workspace.remove([".git"])

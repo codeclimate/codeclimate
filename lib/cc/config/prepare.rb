@@ -38,6 +38,10 @@ module CC
           Fetch.new(each.to_a | other.each.to_a)
         end
 
+        def paths
+          entries.map(&:path)
+        end
+
         private
 
         attr_reader :entries

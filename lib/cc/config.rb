@@ -55,6 +55,7 @@ module CC
       @prepare = prepare
     end
 
+
     def merge(other)
       Merge.new(self, other).run
     end
