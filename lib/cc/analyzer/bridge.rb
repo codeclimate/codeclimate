@@ -95,8 +95,8 @@ module CC
       def workspace
         @workspace ||= Workspace.new.tap do |workspace|
           workspace.add(config.analysis_paths)
-          CC::Analyzer.logger.log("############### Fetched paths ########")
-          CC::Analyzer.logger.log(config.prepare.fetch.paths)
+          CC::Analyzer.logger.error("############### Fetched paths ########")
+          CC::Analyzer.logger.error(config.prepare.fetch.paths)
           workspace.remove(config.prepare.fetch.paths)
 
           unless config.analysis_paths.any?
