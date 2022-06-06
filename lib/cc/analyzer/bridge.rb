@@ -95,15 +95,19 @@ module CC
       def workspace
         @workspace ||= Workspace.new.tap do |workspace|
           workspace.add(config.analysis_paths)
-          CC::Analyzer.logger.error("############### Fetched paths ########")
-          CC::Analyzer.logger.error(config.prepare.fetch.paths)
-          workspace.remove(config.prepare.fetch.paths)
-          workspace.remove(["base_rubocop.yml"])
+          #CC::Analyzer.logger.error("############### Analysis Paths ########")
+          #CC::Analyzer.logger.error(config.analysis_paths)
+          #CC::Analyzer.logger.error("############### Fetched paths ########")
+          #CC::Analyzer.logger.error(config.prepare.fetch.paths)
+          #workspace.remove(config.prepare.fetch.paths)
+          #workspace.remove(["base_rubocop.yml"])
 
           unless config.analysis_paths.any?
             workspace.remove([".git"])
-            workspace.remove(["base_rubocop.yml"])
+            #workspace.remove(["base_rubocop.yml"])
             workspace.remove(config.exclude_patterns)
+            #CC::Analyzer.logger.error("############### Excluded Paths ########")
+            #CC::Analyzer.logger.error(config.exclude_patterns)
           end
         end
       end
