@@ -98,9 +98,11 @@ module CC
           CC::Analyzer.logger.error("############### Fetched paths ########")
           CC::Analyzer.logger.error(config.prepare.fetch.paths)
           workspace.remove(config.prepare.fetch.paths)
+          workspace.remove(["base_rubocop.yml"])
 
           unless config.analysis_paths.any?
             workspace.remove([".git"])
+            workspace.remove(["base_rubocop.yml"])
             workspace.remove(config.exclude_patterns)
           end
         end
