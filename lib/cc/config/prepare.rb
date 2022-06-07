@@ -34,8 +34,8 @@ module CC
           entries.each(&block)
         end
 
-        def map(&block)
-          entries.map(&block)
+        def paths
+          entries.map(&:path)
         end
 
         def merge(other)

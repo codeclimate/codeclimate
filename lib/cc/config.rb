@@ -40,13 +40,12 @@ module CC
     end
 
     def self.build(data)
-      prepare_data = Prepare.from_data(data["prepare"])
-      prepare_paths = prepare_data.fetch.map(&:path)
-      exclude_patterns_data = data.fetch("exclude_patterns", DefaultAdapter::EXCLUDE_PATTERNS) + prepare_paths
+      prepare = Prepare.from_data(data["prepare"])
+      base_excluded_patterns = data.fetch("exclude_patterns", DefaultAdapter::EXCLUDE_PATTERNS)
       new(
         engines: EngineSet.new(data.fetch("plugins", {})).engines,
-        exclude_patterns: exclude_patterns_data,
-        prepare: prepare_data,
+        exclude_patterns: base_excluded_patterns + prepare.fetch.paths,
+        prepare: prepare,
       )
     end
 

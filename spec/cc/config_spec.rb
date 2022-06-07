@@ -122,12 +122,24 @@ describe CC::Config do
 
       config = CC::Config.load
 
-      expect(config.exclude_patterns).to include("**/*.rb")
-      expect(config.exclude_patterns).to include("foo/")
-      expect(config.exclude_patterns).to include("rubocop.yml")
-      expect(config.exclude_patterns).to include("ignore/this.json")
-      expect(config.exclude_patterns).to include("nopath.yml")
-      expect(config.prepare.fetch.map(&:path)).to eq(["rubocop.yml", "ignore/this.json", "nopath.yml"])
+      expect(config.exclude_patterns).to match_array(["**/*.rb", "foo/", "rubocop.yml", "ignore/this.json", "nopath.yml"])
+      expect(config.prepare.fetch.paths).to match_array(["rubocop.yml", "ignore/this.json", "nopath.yml"])
+    end
+
+    it "doesn't add any files to exclude_patterns if no prepare step is specified" do
+      yaml = write_cc_yaml(<<-EOYAML)
+      plugins:
+        rubocop:
+          enabled: true
+      exclude_patterns:
+      - "**/*.rb"
+      - foo/
+      EOYAML
+
+      config = CC::Config.load
+
+      expect(config.exclude_patterns).to match_array(["**/*.rb", "foo/"])
+      expect(config.prepare.fetch.paths).to be_empty
     end
 
     it "loads prepare from JSON" do
