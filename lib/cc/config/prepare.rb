@@ -34,6 +34,10 @@ module CC
           entries.each(&block)
         end
 
+        def paths
+          entries.map(&:path)
+        end
+
         def merge(other)
           Fetch.new(each.to_a | other.each.to_a)
         end
