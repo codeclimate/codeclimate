@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.85.28)
+    codeclimate (0.85.29)
       activesupport (~> 5.2.3)
       highline (~> 1.7, >= 1.7.2)
       posix-spawn (~> 0.3, >= 0.3.11)
