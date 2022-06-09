@@ -26,6 +26,7 @@ module CC
         IPAddr.new("fd00::/8"),
         IPAddr.new("127.0.0.1"),
         IPAddr.new("0:0:0:0:0:0:0:1"),
+        IPAddr.new("169.254.0.0/16"),
       ].freeze
 
       def run
