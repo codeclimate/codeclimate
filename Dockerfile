@@ -7,9 +7,6 @@ COPY VERSION /usr/src/app/
 COPY codeclimate.gemspec /usr/src/app/
 ENV CODECLIMATE_DOCKER=1 BUNDLE_SILENCE_ROOT_WARNING=1
 
-# Add the repository containing the needed ruby and bundler package versions
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.14/main" >> /etc/apk/repositories
-
 RUN apk --no-cache upgrade && \
       apk --no-cache --update add \
       build-base \
@@ -17,7 +14,7 @@ RUN apk --no-cache upgrade && \
       git \
       openssh-client \
       openssl \
-      ruby=2.7.6-r0 \
+      ruby \
       ruby-bigdecimal \
       ruby-bundler \
       ruby-dev \
