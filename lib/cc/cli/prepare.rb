@@ -50,6 +50,8 @@ module CC
       end
 
       def fetch_all
+        say("RUBY_VERSION: #{RUBY_VERSION}")
+        say("CURRENT DIR: #{Dir.pwd}")
         fetches.each do |entry|
           fetch(entry.url, entry.path)
         end
