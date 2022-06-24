@@ -176,8 +176,8 @@ module CC::Analyzer
               name: "cc-engines-rubocop-stable-abc-123",
             )
 
-            allow(POSIX::Spawn::Child).to receive(:new).
-              and_raise(POSIX::Spawn::TimeoutExceeded)
+            allow(Timeout).to receive(:timeout).
+              and_raise(Timeout::Error)
 
             expect(CC::Analyzer.logger).to receive(:error)
             expect(CC::Analyzer.statsd).to receive(:increment).
@@ -234,23 +234,23 @@ module CC::Analyzer
     end
 
     def stub_spawn(status: nil, out: StringIO.new, err: StringIO.new)
-      pid = 42
+      wait_thr = double("Process::Waiter", pid: 42)
       status ||= double("Process::Status", exitstatus: 0)
 
-      allow(POSIX::Spawn).to receive(:popen4).and_return([pid, nil, out, err])
-      allow(Process).to receive(:waitpid2).with(pid).and_return([nil, status])
+      allow(Open3).to receive(:popen3).and_return([nil, out, err, wait_thr])
+      allow(wait_thr).to receive(:value).and_return(status)
 
-      return [pid, out, err]
+      return [nil, out, err, wait_thr]
     end
 
     def expect_spawn(args, status: nil, out: StringIO.new, err: StringIO.new)
-      pid = 42
+      wait_thr = double("Process::Waiter", pid: 42)
       status ||= double("Process::Status", exitstatus: 0)
 
-      expect(POSIX::Spawn).to receive(:popen4).with(*args).and_return([pid, nil, out, err])
-      expect(Process).to receive(:waitpid2).with(pid).and_return([nil, status])
+      expect(Open3).to receive(:popen3).with(*args).and_return([nil, out, err, wait_thr])
+      expect(wait_thr).to receive(:value).and_return(status)
 
-      return [pid, out, err]
+      return [nil, out, err, wait_thr]
     end
 
     def with_timeout(timeout)
