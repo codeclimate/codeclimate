@@ -177,8 +177,8 @@ module CC
       def reap_running_container(message)
         Analyzer.logger.warn("killing container name=#{@name} message=#{message.inspect}")
         Timeout.timeout(2.minutes.to_i) do
-          Kernel.system("docker kill #{@name}")
-          Kernel.system("docker wait #{@name}")
+          Kernel.system("docker", "kill", @name, [:out, :err] => File::NULL)
+          Kernel.system("docker", "wait", @name, [:out, :err] => File::NULL)
         end
       rescue Timeout::Error
         Analyzer.logger.error("unable to kill container name=#{@name} message=#{message.inspect}")
