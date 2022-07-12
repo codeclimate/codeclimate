@@ -31,7 +31,7 @@ module CC
         @data =
           if File.exist? self.class::FILE_NAME
             File.open(self.class::FILE_NAME, "r:bom|utf-8") do |f|
-              YAML.safe_load(f, [Time], [], false, self.class::FILE_NAME) || {}
+              YAML.safe_load(f, permitted_classes: [Time], permitted_symbols: [], aliases: false, filename: self.class::FILE_NAME)  || {}
             end
           else
             {}
