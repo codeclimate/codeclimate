@@ -288,7 +288,7 @@ shellcheck:
 sonar-java:
   channels:
     stable: codeclimate/codeclimate-sonar-java
-    beta: codeclimate/codeclimate-sonar-java:sonar-java-5-14
+    beta: codeclimate/codeclimate-sonar-java:beta
     sonar-java-5-14: codeclimate/codeclimate-sonar-java:sonar-java-5-14
   description: Over 400 checks for bugs, vulnerabilities, and code smells in Java code.
   minimum_memory_limit: 2_048_000_000
