@@ -140,7 +140,7 @@ The following is a brief explanation of each available command.
   within the CLI. Useful for engine developers and maintainers.
 * `engines:install`
   Compares the list of engines in your `.codeclimate.yml` file to those that
-  are currently installed, then installs any missing engines.
+  are currently installed, then installs any missing engines and checks for new images available for existing engines.
 * `engines:list`
   Lists all available engines in the
   [Code Climate Docker Hub](https://hub.docker.com/u/codeclimate/)
@@ -177,6 +177,29 @@ The following is a brief explanation of each available command.
   # 2,000,000,000 bytes
   ENGINE_MEMORY_LIMIT_BYTES=2000000000 codeclimate analyze
   ```
+
+## Releasing a new version
+
+CLI's new versions are released automatically when updating
+[VERSION](https://github.com/codeclimate/codeclimate/blob/master/VERSION) on `master`.
+
+The releasing process includes;
+
+1. Push new version to rubygems.
+1. Create a new release on Github and an associated tag.
+1. Update docker images:
+  * Push new `latest` image.
+  * Push new image with latest version as tag.
+
+Ideally someone will open a pull request against master updating only
+[VERSION](https://github.com/codeclimate/codeclimate/blob/master/VERSION).
+
+There is script in place, which assumes [hub](https://hub.github.com/) is installed,
+to facilitate that. Check the current VERSION (`cat VERSION`) and upgrade accordingly running:
+
+```sh
+./bin/prep-release <VERSION>
+```
 
 ## Copyright
 

@@ -9,9 +9,9 @@ module CC
     EngineDetails = Struct.new(:image, :command, :description, :memory)
     EngineDetailsNotFoundError = Class.new(StandardError)
 
-    def initialize(path = DEFAULT_MANIFEST_PATH, prefix = "")
+    def initialize(path = DEFAULT_MANIFEST_PATH, prefix = nil)
       @yaml = YAML.safe_load(File.read(path))
-      @prefix = prefix
+      @prefix = prefix || ENV["CODECLIMATE_PREFIX"] || ""
     end
 
     def each

@@ -1,7 +1,5 @@
-require "posix/spawn"
-require "thread"
-
 require "cc/analyzer/container/result"
+require "open3"
 
 module CC
   module Analyzer
@@ -54,19 +52,14 @@ module CC
 
         command = docker_run_command(options)
         Analyzer.logger.debug("docker run: #{command.inspect}")
-        pid, _, out, err = POSIX::Spawn.popen4(*command)
+        _, out, err, @t_wait = Open3.popen3(*command)
 
         @t_out = read_stdout(out)
         @t_err = read_stderr(err)
         t_timeout = timeout_thread
 
-        # blocks until the engine stops. this is put in a thread so that we can
-        # explicitly abort it as part of #stop. otherwise a run-away container
-        # could still block here forever if the docker-kill/wait is not
-        # successful. there may still be stdout in flight if it was being
-        # produced more quickly than consumed.
-        @t_wait = Thread.new { _, @status = Process.waitpid2(pid) }
-        @t_wait.join
+        # Calling @t_wait.value waits the termination of the process / engine
+        @status = @t_wait.value
 
         # blocks until all readers are done. they're still governed by the
         # timeout thread at this point. if we hit the timeout while processing
@@ -99,6 +92,9 @@ module CC
       def stop(message = nil)
         reap_running_container(message)
         kill_reader_threads
+        # Manually killing the process otherwise a run-away container
+        # could still block here forever if the docker-kill/wait is not
+        # successful
         kill_wait_thread
       end
 
@@ -180,9 +176,11 @@ module CC
 
       def reap_running_container(message)
         Analyzer.logger.warn("killing container name=#{@name} message=#{message.inspect}")
-        POSIX::Spawn::Child.new("docker", "kill", @name, timeout: 2.minutes)
-        POSIX::Spawn::Child.new("docker", "wait", @name, timeout: 2.minutes)
-      rescue POSIX::Spawn::TimeoutExceeded
+        Timeout.timeout(2.minutes.to_i) do
+          Kernel.system("docker", "kill", @name, [:out, :err] => File::NULL)
+          Kernel.system("docker", "wait", @name, [:out, :err] => File::NULL)
+        end
+      rescue Timeout::Error
         Analyzer.logger.error("unable to kill container name=#{@name} message=#{message.inspect}")
         Analyzer.statsd.increment("container.zombie")
         Analyzer.statsd.increment("container.zombie.#{metric_name}") if metric_name

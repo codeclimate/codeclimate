@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.16.0
 
 WORKDIR /usr/src/app
 COPY Gemfile /usr/src/app/
@@ -24,7 +24,7 @@ RUN apk --no-cache upgrade && \
       rm -fr /usr/share/ri
 
 RUN wget -q -O /tmp/docker.tgz \
-    https://download.docker.com/linux/static/stable/x86_64/docker-17.12.1-ce.tgz && \
+    https://download.docker.com/linux/static/stable/x86_64/docker-20.10.17.tgz && \
     tar -C /tmp -xzvf /tmp/docker.tgz && \
     mv /tmp/docker/docker /bin/docker && \
     chmod +x /bin/docker && \

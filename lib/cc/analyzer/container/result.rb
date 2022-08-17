@@ -32,17 +32,17 @@ module CC
           @timed_out = timed_out
         end
 
-        def self.skipped(ex)
+        def self.skipped(exception)
           new(
             exit_status: 0,
             skipped: true,
-            stderr: ex.message,
+            stderr: exception.message,
           )
         end
 
-        def merge_from_exception(ex)
+        def merge_from_exception(exception)
           self.exit_status = 99
-          self.stderr = ex.message
+          self.stderr = exception.message
           self
         end
 

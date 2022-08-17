@@ -14,14 +14,13 @@ Gem::Specification.new do |s|
   s.files = Dir["lib/**/*.rb"] + Dir["bin/*"] + Dir.glob("config/**/*", File::FNM_DOTMATCH)
   s.require_paths = ["lib"]
   s.bindir = "bin"
-  s.executables = []
+  s.executables = ["codeclimate"]
 
-  s.required_ruby_version = "~> 2.5"
+  s.required_ruby_version = ['>= 2.6', '<= 3.1.2']
 
-  s.add_dependency "activesupport", ">= 5.1.3", "< 5.2"
+  s.add_dependency "activesupport", "~> 5.2.3"
   s.add_dependency "tty-spinner", "~> 0.1.0"
-  s.add_dependency "highline", "~> 1.7", ">= 1.7.2"
-  s.add_dependency "posix-spawn", "~> 0.3", ">= 0.3.11"
+  s.add_dependency "highline", "~> 2.0.3"
   s.add_dependency "pry", "~> 0.10.1"
   s.add_dependency "rainbow", "~> 2.0", ">= 2.0.0"
   s.add_dependency "redcarpet", "~> 3.2"

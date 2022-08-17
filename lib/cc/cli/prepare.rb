@@ -26,6 +26,7 @@ module CC
         IPAddr.new("fd00::/8"),
         IPAddr.new("127.0.0.1"),
         IPAddr.new("0:0:0:0:0:0:0:1"),
+        IPAddr.new("169.254.0.0/16"),
       ].freeze
 
       def run
@@ -65,7 +66,7 @@ module CC
           write_file(target_path, resp.body)
           say("Wrote #{url} to #{target_path}")
         else
-          raise FetchError, "Failed fetching #{url}: code=#{resp.code} body=#{resp.body}"
+          raise FetchError, "Failed fetching #{url}: code=#{resp.code}"
         end
       end
 
