@@ -324,6 +324,10 @@ tailor:
   channels:
     stable: codeclimate/codeclimate-tailor
   description: Cross-platform static analyzer and linter for Swift.
+tflint:
+  channels:
+    beta: codeclimate/codeclimate-tflint:beta
+  description: A pluggable Terraform linter.
 tslint:
   channels:
     stable: codeclimate/codeclimate-tslint
