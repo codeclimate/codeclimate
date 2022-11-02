@@ -33,18 +33,18 @@ module CC
 
       def increment(engine, metric_name)
         tags = engine_tags(engine)
-        metrics(engine, metric_name).each { |metric| statsd.increment(metric, tags: tags) }
+        metrics(engine, metric_name).each { |metric| statsd.increment(metric, tags:) }
       end
 
       def timing(engine, metric_name, millis)
         tags = engine_tags(engine)
-        metrics(engine, metric_name).each { |metric| statsd.timing(metric, millis, tags: tags) }
+        metrics(engine, metric_name).each { |metric| statsd.timing(metric, millis, tags:) }
       end
 
       def metrics(engine, metric_name)
         [
           "engines.#{metric_name}",
-          "engines.names.#{engine.name}.#{metric_name}"
+          "engines.names.#{engine.name}.#{metric_name}",
         ].tap do |metrics|
           metrics << "engines.names.#{engine.name}.#{engine.channel}.#{metric_name}" if engine_channel_present?(engine)
         end
