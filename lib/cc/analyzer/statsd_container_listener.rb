@@ -33,12 +33,16 @@ module CC
 
       def increment(engine, metric_name)
         tags = engine_tags(engine)
-        metrics(engine, metric_name).each { |metric| statsd.increment(metric, tags:) }
+        # rubocop:disable Style/HashSyntax
+        metrics(engine, metric_name).each { |metric| statsd.increment(metric, tags: tags) }
+        # rubocop:enable Style/HashSyntax
       end
 
       def timing(engine, metric_name, millis)
         tags = engine_tags(engine)
-        metrics(engine, metric_name).each { |metric| statsd.timing(metric, millis, tags:) }
+        # rubocop:disable Style/HashSyntax
+        metrics(engine, metric_name).each { |metric| statsd.timing(metric, millis, tags: tags) }
+        # rubocop:enable Style/HashSyntax
       end
 
       def metrics(engine, metric_name)
