@@ -31,20 +31,33 @@ module CC
 
       attr_reader :statsd
 
-      def increment(engine, metric)
-        statsd.increment("engines.#{metric}")
-        statsd.increment("engines.names.#{engine.name}.#{metric}")
-        if engine.respond_to?(:channel) && engine.channel
-          statsd.increment("engines.names.#{engine.name}.#{engine.channel}.#{metric}")
+      def increment(engine, metric_name)
+        tags = engine_tags(engine)
+        metrics(engine, metric_name).each { |metric| statsd.increment(metric, tags:) }
+      end
+
+      def timing(engine, metric_name, millis)
+        tags = engine_tags(engine)
+        metrics(engine, metric_name).each { |metric| statsd.timing(metric, millis, tags:) }
+      end
+
+      def metrics(engine, metric_name)
+        [
+          "engines.#{metric_name}",
+          "engines.names.#{engine.name}.#{metric_name}",
+        ].tap do |metrics|
+          metrics << "engines.names.#{engine.name}.#{engine.channel}.#{metric_name}" if engine_channel_present?(engine)
         end
       end
 
-      def timing(engine, metric, millis)
-        statsd.timing("engines.#{metric}", millis)
-        statsd.timing("engines.names.#{engine.name}.#{metric}", millis)
-        if engine.respond_to?(:channel) && engine.channel
-          statsd.timing("engines.names.#{engine.name}.#{engine.channel}.#{metric}", millis)
+      def engine_tags(engine)
+        ["engine:#{engine.name}"].tap do |tags|
+          tags << "channel:#{engine.channel}" if engine_channel_present?(engine)
         end
+      end
+
+      def engine_channel_present?(engine)
+        engine.respond_to?(:channel) && engine.channel
       end
     end
   end
