@@ -65,7 +65,7 @@ GEM
     systemu (2.6.5)
     thread_safe (0.3.6)
     tty-spinner (0.1.0)
-    tzinfo (1.2.9)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     uuid (2.3.9)
       macaddr (~> 1.0)
