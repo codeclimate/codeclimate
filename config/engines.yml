@@ -328,6 +328,7 @@ tailor:
 tflint:
   channels:
     beta: codeclimate/codeclimate-tflint:beta
+    stable: codeclimate/codeclimate-tflint
   description: A pluggable Terraform linter.
 tslint:
   channels:
