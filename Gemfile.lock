@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.87.4)
+    codeclimate (0.87.5)
       activesupport (~> 5.2.3)
       highline (~> 2.0.3)
       pry (~> 0.10.1)
