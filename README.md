@@ -7,17 +7,14 @@
 
 `codeclimate` is a command line interface for the Code Climate analysis
 platform. It allows you to run Code Climate engines on your local machine inside
-of Docker containers.
+of podman containers.
 
 ## Prerequisites
 
 The Code Climate CLI is distributed and run as a
-[Docker](https://www.docker.com) image. The engines that perform the actual
-analyses are also Docker images. To support this, you must have Docker installed
-and running locally. We also require that the Docker daemon supports connections
-on the default Unix socket `/var/run/docker.sock`.
-
-On macOS, we recommend using [Docker for Mac](https://docs.docker.com/docker-for-mac/).
+[podman](https://podman.io/) container. The engines that perform the actual
+analyses are also podman images. To support this, you must have podman installed
+and running locally.
 
 ## Installation
 
@@ -44,25 +41,24 @@ cd codeclimate-* && sudo make install
 
 To upgrade to a newer version, just run those steps again.
 
-### Manual Docker invocation
+### Manual podman invocation
 
-The above packages pull the docker image and install a shell script wrapper.
-In some cases you may want to run the docker image directly.
+The above packages pull the podman image and install a shell script wrapper.
+In some cases you may want to run the podman image directly.
 
-To pull the docker image:
+To pull the podman image:
 
 ```console
-docker pull codeclimate/codeclimate
+podman pull codeclimate/codeclimate
 ```
 
 To invoke the CLI via Docker:
 
 ```console
-docker run \
+podman run \
   --interactive --tty --rm \
   --env CODECLIMATE_CODE="$PWD" \
   --volume "$PWD":/code \
-  --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume /tmp/cc:/tmp/cc \
   codeclimate/codeclimate help
 ```
@@ -83,7 +79,7 @@ configuration][docs_advanced_config].
 
 ### Plugin installation
 
-Plugins, or "engines", are the docker images that run analysis tools. We support
+Plugins, or "engines", are the podman images that run analysis tools. We support
 many different plugins, and will only install the ones necessary to run
 analysis. As part of setting up your project, we recommend running `codeclimate
 engines:install` from within your repository before running `codeclimate
@@ -143,7 +139,7 @@ The following is a brief explanation of each available command.
   are currently installed, then installs any missing engines and checks for new images available for existing engines.
 * `engines:list`
   Lists all available engines in the
-  [Code Climate Docker Hub](https://hub.docker.com/u/codeclimate/)
+  [Code Climate podman Hub](https://hub.docker.com/u/codeclimate/)
   .
 * `help`
   Displays a list of commands that can be passed to the Code Climate CLI.
@@ -187,7 +183,7 @@ The releasing process includes;
 
 1. Push new version to rubygems.
 1. Create a new release on Github and an associated tag.
-1. Update docker images:
+1. Update podman images:
   * Push new `latest` image.
   * Push new image with latest version as tag.
 

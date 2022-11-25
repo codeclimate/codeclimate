@@ -3,29 +3,19 @@ invalid_setup() {
   local reason=$1
 
   cat >&2 <<EOF
-Your Docker setup does not support the codeclimate wrapper script:
+Your podman setup does not support the codeclimate wrapper script:
 
   > $reason
 
-We require a local Docker daemon that supports communication via the default
+We require a local podman daemon that supports communication via the default
 socket path.
 
-Please use \`docker run' to run the \`codeclimate/codeclimate' image directly.
+Please use \`podman run' to run the \`codeclimate/codeclimate' image directly.
 
 See https://github.com/codeclimate/codeclimate for more details.
 
 EOF
   exit 1
-}
-
-socket_missing() {
-  invalid_setup "/var/run/docker.sock must exist as a Unix domain socket"
-}
-
-invalid_docker_host() {
-  local host=$1
-
-  invalid_setup "invalid DOCKER_HOST=$host, must be unset or unix:///var/run/docker.sock"
 }
 
 analysis_file() {
@@ -103,7 +93,7 @@ ln_dir() {
 }
 
 docker_run() {
-  docker run \
+  podman run \
     --interactive --rm \
     --env CODECLIMATE_CODE \
     --env CODECLIMATE_TMP \
@@ -116,7 +106,6 @@ docker_run() {
     --volume "$CODECLIMATE_TMP":/tmp/cc \
     --volume "$CC_CONFIG":/config.yml \
     --volume "$CC_CACHE":/cache.yml \
-    --volume /var/run/docker.sock:/var/run/docker.sock \
     "$@"
 }
 
@@ -161,19 +150,6 @@ if [ ! -t 0 ]; then
 
     export CODECLIMATE_CODE="$tmp_source_dir"
   fi
-fi
-
-if [ -n "$DOCKER_MACHINE_NAME" ] && command -v docker-machine > /dev/null 2>&1; then
-  docker-machine ssh "$DOCKER_MACHINE_NAME" -- \
-    test -S /var/run/docker.sock > /dev/null 2>&1 || socket_missing
-
-  docker-machine ssh "$DOCKER_MACHINE_NAME" -- \
-    'test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock"' > /dev/null 2>&1 \
-    && invalid_docker_host "$(docker-machine ssh "$DOCKER_MACHINE_NAME" -- 'echo "$DOCKER_HOST"')"
-else
-  test -S /var/run/docker.sock || socket_missing
-  test -n "$DOCKER_HOST" -a "$DOCKER_HOST" != "unix:///var/run/docker.sock" \
-    && invalid_docker_host "$DOCKER_HOST"
 fi
 
 if [ -t 0 ] && [ -t 1 ]; then

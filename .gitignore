@@ -2,3 +2,5 @@
 coverage
 spec/reports
 base_rubocop.yml
+.idea
+.vscode

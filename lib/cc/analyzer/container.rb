@@ -4,7 +4,7 @@ require "open3"
 module CC
   module Analyzer
     #
-    # Running an abstract docker container
+    # Running an abstract podman container
     #
     # Input:
     #   - image
@@ -51,7 +51,7 @@ module CC
         started = Time.now
 
         command = docker_run_command(options)
-        Analyzer.logger.debug("docker run: #{command.inspect}")
+        Analyzer.logger.debug("podman run: #{command.inspect}")
         _, out, err, @t_wait = Open3.popen3(*command)
 
         @t_out = read_stdout(out)
@@ -104,7 +104,7 @@ module CC
 
       def docker_run_command(options)
         [
-          "docker", "run",
+          "podman", "run",
           "--name", @name,
           options,
           @image,

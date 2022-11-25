@@ -26,10 +26,10 @@ printf "########################################################################
 printf "\n\n"
 rake release
 
-docker build --rm --tag codeclimate/codeclimate .
-docker push codeclimate/codeclimate:latest
-docker tag codeclimate/codeclimate "codeclimate/codeclimate:$version"
-docker push "codeclimate/codeclimate:$version"
+podman build --rm --tag codeclimate/codeclimate .
+podman push codeclimate/codeclimate:latest
+podman tag codeclimate/codeclimate "codeclimate/codeclimate:$version"
+podman push "codeclimate/codeclimate:$version"
 
 (cd ../homebrew-formulae/ && bin/release "$version")
 

@@ -19,21 +19,21 @@ following:
   the engine's repository (or Issues aren't enabled there), please do report
   your issue here.
 
-- Is this an issue with your Docker installation in general?
+- Is this an issue with your podman installation in general?
 
   While we try hard to smooth over some of this, there will always be
   system-specific issues and edge-cases that we can't work around. If you're
-  unable to use Docker at all (i.e. commands like `docker version`, `docker ps`,
-  or `docker run hello-world` fail), please try other channels (Stack Overflow,
+  unable to use podman at all (i.e. commands like `podman version`, `podman ps`,
+  or `podman run hello-world` fail), please try other channels (Stack Overflow,
   IRC, etc) before reporting the issue here.
 
-- Are you invoking `docker run codeclimate/codeclimate` without other options?
+- Are you invoking `podman run codeclimate/codeclimate` without other options?
 
-  Invoking the CLI directly via `docker run` requires additional options to work
+  Invoking the CLI directly via `podman run` requires additional options to work
   correctly. That's why we ship the `codeclimate` wrapper script. Please take a
-  look at the README for a working `docker run` example.
+  look at the README for a working `podman run` example.
 
-- Are you having trouble using this project as a gem or not via Docker?
+- Are you having trouble using this project as a gem or not via Podman?
 
   While this project is currently available as a gem, that is not a supported
   use-case. It is more an accident of history due to the way our own
@@ -52,7 +52,7 @@ If you'd still like to report this issue, please follow these guidelines:
   you're using, the following commands will update everything:
 
   ```
-  docker pull codeclimate/codeclimate
+  podman pull codeclimate/codeclimate
   codeclimate engines:install
   ```
 
@@ -67,14 +67,14 @@ If you'd still like to report this issue, please follow these guidelines:
   If this output is large, consider using a service like gist.github.com.
 
 - Indicate what you expected to happen and what happened instead
-- Include your operating system, how you run Docker (e.g. Docker Machine) and
-  the version of Docker you're using.
+- Include your operating system, how you run podman (e.g. podman Machine) and
+  the version of podman you're using.
 
   Include the output of the following commands:
 
   ```
   uname -a
-  docker version
+  podman version
   env | grep "^DOCKER_"
   ```
 

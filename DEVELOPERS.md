@@ -15,7 +15,7 @@ this image:
 codeclimate version
 ```
 
-Otherwise, invoke the `docker run` command found in the README.
+Otherwise, invoke the `podman run` command found in the README.
 
 ## Releasing a new version
 

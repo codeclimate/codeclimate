@@ -19,9 +19,9 @@ module CC::CLI::Engines
 
         install = Install.new
 
-        expect_system(install, "docker pull structure")
-        expect_system(install, "docker pull duplication")
-        expect_system(install, "docker pull madeup")
+        expect_system(install, "podman pull structure")
+        expect_system(install, "podman pull duplication")
+        expect_system(install, "podman pull madeup")
 
         capture_io { install.run }
       end
@@ -53,9 +53,9 @@ module CC::CLI::Engines
 
         install = Install.new
 
-        expect_system(install, "docker pull structure")
-        expect_system(install, "docker pull duplication")
-        expect_system(install, "docker pull madeup", false)
+        expect_system(install, "podman pull structure")
+        expect_system(install, "podman pull duplication")
+        expect_system(install, "podman pull madeup", false)
 
         capture_io do
           expect { install.run }.to raise_error(Install::ImagePullFailure)
