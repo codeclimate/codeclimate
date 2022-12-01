@@ -316,6 +316,7 @@ stylelint:
   channels:
     beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
+    stylelint-14-15-0: codeclimate/codeclimate-stylelint:stylelint-14-15-0
   description: A mighty, modern CSS linter.
 swiftlint:
   channels:
