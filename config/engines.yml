@@ -144,6 +144,8 @@ luacheck:
 markdownlint:
   channels:
     stable: codeclimate/codeclimate-markdownlint
+    beta: codeclimate/codeclimate-markdownlint:beta
+    markdownlint-0-12-0: codeclimate/codeclimate-markdownlint:markdownlint-0-12-0
   description: Flags style issues within Markdown files.
 nodesecurity:
   channels:
