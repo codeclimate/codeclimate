@@ -288,6 +288,7 @@ semgrep:
 shellcheck:
   channels:
     stable: codeclimate/codeclimate-shellcheck
+    beta: codeclimate/codeclimate-shellcheck:beta
     shellcheck-0-9-0: codeclimate/codeclimate-shellcheck:shellcheck-0-9-0
   description: A static analysis tool for shell scripts.
 sonar-java:
