@@ -1,12 +1,12 @@
 module CC
   module Analyzer
     class StatsdContainerListener < ContainerListener
-      # rubocop:disable Lint/MethodMissingSuper
+      # rubocop:disable Lint/MissingSuper
       def initialize(statsd, repo_id: nil)
         @statsd = statsd
         @repo_id = repo_id
       end
-      # rubocop:enable Lint/MethodMissingSuper
+      # rubocop:enable Lint/MissingSuper
 
       def started(engine, _details)
         increment(engine, "started")
