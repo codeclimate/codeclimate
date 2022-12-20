@@ -1,10 +1,12 @@
 module CC
   module Analyzer
     class StatsdContainerListener < ContainerListener
+      # rubocop:disable Lint/MethodMissingSuper
       def initialize(statsd, repo_id: nil)
         @statsd = statsd
         @repo_id = repo_id
       end
+      # rubocop:enable Lint/MethodMissingSuper
 
       def started(engine, _details)
         increment(engine, "started")
@@ -34,19 +36,23 @@ module CC
 
       def increment(engine, action)
         tags = engine_tags(engine)
-        metric = metric_name(engine, action)
+        metric = metric_name(action)
 
+        # rubocop:disable Style/HashSyntax
         statsd.increment(metric, tags: tags)
+        # rubocop:enable Style/HashSyntax
       end
 
       def timing(engine, action, millis)
         tags = engine_tags(engine)
-        metric = metric_name(engine, action)
+        metric = metric_name(action)
 
+        # rubocop:disable Style/HashSyntax
         statsd.timing(metric, millis, tags: tags)
+        # rubocop:enable Style/HashSyntax
       end
 
-      def metric_name(engine, action)
+      def metric_name(action)
         "engines.#{action}"
       end
 
