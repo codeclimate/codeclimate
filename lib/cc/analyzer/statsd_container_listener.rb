@@ -31,27 +31,22 @@ module CC
 
       attr_reader :statsd
 
-      def increment(engine, metric_name)
+      def increment(engine, action)
         tags = engine_tags(engine)
-        # rubocop:disable Style/HashSyntax
-        metrics(engine, metric_name).each { |metric| statsd.increment(metric, tags: tags) }
-        # rubocop:enable Style/HashSyntax
+        metric = metric_name(engine, action)
+
+        statsd.increment(metric, tags: tags)
       end
 
-      def timing(engine, metric_name, millis)
+      def timing(engine, action, millis)
         tags = engine_tags(engine)
-        # rubocop:disable Style/HashSyntax
-        metrics(engine, metric_name).each { |metric| statsd.timing(metric, millis, tags: tags) }
-        # rubocop:enable Style/HashSyntax
+        metric = metric_name(engine, action)
+
+        statsd.timing(metric, millis, tags: tags)
       end
 
-      def metrics(engine, metric_name)
-        [
-          "engines.#{metric_name}",
-          "engines.names.#{engine.name}.#{metric_name}",
-        ].tap do |metrics|
-          metrics << "engines.names.#{engine.name}.#{engine.channel}.#{metric_name}" if engine_channel_present?(engine)
-        end
+      def metric_name(engine, action)
+        "engines.#{action}"
       end
 
       def engine_tags(engine)

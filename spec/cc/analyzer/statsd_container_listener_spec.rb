@@ -70,9 +70,9 @@ module CC::Analyzer
           statsd = double(timing: nil, increment: nil)
           result = double(duration: 10, timed_out?: false, maximum_output_exceeded?: false, exit_status: 0)
 
-          expect(statsd).to receive(:timing).with("engines.names.engine.stable.time", 10, tags: ["engine:engine", "channel:stable"])
-          expect(statsd).to receive(:increment).with("engines.names.engine.stable.finished", tags: ["engine:engine", "channel:stable"])
-          expect(statsd).to receive(:increment).with("engines.names.engine.stable.result.success", tags: ["engine:engine", "channel:stable"])
+          expect(statsd).to receive(:timing).with("engines.time", 10, tags: ["engine:engine", "channel:stable"])
+          expect(statsd).to receive(:increment).with("engines.finished", tags: ["engine:engine", "channel:stable"])
+          expect(statsd).to receive(:increment).with("engines.result.success", tags: ["engine:engine", "channel:stable"])
 
           listener = StatsdContainerListener.new(statsd)
           listener.finished(engine, nil, result)
