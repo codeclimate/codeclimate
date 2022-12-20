@@ -1,8 +1,9 @@
 module CC
   module Analyzer
     class StatsdContainerListener < ContainerListener
-      def initialize(statsd)
+      def initialize(statsd, repo_id: nil)
         @statsd = statsd
+        @repo_id = repo_id
       end
 
       def started(engine, _details)
@@ -29,7 +30,7 @@ module CC
 
       private
 
-      attr_reader :statsd
+      attr_reader :statsd, :repo_id
 
       def increment(engine, action)
         tags = engine_tags(engine)
@@ -52,6 +53,7 @@ module CC
       def engine_tags(engine)
         ["engine:#{engine.name}"].tap do |tags|
           tags << "channel:#{engine.channel}" if engine_channel_present?(engine)
+          tags << "repo_id:#{repo_id}" if repo_id.present?
         end
       end
 

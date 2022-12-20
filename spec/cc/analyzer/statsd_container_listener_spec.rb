@@ -78,6 +78,21 @@ module CC::Analyzer
           listener.finished(engine, nil, result)
         end
       end
+
+      context "when the repo_id is included" do
+        let(:engine) { double(name: "engine") }
+        let(:repo_id) { "123456" }
+
+        it "adds the repo_id to the engine tags" do
+          statsd = double(timing: nil, increment: nil)
+          result = double(duration: 10, timed_out?: false, maximum_output_exceeded?: false, exit_status: 0)
+
+          expect(statsd).to receive(:increment).with("engines.finished", tags: ["engine:engine", "repo_id:#{repo_id}"])
+
+          listener = StatsdContainerListener.new(statsd, repo_id: repo_id)
+          listener.finished(engine, nil, result)
+        end
+      end
     end
   end
 end
