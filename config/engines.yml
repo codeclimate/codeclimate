@@ -10,6 +10,8 @@ apexmetrics:
 bandit:
   channels:
     stable: codeclimate/codeclimate-bandit
+    beta: codeclimate/codeclimate-bandit:beta
+    bandit-1-7-4: codeclimate/codeclimate-bandit:bandit-1-7-4
   description: A tool designed to find common security issues in Python code.
 black:
   channels:
