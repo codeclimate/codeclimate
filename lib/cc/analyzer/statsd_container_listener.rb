@@ -1,9 +1,12 @@
 module CC
   module Analyzer
     class StatsdContainerListener < ContainerListener
-      def initialize(statsd)
+      # rubocop:disable Lint/MissingSuper
+      def initialize(statsd, repo_id: nil)
         @statsd = statsd
+        @repo_id = repo_id
       end
+      # rubocop:enable Lint/MissingSuper
 
       def started(engine, _details)
         increment(engine, "started")
@@ -29,34 +32,34 @@ module CC
 
       private
 
-      attr_reader :statsd
+      attr_reader :statsd, :repo_id
 
-      def increment(engine, metric_name)
+      def increment(engine, action)
         tags = engine_tags(engine)
+        metric = metric_name(action)
+
         # rubocop:disable Style/HashSyntax
-        metrics(engine, metric_name).each { |metric| statsd.increment(metric, tags: tags) }
+        statsd.increment(metric, tags: tags)
         # rubocop:enable Style/HashSyntax
       end
 
-      def timing(engine, metric_name, millis)
+      def timing(engine, action, millis)
         tags = engine_tags(engine)
+        metric = metric_name(action)
+
         # rubocop:disable Style/HashSyntax
-        metrics(engine, metric_name).each { |metric| statsd.timing(metric, millis, tags: tags) }
+        statsd.timing(metric, millis, tags: tags)
         # rubocop:enable Style/HashSyntax
       end
 
-      def metrics(engine, metric_name)
-        [
-          "engines.#{metric_name}",
-          "engines.names.#{engine.name}.#{metric_name}",
-        ].tap do |metrics|
-          metrics << "engines.names.#{engine.name}.#{engine.channel}.#{metric_name}" if engine_channel_present?(engine)
-        end
+      def metric_name(action)
+        "engines.#{action}"
       end
 
       def engine_tags(engine)
         ["engine:#{engine.name}"].tap do |tags|
           tags << "channel:#{engine.channel}" if engine_channel_present?(engine)
+          tags << "repo_id:#{repo_id}" if repo_id.present?
         end
       end
 
