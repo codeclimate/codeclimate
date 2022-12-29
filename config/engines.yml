@@ -89,6 +89,8 @@ eslint:
 flog:
   channels:
     stable: codeclimate/codeclimate-flog
+    beta: codeclimate/codeclimate-flog:beta
+    flog-4-6-6: codeclimate/codeclimate-flog:flog-4-6-6
   description: Easy to read reporting of complexity/pain for Ruby code.
 git-legal:
   channels:
