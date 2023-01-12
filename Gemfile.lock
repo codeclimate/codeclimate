@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codeclimate (0.88.0)
+    codeclimate (0.90.0)
       activesupport (~> 5.2.3)
       highline (~> 2.0.3)
       pry (~> 0.10.1)
@@ -30,7 +30,7 @@ GEM
     macaddr (1.7.2)
       systemu (~> 2.6.5)
     method_source (0.8.2)
-    minitest (5.16.3)
+    minitest (5.17.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
