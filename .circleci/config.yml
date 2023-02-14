@@ -48,6 +48,7 @@ workflows:
     jobs:
       - build_test
       - publish:
+          context: Quality
           requires:
             - build_test
           filters:
