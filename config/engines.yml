@@ -29,6 +29,7 @@ bundler-audit:
 checkstyle:
   channels:
     stable: codeclimate/codeclimate-checkstyle
+    checkstyle-10-7-0: codeclimate/codeclimate-checkstyle:checkstyle-10-7-0
   description: Helps programmers write Java that adheres to a coding standard.
 csslint:
   channels:
