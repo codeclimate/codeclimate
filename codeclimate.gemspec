@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ['>= 2.6', '<= 3.1.3']
 
-  s.add_dependency "activesupport", "~> 5.2.3"
+  s.add_dependency "activesupport", ">= 5.2.3", "< 7.1.0"
   s.add_dependency "tty-spinner", "~> 0.1.0"
   s.add_dependency "highline", "~> 2.0.3"
   s.add_dependency "pry", "~> 0.10.1"
