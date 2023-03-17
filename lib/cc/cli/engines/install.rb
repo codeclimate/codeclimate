@@ -7,7 +7,7 @@ module CC
         ImagePullFailure = Class.new(StandardError)
 
         def run
-          say "Pulling docker images."
+          say "Pulling podman images."
           pull_docker_images
         end
 
@@ -23,7 +23,7 @@ module CC
 
         def pull_engine(engine)
           metadata = engine_registry.fetch_engine_details(engine)
-          unless system("docker pull #{metadata.image}")
+          unless system("podman pull #{metadata.image}")
             raise ImagePullFailure, "unable to pull image #{metadata.image}"
           end
         rescue EngineRegistry::EngineDetailsNotFoundError

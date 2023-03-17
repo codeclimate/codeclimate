@@ -1,17 +1,17 @@
 #!/bin/sh
 
-command -v docker > /dev/null 2>&1 || {
+command -v podman > /dev/null 2>&1 || {
   echo "Unable to find \`docker' on your \$PATH, is it installed?" >&2
   exit 1
 }
 
-docker version | grep -q "Server version\|Server:" || {
-  echo "Unable to run \`docker version', the docker daemon may not be running" >&2
+podman version | grep -q "Server version\|Server:" || {
+  echo "Unable to run \`podman version', the podman daemon may not be running" >&2
 
   if [ "$(id --user)" -eq 0 ]; then
-    echo "Please ensure \`sudo docker version' succeeds and try again" >&2
+    echo "Please ensure \`sudo podman version' succeeds and try again" >&2
   else
-    echo "Please ensure \`docker version' succeeds and try again" >&2
+    echo "Please ensure \`podman version' succeeds and try again" >&2
   fi
 
   exit 1

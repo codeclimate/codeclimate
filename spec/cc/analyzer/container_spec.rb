@@ -3,10 +3,10 @@ require "spec_helper"
 module CC::Analyzer
   describe Container do
     describe "#run" do
-      it "spawns docker run with the image, name, and options given" do
+      it "spawns podman run with the image, name, and options given" do
         container = Container.new(image: "codeclimate/foo", name: "name")
 
-        expect_spawn(%w[ docker run --name name -i -t codeclimate/foo ])
+        expect_spawn(%w[ podman run --name name -i -t codeclimate/foo ])
 
         container.run(%w[ -i -t ])
       end
@@ -14,7 +14,7 @@ module CC::Analyzer
       it "spawns the command if present" do
         container = Container.new(image: "codeclimate/foo", command: "bar", name: "name")
 
-        expect_spawn(%w[ docker run --name name codeclimate/foo bar ])
+        expect_spawn(%w[ podman run --name name codeclimate/foo bar ])
 
         container.run
       end
@@ -22,7 +22,7 @@ module CC::Analyzer
       it "spawns an array command if given" do
         container = Container.new(image: "codeclimate/foo", command: %w[ bar baz ], name: "name")
 
-        expect_spawn(%w[ docker run --name name codeclimate/foo bar baz ])
+        expect_spawn(%w[ podman run --name name codeclimate/foo bar baz ])
 
         container.run
       end
@@ -34,7 +34,7 @@ module CC::Analyzer
           name: "name",
         )
 
-        expect_spawn(%w[ docker run --name name codeclimate/foo bar baz\ bat ])
+        expect_spawn(%w[ podman run --name name codeclimate/foo bar baz\ bat ])
 
         container.run
       end
@@ -69,8 +69,8 @@ module CC::Analyzer
       describe "stopping containers", slow: true do
         before do
           @name = "codeclimate-container-test"
-          system("docker kill #{@name} &>/dev/null")
-          system("docker rm #{@name} &>/dev/null")
+          system("podman kill #{@name} &>/dev/null")
+          system("podman rm #{@name} &>/dev/null")
         end
 
         it "can be stopped" do
@@ -189,8 +189,8 @@ module CC::Analyzer
               run_container(container)
             ensure
               # Cleanup manually
-              system("docker stop #{name} >/dev/null")
-              system("docker rm #{name} >/dev/null")
+              system("podman stop #{name} >/dev/null")
+              system("podman rm #{name} >/dev/null")
             end
           end
         end
@@ -208,7 +208,7 @@ module CC::Analyzer
         end
 
         def assert_container_stopped
-          expect(`docker ps --quiet --filter name=#{@name}`.strip).to eq ""
+          expect(`podman ps --quiet --filter name=#{@name}`.strip).to eq ""
         end
       end
     end

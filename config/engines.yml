@@ -1,7 +1,7 @@
 # This file lists all the engines available to be run for analysis.
 #
 # Each engine must have `channels` (with a `stable` key) and `description`. The
-# values in `channels` will be passed to `docker run` and so may be any value
+# values in `channels` will be passed to `podman run` and so may be any value
 # appropriate for that (repo/name:tag, image id, etc).
 apexmetrics:
   channels:

@@ -12,7 +12,7 @@ function install_hub() {
 
 function login_to_dockerhub() {
   set +x
-  docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
+  podman login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
   set -x
 }
 
@@ -30,10 +30,10 @@ function tag_version() {
 }
 
 function upload_docker_images() {
-  docker build --rm --tag codeclimate/codeclimate .
-  docker push codeclimate/codeclimate:latest
-  docker tag codeclimate/codeclimate "codeclimate/codeclimate:$VERSION"
-  docker push "codeclimate/codeclimate:$VERSION"
+  podman build --rm --tag codeclimate/codeclimate .
+  podman push codeclimate/codeclimate:latest
+  podman tag codeclimate/codeclimate "codeclimate/codeclimate:$VERSION"
+  podman push "codeclimate/codeclimate:$VERSION"
 }
 
 function trigger_hombrew_release() {
@@ -55,7 +55,7 @@ function publish_new_version() {
   # Trigger hombrew release
   trigger_hombrew_release
 
-  # Push docker images
+  # Push podman images
   upload_docker_images
 
   set -x
