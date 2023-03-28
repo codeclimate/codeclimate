@@ -50,7 +50,8 @@ function publish_new_version() {
   gem push ./*.gem
 
   # Create gh tag
-  tag_version
+  # Skip until we have a better way to handle this
+  # tag_version
 
   # Trigger hombrew release
   trigger_hombrew_release
