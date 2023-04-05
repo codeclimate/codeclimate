@@ -1,5 +1,7 @@
 .PHONY: install uninstall image test citest bundle
 
+VERSION ?= $(shell cat VERSION)
+ARTIFACTS_OUTPUT ?= artifacts.tar.gz
 PREFIX ?= /usr/local
 SKIP_ENGINES ?= 0
 
@@ -59,3 +61,10 @@ bundle:
 	  --volume $(PWD):/usr/src/app \
 	  --workdir /usr/src/app \
 	  codeclimate/codeclimate $(BUNDLE_ARGS)
+
+build-gem:
+	gem build ./*.gemspec
+
+new-github-release: build-gem
+	tar -c -f "${ARTIFACTS_OUTPUT}" ./*.gem
+	gh release create "v${VERSION}" "${ARTIFACTS_OUTPUT}" --title "v${VERSION}" --notes "Release v${VERSION}"

@@ -26,9 +26,9 @@ jobs:
     steps:
       - checkout
       - *init
-      - run:
-          name: Install Hub dependency
-          command: install_hub
+      # - run:
+      #     name: Install Hub dependency
+      #     command: install_hub
       - run:
           name: Login on Dockerhub
           command: login_to_dockerhub

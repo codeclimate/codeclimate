@@ -21,6 +21,7 @@ brakeman:
   channels:
     stable: codeclimate/codeclimate-brakeman
     beta: codeclimate/codeclimate-brakeman:beta
+    brakeman-5-4-1: codeclimate/codeclimate-brakeman:brakeman-5-4-1
   description: A static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
 bundler-audit:
   channels:
