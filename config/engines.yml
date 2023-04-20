@@ -26,6 +26,7 @@ brakeman:
 bundler-audit:
   channels:
     stable: codeclimate/codeclimate-bundler-audit
+    bundler-audit-0-9-1: codeclimate/codeclimate-bundler-audit:bundler-audit-0-9-1
   description: Patch-level verification for Bundler.
 checkstyle:
   channels:
