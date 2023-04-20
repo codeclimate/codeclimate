@@ -105,8 +105,8 @@ gofmt:
 golangci-lint:
   channels:
     stable: codeclimate/codeclimate-golangci-lint
-    beta: codeclimate/codeclimate-golangci-lint:b5
-    golangci-lint-1-52-2: codeclimate/codeclimate-golangci-lint:b5
+    beta: codeclimate/codeclimate-golangci-lint:beta
+    golangci-lint-1-52-2: codeclimate/codeclimate-golangci-lint:golangci-lint-1-52-2
 golint:
   channels:
     stable: codeclimate/codeclimate-golint
