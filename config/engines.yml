@@ -102,6 +102,11 @@ gofmt:
   channels:
     stable: codeclimate/codeclimate-gofmt
   description: Checks the formatting of Go programs.
+golangci-lint:
+  channels:
+    stable: codeclimate/codeclimate-golangci-lint
+    beta: codeclimate/codeclimate-golangci-lint:b5
+    golangci-lint-1-52-2: codeclimate/codeclimate-golangci-lint:b5
 golint:
   channels:
     stable: codeclimate/codeclimate-golint
