@@ -22,6 +22,7 @@ brakeman:
     stable: codeclimate/codeclimate-brakeman
     beta: codeclimate/codeclimate-brakeman:beta
     brakeman-5-4-1: codeclimate/codeclimate-brakeman:brakeman-5-4-1
+    brakeman-6-0-1: codeclimate/codeclimate-brakeman:brakeman-6-0-1
   description: A static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
 bundler-audit:
   channels:
@@ -275,6 +276,7 @@ rubocop:
     rubocop-1-31-0: codeclimate/codeclimate-rubocop:rubocop-1-31-0
     rubocop-1-39-0: codeclimate/codeclimate-rubocop:rubocop-1-39-0
     rubocop-1-48-1: codeclimate/codeclimate-rubocop:rubocop-1-48-1
+    rubocop-1-56-3: codeclimate/codeclimate-rubocop:rubocop-1-56-3
   description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
