@@ -310,6 +310,7 @@ sonar-java:
   channels:
     stable: codeclimate/codeclimate-sonar-java
     beta: codeclimate/codeclimate-sonar-java:beta
+    sonar-java-7-2: codeclimate/codeclimate-sonar-java:sonar-java-7-2
     sonar-java-5-14: codeclimate/codeclimate-sonar-java:sonar-java-5-14
     sonar-java-4-14: codeclimate/codeclimate-sonar-java:sonar-java-4-14
   description: Over 400 checks for bugs, vulnerabilities, and code smells in Java code.
