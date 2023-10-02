@@ -7,7 +7,8 @@ SKIP_ENGINES ?= 0
 
 image:
 	docker pull "$(shell grep FROM Dockerfile | sed 's/FROM //')"
-	docker build -t codeclimate/codeclimate .
+	docker buildx create --use
+	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t codeclimate/codeclimate .
 
 test: RSPEC_ARGS ?= --tag ~slow
 test: image
