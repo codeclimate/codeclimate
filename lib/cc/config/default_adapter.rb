@@ -12,6 +12,7 @@ module CC
         db/
         dist/
         features/
+        flow-typed/
         **/node_modules/
         script/
         **/spec/
