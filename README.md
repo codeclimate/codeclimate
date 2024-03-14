@@ -67,6 +67,16 @@ docker run \
   codeclimate/codeclimate help
 ```
 
+On windows:
+```powershell
+docker run `
+  --interactive --tty --rm `
+  --env CODECLIMATE_CODE="$(pwd)" `
+  --volume "$(pwd):/code" `
+  --volume /var/run/docker.sock:/var/run/docker.sock `
+  codeclimate/codeclimate help
+```
+
 ## Project setup
 
 ### Configuration
