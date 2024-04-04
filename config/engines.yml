@@ -10,6 +10,8 @@ apexmetrics:
 bandit:
   channels:
     stable: codeclimate/codeclimate-bandit
+    beta: codeclimate/codeclimate-bandit:beta
+    bandit-1-7-4: codeclimate/codeclimate-bandit:bandit-1-7-4
   description: A tool designed to find common security issues in Python code.
 black:
   channels:
@@ -18,14 +20,19 @@ black:
 brakeman:
   channels:
     stable: codeclimate/codeclimate-brakeman
+    beta: codeclimate/codeclimate-brakeman:beta
+    brakeman-5-4-1: codeclimate/codeclimate-brakeman:brakeman-5-4-1
+    brakeman-6-0-1: codeclimate/codeclimate-brakeman:brakeman-6-0-1
   description: A static analysis tool which checks Ruby on Rails applications for security vulnerabilities.
 bundler-audit:
   channels:
     stable: codeclimate/codeclimate-bundler-audit
+    bundler-audit-0-9-1: codeclimate/codeclimate-bundler-audit:bundler-audit-0-9-1
   description: Patch-level verification for Bundler.
 checkstyle:
   channels:
     stable: codeclimate/codeclimate-checkstyle
+    checkstyle-10-7-0: codeclimate/codeclimate-checkstyle:checkstyle-10-7-0
   description: Helps programmers write Java that adheres to a coding standard.
 csslint:
   channels:
@@ -86,6 +93,8 @@ eslint:
 flog:
   channels:
     stable: codeclimate/codeclimate-flog
+    beta: codeclimate/codeclimate-flog:beta
+    flog-4-6-6: codeclimate/codeclimate-flog:flog-4-6-6
   description: Easy to read reporting of complexity/pain for Ruby code.
 git-legal:
   channels:
@@ -95,6 +104,11 @@ gofmt:
   channels:
     stable: codeclimate/codeclimate-gofmt
   description: Checks the formatting of Go programs.
+golangci-lint:
+  channels:
+    stable: codeclimate/codeclimate-golangci-lint
+    beta: codeclimate/codeclimate-golangci-lint:beta
+    golangci-lint-1-52-2: codeclimate/codeclimate-golangci-lint:golangci-lint-1-52-2
 golint:
   channels:
     stable: codeclimate/codeclimate-golint
@@ -143,6 +157,8 @@ luacheck:
 markdownlint:
   channels:
     stable: codeclimate/codeclimate-markdownlint
+    beta: codeclimate/codeclimate-markdownlint:beta
+    markdownlint-0-12-0: codeclimate/codeclimate-markdownlint:markdownlint-0-12-0
   description: Flags style issues within Markdown files.
 nodesecurity:
   channels:
@@ -258,6 +274,9 @@ rubocop:
     rubocop-1-23-0: codeclimate/codeclimate-rubocop:rubocop-1-23-0
     rubocop-1-30-0: codeclimate/codeclimate-rubocop:rubocop-1-30-0
     rubocop-1-31-0: codeclimate/codeclimate-rubocop:rubocop-1-31-0
+    rubocop-1-39-0: codeclimate/codeclimate-rubocop:rubocop-1-39-0
+    rubocop-1-48-1: codeclimate/codeclimate-rubocop:rubocop-1-48-1
+    rubocop-1-56-3: codeclimate/codeclimate-rubocop:rubocop-1-56-3
   description: A Ruby static code analyzer, based on the community Ruby style guide.
 rubymotion:
   channels:
@@ -284,12 +303,16 @@ semgrep:
 shellcheck:
   channels:
     stable: codeclimate/codeclimate-shellcheck
+    beta: codeclimate/codeclimate-shellcheck:beta
+    shellcheck-0-9-0: codeclimate/codeclimate-shellcheck:shellcheck-0-9-0
   description: A static analysis tool for shell scripts.
 sonar-java:
   channels:
     stable: codeclimate/codeclimate-sonar-java
     beta: codeclimate/codeclimate-sonar-java:beta
+    sonar-java-7-2: codeclimate/codeclimate-sonar-java:sonar-java-7-2
     sonar-java-5-14: codeclimate/codeclimate-sonar-java:sonar-java-5-14
+    sonar-java-4-14: codeclimate/codeclimate-sonar-java:sonar-java-4-14
   description: Over 400 checks for bugs, vulnerabilities, and code smells in Java code.
   minimum_memory_limit: 2_048_000_000
 sonar-php:
@@ -315,6 +338,7 @@ stylelint:
   channels:
     beta: codeclimate/codeclimate-stylelint:beta
     stable: codeclimate/codeclimate-stylelint
+    stylelint-14-15-0: codeclimate/codeclimate-stylelint:stylelint-14-15-0
   description: A mighty, modern CSS linter.
 swiftlint:
   channels:
@@ -324,6 +348,11 @@ tailor:
   channels:
     stable: codeclimate/codeclimate-tailor
   description: Cross-platform static analyzer and linter for Swift.
+tflint:
+  channels:
+    beta: codeclimate/codeclimate-tflint:beta
+    stable: codeclimate/codeclimate-tflint
+  description: A pluggable Terraform linter.
 tslint:
   channels:
     stable: codeclimate/codeclimate-tslint

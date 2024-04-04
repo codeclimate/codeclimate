@@ -1,9 +1,12 @@
 module CC
   module Analyzer
     class StatsdContainerListener < ContainerListener
-      def initialize(statsd)
+      # rubocop:disable Lint/MissingSuper
+      def initialize(statsd, repo_id: nil)
         @statsd = statsd
+        @repo_id = repo_id
       end
+      # rubocop:enable Lint/MissingSuper
 
       def started(engine, _details)
         increment(engine, "started")
@@ -29,22 +32,39 @@ module CC
 
       private
 
-      attr_reader :statsd
+      attr_reader :statsd, :repo_id
 
-      def increment(engine, metric)
-        statsd.increment("engines.#{metric}")
-        statsd.increment("engines.names.#{engine.name}.#{metric}")
-        if engine.respond_to?(:channel) && engine.channel
-          statsd.increment("engines.names.#{engine.name}.#{engine.channel}.#{metric}")
+      def increment(engine, action)
+        tags = engine_tags(engine)
+        metric = metric_name(action)
+
+        # rubocop:disable Style/HashSyntax
+        statsd.increment(metric, tags: tags)
+        # rubocop:enable Style/HashSyntax
+      end
+
+      def timing(engine, action, millis)
+        tags = engine_tags(engine)
+        metric = metric_name(action)
+
+        # rubocop:disable Style/HashSyntax
+        statsd.timing(metric, millis, tags: tags)
+        # rubocop:enable Style/HashSyntax
+      end
+
+      def metric_name(action)
+        "engines.#{action}"
+      end
+
+      def engine_tags(engine)
+        ["engine:#{engine.name}"].tap do |tags|
+          tags << "channel:#{engine.channel}" if engine_channel_present?(engine)
+          tags << "repo_id:#{repo_id}" if repo_id.present?
         end
       end
 
-      def timing(engine, metric, millis)
-        statsd.timing("engines.#{metric}", millis)
-        statsd.timing("engines.names.#{engine.name}.#{metric}", millis)
-        if engine.respond_to?(:channel) && engine.channel
-          statsd.timing("engines.names.#{engine.name}.#{engine.channel}.#{metric}", millis)
-        end
+      def engine_channel_present?(engine)
+        engine.respond_to?(:channel) && engine.channel
       end
     end
   end

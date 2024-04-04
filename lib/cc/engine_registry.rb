@@ -6,7 +6,7 @@ module CC
     DEFAULT_COMMAND = nil
     DEFAULT_MANIFEST_PATH = File.expand_path("../../../config/engines.yml", __FILE__)
 
-    EngineDetails = Struct.new(:image, :command, :description, :memory)
+    EngineDetails = Struct.new(:image, :command, :description, :memory, :source_library, :channel_versions, :plugin)
     EngineDetailsNotFoundError = Class.new(StandardError)
 
     def initialize(path = DEFAULT_MANIFEST_PATH, prefix = nil)
@@ -38,6 +38,9 @@ module CC
           metadata.fetch("command", DEFAULT_COMMAND),
           metadata.fetch("description", "(No description available)"),
           memory_limit(metadata["minimum_memory_limit"]),
+          metadata.fetch("source-library", {}),
+          metadata.fetch("channel-versions", {}),
+          metadata.fetch("plugin", {}),
         )
       end
     rescue KeyError

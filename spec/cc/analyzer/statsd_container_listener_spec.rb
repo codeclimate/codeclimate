@@ -7,7 +7,7 @@ module CC::Analyzer
     describe "#started" do
       it "increments a metric in statsd" do
         statsd = double(increment: nil)
-        expect(statsd).to receive(:increment).with("engines.started")
+        expect(statsd).to receive(:increment).with("engines.started", tags: ["engine:engine"])
 
         listener = StatsdContainerListener.new(statsd)
         listener.started(engine, nil)
@@ -19,9 +19,9 @@ module CC::Analyzer
         statsd = double(timing: nil, increment: nil)
         result = double(duration: 10, timed_out?: false, maximum_output_exceeded?: false, exit_status: 0)
 
-        expect(statsd).to receive(:timing).with("engines.time", 10)
-        expect(statsd).to receive(:increment).with("engines.finished")
-        expect(statsd).to receive(:increment).with("engines.result.success")
+        expect(statsd).to receive(:timing).with("engines.time", 10, tags: ["engine:engine"])
+        expect(statsd).to receive(:increment).with("engines.finished", tags: ["engine:engine"])
+        expect(statsd).to receive(:increment).with("engines.result.success", tags: ["engine:engine"])
 
         listener = StatsdContainerListener.new(statsd)
         listener.finished(engine, nil, result)
@@ -31,9 +31,9 @@ module CC::Analyzer
         statsd = double(timing: nil, increment: nil)
         result = double(duration: 10, timed_out?: false, maximum_output_exceeded?: false, exit_status: 1)
 
-        expect(statsd).to receive(:timing).with("engines.time", 10)
-        expect(statsd).to receive(:increment).with("engines.finished")
-        expect(statsd).to receive(:increment).with("engines.result.error")
+        expect(statsd).to receive(:timing).with("engines.time", 10, tags: ["engine:engine"])
+        expect(statsd).to receive(:increment).with("engines.finished", tags: ["engine:engine"])
+        expect(statsd).to receive(:increment).with("engines.result.error", tags: ["engine:engine"])
 
         listener = StatsdContainerListener.new(statsd)
         listener.finished(engine, nil, result)
@@ -43,9 +43,9 @@ module CC::Analyzer
         statsd = double(timing: nil, increment: nil)
         result = double(duration: 10, timed_out?: false, maximum_output_exceeded?: true)
 
-        expect(statsd).to receive(:timing).with("engines.time", 10)
-        expect(statsd).to receive(:increment).with("engines.result.error")
-        expect(statsd).to receive(:increment).with("engines.result.error.output_exceeded")
+        expect(statsd).to receive(:timing).with("engines.time", 10, tags: ["engine:engine"])
+        expect(statsd).to receive(:increment).with("engines.result.error", tags: ["engine:engine"])
+        expect(statsd).to receive(:increment).with("engines.result.error.output_exceeded", tags: ["engine:engine"])
 
         listener = StatsdContainerListener.new(statsd)
         listener.finished(engine, nil, result)
@@ -55,9 +55,9 @@ module CC::Analyzer
         statsd = double(timing: nil, increment: nil)
         result = double(duration: 10, timed_out?: true)
 
-        expect(statsd).to receive(:timing).with("engines.time", 10)
-        expect(statsd).to receive(:increment).with("engines.result.error")
-        expect(statsd).to receive(:increment).with("engines.result.error.timeout")
+        expect(statsd).to receive(:timing).with("engines.time", 10, tags: ["engine:engine"])
+        expect(statsd).to receive(:increment).with("engines.result.error", tags: ["engine:engine"])
+        expect(statsd).to receive(:increment).with("engines.result.error.timeout", tags: ["engine:engine"])
 
         listener = StatsdContainerListener.new(statsd)
         listener.finished(engine, nil, result)
@@ -70,11 +70,26 @@ module CC::Analyzer
           statsd = double(timing: nil, increment: nil)
           result = double(duration: 10, timed_out?: false, maximum_output_exceeded?: false, exit_status: 0)
 
-          expect(statsd).to receive(:timing).with("engines.names.engine.stable.time", 10)
-          expect(statsd).to receive(:increment).with("engines.names.engine.stable.finished")
-          expect(statsd).to receive(:increment).with("engines.names.engine.stable.result.success")
+          expect(statsd).to receive(:timing).with("engines.time", 10, tags: ["engine:engine", "channel:stable"])
+          expect(statsd).to receive(:increment).with("engines.finished", tags: ["engine:engine", "channel:stable"])
+          expect(statsd).to receive(:increment).with("engines.result.success", tags: ["engine:engine", "channel:stable"])
 
           listener = StatsdContainerListener.new(statsd)
+          listener.finished(engine, nil, result)
+        end
+      end
+
+      context "when the repo_id is included" do
+        let(:engine) { double(name: "engine") }
+        let(:repo_id) { "123456" }
+
+        it "adds the repo_id to the engine tags" do
+          statsd = double(timing: nil, increment: nil)
+          result = double(duration: 10, timed_out?: false, maximum_output_exceeded?: false, exit_status: 0)
+
+          expect(statsd).to receive(:increment).with("engines.finished", tags: ["engine:engine", "repo_id:#{repo_id}"])
+
+          listener = StatsdContainerListener.new(statsd, repo_id: repo_id)
           listener.finished(engine, nil, result)
         end
       end
