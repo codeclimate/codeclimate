@@ -61,6 +61,22 @@ module CC::CLI::Engines
           expect { install.run }.to raise_error(Install::ImagePullFailure)
         end
       end
+      
+      it "excludes disabled images" do
+        write_cc_yaml(YAML.dump("plugins" => { "madeup" => true, "structure" => false }))
+        stub_engine_registry(YAML.dump(
+          "structure" => { "channels" => { "stable" => "structure" } },
+          "duplication" => { "channels" => { "stable" => "duplication" } },
+          "madeup" => { "channels" => { "stable" => "madeup" } },
+        ))
+
+        install = Install.new
+
+        expect_system(install, "docker pull duplication")
+        expect_system(install, "docker pull madeup")
+
+        capture_io { install.run }
+      end
     end
 
     def expect_system(install, cmd, result = true)
